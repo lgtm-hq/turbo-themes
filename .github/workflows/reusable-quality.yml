@@ -62,6 +62,9 @@ jobs:
       - name: CSS lint (Stylelint)
         run: bun run stylelint
 
+      - name: TypeScript type-check
+        run: bun run build:root
+
       - name: Shellcheck (non-blocking)
         continue-on-error: true
         run: ./scripts/ci/run-shellcheck.sh

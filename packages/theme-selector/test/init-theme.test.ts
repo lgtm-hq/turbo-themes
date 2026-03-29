@@ -9,7 +9,6 @@ import {
   setupDocumentMocks,
   mockThemeLoading,
   setupThemeLinkAutoLoad,
-  createMockLink,
 } from '../../../test/helpers/mocks.js';
 
 describe('initTheme', () => {

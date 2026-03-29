@@ -57,6 +57,7 @@ function schemaToInterface(name, schema, defs) {
 /**
  * Convert a JSON Schema type to TypeScript type.
  */
+// eslint-disable-next-line oxc/only-used-in-recursion -- defs is passed through recursive calls
 function schemaTypeToTs(schema, defs) {
   if (!schema) return 'unknown';
 

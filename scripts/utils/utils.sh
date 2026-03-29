@@ -154,9 +154,49 @@ run_python_tests() {
   fi
 }
 
+# Generate a structured PR comment file (matches py-lintro's generate_pr_comment)
+generate_pr_comment() {
+  local title="$1"
+  local status="$2"
+  local content="$3"
+  local output_file="$4"
+  local tool_name="${5:-lintro}"
+
+  local server_url="${GITHUB_SERVER_URL:-https://github.com}"
+  local repo="${GITHUB_REPOSITORY:-}"
+  local run_id="${GITHUB_RUN_ID:-}"
+
+  local build_details_link=""
+  if [[ -n "${repo}" ]] && [[ -n "${run_id}" ]]; then
+    build_details_link="
+🔗 **[View full build details](${server_url}/${repo}/actions/runs/${run_id})**"
+  fi
+
+  local comment="## 🔐 ${title}
+
+This PR has been analyzed using **${tool_name}** - our unified code quality tool.
+
+### 📊 Status: ${status}
+
+${content}
+
+---${build_details_link}
+
+*This analysis was performed automatically by the CI pipeline.*"
+
+  ensure_directory "$(dirname "${output_file}")"
+  if echo "${comment}" >"${output_file}"; then
+    log_success "PR comment generated and saved to ${output_file}"
+  else
+    log_error "Failed to write PR comment to ${output_file}"
+    return 1
+  fi
+}
+
 # Export functions for use in other scripts
 export -f log_info log_success log_warn log_error
 export -f command_exists is_ci
 export -f get_git_root get_current_branch get_commit_sha get_short_sha
 export -f ensure_directory die require_command require_file
 export -f port_available wait_for_port run_htmlproofer run_python_tests
+export -f generate_pr_comment

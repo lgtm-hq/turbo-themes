@@ -8,7 +8,10 @@
     "$schema": { "type": "string" },
     "$description": { "type": "string" },
     "$version": { "type": "string" },
-    "$generated": { "type": "string", "format": "date-time" },
+    "$generated": {
+      "type": "string",
+      "description": "SHA-256 content hash of the generated content (deterministic snapshot)"
+    },
     "meta": { "$ref": "#/$defs/Meta" },
     "themes": {
       "type": "object",

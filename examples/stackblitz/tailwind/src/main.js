@@ -22,7 +22,6 @@ const THEMES = [
   { id: 'solarized-light', isLight: true },
 ];
 const VALID_THEMES = THEMES.map((t) => t.id);
-const LIGHT_THEMES = THEMES.filter((t) => t.isLight).map((t) => t.id);
 const DEFAULT_THEME = 'catppuccin-mocha';
 
 const selector = document.getElementById('theme-selector');

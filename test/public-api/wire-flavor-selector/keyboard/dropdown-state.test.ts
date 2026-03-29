@@ -58,7 +58,7 @@ describe('wireFlavorSelector dropdown state management', () => {
         setAttribute: vi.fn(),
         addEventListener: vi.fn(),
       };
-      const mockDropdown = {
+      const _mockDropdown = {
         ...mockElement,
         classList: {
           ...mockElement.classList,

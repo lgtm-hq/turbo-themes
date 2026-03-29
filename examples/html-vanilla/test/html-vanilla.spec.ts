@@ -1,4 +1,4 @@
-import { test, expect, VALID_THEMES, type ThemeId } from '../../test-utils';
+import { test, expect, type ThemeId } from '../../test-utils';
 import { HtmlVanillaPage } from './pages/HtmlVanillaPage';
 
 test.describe('HTML Vanilla Example', () => {
@@ -93,7 +93,7 @@ test.describe('HTML Vanilla Example', () => {
       expect(bgBase).toBeTruthy();
     });
 
-    test('should change CSS variables when switching themes', async ({ examplePage }) => {
+    test('should change CSS variables when switching themes', async () => {
       await htmlPage.selectTheme('github-light');
       const lightBg = await htmlPage.getCssVariable('--turbo-bg-base');
 

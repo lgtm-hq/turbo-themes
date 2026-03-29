@@ -9,7 +9,7 @@ import { bench, describe, beforeAll } from 'vitest';
 import { flavors } from '@lgtm-hq/turbo-themes-core';
 
 // Mock DOM for benchmarking
-let mockDocument: Document;
+let _mockDocument: Document;
 let mockDocumentElement: HTMLElement;
 
 beforeAll(() => {
@@ -24,7 +24,7 @@ beforeAll(() => {
     setAttribute: () => {},
   } as unknown as HTMLElement;
 
-  mockDocument = {
+  _mockDocument = {
     documentElement: mockDocumentElement,
     getElementById: () => null,
     querySelectorAll: () => [],

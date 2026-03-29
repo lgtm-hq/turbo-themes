@@ -50,6 +50,7 @@ function toSnakeCase(name) {
 /**
  * Convert a JSON Schema type to Python type hint.
  */
+// eslint-disable-next-line oxc/only-used-in-recursion -- defs is passed through recursive calls
 function schemaToPythonType(schema, defs, optional = false) {
   if (!schema) return 'Any';
 
@@ -103,8 +104,6 @@ function generateDataclass(name, schema, defs) {
 
   const properties = schema.properties || {};
   const required = new Set(schema.required || []);
-  const fields = [];
-
   // Separate required and optional fields (required must come first in Python)
   const requiredFields = [];
   const optionalFields = [];
@@ -121,13 +120,13 @@ function generateDataclass(name, schema, defs) {
   }
 
   // Generate required fields first
-  for (const { propName, pyName, propSchema } of requiredFields) {
+  for (const { pyName, propSchema } of requiredFields) {
     const pyType = schemaToPythonType(propSchema, defs, false);
     lines.push(`    ${pyName}: ${pyType}`);
   }
 
   // Then optional fields with defaults
-  for (const { propName, pyName, propSchema } of optionalFields) {
+  for (const { pyName, propSchema } of optionalFields) {
     const pyType = schemaToPythonType(propSchema, defs, true);
     lines.push(`    ${pyName}: ${pyType} = None`);
   }
@@ -190,9 +189,6 @@ function generateTypes(schema) {
   lines.push('');
 
   const defs = schema.$defs || {};
-
-  // Track which definitions we've processed
-  const processed = new Set();
 
   // Process definitions in dependency order
   // Simple types first, then complex ones

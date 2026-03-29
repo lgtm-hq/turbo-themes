@@ -15,28 +15,28 @@ from turbo_themes.manager import (
 )
 
 
-def test_theme_manager_init():
-    """Test theme manager initialization."""
+def test_theme_manager_init() -> None:
+    """ThemeManager should default to catppuccin-mocha."""
     manager = ThemeManager()
     assert_that(manager.current_theme_id).is_equal_to("catppuccin-mocha")
     assert_that(manager.current_theme.id).is_equal_to("catppuccin-mocha")
 
 
-def test_theme_manager_custom_default():
-    """Test theme manager with custom default."""
+def test_theme_manager_custom_default() -> None:
+    """ThemeManager should accept a custom default theme."""
     manager = ThemeManager("github-light")
     assert_that(manager.current_theme_id).is_equal_to("github-light")
     assert_that(manager.current_theme.appearance).is_equal_to("light")
 
 
-def test_theme_manager_invalid_default():
-    """Test theme manager with invalid default raises error."""
+def test_theme_manager_invalid_default() -> None:
+    """ThemeManager should raise ValueError for invalid default theme."""
     with pytest.raises(ValueError, match="not found"):
         ThemeManager("nonexistent-theme")
 
 
-def test_set_theme():
-    """Test setting themes."""
+def test_set_theme() -> None:
+    """Setting themes should update the current theme."""
     manager = ThemeManager("catppuccin-mocha")
 
     manager.set_theme("github-light")
@@ -48,21 +48,21 @@ def test_set_theme():
     assert_that(manager.current_theme.appearance).is_equal_to("dark")
 
 
-def test_set_invalid_theme():
-    """Test setting invalid theme raises error."""
+def test_set_invalid_theme() -> None:
+    """Setting an invalid theme should raise ValueError."""
     manager = ThemeManager()
 
     with pytest.raises(ValueError, match="not found"):
         manager.set_theme("nonexistent-theme")
 
 
-def test_get_theme():
-    """Test getting specific themes."""
+def test_get_theme() -> None:
+    """Getting a specific theme should return it or None."""
     manager = ThemeManager()
 
     theme = manager.get_theme("catppuccin-latte")
     assert_that(theme).is_not_none()
-    assert theme is not None
+    assert theme is not None  # type narrowing for mypy
     assert_that(theme.id).is_equal_to("catppuccin-latte")
     assert_that(theme.appearance).is_equal_to("light")
 
@@ -70,8 +70,8 @@ def test_get_theme():
     assert_that(theme).is_none()
 
 
-def test_get_themes_by_appearance():
-    """Test filtering themes by appearance."""
+def test_get_themes_by_appearance() -> None:
+    """Filtering themes by appearance should return matching themes."""
     manager = ThemeManager()
 
     light_themes = manager.get_themes_by_appearance("light")
@@ -87,8 +87,8 @@ def test_get_themes_by_appearance():
         assert_that(theme.appearance).is_equal_to("dark")
 
 
-def test_get_themes_by_vendor():
-    """Test filtering themes by vendor."""
+def test_get_themes_by_vendor() -> None:
+    """Filtering themes by vendor should return matching themes."""
     manager = ThemeManager()
 
     catppuccin_themes = manager.get_themes_by_vendor("catppuccin")
@@ -98,8 +98,8 @@ def test_get_themes_by_vendor():
         assert_that(theme.vendor).is_equal_to("catppuccin")
 
 
-def test_cycle_theme():
-    """Test theme cycling."""
+def test_cycle_theme() -> None:
+    """Cycling should advance to the next theme."""
     manager = ThemeManager("catppuccin-mocha")
 
     # Cycle through all themes
@@ -115,16 +115,16 @@ def test_cycle_theme():
     assert_that(manager.current_theme.appearance).is_equal_to("light")
 
 
-def test_cycle_theme_empty():
-    """Test cycling with no matching themes raises error."""
+def test_cycle_theme_empty() -> None:
+    """Cycling with no matching themes should raise ValueError."""
     manager = ThemeManager()
 
     with pytest.raises(ValueError, match="No themes found"):
         manager.cycle_theme("nonexistent-appearance")
 
 
-def test_apply_theme_css_variables():
-    """Test CSS variable generation."""
+def test_apply_theme_css_variables() -> None:
+    """CSS variable generation should produce expected variables."""
     manager = ThemeManager("catppuccin-mocha")
 
     variables = manager.apply_theme_to_css_variables()
@@ -143,8 +143,8 @@ def test_apply_theme_css_variables():
         assert_that(key).starts_with("--turbo-")
 
 
-def test_export_theme_json():
-    """Test JSON export."""
+def test_export_theme_json() -> None:
+    """JSON export should produce valid theme data."""
     manager = ThemeManager("catppuccin-mocha")
 
     # Export single theme
@@ -160,16 +160,16 @@ def test_export_theme_json():
     assert_that(data).contains("catppuccin-mocha")
 
 
-def test_export_invalid_theme():
-    """Test exporting invalid theme raises error."""
+def test_export_invalid_theme() -> None:
+    """Exporting an invalid theme should raise ValueError."""
     manager = ThemeManager()
 
     with pytest.raises(ValueError, match="not found"):
         manager.export_theme_json("nonexistent")
 
 
-def test_global_functions():
-    """Test global convenience functions."""
+def test_global_functions() -> None:
+    """Global convenience functions should manage theme state."""
     # Reset to default
     set_theme("catppuccin-mocha")
     assert_that(get_current_theme().id).is_equal_to("catppuccin-mocha")
@@ -185,16 +185,16 @@ def test_global_functions():
     assert_that(get_current_theme().id).is_equal_to(new_theme)
 
 
-def test_get_theme_manager():
-    """Test getting the global theme manager."""
+def test_get_theme_manager() -> None:
+    """Getting the global theme manager should return a ThemeManager."""
     reset_theme_manager()  # Ensure clean state
     manager = get_theme_manager()
     assert_that(manager).is_instance_of(ThemeManager)
     assert_that(manager.current_theme_id).is_equal_to("catppuccin-mocha")
 
 
-def test_get_theme_manager_preserves_state():
-    """Test that get_theme_manager preserves theme state between calls."""
+def test_get_theme_manager_preserves_state() -> None:
+    """The global theme manager should preserve theme state between calls."""
     reset_theme_manager()  # Start clean
     set_theme("github-light")
     # get_theme_manager should preserve the changed state
@@ -203,38 +203,38 @@ def test_get_theme_manager_preserves_state():
     reset_theme_manager()  # Clean up
 
 
-def test_reset_theme_manager():
-    """Test that reset_theme_manager resets to default state."""
+def test_reset_theme_manager() -> None:
+    """Resetting the theme manager should restore default state."""
     set_theme("dracula")
     reset_theme_manager()
     manager = get_theme_manager()
     assert_that(manager.current_theme_id).is_equal_to("catppuccin-mocha")
 
 
-def test_current_theme_property():
-    """Test current_theme property returns ThemeInfo."""
+def test_current_theme_property() -> None:
+    """The current_theme property should return ThemeInfo."""
     manager = ThemeManager()
     theme = manager.current_theme
     assert_that(theme.id).is_equal_to("catppuccin-mocha")
 
 
-def test_theme_info_tokens_access():
-    """Test accessing tokens through ThemeInfo."""
+def test_theme_info_tokens_access() -> None:
+    """Accessing tokens through ThemeInfo should return non-empty values."""
     manager = ThemeManager()
     theme = manager.current_theme
     assert_that(theme.tokens.background.base).is_not_empty()
     assert_that(theme.tokens.text.primary).is_not_empty()
 
 
-def test_themes_by_vendor_empty():
-    """Test filtering by non-existent vendor returns empty dict."""
+def test_themes_by_vendor_empty() -> None:
+    """Filtering by non-existent vendor should return empty dict."""
     manager = ThemeManager()
     themes = manager.get_themes_by_vendor("nonexistent-vendor")
     assert_that(themes).is_empty()
 
 
-def test_themes_by_appearance_empty():
-    """Test filtering by non-existent appearance returns empty dict."""
+def test_themes_by_appearance_empty() -> None:
+    """Filtering by non-existent appearance should return empty dict."""
     manager = ThemeManager()
     themes = manager.get_themes_by_appearance("nonexistent-appearance")
     assert_that(themes).is_empty()

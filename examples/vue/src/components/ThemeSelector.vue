@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ThemeId, ThemeOption } from '../composables/useTheme';
+import type { ThemeId, ThemeOption } from "../composables/useTheme";
 
 defineProps<{
   currentTheme: ThemeId;
@@ -12,7 +12,7 @@ const emit = defineEmits<{
 
 function handleChange(event: Event) {
   const target = event.target as HTMLSelectElement;
-  emit('themeChange', target.value as ThemeId);
+  emit("themeChange", target.value as ThemeId);
 }
 </script>
 

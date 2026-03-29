@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { useTheme } from './composables/useTheme';
-import ThemeSelector from './components/ThemeSelector.vue';
-import Card from './components/Card.vue';
+import { useTheme } from "./composables/useTheme";
+import ThemeSelector from "./components/ThemeSelector.vue";
+import Card from "./components/Card.vue";
 
 const { theme, setTheme, themes } = useTheme();
 </script>

@@ -12,6 +12,7 @@
  * The JSON follows the W3C Design Tokens Community Group format where practical.
  */
 
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,7 +37,7 @@ async function main() {
     $version: JSON.parse(
       fs.readFileSync(path.join(projectRoot, 'package.json'), 'utf8')
     ).version,
-    $generated: new Date().toISOString(),
+    $generated: '', // placeholder — replaced with content hash below
 
     // Metadata about available themes
     meta: {
@@ -74,6 +75,10 @@ async function main() {
       ])
     ),
   };
+
+  // Compute deterministic content hash (excludes $generated itself)
+  const { $generated: _, ...hashable } = output;
+  output.$generated = crypto.createHash('sha256').update(JSON.stringify(hashable)).digest('hex');
 
   // Write to dist/tokens.json
   const outputPath = path.join(distDir, 'tokens.json');

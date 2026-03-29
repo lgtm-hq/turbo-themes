@@ -125,3 +125,22 @@ tools:
   # Semgrep - Security scanner (uses .semgrepignore for exclusions)
   semgrep:
     enabled: true
+
+  # tsc - disabled: lintro's tsc wrapper ignores tool-level excludes and
+  # generates a temp tsconfig that includes all .ts files, breaking against
+  # rootDir in monorepos. Filed as lgtm-hq/py-lintro#803.
+  # TypeScript is type-checked via `bun run build` (uses project tsconfigs).
+  tsc:
+    enabled: false
+
+  # vue-tsc - Vue files only exist in examples/vue (has own tsconfig).
+  # lintro's vue-tsc invocation conflicts with TS 5.9 (TS5112: can't pass
+  # files + tsconfig together). Root project has no Vue source to check.
+  vue-tsc:
+    enabled: false
+
+  # OSV-Scanner - Multi-ecosystem dependency vulnerability scanner
+  # Scans lockfiles (bun.lock, package-lock.json) against the OSV database
+  # Config and suppressions in .osv-scanner.toml
+  osv_scanner:
+    enabled: true

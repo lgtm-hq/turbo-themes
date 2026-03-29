@@ -6,7 +6,7 @@
 import { migrateLegacyStorage, getSavedTheme, saveTheme, DEFAULT_THEME } from './storage.js';
 import { getBaseUrl, getCurrentThemeFromClasses } from './theme-loader.js';
 import { applyTheme, getCurrentTheme } from './apply-theme.js';
-import { CSS_LINK_ID, DOM_IDS, THEME_FAMILIES } from './constants.js';
+import { CSS_LINK_ID, THEME_FAMILIES } from './constants.js';
 import { getThemes, getValidThemeIds } from './theme-resolver.js';
 import { createDropdownStateManager, type DropdownState } from './dropdown/state.js';
 import { wireDropdownEventHandlers } from './dropdown/events.js';

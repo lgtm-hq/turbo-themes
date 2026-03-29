@@ -13,7 +13,6 @@
  *   1 - One or more bundles exceed limits
  */
 
-import { execSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -178,7 +177,7 @@ function printTotalSizes() {
     'CSS Themes': [],
   };
 
-  for (const [relativePath, limitKB] of Object.entries(BUNDLE_LIMITS)) {
+  for (const [relativePath, _limitKB] of Object.entries(BUNDLE_LIMITS)) {
     const fullPath = path.join(projectRoot, relativePath);
     if (!fs.existsSync(fullPath)) continue;
 
