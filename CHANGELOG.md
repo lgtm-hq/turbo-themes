@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.0] - 2026-03-31
+
+### ✨ Added
+
+- add OSV-Scanner vulnerability scanning via lintro Docker image (#366)
+
 ## [0.19.2] - 2026-02-10
 
 ### 🐛 Fixed
