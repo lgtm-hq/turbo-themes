@@ -87,7 +87,7 @@ jobs:
         if: steps.guard.outputs.is_release != 'true' && steps.check-pr.outputs.pr_exists != 'true'
         run: node scripts/ci/create-version-pr.mjs
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Generate Version PR Summary
         if: always()
