@@ -310,21 +310,20 @@ function createPullRequest(branchName, version, description) {
     const tempFile = join(projectRoot, '.pr-description.tmp');
     writeFileSync(tempFile, description, 'utf8');
 
-    // Ensure release-bump label exists before creating PR
+    const prOutput = execSync(
+      `gh pr create --title "${title}" --body-file "${tempFile}" --head ${branchName} --base main`,
+      { encoding: 'utf8', cwd: projectRoot }
+    );
+
+    // Best-effort: apply release-bump label after PR creation
     try {
-      execSync('gh label list --search release-bump --json name -q ".[].name" | grep -q "^release-bump$"', {
+      const prUrl = prOutput.trim().split('\n').pop();
+      execSync(`gh pr edit ${prUrl} --add-label release-bump`, {
         cwd: projectRoot,
       });
     } catch {
-      execSync('gh label create "release-bump" --description "Automated version bump PR" --color "6f42c1"', {
-        cwd: projectRoot,
-      });
+      // Label may not exist or permissions insufficient — not fatal
     }
-
-    const prOutput = execSync(
-      `gh pr create --title "${title}" --body-file "${tempFile}" --head ${branchName} --base main --label release-bump`,
-      { encoding: 'utf8', cwd: projectRoot }
-    );
 
     // Clean up temporary file
     try {
