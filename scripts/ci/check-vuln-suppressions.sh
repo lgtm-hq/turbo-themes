@@ -57,6 +57,26 @@ if [[ -n "${PROBE_DIAG}" ]]; then
   log_info "osv-scanner diagnostics: ${PROBE_DIAG}"
 fi
 
+# Validate PROBE_OUTPUT is non-empty and well-formed JSON before classifying.
+if [[ -z "${PROBE_OUTPUT}" ]]; then
+  log_error "osv-scanner produced no stdout output"
+  [[ -n "${PROBE_DIAG}" ]] && log_error "stderr: ${PROBE_DIAG}"
+  exit 1
+fi
+if command_exists jq; then
+  if ! echo "${PROBE_OUTPUT}" | jq empty 2>/dev/null; then
+    log_error "osv-scanner produced invalid JSON"
+    [[ -n "${PROBE_DIAG}" ]] && log_error "stderr: ${PROBE_DIAG}"
+    exit 1
+  fi
+else
+  if ! echo "${PROBE_OUTPUT}" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null; then
+    log_error "osv-scanner produced invalid JSON"
+    [[ -n "${PROBE_DIAG}" ]] && log_error "stderr: ${PROBE_DIAG}"
+    exit 1
+  fi
+fi
+
 # Classify suppressions using lintro's Python parser (inside Docker).
 # Write probe output to a temp file and bind-mount it to avoid shell
 # escaping issues with large JSON payloads piped through stdin.
@@ -193,7 +213,6 @@ if ! git diff --quiet; then
   git config user.email "github-actions[bot]@users.noreply.github.com"
   git checkout -b "${BRANCH}"
   git add "${OSV_TOML}" 2>/dev/null || true
-  git add -u
   git commit -m "$(
     cat <<EOF
 chore(security): remove stale vulnerability suppressions
