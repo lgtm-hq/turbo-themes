@@ -177,27 +177,36 @@ fi
 
 # --- Remove stale/expired entries from .osv-scanner.toml ---
 
-for VULN_ID in "${REMOVE_IDS[@]}"; do
-  log_info "Removing ${VULN_ID} from ${OSV_TOML}..."
-  awk -v id="${VULN_ID}" '
-    /^\[\[(IgnoredVulns|PackageOverrides)\]\]/ {
-      if (in_block && !found) { printf "%s", block }
-      block = $0 "\n"; in_block = 1; found = 0; next
-    }
-    in_block {
-      if (/^\[/) {
-        if (!found) { printf "%s", block }
-        in_block = 0; found = 0; block = ""
-        print; next
-      }
-      block = block $0 "\n"
-      if (index($0, "id") > 0 && index($0, "\"" id "\"") > 0) { found = 1 }
-      next
-    }
-    { print }
-    END { if (in_block && !found) { printf "%s", block } }
-  ' "${OSV_TOML}" >"${AWK_TMPFILE}" && mv "${AWK_TMPFILE}" "${OSV_TOML}"
+IDS_LIST=$(
+  IFS="|"
+  echo "${REMOVE_IDS[*]}"
+)
+for id in "${REMOVE_IDS[@]}"; do
+  log_info "Removing ${id} from ${OSV_TOML}..."
 done
+awk -v ids="${IDS_LIST}" '
+  BEGIN { n = split(ids, arr, "|"); for (i = 1; i <= n; i++) remove[arr[i]] = 1 }
+  /^\[\[(IgnoredVulns|PackageOverrides)\]\]/ {
+    if (in_block && !found) { printf "%s", block }
+    block = $0 "\n"; in_block = 1; found = 0; next
+  }
+  in_block {
+    if (/^\[/) {
+      if (!found) { printf "%s", block }
+      in_block = 0; found = 0; block = ""
+      print; next
+    }
+    block = block $0 "\n"
+    if (index($0, "id") > 0) {
+      for (rid in remove) {
+        if (index($0, "\"" rid "\"") > 0) { found = 1; break }
+      }
+    }
+    next
+  }
+  { print }
+  END { if (in_block && !found) { printf "%s", block } }
+' "${OSV_TOML}" >"${AWK_TMPFILE}" && mv "${AWK_TMPFILE}" "${OSV_TOML}"
 
 # Clean up empty TOML file (only comments/whitespace left)
 if [[ -f "${OSV_TOML}" ]] && ! grep -qE '^\[' "${OSV_TOML}"; then
