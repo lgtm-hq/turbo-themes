@@ -8,8 +8,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
-  pull-requests: write
 
 concurrency:
   group: lighthouse-${{ github.ref }}
@@ -20,6 +18,9 @@ jobs:
     name: 📊 Lighthouse Performance Analysis
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Harden Runner
         if: ${{ !env.ACT }}

@@ -6,9 +6,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write
-  actions: write
-  pull-requests: write
+  contents: read
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -36,6 +34,9 @@ jobs:
     name: 🏗️ Build & Quality Checks
     runs-on: ubuntu-24.04
     timeout-minutes: 45
+    permissions:
+      contents: read
+      pull-requests: write
     strategy:
       fail-fast: false
       matrix:
@@ -174,6 +175,8 @@ jobs:
     name: 📦 Validate Examples
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    permissions:
+      contents: read
     needs: build
     steps:
       - name: Harden Runner

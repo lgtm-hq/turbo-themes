@@ -17,8 +17,7 @@ on:
         type: string
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   bump:
@@ -31,6 +30,9 @@ jobs:
     name: 🔄 Update Internal SHA References
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
     concurrency:
       group: auto-bump-refs-${{ github.ref }}
       cancel-in-progress: true
