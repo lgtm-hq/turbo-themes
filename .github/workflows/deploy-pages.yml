@@ -56,6 +56,7 @@ jobs:
             objects.githubusercontent.com:443
             pkg-containers.githubusercontent.com:443
             pypi.org:443
+            releases.astral.sh:443
             registry.npmjs.org:443
             release-assets.githubusercontent.com:443
             rubygems-downloads.global.ssl.fastly.net:443
@@ -80,6 +81,7 @@ jobs:
         run: bun run build:ci:site
         env:
           ASTRO_BASE: /turbo-themes/
+          ASTRO_TELEMETRY_DISABLED: '1'
       - name: Download test artifacts
         if: github.event_name == 'workflow_run'
         env:
