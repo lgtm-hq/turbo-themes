@@ -12,11 +12,11 @@ import {
 } from '../helpers/mocks.js';
 
 describe('initNavbar - reports dropdown', () => {
-  let mocks: ReturnType<typeof setupDocumentMocks>;
+  let _mocks: ReturnType<typeof setupDocumentMocks>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks = setupDocumentMocks();
+    _mocks = setupDocumentMocks();
 
     // Default querySelector mock
     Object.defineProperty(document, 'querySelector', {

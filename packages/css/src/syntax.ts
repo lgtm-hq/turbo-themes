@@ -15,7 +15,7 @@ import { CSS_VAR_PREFIX } from './generator.js';
  * Syntax highlighting token types and their CSS class mappings.
  * These cover the common classes used by most syntax highlighters.
  */
-const SYNTAX_CLASS_GROUPS = {
+const _SYNTAX_CLASS_GROUPS = {
   // Comments
   comment: ['.c', '.cm', '.c1', '.cs', '.cp', '.cpf'],
   // Keywords (control flow, declarations)

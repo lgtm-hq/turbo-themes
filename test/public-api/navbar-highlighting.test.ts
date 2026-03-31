@@ -8,11 +8,11 @@ import { initNavbar } from '../../src/index.js';
 import { setupDocumentMocks } from '../helpers/mocks.js';
 
 describe('initNavbar - path highlighting', () => {
-  let mocks: ReturnType<typeof setupDocumentMocks>;
+  let _mocks: ReturnType<typeof setupDocumentMocks>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mocks = setupDocumentMocks();
+    _mocks = setupDocumentMocks();
 
     // Mock location.pathname
     Object.defineProperty(document, 'location', {

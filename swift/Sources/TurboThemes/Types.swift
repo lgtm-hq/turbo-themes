@@ -195,12 +195,12 @@ public struct Meta: Codable, Equatable, Sendable {
 /// Root container for all themes and metadata.
 public struct TurboThemes: Codable, Equatable, Sendable {
     public let themes: [String: ThemeValue]
-    public let byVendor: [String: ByVendorValue]?
+    public let byVendor: [String: ByVendorValue]
     public let meta: Meta?
     public let schema: String?
     public let version: String?
     public let description: String?
-    public let generated: Date?
+    public let generated: String?
 
     public enum CodingKeys: String, CodingKey {
         case themes, byVendor, meta
@@ -210,7 +210,7 @@ public struct TurboThemes: Codable, Equatable, Sendable {
         case generated = "$generated"
     }
 
-    public init(themes: [String: ThemeValue], byVendor: [String: ByVendorValue]? = nil, meta: Meta? = nil, schema: String? = nil, version: String? = nil, description: String? = nil, generated: Date? = nil) {
+    public init(themes: [String: ThemeValue], byVendor: [String: ByVendorValue] = [:], meta: Meta? = nil, schema: String? = nil, version: String? = nil, description: String? = nil, generated: String? = nil) {
         self.themes = themes
         self.byVendor = byVendor
         self.meta = meta
@@ -218,6 +218,17 @@ public struct TurboThemes: Codable, Equatable, Sendable {
         self.version = version
         self.description = description
         self.generated = generated
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        themes = try container.decode([String: ThemeValue].self, forKey: .themes)
+        byVendor = try container.decodeIfPresent([String: ByVendorValue].self, forKey: .byVendor) ?? [:]
+        meta = try container.decodeIfPresent(Meta.self, forKey: .meta)
+        schema = try container.decodeIfPresent(String.self, forKey: .schema)
+        version = try container.decodeIfPresent(String.self, forKey: .version)
+        description = try container.decodeIfPresent(String.self, forKey: .description)
+        generated = try container.decodeIfPresent(String.self, forKey: .generated)
     }
 }
 
@@ -227,7 +238,6 @@ public extension TurboThemes {
     /// Initialize from JSON data
     init(data: Data) throws {
         let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
         self = try decoder.decode(TurboThemes.self, from: data)
     }
 
@@ -247,7 +257,6 @@ public extension TurboThemes {
     /// Encode to JSON data
     func jsonData() throws -> Data {
         let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = .iso8601
         return try encoder.encode(self)
     }
 

@@ -40,6 +40,16 @@
       "trailingCommas": "es5"
     }
   },
+  "overrides": [
+    {
+      "include": ["src/themes/packs/*.synced.ts"],
+      "javascript": {
+        "formatter": {
+          "quoteStyle": "double"
+        }
+      }
+    }
+  ],
   "files": {
     "include": [
       "src/**/*.ts",

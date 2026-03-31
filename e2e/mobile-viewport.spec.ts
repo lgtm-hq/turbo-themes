@@ -1,7 +1,6 @@
 import { expect, test } from '@playwright/test';
 import {
   ThemeSelector,
-  getCurrentTheme,
   getStoredTheme,
   getCssVariable,
   TEST_THEMES,

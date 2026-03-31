@@ -44,7 +44,7 @@ let hasErrors = false;
 /**
  * Validate a single file
  */
-function validateFile(filePath, validator, fileType) {
+function validateFile(filePath, validator, _fileType) {
   const fileName = basename(filePath);
   try {
     const data = JSON.parse(readFileSync(filePath, 'utf-8'));

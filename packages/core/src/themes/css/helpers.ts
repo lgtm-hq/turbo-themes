@@ -114,6 +114,7 @@ export function escapeCssId(id: string): string {
     return CSS.escape(id);
   }
   // Fallback: escape per CSSOM spec (simplified for valid identifier chars)
+  // oxlint-disable-next-line no-control-regex -- intentionally matching control characters
   return id.replace(/[\0-\x1f\x7f]|^-?[0-9]|[^a-zA-Z0-9_-]/g, (char) => {
     if (char === '\0') return '\uFFFD';
     const code = char.charCodeAt(0);

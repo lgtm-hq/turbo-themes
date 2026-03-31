@@ -64,21 +64,6 @@ const copyBuiltExample = (exampleName) => {
   return false;
 };
 
-/**
- * Check if the turbo-themes gem is available to bundler
- */
-function isGemAvailable() {
-  try {
-    execSync('bundle exec ruby -e "require \'turbo-themes\'"', {
-      cwd: rootDir,
-      stdio: 'pipe',
-    });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 try {
   const siteDistDir = join(rootDir, 'apps', 'site', 'dist');
   if (!existsSync(siteDistDir)) {
@@ -176,7 +161,7 @@ try {
             stdio: 'inherit',
           }
         );
-      } catch (e) {
+      } catch {
         // If bundle exec fails, try plain jekyll
         console.log('bundle exec failed, trying plain jekyll...');
         try {
@@ -187,7 +172,7 @@ try {
               stdio: 'inherit',
             }
           );
-        } catch (e2) {
+        } catch {
           console.log('⚠️  Jekyll build failed. Skipping Jekyll example.');
         }
       }

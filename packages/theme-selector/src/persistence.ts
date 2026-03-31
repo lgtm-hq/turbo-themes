@@ -37,6 +37,7 @@ export function resolveInitialTheme(windowObj: Window, validThemes: string[]): s
  * protocol-relative and absolute URLs. Only allows relative paths.
  */
 export function sanitizeBaseUrl(raw: string): string {
+  // oxlint-disable-next-line no-control-regex -- intentionally stripping control characters
   const normalized = raw.replace(/^[\s\u0000-\u001F\u007F]+/, '');
   if (normalized.startsWith('//')) return '';
   if (/^[a-z][a-z0-9+.-]*:/i.test(normalized)) return '';

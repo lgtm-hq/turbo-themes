@@ -119,7 +119,53 @@ allowed-endpoints: >
 - Fetching vulnerability data
 - Updating SBOM metadata
 
+### OSV-Scanner (Dependency Vulnerability Scanning)
+
+```yaml
+allowed-endpoints: >
+  api.osv.dev:443 api.deps.dev:443
+```
+
+**Used for:**
+
+- Querying the OSV vulnerability database
+- Resolving dependency metadata via deps.dev API
+
 ## Workflow-Specific Policies
+
+### Security Audit Workflow (OSV-Scanner)
+
+```yaml
+# security-dependency-review.yml
+allowed-endpoints: >
+  api.github.com:443 api.osv.dev:443 api.deps.dev:443
+  github.com:443 ghcr.io:443 objects.githubusercontent.com:443
+  pkg-containers.githubusercontent.com:443 codeload.github.com:443
+```
+
+**Rationale:**
+
+- GitHub: Code checkout, PR comment posting
+- GHCR: Pulling the py-lintro Docker image (lintro + osv-scanner)
+- OSV: Vulnerability database queries
+- deps.dev: Dependency metadata resolution
+
+### Vulnerability Suppression Check
+
+```yaml
+# vuln-suppression-check.yml
+allowed-endpoints: >
+  api.github.com:443 api.osv.dev:443 api.deps.dev:443
+  github.com:443 ghcr.io:443 objects.githubusercontent.com:443
+  pkg-containers.githubusercontent.com:443 codeload.github.com:443
+```
+
+**Rationale:**
+
+- GitHub: Code checkout, PR creation for stale suppression cleanup
+- GHCR: Pulling the py-lintro Docker image for probe scans and classification
+- OSV: Vulnerability database queries (probe scan without suppressions)
+- deps.dev: Dependency metadata resolution
 
 ### Quality CI Workflow
 

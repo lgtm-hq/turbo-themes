@@ -54,9 +54,9 @@ test.describe('StackBlitz Templates @external', () => {
         // Check for error messages in the page
         const errorLocator = page.locator('[class*="error"], [class*="Error"]');
         const errorCount = await errorLocator.count();
+        expect(errorCount).toBe(0);
 
-        // Some errors might be warnings, so we just verify the page loaded
-        // Critical errors would prevent the editor from showing
+        // Also verify the page loaded meaningful content
         const hasContent = await page.locator('body').textContent();
         expect(hasContent?.length).toBeGreaterThan(100);
       });

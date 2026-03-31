@@ -33,6 +33,7 @@ import Foundation
 /**
  * Convert a JSON Schema type to Swift type.
  */
+// eslint-disable-next-line oxc/only-used-in-recursion -- defs is passed through recursive calls
 function schemaToSwiftType(schema, defs, optional = false) {
   if (!schema) return 'Any';
 
@@ -154,9 +155,6 @@ function generateTypes(schema) {
   lines.push('');
 
   const defs = schema.$defs || {};
-
-  // Track which definitions we've processed
-  const processed = new Set();
 
   // Process definitions in dependency order
   // Simple types first, then complex ones

@@ -9,7 +9,6 @@ import { bench, describe, beforeAll } from 'vitest';
 import { flavors } from '@lgtm-hq/turbo-themes-core';
 
 // Mock DOM for benchmarking
-let mockDocument: Document;
 let mockDocumentElement: HTMLElement;
 
 beforeAll(() => {
@@ -23,20 +22,6 @@ beforeAll(() => {
     getAttribute: () => null,
     setAttribute: () => {},
   } as unknown as HTMLElement;
-
-  mockDocument = {
-    documentElement: mockDocumentElement,
-    getElementById: () => null,
-    querySelectorAll: () => [],
-    head: { appendChild: () => {} },
-    createElement: () => ({
-      setAttribute: () => {},
-      id: '',
-      rel: '',
-      type: '',
-      href: '',
-    }),
-  } as unknown as Document;
 });
 
 describe('Theme Switching Benchmarks', () => {

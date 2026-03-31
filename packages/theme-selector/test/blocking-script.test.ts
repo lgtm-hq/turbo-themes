@@ -116,8 +116,8 @@ describe('generateBlockingScript', () => {
 
     function execScript(options = {}) {
       const script = generateBlockingScript({ validThemes: VALID_THEMES, ...options });
-      // nosemgrep: javascript.browser.security.eval-detected.eval-detected -- test-only: eval is the only way to execute the generated IIFE string in happy-dom
-      eval(script);
+      // eslint-disable-next-line no-eval
+      eval(script); // nosemgrep: javascript.browser.security.eval-detected.eval-detected
     }
 
     it('sets data-theme to default when localStorage is empty', () => {

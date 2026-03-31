@@ -17,9 +17,6 @@ import { allFormats } from './style-dictionary/formats.mjs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const projectRoot = path.resolve(__dirname, '..');
-const styleDictionaryTokensDir = path.join(projectRoot, 'dist', 'tokens', 'style-dictionary');
-
 export default {
   source: ['dist/tokens/style-dictionary/*.json'],
 

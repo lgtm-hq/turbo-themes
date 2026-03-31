@@ -8,7 +8,7 @@ Replaces the complex quicktype-generated types with a simpler implementation.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime
+
 from enum import Enum
 from typing import Any, Dict, Optional
 
@@ -226,7 +226,7 @@ class TurboThemes:
     schema: Optional[str] = None
     version: Optional[str] = None
     description: Optional[str] = None
-    generated: Optional[datetime] = None
+    generated: Optional[str] = None
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> TurboThemes:
@@ -254,14 +254,7 @@ class TurboThemes:
         if "meta" in data:
             meta = Meta.from_dict(data["meta"])
 
-        generated = None
-        if "$generated" in data:
-            try:
-                generated = datetime.fromisoformat(
-                    data["$generated"].replace("Z", "+00:00")
-                )
-            except (ValueError, AttributeError):
-                pass
+        generated = data.get("$generated")
 
         return cls(
             themes=themes,

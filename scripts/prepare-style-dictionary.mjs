@@ -9,8 +9,9 @@
  * Output: dist/tokens/style-dictionary/themes.json
  */
 
+import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 'node:fs';
-import { dirname, join, basename } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { validateThemeId } from './utils/validation.mjs';
 
@@ -235,7 +236,7 @@ function main() {
     $schema: 'https://design-tokens.org/schema.json',
     $description: `Turbo Themes - Design tokens for ${themeIds.length} themes`,
     $version: version,
-    $generated: new Date().toISOString(),
+    $generated: '', // replaced with content hash below
     meta: {
       themeIds,
       totalThemes: themeIds.length,
@@ -244,6 +245,10 @@ function main() {
     themes,
     byVendor,
   };
+
+  // Compute deterministic content hash (excludes $generated itself)
+  const { $generated: _g1, ...outputHashable } = output;
+  output.$generated = createHash('sha256').update(JSON.stringify(outputHashable)).digest('hex');
 
   // Write main themes file (SD format with $value)
   const outputPath = join(outputDir, 'themes.json');
@@ -268,7 +273,7 @@ function main() {
     $schema: 'https://design-tokens.org/schema.json',
     $description: `Turbo Themes - Flat tokens for ${themeIds.length} themes`,
     $version: version,
-    $generated: new Date().toISOString(),
+    $generated: '', // replaced with content hash below
     meta: {
       themeIds,
       totalThemes: themeIds.length,
@@ -277,6 +282,10 @@ function main() {
     themes: flatThemes,
     byVendor,
   };
+
+  // Compute deterministic content hash
+  const { $generated: _g2, ...tokensHashable } = tokensOutput;
+  tokensOutput.$generated = createHash('sha256').update(JSON.stringify(tokensHashable)).digest('hex');
 
   // Write flat tokens file for TypeScript/runtime
   const tokensPath = join(outputDir, 'tokens.json');

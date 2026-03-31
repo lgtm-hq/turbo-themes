@@ -48,7 +48,7 @@ describe('baseUrl path construction', () => {
 
     mocks.mockLocalStorage.getItem.mockReturnValue('catppuccin-latte');
 
-    const { mockHead, mockThemeLink } = createBaseUrlTestSetup(mocks, '');
+    const { mockHead: _mockHead, mockThemeLink: _mockThemeLink } = createBaseUrlTestSetup(mocks, '');
 
     // Override getElementById to return our trigger icon
     Object.defineProperty(document, 'getElementById', {

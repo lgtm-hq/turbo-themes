@@ -163,7 +163,7 @@ async function main() {
   writeFile(path.join(distDir, 'turbo-themes-all.css'), themesOnlyCss);
 
   // Build component CSS files
-  const { totalSize: componentsTotalSize, bundleSize: componentsBundleSize } = buildComponents();
+  const { totalSize: _componentsTotalSize, bundleSize: componentsBundleSize } = buildComponents();
 
   // Summary
   const coreSize = Buffer.byteLength(coreCss, 'utf8');

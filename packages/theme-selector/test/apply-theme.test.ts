@@ -4,7 +4,7 @@
  */
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { applyTheme, getCurrentTheme } from '../src/apply-theme.js';
-import { DOM_IDS, DOM_SELECTORS } from '../src/constants.js';
+import { DOM_IDS } from '../src/constants.js';
 
 // Mock theme-loader module
 vi.mock('../src/theme-loader.js', () => ({

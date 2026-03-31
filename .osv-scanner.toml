@@ -1,0 +1,67 @@
+# OSV-Scanner Configuration
+# https://google.github.io/osv-scanner/configuration/
+#
+# Suppress known vulnerabilities that have been assessed and accepted.
+# Each entry must include an expiry date and a reason.
+#
+# Note: [[IgnoredVulns]] is used for all suppressions (not [[PackageOverrides]])
+# because PackageOverrides with vulnerability.ids is not supported in OSV-Scanner
+# v2.x. This matches py-lintro's approach.
+
+# --- Pygments (pip) ---
+
+[[IgnoredVulns]]
+id = "GHSA-5239-wwwm-4pmq"
+ignoreUntil = 2026-09-29
+reason = "Pygments@2.19.2 ReDoS (CVE-2026-4539) — low severity, transitive dev dep via lintro, no user input reaches Pygments"
+
+# --- h3 (npm, transitive via astro/nitro) ---
+# Fix only available in RC versions. Track: https://github.com/unjs/h3/releases
+
+[[IgnoredVulns]]
+id = "GHSA-22cc-p3c6-wpvm"
+ignoreUntil = 2026-06-29
+reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
+
+[[IgnoredVulns]]
+id = "GHSA-26f5-8h2x-34xh"
+ignoreUntil = 2026-06-29
+reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
+
+[[IgnoredVulns]]
+id = "GHSA-3vj8-jmxq-cgj5"
+ignoreUntil = 2026-06-29
+reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
+
+[[IgnoredVulns]]
+id = "GHSA-4hxc-9384-m385"
+ignoreUntil = 2026-06-29
+reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
+
+[[IgnoredVulns]]
+id = "GHSA-q5pr-72pq-83v3"
+ignoreUntil = 2026-06-29
+reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
+
+[[IgnoredVulns]]
+id = "GHSA-wr4h-v87w-p3r7"
+ignoreUntil = 2026-06-29
+reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
+
+# --- npm packages with impractical remediation ---
+# OSV suggests downgrading to older major versions, which is not viable.
+
+[[IgnoredVulns]]
+id = "GHSA-wf6x-7x77-mvgw"
+ignoreUntil = 2026-09-29
+reason = "immutable@5.1.4 — not actionable, OSV suggests downgrading to v4 (breaking major)"
+
+[[IgnoredVulns]]
+id = "GHSA-mw96-cpmx-2vgc"
+ignoreUntil = 2026-09-29
+reason = "rollup@4.57.0 — not actionable, OSV suggests downgrading to v2 (breaking major)"
+
+[[IgnoredVulns]]
+id = "GHSA-xpqw-6gx7-v673"
+ignoreUntil = 2026-09-29
+reason = "svgo@4.0.0 — not actionable, OSV suggests downgrading to v2 (breaking major)"

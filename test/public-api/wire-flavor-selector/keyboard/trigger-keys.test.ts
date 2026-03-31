@@ -82,7 +82,7 @@ describe('wireFlavorSelector trigger keyboard navigation', () => {
     });
 
     it('handles ArrowUp when dropdown is already open', async () => {
-      const { mockDropdown, mockTrigger } = setupKeyboardTriggerTest(mocks, { dropdownOpen: true });
+      const { mockDropdown: _mockDropdown, mockTrigger } = setupKeyboardTriggerTest(mocks, { dropdownOpen: true });
 
       await wireFlavorSelector(document, window);
 
