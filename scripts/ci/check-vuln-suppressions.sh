@@ -191,7 +191,7 @@ for VULN_ID in "${REMOVE_IDS[@]}"; do
         print; next
       }
       block = block $0 "\n"
-      if ($0 ~ "id[[:space:]]*=[[:space:]]*\"" id "\"") { found = 1 }
+      if (index($0, "id") > 0 && index($0, "\"" id "\"") > 0) { found = 1 }
       next
     }
     { print }
@@ -230,9 +230,10 @@ EOF
 
   git push -u origin "${BRANCH}"
 
-  WF_URL="${GITHUB_SERVER_URL:-https://github.com}"
   if [[ -n "${GITHUB_REPOSITORY:-}" ]]; then
-    WF_URL="${WF_URL}/${GITHUB_REPOSITORY}/actions/workflows/vuln-suppression-check.yml"
+    WF_URL="${GITHUB_SERVER_URL:-https://github.com}/${GITHUB_REPOSITORY}/actions/workflows/vuln-suppression-check.yml"
+  else
+    WF_URL="(workflow URL unavailable — GITHUB_REPOSITORY not set)"
   fi
 
   gh pr create \
