@@ -31,8 +31,11 @@ def escape_md_cell(text: str | None) -> str:
 def parse_lintro_json(path: str) -> dict[str, Any]:
     """Parse the lintro JSON output file."""
     data: dict[str, Any] = json.loads(Path(path).read_text())
-    for result in data.get("results", []):
-        if result.get("tool") == "osv_scanner":
+    results = data.get("results", [])
+    if not isinstance(results, list):
+        return {}
+    for result in results:
+        if isinstance(result, dict) and result.get("tool") == "osv_scanner":
             return dict(result)
     return {}
 
@@ -55,11 +58,11 @@ def format_suppressions_table(suppressions: list[dict[str, Any]]) -> str:
         "|----|---------|--------|--------|",
     ]
     for s in suppressions:
-        vuln_id = escape_md_cell(s.get("id", "unknown"))
-        expires = escape_md_cell(str(s.get("ignore_until", "N/A")))
-        status = escape_md_cell(
-            status_icons.get(s.get("status", ""), s.get("status", "unknown"))
-        )
+        vuln_id = escape_md_cell(s.get("id") or "unknown")
+        raw_expires = s.get("ignore_until")
+        expires = escape_md_cell(str(raw_expires) if raw_expires is not None else "N/A")
+        raw_status = s.get("status") or ""
+        status = escape_md_cell(status_icons.get(raw_status, raw_status or "unknown"))
         reason = escape_md_cell(s.get("reason", ""))
         lines.append(f"| `{vuln_id}` | {expires} | {status} | {reason} |")
 

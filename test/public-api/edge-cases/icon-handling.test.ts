@@ -9,21 +9,17 @@ import {
   setupDocumentMocks,
   createMockElement,
   createMockImg,
-  createMockSpan,
 } from '../../helpers/mocks.js';
 
 describe('icon handling edge cases', () => {
   let mocks: ReturnType<typeof setupDocumentMocks>;
   let mockElement: ReturnType<typeof createMockElement>;
   let mockImg: ReturnType<typeof createMockImg>;
-  let _mockSpan: ReturnType<typeof createMockSpan>;
-
   beforeEach(() => {
     vi.clearAllMocks();
     mocks = setupDocumentMocks();
     mockElement = mocks.mockElement;
     mockImg = mocks.mockImg;
-    _mockSpan = mocks.mockSpan;
   });
 
   it('displays fallback text spans in dropdown for themes without icons', async () => {
