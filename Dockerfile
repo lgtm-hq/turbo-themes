@@ -66,7 +66,7 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8
 
-# NodeSource for Node 22 — pinned script hash for supply chain safety
+# NodeSource for Node 22 — downloaded to file before execution
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN NODESOURCE_SCRIPT="/tmp/setup_node.sh" \
   && curl -fsSL https://deb.nodesource.com/setup_22.x -o "$NODESOURCE_SCRIPT" \

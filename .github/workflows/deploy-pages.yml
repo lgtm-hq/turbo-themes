@@ -30,8 +30,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     if:
-      ${{ github.event.workflow_run.conclusion == 'success' || github.event_name ==
-      'workflow_dispatch' }}
+      ${{ (github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository) ||
+      github.event_name == 'workflow_dispatch' }}
     steps:
       - name: Harden Runner
         if: ${{ !env.ACT }}
@@ -60,7 +63,9 @@ jobs:
             rubygems.org:443
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          ref: ${{ github.event.inputs.branch || github.ref }}
+          ref:
+            ${{ github.event.inputs.branch || github.event.workflow_run.head_sha ||
+            github.ref }}
       - name: Setup environment
         uses: ./.github/actions/setup-env
         with:

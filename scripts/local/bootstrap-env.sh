@@ -125,7 +125,10 @@ else
     npm ci
   else
     log_warn "  ⚠ No lockfile found, generating package-lock.json first..."
-    npm install --package-lock-only
+    if ! npm install --package-lock-only; then
+      log_error "Failed to generate package-lock.json via 'npm install --package-lock-only'"
+      exit 1
+    fi
     npm ci
   fi
 fi
