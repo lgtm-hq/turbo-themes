@@ -9,8 +9,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
-  id-token: write # Required for SBOM signing
 
 concurrency:
   group: sbom-${{ github.ref }}
@@ -22,5 +20,4 @@ jobs:
     uses: ./.github/workflows/reusable-sbom.yml
     permissions:
       contents: read
-      actions: write
       id-token: write

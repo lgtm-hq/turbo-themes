@@ -8,14 +8,15 @@ on:
 
 permissions:
   contents: read
-  actions: write
-  id-token: write # Required for cosign signing
 
 jobs:
   sbom:
     name: 📋 Generate SBOM (Multi-format)
     runs-on: ubuntu-24.04
     timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write # Required for cosign signing
     steps:
       - name: Harden Runner
         if: ${{ !env.ACT }}

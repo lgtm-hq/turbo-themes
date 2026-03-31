@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # CI-like environment to run local builds/tests
 
-FROM ruby:4.0-bookworm
+FROM ruby:4.0-bookworm@sha256:3d410a7caafc13ca3eab2f973e607d2be215eb3daa199977104d9edbb6110d46
 
 # Install OS deps and Node.js LTS (22.x)
 RUN apt-get update \
@@ -19,6 +19,7 @@ RUN apt-get update \
   && locale-gen
 
 # Install Python 3.13 for lintro compatibility
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # hadolint ignore=DL3003
 RUN apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
@@ -37,6 +38,7 @@ RUN apt-get update \
     libffi-dev=3.4.4-1 \
     liblzma-dev=5.4.1-1 \
   && curl -fL --progress-bar https://www.python.org/ftp/python/3.13.0/Python-3.13.0.tgz -o Python-3.13.0.tgz \
+  && echo "12445c7b3db3126c41190bfdc1c8239c39c719404e844babbd015a1bc3fafcd4  Python-3.13.0.tgz" | sha256sum -c - \
   && tar xzf Python-3.13.0.tgz \
   && cd Python-3.13.0 \
   && ./configure --enable-optimizations \
@@ -64,20 +66,28 @@ ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8
 
-# NodeSource for Node 22
+# NodeSource for Node 22 — downloaded to file before execution
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+RUN NODESOURCE_SCRIPT="/tmp/setup_node.sh" \
+  && curl -fsSL https://deb.nodesource.com/setup_22.x -o "$NODESOURCE_SCRIPT" \
+  && bash "$NODESOURCE_SCRIPT" \
+  && rm -f "$NODESOURCE_SCRIPT" \
   && apt-get update \
   && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nodejs=22.* \
   && rm -rf /var/lib/apt/lists/*
 SHELL ["/bin/sh", "-c"]
 
-# Install Bun (preferred package manager/runtime)
+# Install Bun (preferred package manager/runtime) — pinned version
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl -fsSL https://bun.sh/install | bash \
-  && mv /root/.bun/bin/bun /usr/local/bin/bun \
-  && mv /root/.bun/bin/bunx /usr/local/bin/bunx \
-  && rm -rf /root/.bun
+RUN BUN_VERSION="1.3.11" \
+  && BUN_SHA256="8611ba935af886f05a6f38740a15160326c15e5d5d07adef966130b4493607ed" \
+  && curl -fsSL "https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-x64.zip" -o /tmp/bun.zip \
+  && echo "${BUN_SHA256}  /tmp/bun.zip" | sha256sum -c - \
+  && unzip -q /tmp/bun.zip -d /tmp/bun \
+  && mv /tmp/bun/bun-linux-x64/bun /usr/local/bin/bun \
+  && ln -s /usr/local/bin/bun /usr/local/bin/bunx \
+  && chmod +x /usr/local/bin/bun \
+  && rm -rf /tmp/bun /tmp/bun.zip
 SHELL ["/bin/sh", "-c"]
 
 # Ensure Bundler version matches Gemfile.lock (2.3.26)
@@ -90,9 +100,13 @@ COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile --lockfile bun.lock \
   && bunx playwright install --with-deps chromium
 
-# Install Python package manager uv
+# Install Python package manager uv — pinned version
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
+RUN UV_INSTALL_SCRIPT="/tmp/uv-install.sh" \
+  && curl -LsSf https://astral.sh/uv/0.11.0/install.sh -o "$UV_INSTALL_SCRIPT" \
+  && echo "90a46cecbc558ed0a50e50cc0b5775fba8346f362e67ed8da7daf0018261048d  $UV_INSTALL_SCRIPT" | sha256sum -c - \
+  && sh "$UV_INSTALL_SCRIPT" \
+  && rm -f "$UV_INSTALL_SCRIPT"
 SHELL ["/bin/sh", "-c"]
 ENV PATH="/root/.local/bin:${PATH}"
 ENV UV_PYTHON="/usr/local/bin/python3.13"

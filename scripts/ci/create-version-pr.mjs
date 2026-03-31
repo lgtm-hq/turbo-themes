@@ -315,6 +315,16 @@ function createPullRequest(branchName, version, description) {
       { encoding: 'utf8', cwd: projectRoot }
     );
 
+    // Best-effort: apply release-bump label after PR creation
+    try {
+      const prUrl = prOutput.trim().split('\n').pop();
+      execSync(`gh pr edit ${prUrl} --add-label release-bump`, {
+        cwd: projectRoot,
+      });
+    } catch {
+      // Label may not exist or permissions insufficient — not fatal
+    }
+
     // Clean up temporary file
     try {
       execSync(`rm "${tempFile}"`, { cwd: projectRoot });
