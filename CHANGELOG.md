@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.1] - 2026-03-31
+
+### 🐛 Fixed
+
+- harden OpenSSF Scorecard and resolve vulnerability alerts (#368)
+
 ## [0.20.0] - 2026-03-31
 
 ### ✨ Added
