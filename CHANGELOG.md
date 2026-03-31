@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.3] - 2026-03-31
+
+### 🐛 Fixed
+
+- avoid SIGPIPE in deploy-pages artifact download (#374)
+
 ## [0.20.2] - 2026-03-31
 
 ### 🐛 Fixed
