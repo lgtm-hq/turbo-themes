@@ -247,6 +247,7 @@ EOF
 
   gh pr create \
     --title "chore(security): remove stale vulnerability suppressions" \
+    --label "security,dependencies,automation" \
     --body "$(
       cat <<EOF
 ## Summary
