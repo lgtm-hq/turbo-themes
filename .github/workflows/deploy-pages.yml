@@ -60,7 +60,6 @@ jobs:
             registry.npmjs.org:443
             release-assets.githubusercontent.com:443
             rubygems-downloads.global.ssl.fastly.net:443
-            telemetry.astro.build:443
             rubygems.global.ssl.fastly.net:443
             rubygems.org:443
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -82,6 +81,7 @@ jobs:
         run: bun run build:ci:site
         env:
           ASTRO_BASE: /turbo-themes/
+          ASTRO_TELEMETRY_DISABLED: '1'
       - name: Download test artifacts
         if: github.event_name == 'workflow_run'
         env:
