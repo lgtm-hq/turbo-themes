@@ -8,13 +8,6 @@
 # because PackageOverrides with vulnerability.ids is not supported in OSV-Scanner
 # v2.x. This matches py-lintro's approach.
 
-# --- Pygments (pip) ---
-
-[[IgnoredVulns]]
-id = "GHSA-5239-wwwm-4pmq"
-ignoreUntil = 2026-09-29
-reason = "Pygments@2.19.2 ReDoS (CVE-2026-4539) — low severity, transitive dev dep via lintro, no user input reaches Pygments"
-
 # --- h3 (npm, transitive via astro/nitro) ---
 # Fix only available in RC versions. Track: https://github.com/unjs/h3/releases
 
