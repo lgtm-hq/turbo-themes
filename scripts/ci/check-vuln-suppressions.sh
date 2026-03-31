@@ -20,6 +20,11 @@ cd "${REPO_ROOT}"
 # shellcheck source=../utils/utils.sh
 source "${SCRIPT_DIR}/../utils/utils.sh"
 
+if [[ -z "${GH_TOKEN:-}" ]]; then
+  log_error "GH_TOKEN is required for PR creation but is not set"
+  exit 1
+fi
+
 OSV_TOML=".osv-scanner.toml"
 LINTRO_IMAGE="${LINTRO_IMAGE:-py-lintro:latest}"
 
@@ -37,7 +42,7 @@ AWK_TMPFILE=$(mktemp)
 PROBE_TMPFILE=$(mktemp)
 cleanup() {
   [[ -n "${AWK_TMPFILE:-}" ]] && rm -f "${AWK_TMPFILE}"
-  [[ -n "${PROBE_TMPFILE:-}" ]] && rm -f "${PROBE_TMPFILE}"
+  [[ -n "${PROBE_TMPFILE:-}" ]] && rm -f "${PROBE_TMPFILE}" "${PROBE_TMPFILE}.diag"
 }
 trap cleanup EXIT
 
@@ -64,13 +69,13 @@ if [[ -z "${PROBE_OUTPUT}" ]]; then
   exit 1
 fi
 if command_exists jq; then
-  if ! echo "${PROBE_OUTPUT}" | jq empty 2>/dev/null; then
+  if ! printf '%s' "${PROBE_OUTPUT}" | jq empty 2>/dev/null; then
     log_error "osv-scanner produced invalid JSON"
     [[ -n "${PROBE_DIAG}" ]] && log_error "stderr: ${PROBE_DIAG}"
     exit 1
   fi
 else
-  if ! echo "${PROBE_OUTPUT}" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null; then
+  if ! printf '%s' "${PROBE_OUTPUT}" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null; then
     log_error "osv-scanner produced invalid JSON"
     [[ -n "${PROBE_DIAG}" ]] && log_error "stderr: ${PROBE_DIAG}"
     exit 1
@@ -98,12 +103,12 @@ if [[ -z "${CLASSIFICATION_JSON}" ]]; then
   exit 1
 fi
 if command_exists jq; then
-  if ! echo "${CLASSIFICATION_JSON}" | jq empty 2>/dev/null; then
+  if ! printf '%s' "${CLASSIFICATION_JSON}" | jq empty 2>/dev/null; then
     log_error "classify-suppressions.py produced invalid JSON: ${CLASSIFICATION_JSON}"
     exit 1
   fi
 else
-  if ! echo "${CLASSIFICATION_JSON}" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null; then
+  if ! printf '%s' "${CLASSIFICATION_JSON}" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null; then
     log_error "classify-suppressions.py produced invalid JSON: ${CLASSIFICATION_JSON}"
     exit 1
   fi
@@ -116,9 +121,9 @@ _extract_json_array() {
   local json="$1"
   local key="$2"
   if command_exists jq; then
-    echo "${json}" | jq -r --arg k "${key}" '.[$k] // [] | .[]'
+    printf '%s' "${json}" | jq -r --arg k "${key}" '.[$k] // [] | .[]'
   else
-    echo "${json}" | python3 -c "import json,sys; [print(i) for i in json.load(sys.stdin).get(sys.argv[1],[])]" "${key}"
+    printf '%s' "${json}" | python3 -c "import json,sys; [print(i) for i in json.load(sys.stdin).get(sys.argv[1],[])]" "${key}"
   fi
 }
 
@@ -212,7 +217,7 @@ if ! git diff --quiet; then
   git config user.name "github-actions[bot]"
   git config user.email "github-actions[bot]@users.noreply.github.com"
   git checkout -b "${BRANCH}"
-  git add "${OSV_TOML}" 2>/dev/null || true
+  git add -- "${OSV_TOML}" 2>/dev/null || git rm --cached -- "${OSV_TOML}" 2>/dev/null || true
   git commit -m "$(
     cat <<EOF
 chore(security): remove stale vulnerability suppressions
@@ -226,8 +231,9 @@ EOF
   git push -u origin "${BRANCH}"
 
   WF_URL="${GITHUB_SERVER_URL:-https://github.com}"
-  WF_URL="${WF_URL}/${GITHUB_REPOSITORY}"
-  WF_URL="${WF_URL}/actions/workflows/vuln-suppression-check.yml"
+  if [[ -n "${GITHUB_REPOSITORY:-}" ]]; then
+    WF_URL="${WF_URL}/${GITHUB_REPOSITORY}/actions/workflows/vuln-suppression-check.yml"
+  fi
 
   gh pr create \
     --title "chore(security): remove stale vulnerability suppressions" \
