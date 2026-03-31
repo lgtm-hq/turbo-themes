@@ -36,7 +36,7 @@ def test_turbo_tokens_is_dataclass() -> None:
 def test_turbo_tokens_is_frozen() -> None:
     """TurboTokens should be frozen (immutable)."""
     tokens = TurboTokens()
-    with pytest.raises(Exception):  # FrozenInstanceError
+    with pytest.raises(dataclasses.FrozenInstanceError):
         tokens.bg_base = "changed"
 
 

@@ -249,7 +249,7 @@ def test_turbo_themes_parses_meta(
 def test_turbo_themes_parses_generated_field(
     full_turbo_themes_data: dict[str, Any],
 ) -> None:
-    """Should parse generated git SHA.
+    """Should parse generated content hash (SHA-256 of JSON content).
 
     Args:
         full_turbo_themes_data: Full TurboThemes data fixture.

@@ -64,6 +64,25 @@ CLASSIFICATION_JSON=$(
     sh -c 'python3 /code/scripts/ci/classify-suppressions.py < /tmp/probe-output.json'
 )
 
+# Validate that CLASSIFICATION_JSON is well-formed before extracting arrays.
+# A parse failure here (empty output, Python traceback, etc.) must fail the
+# script rather than silently produce an empty REMOVE_IDS list.
+if [[ -z "${CLASSIFICATION_JSON}" ]]; then
+  log_error "classify-suppressions.py produced no output"
+  exit 1
+fi
+if command_exists jq; then
+  if ! echo "${CLASSIFICATION_JSON}" | jq empty 2>/dev/null; then
+    log_error "classify-suppressions.py produced invalid JSON: ${CLASSIFICATION_JSON}"
+    exit 1
+  fi
+else
+  if ! echo "${CLASSIFICATION_JSON}" | python3 -c 'import json,sys; json.load(sys.stdin)' 2>/dev/null; then
+    log_error "classify-suppressions.py produced invalid JSON: ${CLASSIFICATION_JSON}"
+    exit 1
+  fi
+fi
+
 # Extract IDs from JSON classification
 # Helper: extract an array of strings from a JSON object by key.
 # Uses jq when available, falls back to Python.
@@ -114,6 +133,10 @@ PR_LIST_OUTPUT=$(
 ) || PR_LIST_EXIT=$?
 if [[ "${PR_LIST_EXIT}" -ne 0 ]]; then
   log_error "gh pr list failed: ${PR_LIST_OUTPUT}"
+  exit 1
+fi
+if ! [[ "${PR_LIST_OUTPUT}" =~ ^[0-9]+$ ]]; then
+  log_error "gh pr list returned non-numeric output: ${PR_LIST_OUTPUT}"
   exit 1
 fi
 if [[ "${PR_LIST_OUTPUT}" -gt 0 ]]; then
