@@ -14,6 +14,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 ### 🐛 Fixed
 
+- use RELEASE_TOKEN for version PR creation (#373)
+- replace invalid email in SECURITY.md (#371)
+
+## [0.20.2] - 2026-03-31
+
+### 🐛 Fixed
+
 - replace invalid email in SECURITY.md (#371)
 
 ## [0.20.1] - 2026-03-31
