@@ -185,7 +185,7 @@ for VULN_ID in "${REMOVE_IDS[@]}"; do
       block = $0 "\n"; in_block = 1; found = 0; next
     }
     in_block {
-      if (/^$/ || /^\[/) {
+      if (/^\[/) {
         if (!found) { printf "%s", block }
         in_block = 0; found = 0; block = ""
         print; next
