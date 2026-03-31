@@ -84,9 +84,9 @@ find_workflow_run() {
   fi
 
   # Use head_sha query parameter for efficient filtering (avoids pagination issues)
+  # Use jq first() instead of piping to head -1 to avoid SIGPIPE with pipefail
   gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=${commit_sha}&per_page=100" \
-    --jq "${jq_filter}" |
-    head -1
+    --jq "first(${jq_filter}) // empty"
 }
 
 # Function to find the most recent successful workflow run on main branch
@@ -103,9 +103,9 @@ find_latest_workflow_run_on_main() {
     jq_filter=".workflow_runs[] | select(.name == \"${workflow_name}\" and .head_branch == \"${MAIN_BRANCH}\" and .conclusion == \"success\") | .id"
   fi
 
+  # Use jq first() instead of piping to head -1 to avoid SIGPIPE with pipefail
   gh api "repos/${GITHUB_REPOSITORY}/actions/runs?branch=${MAIN_BRANCH}&per_page=50" \
-    --jq "${jq_filter}" |
-    head -1
+    --jq "first(${jq_filter}) // empty"
 }
 
 # Function to get artifact ID from a workflow run
