@@ -1,6 +1,6 @@
 ---
 name: Reusable - Quality Gate & Linting
-# Reusable workflow for quality checks: linting (JS, CSS, MD) and format validation.
+# Reusable workflow for quality checks via lintro and TypeScript build.
 # Can be called from other workflows to enforce consistent quality standards.
 
 on:
@@ -50,21 +50,8 @@ jobs:
           node-version: ${{ inputs.node-version }}
           skip-ruby: 'true'
 
-      - name: Lint JavaScript/TypeScript
+      - name: Lint & format (lintro)
         run: bun run lint
-
-      - name: Format check
-        run: bun run format
-
-      - name: Markdown lint
-        run: bun run mdlint
-
-      - name: CSS lint (Stylelint)
-        run: bun run stylelint
 
       - name: TypeScript build
         run: bun run build:root
-
-      - name: Shellcheck (non-blocking)
-        continue-on-error: true
-        run: ./scripts/ci/run-shellcheck.sh
