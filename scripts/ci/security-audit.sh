@@ -39,14 +39,15 @@ docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
 HAS_VULNS=0
 if [[ -f "${OSV_RESULTS}" ]] && python3 -c "
 import json, sys
+path = sys.argv[1]
 try:
-    d = json.load(open('${OSV_RESULTS}'))
+    d = json.load(open(path))
     r = next((x for x in d.get('results', []) if x.get('tool') == 'osv_scanner'), None)
     sys.exit(0 if r and r.get('issues_count', 0) > 0 else 1)
 except (json.JSONDecodeError, KeyError) as e:
-    print(f'Failed to parse ${OSV_RESULTS}: {e}', file=sys.stderr)
+    print(f'Failed to parse {path}: {e}', file=sys.stderr)
     sys.exit(1)
-" 2>&1; then
+" "${OSV_RESULTS}" 2>&1; then
   HAS_VULNS=1
 fi
 

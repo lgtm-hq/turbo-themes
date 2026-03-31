@@ -44,12 +44,18 @@ trap cleanup EXIT
 # Probe osv-scanner without suppressions (--config /dev/null bypasses .osv-scanner.toml)
 # to see which vulnerabilities still exist in the current lockfiles.
 log_info "Probing osv-scanner without suppressions..."
+PROBE_DIAG=""
 PROBE_OUTPUT=$(
   docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
     -v "$PWD:/code" -w /code "${LINTRO_IMAGE}" \
     osv-scanner scan --format json --config /dev/null --recursive . \
-    2>&1 || true
+    2>"${PROBE_TMPFILE}.diag" || true
 )
+PROBE_DIAG=$(cat "${PROBE_TMPFILE}.diag" 2>/dev/null || true)
+rm -f "${PROBE_TMPFILE}.diag"
+if [[ -n "${PROBE_DIAG}" ]]; then
+  log_info "osv-scanner diagnostics: ${PROBE_DIAG}"
+fi
 
 # Classify suppressions using lintro's Python parser (inside Docker).
 # Write probe output to a temp file and bind-mount it to avoid shell
@@ -149,7 +155,7 @@ fi
 for VULN_ID in "${REMOVE_IDS[@]}"; do
   log_info "Removing ${VULN_ID} from ${OSV_TOML}..."
   awk -v id="${VULN_ID}" '
-    /^\[\[IgnoredVulns\]\]/ {
+    /^\[\[(IgnoredVulns|PackageOverrides)\]\]/ {
       if (in_block && !found) { printf "%s", block }
       block = $0 "\n"; in_block = 1; found = 0; next
     }

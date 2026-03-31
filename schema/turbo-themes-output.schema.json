@@ -10,7 +10,10 @@
     "$version": { "type": "string" },
     "$generated": {
       "type": "string",
-      "description": "SHA-256 content hash of the generated content (deterministic snapshot)"
+      "description": "SHA-256 content hash of the generated content (deterministic snapshot)",
+      "pattern": "^[a-f0-9]{64}$",
+      "minLength": 64,
+      "maxLength": 64
     },
     "meta": { "$ref": "#/$defs/Meta" },
     "themes": {

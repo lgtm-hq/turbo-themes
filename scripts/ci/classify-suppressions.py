@@ -46,14 +46,13 @@ def main() -> None:
 
     probe_output = sys.stdin.read()
     if not probe_output or not probe_output.strip():
-        # Empty stdin means osv-scanner produced no output; treat all
-        # suppressions as active (nothing to contradict them).
-        print(
-            json.dumps({"stale": [], "expired": [], "active": [e.id for e in entries]})
-        )
-        return
-    probe_issues = parse_osv_scanner_output(probe_output)
-    probe_ids = {i.vuln_id for i in probe_issues}
+        # Empty stdin means osv-scanner produced no output; use the
+        # classifier with an empty probe set so expired entries are
+        # still correctly detected.
+        probe_ids: set[str] = set()
+    else:
+        probe_issues = parse_osv_scanner_output(probe_output)
+        probe_ids = {i.vuln_id for i in probe_issues}
 
     classified = classify_suppressions(entries, probe_ids)
 

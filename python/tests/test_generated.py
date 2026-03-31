@@ -15,14 +15,14 @@ def test_can_import_from_generated() -> None:
     """Should be able to import TurboTokens from generated module."""
     from turbo_themes.generated import TurboTokens as TurboTokensImport
 
-    assert_that(TurboTokensImport).is_not_none()
+    assert_that(TurboTokensImport).is_same_as(TurboTokens)
 
 
 def test_can_import_from_tokens_submodule() -> None:
     """Should be able to import from tokens submodule."""
     from turbo_themes.generated.tokens import TurboTokens as TurboTokensSub
 
-    assert_that(TurboTokensSub).is_not_none()
+    assert_that(TurboTokensSub).is_same_as(TurboTokens)
 
 
 # --- TurboTokens dataclass ---
@@ -186,7 +186,7 @@ def test_turbo_tokens_spacing_values_are_rem(attr: str) -> None:
         attr: The spacing attribute name to check.
     """
     tokens = TurboTokens()
-    assert_that(getattr(tokens, attr)).contains("rem")
+    assert_that(getattr(tokens, attr)).ends_with("rem")
 
 
 @pytest.mark.parametrize(
@@ -204,7 +204,7 @@ def test_turbo_tokens_animation_duration_values_are_ms(attr: str) -> None:
         attr: The animation duration attribute name to check.
     """
     tokens = TurboTokens()
-    assert_that(getattr(tokens, attr)).contains("ms")
+    assert_that(getattr(tokens, attr)).ends_with("ms")
 
 
 def test_turbo_tokens_can_create_with_custom_values() -> None:

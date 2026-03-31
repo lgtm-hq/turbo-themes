@@ -51,7 +51,7 @@ export function createThemeItemElement(
   theme: ThemeFlavor,
   familyMeta: ThemeFamilyMeta
 ): HTMLButtonElement {
-  const { documentObj, baseUrl, currentThemeId, selectEl, windowObj: _windowObj, closeDropdown, onThemeSelect } = ctx;
+  const { documentObj, baseUrl, currentThemeId, selectEl, closeDropdown, onThemeSelect } = ctx;
 
   const item = documentObj.createElement('button');
   item.type = 'button';
@@ -211,7 +211,7 @@ export function wireNativeSelect(
   themes: ThemeFlavor[],
   defaultTheme: string
 ): void {
-  const { documentObj, windowObj: _windowObj, onThemeSelect } = ctx;
+  const { documentObj, onThemeSelect } = ctx;
 
   // Clear existing options
   while (selectEl.firstChild) {
