@@ -311,7 +311,7 @@ function createPullRequest(branchName, version, description) {
     writeFileSync(tempFile, description, 'utf8');
 
     const prOutput = execSync(
-      `gh pr create --title "${title}" --body-file "${tempFile}" --head ${branchName} --base main`,
+      `gh pr create --title "${title}" --body-file "${tempFile}" --head ${branchName} --base main --label release-bump`,
       { encoding: 'utf8', cwd: projectRoot }
     );
 
