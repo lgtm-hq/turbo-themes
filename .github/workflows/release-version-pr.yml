@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   version-pr:
-    name: 📝 Create Version PR
+    name: Create or Update Version PR
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     permissions:
@@ -42,6 +42,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: true
+          token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
 
       - name: Guard - Check if last commit is a release
         id: guard
@@ -52,7 +53,7 @@ jobs:
       - name: Skip if release commit
         if: steps.guard.outputs.is_release == 'true'
         run: |
-          echo "⏭️  Skipping version PR - last commit was a release (prevents infinite loop)"
+          echo "Skipping version PR - last commit was a release (prevents infinite loop)"
           exit 0
 
       - name: Configure Git
@@ -76,23 +77,34 @@ jobs:
         if: steps.guard.outputs.is_release != 'true'
         run: bun install --frozen-lockfile
 
-      - name: Check for existing version PR
+      - name: Compute next version and update files
         if: steps.guard.outputs.is_release != 'true'
-        id: check-pr
-        run: ./scripts/ci/check-existing-version-pr.sh
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create version PR
-        if: steps.guard.outputs.is_release != 'true' && steps.check-pr.outputs.pr_exists != 'true'
+        id: version
         run: node scripts/ci/create-version-pr.mjs
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Create or update version PR
+        if: steps.guard.outputs.is_release != 'true' && steps.version.outputs.bump_needed == 'true'
+        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
+        with:
+          token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(release): version ${{ steps.version.outputs.next_version }}'
+          title: ${{ steps.version.outputs.pr_title }}
+          body-path: ${{ steps.version.outputs.pr_body_file }}
+          branch: release/version-${{ steps.version.outputs.next_version }}
+          base: main
+          labels: |
+            release-bump
+          delete-branch: true
 
       - name: Generate Version PR Summary
         if: always()
         shell: bash
-        run: ./scripts/ci/generate-version-pr-summary.sh
-        env:
-          PR_EXISTS: ${{ steps.check-pr.outputs.pr_exists }}
-          PR_NUMBER: ${{ steps.check-pr.outputs.pr_number }}
+        run: |
+          {
+            echo "## Release Version PR Status"
+            if [ "${{ steps.version.outputs.bump_needed }}" = "true" ]; then
+              echo "Version PR created/updated for v${{ steps.version.outputs.next_version }}"
+            else
+              echo "No version bump needed"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
