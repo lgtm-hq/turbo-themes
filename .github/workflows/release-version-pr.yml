@@ -98,13 +98,7 @@ jobs:
 
       - name: Generate Version PR Summary
         if: always()
-        shell: bash
-        run: |
-          {
-            echo "## Release Version PR Status"
-            if [ "${{ steps.version.outputs.bump_needed }}" = "true" ]; then
-              echo "Version PR created/updated for v${{ steps.version.outputs.next_version }}"
-            else
-              echo "No version bump needed"
-            fi
-          } >> "$GITHUB_STEP_SUMMARY"
+        env:
+          BUMP_NEEDED: ${{ steps.version.outputs.bump_needed }}
+          NEXT_VERSION: ${{ steps.version.outputs.next_version }}
+        run: ./scripts/ci/generate-version-pr-summary.sh
