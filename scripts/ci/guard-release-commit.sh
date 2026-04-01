@@ -24,9 +24,9 @@ echo "Last commit: $msg"
 is_release=false
 if echo "$msg" | grep -Eq '^chore\(release\):'; then
   is_release=true
-  echo "✅ This is a release commit - version PR workflow will be skipped"
+  echo "This is a release commit - version PR workflow will be skipped"
 else
-  echo "📝 Not a release commit - version PR workflow will proceed"
+  echo "Not a release commit - version PR workflow will proceed"
 fi
 
 if [[ -n "${GITHUB_OUTPUT:-}" ]]; then

@@ -5,7 +5,7 @@ set -euo pipefail
 
 {
   echo "## Release Version PR Status"
-  if [ "${BUMP_NEEDED}" = "true" ]; then
+  if [ "${BUMP_NEEDED:-}" = "true" ]; then
     echo "Version PR created/updated for v${NEXT_VERSION}"
   else
     echo "No version bump needed"

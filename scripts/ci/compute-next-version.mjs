@@ -15,7 +15,7 @@
  *   - pr_title: the PR title to use
  *   - pr_body_file: path to a temp file containing the PR body
  *
- * Usage: node scripts/ci/create-version-pr.mjs [--dry-run]
+ * Usage: node scripts/ci/compute-next-version.mjs [--dry-run]
  */
 
 import { execSync, execFileSync } from 'child_process';

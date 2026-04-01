@@ -80,7 +80,7 @@ jobs:
       - name: Compute next version and update files
         if: steps.guard.outputs.is_release != 'true'
         id: version
-        run: node scripts/ci/create-version-pr.mjs
+        run: node scripts/ci/compute-next-version.mjs
 
       - name: Create or update version PR
         if: steps.guard.outputs.is_release != 'true' && steps.version.outputs.bump_needed == 'true'
@@ -95,6 +95,12 @@ jobs:
           labels: |
             release-bump
           delete-branch: true
+
+      - name: Enable auto-merge
+        if: steps.guard.outputs.is_release != 'true' && steps.version.outputs.bump_needed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+        run: gh pr merge release/version-${{ steps.version.outputs.next_version }} --auto --squash
 
       - name: Generate Version PR Summary
         if: always()
