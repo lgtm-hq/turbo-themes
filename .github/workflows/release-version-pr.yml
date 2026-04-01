@@ -102,7 +102,7 @@ jobs:
         if: steps.create_pr.outputs.pull-request-number
         env:
           GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
-        run: gh pr merge release/version-${{ steps.version.outputs.next_version }} --auto --squash
+        run: gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --squash
 
       - name: Generate Version PR Summary
         if: always()

@@ -63,7 +63,8 @@ function getCommitsSinceLastTag() {
     return { lastTag, commits };
   } catch (err) {
     // Only handle "no tags found" — rethrow other git errors
-    if (err.stderr && !err.stderr.includes('No names found') && !err.stderr.includes('No tags')) {
+    const stderr = String(err.stderr || '');
+    if (!stderr.includes('No names found') && !stderr.includes('No tags')) {
       throw err;
     }
     const commits = execFileSync('git', ['log', '--oneline', '--no-merges'], {
