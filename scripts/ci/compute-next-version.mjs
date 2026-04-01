@@ -19,7 +19,7 @@
  */
 
 import { execSync, execFileSync } from 'child_process';
-import { readFileSync, writeFileSync, appendFileSync } from 'fs';
+import { existsSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import {
@@ -98,6 +98,8 @@ function generatePRDescription(commits, version, bumpType, lastTag) {
   description += `  - Python: \`python/pyproject.toml\`\n`;
   description += `  - Ruby: \`lib/turbo-themes/version.rb\`\n`;
   description += `  - Swift: \`swift/Sources/TurboThemes/Version.swift\`\n`;
+  description += `  - Dart: \`dart/pubspec.yaml\`\n`;
+  description += `  - Kotlin: \`kotlin/build.gradle.kts\`\n`;
   description += `- Updated \`CHANGELOG.md\` with new version entry\n\n`;
 
   description += `### Next Steps\n\n`;
@@ -166,6 +168,11 @@ function main() {
   }
 
   // Calculate next version from VERSION file (source of truth)
+  if (!existsSync(CONFIG.versionFile)) {
+    console.error(`VERSION file not found at ${CONFIG.versionFile}`);
+    console.error('Create it with the current version, e.g.: echo "0.1.0" > VERSION');
+    process.exit(1);
+  }
   const currentVersion = readFileSync(CONFIG.versionFile, 'utf8').trim();
   const nextVersion = calculateNextVersion(currentVersion, bumpType);
 
@@ -184,19 +191,24 @@ function main() {
   console.log(`Updated VERSION file to ${nextVersion}`);
 
   // Run sync-version.mjs to update all platform packages
-  // This syncs: package.json, Python, Ruby, Swift
+  // This syncs: package.json, tokens.json, Python, Ruby, Swift, Dart, Kotlin
   execFileSync('node', [CONFIG.syncScript], { cwd: projectRoot, stdio: 'inherit' });
   console.log(`Synced version across all platforms`);
 
   // Update CHANGELOG.md
   const changelogEntry = generateChangelogEntry(commits, nextVersion, bumpType);
   const changelogContent = readFileSync(CONFIG.changelogFile, 'utf8');
-  const updatedContent = changelogContent.replace(
-    /## \[Unreleased\][\s\S]*?(?=## \[|$)/,
-    `## [Unreleased]\n\n### Added\n\n- TBD\n\n${changelogEntry}`
-  );
-  writeFileSync(CONFIG.changelogFile, updatedContent);
-  console.log(`Updated CHANGELOG.md`);
+  if (!/## \[Unreleased\]/.test(changelogContent)) {
+    console.warn(`Warning: ${CONFIG.changelogFile} is missing a "## [Unreleased]" section`);
+    console.warn('Changelog will not be updated. Add the section manually.');
+  } else {
+    const updatedContent = changelogContent.replace(
+      /## \[Unreleased\][\s\S]*?(?=## \[|$)/,
+      `## [Unreleased]\n\n### Added\n\n- TBD\n\n${changelogEntry}`
+    );
+    writeFileSync(CONFIG.changelogFile, updatedContent);
+    console.log(`Updated CHANGELOG.md`);
+  }
 
   // Generate PR description and write to temp file outside repo
   const description = generatePRDescription(commits, nextVersion, bumpType, lastTag);
