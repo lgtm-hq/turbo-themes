@@ -61,8 +61,11 @@ function getCommitsSinceLastTag() {
       .filter((commit) => !commit.includes('chore(release):')); // Exclude release commits
 
     return { lastTag, commits };
-  } catch {
-    // No tags found, get all commits
+  } catch (err) {
+    // Only handle "no tags found" — rethrow other git errors
+    if (err.stderr && !err.stderr.includes('No names found') && !err.stderr.includes('No tags')) {
+      throw err;
+    }
     const commits = execSync('git log --oneline --no-merges', {
       encoding: 'utf8',
       cwd: projectRoot,
@@ -197,17 +200,21 @@ function main() {
 
   // Update CHANGELOG.md
   const changelogEntry = generateChangelogEntry(commits, nextVersion, bumpType);
-  const changelogContent = readFileSync(CONFIG.changelogFile, 'utf8');
-  if (!/## \[Unreleased\]/.test(changelogContent)) {
-    console.warn(`Warning: ${CONFIG.changelogFile} is missing a "## [Unreleased]" section`);
-    console.warn('Changelog will not be updated. Add the section manually.');
+  if (!existsSync(CONFIG.changelogFile)) {
+    console.warn(`Warning: ${CONFIG.changelogFile} not found, skipping changelog update`);
   } else {
-    const updatedContent = changelogContent.replace(
-      /## \[Unreleased\][\s\S]*?(?=## \[|$)/,
-      `## [Unreleased]\n\n### Added\n\n- TBD\n\n${changelogEntry}`
-    );
-    writeFileSync(CONFIG.changelogFile, updatedContent);
-    console.log(`Updated CHANGELOG.md`);
+    const changelogContent = readFileSync(CONFIG.changelogFile, 'utf8');
+    if (!/## \[Unreleased\]/.test(changelogContent)) {
+      console.warn(`Warning: ${CONFIG.changelogFile} is missing a "## [Unreleased]" section`);
+      console.warn('Changelog will not be updated. Add the section manually.');
+    } else {
+      const updatedContent = changelogContent.replace(
+        /## \[Unreleased\][\s\S]*?(?=## \[|$)/,
+        `## [Unreleased]\n\n### Added\n\n- TBD\n\n${changelogEntry}`
+      );
+      writeFileSync(CONFIG.changelogFile, updatedContent);
+      console.log(`Updated CHANGELOG.md`);
+    }
   }
 
   // Generate PR description and write to temp file outside repo
