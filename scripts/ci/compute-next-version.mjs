@@ -18,7 +18,7 @@
  * Usage: node scripts/ci/compute-next-version.mjs [--dry-run]
  */
 
-import { execSync, execFileSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import { existsSync, readFileSync, writeFileSync, appendFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
@@ -46,12 +46,12 @@ const CONFIG = {
  */
 function getCommitsSinceLastTag() {
   try {
-    const lastTag = execSync('git describe --tags --abbrev=0', {
+    const lastTag = execFileSync('git', ['describe', '--tags', '--abbrev=0'], {
       encoding: 'utf8',
       cwd: projectRoot,
     }).trim();
 
-    const commits = execSync(`git log ${lastTag}..HEAD --oneline --no-merges`, {
+    const commits = execFileSync('git', ['log', `${lastTag}..HEAD`, '--oneline', '--no-merges'], {
       encoding: 'utf8',
       cwd: projectRoot,
     })
@@ -66,7 +66,7 @@ function getCommitsSinceLastTag() {
     if (err.stderr && !err.stderr.includes('No names found') && !err.stderr.includes('No tags')) {
       throw err;
     }
-    const commits = execSync('git log --oneline --no-merges', {
+    const commits = execFileSync('git', ['log', '--oneline', '--no-merges'], {
       encoding: 'utf8',
       cwd: projectRoot,
     })
