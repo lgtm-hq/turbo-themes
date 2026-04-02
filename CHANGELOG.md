@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.4] - 2026-04-02
+
+### 🐛 Fixed
+
+- disable husky in version PR and use GitHub App token (#379)
+- switch to peter-evans/create-pull-request for auto-updating version PRs (#377)
+
 ## [0.20.3] - 2026-03-31
 
 ### 🐛 Fixed
