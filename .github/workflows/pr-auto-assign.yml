@@ -43,4 +43,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_AUTHOR_TYPE: ${{ github.event.pull_request.user.type }}
         run: ./scripts/ci/pr-auto-assign.sh

@@ -38,12 +38,21 @@ jobs:
             registry.npmjs.org:443
             bun.sh:443
 
+      - name: Create GitHub App installation token
+        id: app-token
+        # yamllint disable-line rule:line-length
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
+        with:
+          app-id: ${{ secrets.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
-          persist-credentials: true
-          token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          persist-credentials: false
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Guard - Check if last commit is a release
         id: guard
@@ -87,8 +96,10 @@ jobs:
         id: create_pr
         if: steps.guard.outputs.is_release != 'true' && steps.version.outputs.bump_needed == 'true'
         uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
+        env:
+          HUSKY: '0'
         with:
-          token: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           commit-message: 'chore(release): version ${{ steps.version.outputs.next_version }}'
           title: ${{ steps.version.outputs.pr_title }}
           body-path: ${{ steps.version.outputs.pr_body_file }}
@@ -101,7 +112,7 @@ jobs:
       - name: Enable auto-merge
         if: steps.create_pr.outputs.pull-request-number
         env:
-          GH_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --squash
 
       - name: Generate Version PR Summary
