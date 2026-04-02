@@ -58,3 +58,10 @@ selected="${owner_array[$random_index]}"
 
 echo "Selected assignee: $selected (from $count CODEOWNERS)"
 gh pr edit "$PR_NUMBER" --add-assignee "$selected"
+
+# Request a review from the selected CODEOWNER for bot-authored PRs
+# (e.g. version bumps, Renovate dependency updates)
+if [[ "${PR_AUTHOR_TYPE:-}" == "Bot" ]]; then
+  echo "Bot-authored PR detected, requesting review from $selected"
+  gh pr edit "$PR_NUMBER" --add-reviewer "$selected"
+fi
