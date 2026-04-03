@@ -1,7 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "platformCommit": true,
+  "platformCommit": "enabled",
   "assigneesFromCodeOwners": true,
   "reviewersFromCodeOwners": false,
   "prHourlyLimit": 2,
