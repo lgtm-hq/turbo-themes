@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.5] - 2026-04-03
+
+### 🐛 Fixed
+
+- standardize Renovate config with org-wide shared preset (#381)
+
 ## [0.20.4] - 2026-04-02
 
 ### 🐛 Fixed
