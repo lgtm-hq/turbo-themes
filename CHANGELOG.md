@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.6] - 2026-04-03
+
+### 🐛 Fixed
+
+- remove local community health stubs in favor of org-wide defaults (#384)
+
 ## [0.20.5] - 2026-04-03
 
 ### 🐛 Fixed
