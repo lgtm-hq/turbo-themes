@@ -1,33 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-  "platformCommit": true,
-  "assigneesFromCodeOwners": true,
-  "reviewersFromCodeOwners": false,
-  "prHourlyLimit": 2,
-  "prConcurrentLimit": 5,
-  "dependencyDashboard": true,
-  "dependencyDashboardTitle": "Dependency Dashboard",
-  "packageRules": [
-    {
-      "matchManagers": ["npm", "bun"],
-      "matchUpdateTypes": ["patch"],
-      "automerge": true,
-      "automergeType": "branch"
-    },
-    {
-      "matchManagers": ["github-actions"],
-      "pinDigests": true,
-      "automerge": true,
-      "automergeType": "branch"
-    }
-  ],
-  "schedule": ["after 22:00", "before 23:00"],
-  "timezone": "UTC",
-  "labels": ["dependencies"],
-  "semanticCommits": "enabled",
-  "lockFileMaintenance": {
-    "enabled": true,
-    "automerge": true
-  }
+  "extends": ["local>lgtm-hq/.github:renovate-config"]
 }
