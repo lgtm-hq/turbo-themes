@@ -174,7 +174,7 @@
   },
   "peerDependencies": {},
   "devDependencies": {
-    "@axe-core/playwright": "4.11.0",
+    "@axe-core/playwright": "4.11.1",
     "@catppuccin/palette": "1.7.1",
     "@fullhuman/postcss-purgecss": "7.0.2",
     "@lhci/cli": "0.15.1",
