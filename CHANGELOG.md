@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.7] - 2026-04-05
+
+### 🐛 Fixed
+
+- add type declarations for CSS subpath exports (#391)
+
 ## [0.20.6] - 2026-04-03
 
 ### 🐛 Fixed
