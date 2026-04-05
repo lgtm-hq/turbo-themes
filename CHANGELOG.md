@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.9] - 2026-04-05
+
+### 🐛 Fixed
+
+- update @types/react to 19.2.14 (#387)
+
 ## [0.20.8] - 2026-04-05
 
 ### 🐛 Fixed
