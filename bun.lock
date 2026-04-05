@@ -10,7 +10,7 @@
         "@fullhuman/postcss-purgecss": "7.0.2",
         "@lhci/cli": "0.15.1",
         "@playwright/test": "1.58.0",
-        "@primer/primitives": "11.3.2",
+        "@primer/primitives": "11.6.0",
         "@rose-pine/palette": "4.0.1",
         "@testing-library/react": "16.3.2",
         "@types/react": "19.2.14",
@@ -563,7 +563,7 @@
 
     "@popperjs/core": ["@popperjs/core@2.11.8", "", {}, "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A=="],
 
-    "@primer/primitives": ["@primer/primitives@11.3.2", "", {}, "sha512-/8EDh3MmF9cbmrLETFmIuNFIdvpSCkvBlx6zzD8AZ4dZ5UYExQzFj8QAtIrRtCFJ2ZmW5QrtrPR3+JVb8KEDpg=="],
+    "@primer/primitives": ["@primer/primitives@11.6.0", "", {}, "sha512-HiWlrszsC5KuxO3O8eciyXMT54JCLSHLJU1++/cnU9ufRVqKhzNmDtXKQwfK6JRqaIFYbBfF5Ze24wHUrY9KZA=="],
 
     "@puppeteer/browsers": ["@puppeteer/browsers@2.11.1", "", { "dependencies": { "debug": "^4.4.3", "extract-zip": "^2.0.1", "progress": "^2.0.3", "proxy-agent": "^6.5.0", "semver": "^7.7.3", "tar-fs": "^3.1.1", "yargs": "^17.7.2" }, "bin": { "browsers": "lib/cjs/main-cli.js" } }, "sha512-YmhAxs7XPuxN0j7LJloHpfD1ylhDuFmmwMvfy/+6nBSrETT2ycL53LrhgPtR+f+GcPSybQVuQ5inWWu5MrWCpA=="],
 
