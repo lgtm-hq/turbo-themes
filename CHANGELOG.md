@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.12] - 2026-04-05
+
+### 🐛 Fixed
+
+- update @catppuccin/palette to 1.8.0 (minor) (#396)
+
 ## [0.20.11] - 2026-04-05
 
 ### 🐛 Fixed
