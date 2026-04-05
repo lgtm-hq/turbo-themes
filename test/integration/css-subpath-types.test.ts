@@ -8,7 +8,7 @@
  * configs must be able to resolve a type declaration.
  */
 import { readFileSync, readdirSync, existsSync } from 'fs';
-import { dirname, join } from 'path';
+import { dirname } from 'path';
 import { describe, it, expect } from 'vitest';
 
 type ExportsValue = string | { types?: string; default?: string; import?: string };
@@ -66,16 +66,23 @@ describe('CSS subpath `types` targets resolve to shim files', () => {
         expect(content, `${typesPath} must contain an empty export statement`).toMatch(/export\s*\{\s*\}\s*;/);
       });
     } else {
-      // Wildcard: check that every .css file in the source dir has a matching .css.d.ts
-      const dir = dirname(typesPath);
-      it(`${key} → ${typesPath} has shim for every CSS file in ${dir}`, () => {
+      // Wildcard: substitute `*` in typesPath with each CSS filename (reproducing
+      // Node's exports wildcard resolution) and assert the resolved shim exists.
+      // This catches malformed `types` patterns, not just missing shims.
+      const defaultTarget = (value.default ?? '').replace(/^\.\//, '');
+      const dir = dirname(defaultTarget);
+      it(`${key} → ${typesPath} resolves to a shim for every CSS file`, () => {
         expect(existsSync(dir), `${dir} should exist`).toBe(true);
-        const entries = readdirSync(dir);
-        const cssFiles = entries.filter((f) => f.endsWith('.css'));
-        const dtsFiles = new Set(entries.filter((f) => f.endsWith('.css.d.ts')));
+        const cssFiles = readdirSync(dir).filter((f) => f.endsWith('.css'));
         expect(cssFiles.length).toBeGreaterThan(0);
         for (const cssFile of cssFiles) {
-          expect(dtsFiles.has(`${cssFile}.d.ts`), `missing shim for ${join(dir, cssFile)}`).toBe(true);
+          // Node's exports spec: the `*` captured by the key pattern is
+          // substituted verbatim into the target. For `./css/components/*`
+          // (no extension) the capture is the full basename.
+          const resolvedTypes = typesPath.replace(/\*/g, cssFile);
+          expect(existsSync(resolvedTypes), `shim not found at ${resolvedTypes}`).toBe(true);
+          const content = readFileSync(resolvedTypes, 'utf-8');
+          expect(content, `${resolvedTypes} must contain an empty export statement`).toMatch(/export\s*\{\s*\}\s*;/);
         }
       });
     }

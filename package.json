@@ -109,7 +109,7 @@
     "build:adapters": "cd packages/adapters/tailwind && bun run build && cd ../bulma && bun run build",
     "build:root": "tsc -p tsconfig.json",
     "generate:all": "bun run build:tokens && bun run generate:types",
-    "generate:css": "cd packages/css && bun run build:css && node ../../scripts/generate-css-dts.mjs",
+    "generate:css": "cd packages/css && bun run build:css && cd ../.. && bun run generate:css-dts",
     "generate:css-dts": "node scripts/generate-css-dts.mjs",
     "generate:types": "node scripts/codegen/generate-types.mjs --all",
     "generate:types:ts": "node scripts/codegen/generate-ts-types.mjs",
