@@ -41,13 +41,34 @@
       "import": "./dist/tokens/index.js"
     },
     "./tokens.json": "./dist/tokens.json",
-    "./css": "./packages/css/dist/turbo.css",
-    "./css/core": "./packages/css/dist/turbo-core.css",
-    "./css/base": "./packages/css/dist/turbo-base.css",
-    "./css/syntax": "./packages/css/dist/turbo-syntax.css",
-    "./css/components": "./packages/css/dist/turbo-components.css",
-    "./css/components/*": "./packages/css/dist/components/*",
-    "./css/themes/*": "./packages/css/dist/themes/*",
+    "./css": {
+      "types": "./packages/css/dist/turbo.css.d.ts",
+      "default": "./packages/css/dist/turbo.css"
+    },
+    "./css/core": {
+      "types": "./packages/css/dist/turbo-core.css.d.ts",
+      "default": "./packages/css/dist/turbo-core.css"
+    },
+    "./css/base": {
+      "types": "./packages/css/dist/turbo-base.css.d.ts",
+      "default": "./packages/css/dist/turbo-base.css"
+    },
+    "./css/syntax": {
+      "types": "./packages/css/dist/turbo-syntax.css.d.ts",
+      "default": "./packages/css/dist/turbo-syntax.css"
+    },
+    "./css/components": {
+      "types": "./packages/css/dist/turbo-components.css.d.ts",
+      "default": "./packages/css/dist/turbo-components.css"
+    },
+    "./css/components/*": {
+      "types": "./packages/css/dist/components/*.d.ts",
+      "default": "./packages/css/dist/components/*"
+    },
+    "./css/themes/*": {
+      "types": "./packages/css/dist/themes/*.d.ts",
+      "default": "./packages/css/dist/themes/*"
+    },
     "./selector": {
       "types": "./packages/theme-selector/dist/index.d.ts",
       "import": "./packages/theme-selector/dist/index.js"
@@ -59,7 +80,10 @@
       "types": "./packages/adapters/bulma/dist/index.d.ts",
       "import": "./packages/adapters/bulma/dist/index.js"
     },
-    "./adapters/bulma.css": "./packages/adapters/bulma/dist/bulma-adapter.css"
+    "./adapters/bulma.css": {
+      "types": "./packages/adapters/bulma/dist/bulma-adapter.css.d.ts",
+      "default": "./packages/adapters/bulma/dist/bulma-adapter.css"
+    }
   },
   "types": "./dist/index.d.ts",
   "files": [
@@ -85,7 +109,8 @@
     "build:adapters": "cd packages/adapters/tailwind && bun run build && cd ../bulma && bun run build",
     "build:root": "tsc -p tsconfig.json",
     "generate:all": "bun run build:tokens && bun run generate:types",
-    "generate:css": "cd packages/css && bun run build:css",
+    "generate:css": "cd packages/css && bun run build:css && node ../../scripts/generate-css-dts.mjs",
+    "generate:css-dts": "node scripts/generate-css-dts.mjs",
     "generate:types": "node scripts/codegen/generate-types.mjs --all",
     "generate:types:ts": "node scripts/codegen/generate-ts-types.mjs",
     "generate:types:python": "node scripts/codegen/generate-python-types.mjs",
