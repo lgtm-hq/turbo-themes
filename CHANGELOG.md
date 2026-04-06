@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.18] - 2026-04-06
+
+### 🐛 Fixed
+
+- update lint-staged to 16.4.0 (minor) (#408)
+
 ## [0.20.17] - 2026-04-06
 
 ### 🐛 Fixed
