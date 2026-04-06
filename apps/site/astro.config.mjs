@@ -25,6 +25,7 @@ export default defineConfig({
   },
   vite: {
     build: {
+      target: 'esnext',
       // Ensure assets are properly handled
       assetsInlineLimit: 0,
     },
