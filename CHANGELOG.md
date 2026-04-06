@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.17] - 2026-04-06
+
+### 🐛 Fixed
+
+- set build target to esnext for esbuild 0.28.0 compat (#411)
+- update lightningcss to 1.32.0 (minor) (#406)
+
 ## [0.20.16] - 2026-04-06
 
 ### 🐛 Fixed
