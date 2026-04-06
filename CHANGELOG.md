@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.16] - 2026-04-06
+
+### 🐛 Fixed
+
+- update esbuild to 0.28.0 (minor) (#404)
+
 ## [0.20.15] - 2026-04-05
 
 ### 🐛 Fixed
