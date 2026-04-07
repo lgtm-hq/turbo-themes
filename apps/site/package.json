@@ -3,6 +3,9 @@
   "type": "module",
   "version": "0.0.1",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/copy-assets.mjs && astro build && node scripts/post-build.mjs && npx pagefind --site dist --glob '**/*.html' --exclude-selectors '[data-pagefind-ignore]' --exclude-selectors 'nav' --exclude-selectors 'footer'",
@@ -10,9 +13,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "3.7.2",
     "@lgtm-hq/turbo-themes-core": "workspace:*",
-    "astro": "5.18.1",
-    "@astrojs/sitemap": "3.7.2"
+    "astro": "6.1.4"
   },
   "devDependencies": {
     "@pagefind/default-ui": "1.5.0"

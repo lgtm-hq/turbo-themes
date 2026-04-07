@@ -14,15 +14,15 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 const allDocs = await getCollection('docs');
 
-const prevDoc = prev ? allDocs.find(d => d.slug === prev) : null;
-const nextDoc = next ? allDocs.find(d => d.slug === next) : null;
+const prevDoc = prev ? allDocs.find(d => d.id === prev) : null;
+const nextDoc = next ? allDocs.find(d => d.id === next) : null;
 ---
 
 {(prevDoc || nextDoc) && (
   <nav class="prev-next" aria-label="Previous and next pages">
     <div class="prev-next-inner">
       {prevDoc ? (
-        <a href={`${baseUrl}/docs/${prevDoc.slug}/`} class="prev-next-link prev">
+        <a href={`${baseUrl}/docs/${prevDoc.id}/`} class="prev-next-link prev">
           <span class="prev-next-direction">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -34,7 +34,7 @@ const nextDoc = next ? allDocs.find(d => d.slug === next) : null;
       ) : <div />}
 
       {nextDoc ? (
-        <a href={`${baseUrl}/docs/${nextDoc.slug}/`} class="prev-next-link next">
+        <a href={`${baseUrl}/docs/${nextDoc.id}/`} class="prev-next-link next">
           <span class="prev-next-direction">
             Next
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

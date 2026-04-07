@@ -74,7 +74,7 @@ const groupedDocs = categories.map(cat => ({
               </h2>
               <div class="docs-landing-links">
                 {category.docs.map(doc => (
-                  <a href={`${baseUrl}/docs/${doc.slug}/`}>
+                  <a href={`${baseUrl}/docs/${doc.id}/`}>
                     {doc.data.title}
                   </a>
                 ))}
