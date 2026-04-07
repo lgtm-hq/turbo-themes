@@ -10,6 +10,14 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.20] - 2026-04-07
+
+### 🐛 Fixed
+
+- use instant scroll in mobile viewport tests (#418)
+- suppress vite CVEs pending major version upgrade (#417)
+- update @pagefind/default-ui to 1.5.0 (minor) (#414)
+
 ## [0.20.19] - 2026-04-06
 
 ### 🐛 Fixed
