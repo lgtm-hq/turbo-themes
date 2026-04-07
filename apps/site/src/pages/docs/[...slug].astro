@@ -3,14 +3,14 @@
  * Dynamic route for all documentation pages.
  * Renders markdown content from the docs content collection.
  */
-import { getCollection, type CollectionEntry } from 'astro:content';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
 import DocsLayout from '../../layouts/DocsLayout.astro';
 
 export async function getStaticPaths() {
   const docs = await getCollection('docs', ({ data }) => !data.draft);
 
   return docs.map(doc => ({
-    params: { slug: doc.slug },
+    params: { slug: doc.id },
     props: { doc },
   }));
 }
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const { doc } = Astro.props;
-const { Content, headings } = await doc.render();
+const { Content, headings } = await render(doc);
 
 // Category labels for display
 const categoryLabels: Record<string, string> = {
@@ -39,7 +39,7 @@ const categoryLabels: Record<string, string> = {
   category={doc.data.category}
   categoryLabel={categoryLabels[doc.data.category] || doc.data.category}
   headings={headings}
-  slug={doc.slug}
+  slug={doc.id}
   showToc={doc.data.toc}
   prev={doc.data.prev}
   next={doc.data.next}

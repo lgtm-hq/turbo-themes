@@ -44,7 +44,7 @@ const groupedDocs = categories.map(cat => ({
 
   <div class="sidebar-content">
     {groupedDocs.map(category => {
-      const isActive = category.docs.some(d => d.slug === currentSlug || currentSlug.startsWith(category.key));
+      const isActive = category.docs.some(d => d.id === currentSlug || currentSlug.startsWith(category.key));
       return (
         <div class="sidebar-group">
           <ul class="sidebar-menu">
@@ -64,9 +64,9 @@ const groupedDocs = categories.map(cat => ({
               <div class="sidebar-menu-sub">
                 {category.docs.map(doc => (
                   <a
-                    href={`${baseUrl}/docs/${doc.slug}/`}
-                    class={`sidebar-menu-sub-button ${doc.slug === currentSlug ? 'active' : ''}`}
-                    aria-current={doc.slug === currentSlug ? 'page' : undefined}
+                    href={`${baseUrl}/docs/${doc.id}/`}
+                    class={`sidebar-menu-sub-button ${doc.id === currentSlug ? 'active' : ''}`}
+                    aria-current={doc.id === currentSlug ? 'page' : undefined}
                   >
                     {doc.data.title}
                   </a>

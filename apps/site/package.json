@@ -10,9 +10,9 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "3.7.2",
     "@lgtm-hq/turbo-themes-core": "workspace:*",
-    "astro": "5.18.1",
-    "@astrojs/sitemap": "3.7.2"
+    "astro": "6.1.4"
   },
   "devDependencies": {
     "@pagefind/default-ui": "1.5.0"

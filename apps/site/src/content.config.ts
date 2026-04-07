@@ -1,11 +1,12 @@
 import { z, defineCollection } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 /**
  * Documentation content collection schema.
  * Defines the structure for all documentation markdown files.
  */
 const docsCollection = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
   schema: z.object({
     // Required fields
     title: z.string(),
