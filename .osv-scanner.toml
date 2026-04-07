@@ -59,20 +59,16 @@ id = "GHSA-xpqw-6gx7-v673"
 ignoreUntil = 2026-09-29
 reason = "svgo@4.0.0 — not actionable, OSV suggests downgrading to v2 (breaking major)"
 
-# --- vite (npm, transitive via astro and sub-package vitest) ---
-# Root and examples upgraded; these remain as transitive deps from astro (6.4.1) and sub-package vitest (7.3.1).
+# --- vite (npm, transitive via astro 5.x) ---
+# Direct deps upgraded (root 7.3.2, examples 8.0.7). Only vite 6.4.1 remains
+# as a transitive dep locked by astro 5.18.1. Will be resolved by Astro 6 migration (#420).
 
 [[IgnoredVulns]]
 id = "GHSA-4w7w-66w2-5vf9"
 ignoreUntil = 2026-07-07
-reason = "vite@6.4.1/7.3.1 — transitive via astro and sub-package vitest, fix requires major bump"
+reason = "vite@6.4.1 — transitive via astro 5.x, will be resolved by Astro 6 migration (#420)"
 
 [[IgnoredVulns]]
 id = "GHSA-p9ff-h696-f583"
 ignoreUntil = 2026-07-07
-reason = "vite@6.4.1/7.3.1 — transitive via astro and sub-package vitest, fix requires major bump"
-
-[[IgnoredVulns]]
-id = "GHSA-v2wj-q39q-566r"
-ignoreUntil = 2026-07-07
-reason = "vite@7.3.1 — transitive via sub-package vitest, fix requires major bump"
+reason = "vite@6.4.1 — transitive via astro 5.x, will be resolved by Astro 6 migration (#420)"
