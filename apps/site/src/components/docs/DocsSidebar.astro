@@ -44,7 +44,7 @@ const groupedDocs = categories.map(cat => ({
 
   <div class="sidebar-content">
     {groupedDocs.map(category => {
-      const isActive = category.docs.some(d => d.id === currentSlug || currentSlug.startsWith(category.key));
+      const isActive = category.docs.some(d => d.id === currentSlug) || currentSlug === category.key || currentSlug.startsWith(category.key + '/');
       return (
         <div class="sidebar-group">
           <ul class="sidebar-menu">
