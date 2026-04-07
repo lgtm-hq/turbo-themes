@@ -152,16 +152,20 @@ test.describe('Mobile Viewport @mobile', () => {
     test('should not interfere with page scrolling', async ({ page }) => {
       const initialScroll = await page.evaluate(() => window.scrollY);
 
-      await page.evaluate(() => window.scrollTo(0, 100));
-      await page.waitForTimeout(100);
+      await page.evaluate(() =>
+        window.scrollTo({ top: 100, behavior: 'instant' })
+      );
+      await page.waitForFunction(() => window.scrollY > 0);
 
       const newScroll = await page.evaluate(() => window.scrollY);
       expect(newScroll).toBeGreaterThan(initialScroll);
     });
 
     test('should maintain scroll position on theme switch', async ({ page }) => {
-      await page.evaluate(() => window.scrollTo(0, 150));
-      await page.waitForTimeout(100);
+      await page.evaluate(() =>
+        window.scrollTo({ top: 150, behavior: 'instant' })
+      );
+      await page.waitForFunction(() => window.scrollY > 0);
 
       const scrollBefore = await page.evaluate(() => window.scrollY);
 
