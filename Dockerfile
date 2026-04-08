@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 # CI-like environment to run local builds/tests
 
-FROM ruby:4.0-bookworm@sha256:6e2b48a8c55a73d3ca521b4f69db432a99b757e7318ccd08483f2bbebccc4fcc
+FROM ruby:4.0-bookworm@sha256:bde6f7100ce88cc06e074627ffb2916c0a055b806613729c72e84bc4fbf03be4
 
 # Install OS deps and Node.js LTS (22.x)
 RUN apt-get update \
