@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.22] - 2026-04-08
+
+### 🐛 Fixed
+
+- group shared deps across root and examples (#419)
+
 ## [0.20.21] - 2026-04-07
 
 ### 🐛 Fixed
