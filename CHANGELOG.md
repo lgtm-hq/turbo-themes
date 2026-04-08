@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.21] - 2026-04-07
+
+### 🐛 Fixed
+
+- update to latest vite, vitest, and Astro 6 (#421)
+
 ## [0.20.20] - 2026-04-07
 
 ### 🐛 Fixed
