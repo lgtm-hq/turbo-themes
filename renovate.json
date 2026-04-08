@@ -1,4 +1,31 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["local>lgtm-hq/.github:renovate-config"]
+  "extends": ["local>lgtm-hq/.github:renovate-config"],
+  "packageRules": [
+    {
+      "description": "Group vite across root and all examples",
+      "matchPackageNames": ["vite", "@vitejs/**"],
+      "groupName": "npm-vite"
+    },
+    {
+      "description": "Group vitest and its plugins together",
+      "matchPackageNames": ["vitest", "@vitest/**"],
+      "groupName": "npm-vitest"
+    },
+    {
+      "description": "Group astro and its integrations together",
+      "matchPackageNames": ["astro", "@astrojs/**"],
+      "groupName": "npm-astro"
+    },
+    {
+      "description": "Group Jekyll and its plugins across root and examples",
+      "matchPackageNames": ["jekyll", "jekyll-*"],
+      "groupName": "ruby-jekyll"
+    },
+    {
+      "description": "Group Ruby test dependencies together",
+      "matchPackageNames": ["rspec", "rspec-*", "simplecov", "simplecov-*"],
+      "groupName": "ruby-test"
+    }
+  ]
 }
