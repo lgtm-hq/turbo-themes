@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.25] - 2026-04-08
+
+### 🐛 Fixed
+
+- update ruby digest (#427)
+
 ## [0.20.24] - 2026-04-08
 
 ### 🐛 Fixed
