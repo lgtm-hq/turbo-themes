@@ -53,8 +53,3 @@ reason = "immutable@5.1.4 — not actionable, OSV suggests downgrading to v4 (br
 id = "GHSA-mw96-cpmx-2vgc"
 ignoreUntil = 2026-09-29
 reason = "rollup@4.57.0 — not actionable, OSV suggests downgrading to v2 (breaking major)"
-
-[[IgnoredVulns]]
-id = "GHSA-xpqw-6gx7-v673"
-ignoreUntil = 2026-09-29
-reason = "svgo@4.0.0 — not actionable, OSV suggests downgrading to v2 (breaking major)"

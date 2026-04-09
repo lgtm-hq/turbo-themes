@@ -215,7 +215,7 @@
     "picomatch": "4.0.4",
     "yaml": "2.8.3",
     "qs": "6.15.0",
-    "basic-ftp": "5.2.0",
+    "basic-ftp": "5.2.1",
     "smol-toml": "1.6.1",
     "path-to-regexp": "8.4.0",
     "@isaacs/brace-expansion": "5.0.1",
