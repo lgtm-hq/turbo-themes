@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.26] - 2026-04-09
+
+### 🐛 Fixed
+
+- patch basic-ftp CVE and remove resolved svgo suppression (#430)
+
 ## [0.20.25] - 2026-04-08
 
 ### 🐛 Fixed
