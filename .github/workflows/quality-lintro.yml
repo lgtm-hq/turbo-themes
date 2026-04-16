@@ -1,0 +1,79 @@
+---
+name: Quality - Lint & Format
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  merge_group:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lintro:
+    name: 🔍 Code Quality & Linting
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Harden Runner
+        if: ${{ !env.ACT }}
+        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            astral.sh:443
+            bun.sh:443
+            codeload.github.com:443
+            files.pythonhosted.org:443
+            github-releases.githubusercontent.com:443
+            github.com:443
+            npmjs.org:443
+            objects.githubusercontent.com:443
+            pkg-containers.githubusercontent.com:443
+            pipelines.actions.githubusercontent.com:443
+            pypi.org:443
+            raw.githubusercontent.com:443
+            registry.npmjs.org:443
+            release-assets.githubusercontent.com:443
+            releases.astral.sh:443
+
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Setup environment
+        uses: ./.github/actions/setup-env
+        with:
+          node-version: '22'
+          skip-ruby: 'true'
+
+      - name: Run lintro check
+        id: lintro
+        continue-on-error: true
+        run: ./scripts/ci/run-lintro.sh
+
+      - name: Generate PR comment
+        if: github.event_name == 'pull_request'
+        run: ./scripts/ci/lintro-pr-comment.sh
+
+      - name: Post PR comment
+        if: github.event_name == 'pull_request'
+        uses: ./.github/actions/post-pr-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          comment-file: lintro-comment.md
+          marker: lintro-report
+
+      - name: Fail on lint errors
+        if: env.CHK_EXIT_CODE != '0'
+        run: |
+          echo "::error::Lintro check failed. Review the PR comment or CI logs for details."
+          exit 1
