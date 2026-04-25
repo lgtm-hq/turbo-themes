@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Pull the py-lintro Docker image and tag it for local use.
-# The LINTRO_IMAGE env var is set by the workflow (e.g. ghcr.io/lgtm-hq/py-lintro:0.57.1).
+# The LINTRO_IMAGE env var is set by the workflow (e.g. ghcr.io/lgtm-hq/py-lintro:0.60.2).
 #
 # Usage: pull-lintro-image.sh
 
