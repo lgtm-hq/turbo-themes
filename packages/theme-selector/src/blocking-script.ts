@@ -85,16 +85,21 @@ export function generateBlockingScript(options: BlockingScriptOptions = {}): str
     classes.add('theme-' + theme);
     window.__INITIAL_THEME__ = theme;
 
-    if (theme !== defaultTheme) {
-      var rawBase = root.getAttribute('data-baseurl') || '';
-      var baseUrl = '';
-      if (rawBase && rawBase.indexOf('//') !== 0 && !/^[a-z][a-z0-9+.-]*:/i.test(rawBase)) {
-        baseUrl = '/' + rawBase.replace(/^[/]+|[/]+$/g, '');
-        if (baseUrl === '/') baseUrl = '';
+    var rawBase = root.getAttribute('data-baseurl') || '';
+    var baseUrl = '';
+    if (rawBase && rawBase.indexOf('//') !== 0) {
+      try {
+        var parsed = new URL(rawBase, location.href);
+        if (parsed.origin === location.origin) {
+          baseUrl = parsed.pathname.replace(/[/]+$/g, '');
+          if (baseUrl === '/') baseUrl = '';
+        }
+      } catch (urlErr) {
+        baseUrl = '';
       }
-      var link = document.getElementById(cssLinkId);
-      if (link) link.href = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
     }
+    var link = document.getElementById(cssLinkId);
+    if (link) link.href = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
   } catch (e) {
     console.warn('Unable to load saved theme:', e);
   }
