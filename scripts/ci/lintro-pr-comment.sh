@@ -28,6 +28,18 @@ else
     OUTPUT="❌ Analysis failed — check the CI logs for details"
 fi
 
+# GitHub PR comment max is 65536 chars; cap well below to leave room for
+# wrapper markdown, status header, and footer.
+MAX_BYTES="${LINTRO_COMMENT_MAX_BYTES:-60000}"
+if (( ${#OUTPUT} > MAX_BYTES )); then
+    OUTPUT="${OUTPUT:0:MAX_BYTES}
+
+…[truncated — see CI logs for full output]"
+fi
+
+# Escape backticks to prevent breaking out of the fenced code block.
+OUTPUT="${OUTPUT//\`\`\`/\`\`\` }"
+
 if [[ "${CHK_EXIT_CODE:-1}" != "0" ]]; then
     STATUS="⚠️ ISSUES FOUND"
 else

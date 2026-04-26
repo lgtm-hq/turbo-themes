@@ -10,7 +10,8 @@ on:
 permissions: {}
 
 env:
-  LINTRO_IMAGE: ghcr.io/lgtm-hq/py-lintro:0.60.2
+  # py-lintro 0.61.0 pinned to immutable digest for reproducibility
+  LINTRO_IMAGE: ghcr.io/lgtm-hq/py-lintro:0.61.0@sha256:95b9fd9d62c3ca1227447467767ec915e78a7eef62282dd18c0b1c02ee4d3887
 
 jobs:
   check-suppressions:
