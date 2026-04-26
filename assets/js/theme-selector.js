@@ -334,14 +334,16 @@ var TurboThemeSelector = (function(exports) {
     if (!themeLink) {
       const blockingLink = doc.getElementById(CSS_LINK_ID);
       if (blockingLink) {
-        blockingLink.id = themeLinkId;
-        blockingLink.setAttribute("data-theme-id", theme.id);
+        let resolvedHref;
         try {
-          blockingLink.href = resolveAssetPath(theme.cssFile, baseUrl);
+          resolvedHref = resolveAssetPath(theme.cssFile, baseUrl);
         } catch {
           logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
           return;
         }
+        blockingLink.href = resolvedHref;
+        blockingLink.id = themeLinkId;
+        blockingLink.setAttribute("data-theme-id", theme.id);
         themeLink = blockingLink;
       }
     }
@@ -487,7 +489,7 @@ var TurboThemeSelector = (function(exports) {
       id: flavor.id,
       name: flavor.label,
       description: getDescriptionForFlavor(flavor.id, flavor.label),
-      cssFile: `packages/css/dist/themes/${flavor.id}.css`,
+      cssFile: `assets/css/themes/turbo/${flavor.id}.css`,
       icon: getIconForVendor(flavor.vendor, flavor.appearance),
       family,
       vendor: flavor.vendor,
@@ -967,7 +969,12 @@ var TurboThemeSelector = (function(exports) {
     window.__INITIAL_THEME__ = theme;
 
     if (theme !== defaultTheme) {
-      var baseUrl = root.getAttribute('data-baseurl') || '';
+      var rawBase = root.getAttribute('data-baseurl') || '';
+      var baseUrl = '';
+      if (rawBase && rawBase.indexOf('//') !== 0 && !/^[a-z][a-z0-9+.-]*:/i.test(rawBase)) {
+        baseUrl = '/' + rawBase.replace(/^[/]+|[/]+$/g, '');
+        if (baseUrl === '/') baseUrl = '';
+      }
       var link = document.getElementById(cssLinkId);
       if (link) link.href = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
     }

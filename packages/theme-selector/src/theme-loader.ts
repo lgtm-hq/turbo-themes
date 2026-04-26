@@ -153,14 +153,16 @@ export async function loadThemeCSS(
   if (!themeLink) {
     const blockingLink = doc.getElementById(CSS_LINK_ID) as HTMLLinkElement | null;
     if (blockingLink) {
-      blockingLink.id = themeLinkId;
-      blockingLink.setAttribute('data-theme-id', theme.id);
+      let resolvedHref: string;
       try {
-        blockingLink.href = resolveAssetPath(theme.cssFile, baseUrl);
+        resolvedHref = resolveAssetPath(theme.cssFile, baseUrl);
       } catch {
         logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
         return;
       }
+      blockingLink.href = resolvedHref;
+      blockingLink.id = themeLinkId;
+      blockingLink.setAttribute('data-theme-id', theme.id);
       themeLink = blockingLink;
     }
   }

@@ -86,7 +86,12 @@ export function generateBlockingScript(options: BlockingScriptOptions = {}): str
     window.__INITIAL_THEME__ = theme;
 
     if (theme !== defaultTheme) {
-      var baseUrl = root.getAttribute('data-baseurl') || '';
+      var rawBase = root.getAttribute('data-baseurl') || '';
+      var baseUrl = '';
+      if (rawBase && rawBase.indexOf('//') !== 0 && !/^[a-z][a-z0-9+.-]*:/i.test(rawBase)) {
+        baseUrl = '/' + rawBase.replace(/^[/]+|[/]+$/g, '');
+        if (baseUrl === '/') baseUrl = '';
+      }
       var link = document.getElementById(cssLinkId);
       if (link) link.href = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
     }
