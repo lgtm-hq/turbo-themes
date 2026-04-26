@@ -10,6 +10,14 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.28] - 2026-04-26
+
+### 🐛 Fixed
+
+- update astro to 6.1.6 (#442)
+- patch basic-ftp, follow-redirects, and pytest vulnerabilities (#439)
+- update @vitest/coverage-v8 to 4.1.4 (#433)
+
 ## [0.20.27] - 2026-04-09
 
 ### 🐛 Fixed
