@@ -25,7 +25,7 @@ describe('baseUrl path construction', () => {
     await initTheme(document, window);
 
     // Verify theme link was created with correct href
-    expect(mockThemeLink.href).toContain('/turbo-themes/packages/css/dist/themes/');
+    expect(mockThemeLink.href).toContain('/turbo-themes/assets/css/themes/turbo/');
   });
 
   it('correctly creates theme selector elements in wireFlavorSelector', async () => {

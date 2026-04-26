@@ -19,7 +19,7 @@ export const catppuccinSynced: ThemePackage = {
   },
   source: {
     package: "@catppuccin/palette",
-    version: "1.7.1",
+    version: "1.8.0",
     repository: "https://github.com/catppuccin/palette",
   },
   flavors: [

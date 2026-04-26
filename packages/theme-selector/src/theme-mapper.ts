@@ -163,7 +163,7 @@ export function mapFlavorToUI(flavor: CanonicalThemeFlavor): ThemeFlavor {
     id: flavor.id,
     name: flavor.label,
     description: getDescriptionForFlavor(flavor.id, flavor.label),
-    cssFile: `packages/css/dist/themes/${flavor.id}.css`,
+    cssFile: `assets/css/themes/turbo/${flavor.id}.css`,
     icon: getIconForVendor(flavor.vendor, flavor.appearance),
     family,
     vendor: flavor.vendor,

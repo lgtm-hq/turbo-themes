@@ -99,7 +99,7 @@ describe('theme-mapper', () => {
       expect(ui.name).toBe('Test Theme');
       expect(ui.vendor).toBe('bulma');
       expect(ui.appearance).toBe('light');
-      expect(ui.cssFile).toBe('packages/css/dist/themes/test-theme.css');
+      expect(ui.cssFile).toBe('assets/css/themes/turbo/test-theme.css');
       expect(ui.family).toBe('bulma');
     });
 

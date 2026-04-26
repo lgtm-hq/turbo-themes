@@ -3073,8 +3073,8 @@ describe('public API', () => {
 
       await initTheme(document, window);
 
-      // Verify theme link was created with correct href (uses packages/css/dist/themes/ path)
-      expect(mockThemeLink.href).toContain('/turbo-themes/packages/css/dist/themes/');
+      // Verify theme link was created with correct href (served path)
+      expect(mockThemeLink.href).toContain('/turbo-themes/assets/css/themes/turbo/');
     });
 
     it('correctly creates theme selector elements in wireFlavorSelector', () => {
