@@ -30,14 +30,16 @@ export interface BlockingScriptOptions {
 }
 
 /**
- * Generates a self-contained inline JavaScript string that prevents FOUC.
- *
- * The returned string is a complete IIFE that:
- * 1. Migrates legacy storage keys
+ * Generates a self-contained inline IIFE that prevents FOUC. It:
+ * 1. Migrates legacy storage keys to the current `storageKey`
  * 2. Reads and validates the stored theme against the allowlist
- * 3. Sets `data-theme` and `theme-{id}` class on `<html>`
- * 4. Sets `window.__INITIAL_THEME__`
- * 5. Updates the CSS `<link>` href if the theme differs from the default
+ * 3. Sets `data-theme` and the `theme-{id}` class on `<html>`
+ * 4. Sets `window.__INITIAL_THEME__` so `initTheme` can short-circuit
+ * 5. Updates the existing CSS `<link>` href when the theme is non-default
+ *
+ * The body uses readable identifiers; the bundler/gzip handles size. The
+ * outer try/catch keeps the page from breaking when localStorage throws
+ * (e.g. private browsing).
  */
 export function generateBlockingScript(options: BlockingScriptOptions = {}): string {
   const {
@@ -47,28 +49,49 @@ export function generateBlockingScript(options: BlockingScriptOptions = {}): str
     legacyKeys = LEGACY_STORAGE_KEYS,
   } = options;
 
-  const S = JSON.stringify(storageKey);
-  const D = JSON.stringify(defaultTheme);
-  const V = JSON.stringify(validThemes);
-  const L = JSON.stringify(legacyKeys);
-  const C = JSON.stringify(CSS_LINK_ID);
+  const config = {
+    storageKey: JSON.stringify(storageKey),
+    defaultTheme: JSON.stringify(defaultTheme),
+    validThemes: JSON.stringify(validThemes),
+    legacyKeys: JSON.stringify(legacyKeys),
+    cssLinkId: JSON.stringify(CSS_LINK_ID),
+  };
 
-  return [
-    '(function(){try{',
-    `var S=${S};var D=${D};var V=${V};var L=${L};var C=${C};`,
-    // Legacy migration
-    'for(var i=0;i<L.length;i++){var lv=localStorage.getItem(L[i]);',
-    'if(lv&&!localStorage.getItem(S)){localStorage.setItem(S,lv);localStorage.removeItem(L[i])}}',
-    // Read and validate
-    'var t=localStorage.getItem(S)||D;if(V.indexOf(t)===-1)t=D;',
-    // Apply to DOM (data-theme attr + theme-{id} class so initTheme fast-path matches)
-    'var de=document.documentElement;de.setAttribute("data-theme",t);',
-    'var cs=de.classList;for(var j=cs.length-1;j>=0;j--){if(cs[j].indexOf("theme-")===0)cs.remove(cs[j])}',
-    'cs.add("theme-"+t);window.__INITIAL_THEME__=t;',
-    // Update CSS link href for non-default theme
-    'if(t!==D){var b=document.documentElement.getAttribute("data-baseurl")||"";',
-    'var l=document.getElementById(C);',
-    'if(l)l.href=b+"/assets/css/themes/turbo/"+t+".css"}',
-    '}catch(e){console.warn("Unable to load saved theme:",e)}})();',
-  ].join('');
+  return `(function () {
+  try {
+    var storageKey = ${config.storageKey};
+    var defaultTheme = ${config.defaultTheme};
+    var validThemes = ${config.validThemes};
+    var legacyKeys = ${config.legacyKeys};
+    var cssLinkId = ${config.cssLinkId};
+
+    for (var i = 0; i < legacyKeys.length; i++) {
+      var legacyValue = localStorage.getItem(legacyKeys[i]);
+      if (legacyValue && !localStorage.getItem(storageKey)) {
+        localStorage.setItem(storageKey, legacyValue);
+        localStorage.removeItem(legacyKeys[i]);
+      }
+    }
+
+    var theme = localStorage.getItem(storageKey) || defaultTheme;
+    if (validThemes.indexOf(theme) === -1) theme = defaultTheme;
+
+    var root = document.documentElement;
+    root.setAttribute('data-theme', theme);
+    var classes = root.classList;
+    for (var j = classes.length - 1; j >= 0; j--) {
+      if (classes[j].indexOf('theme-') === 0) classes.remove(classes[j]);
+    }
+    classes.add('theme-' + theme);
+    window.__INITIAL_THEME__ = theme;
+
+    if (theme !== defaultTheme) {
+      var baseUrl = root.getAttribute('data-baseurl') || '';
+      var link = document.getElementById(cssLinkId);
+      if (link) link.href = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
+    }
+  } catch (e) {
+    console.warn('Unable to load saved theme:', e);
+  }
+})();`;
 }

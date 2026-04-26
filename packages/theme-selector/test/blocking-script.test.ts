@@ -21,14 +21,14 @@ describe('generateBlockingScript', () => {
 
     it('is wrapped in an IIFE', () => {
       const script = generateBlockingScript();
-      expect(script).toMatch(/^\(function\(\)\{/);
-      expect(script).toMatch(/\}\)\(\);$/);
+      expect(script).toMatch(/^\(function\s*\(\)\s*\{/);
+      expect(script).toMatch(/\}\)\(\);\s*$/);
     });
 
     it('contains try-catch for error handling', () => {
       const script = generateBlockingScript();
-      expect(script).toContain('try{');
-      expect(script).toContain('catch(e)');
+      expect(script).toMatch(/try\s*\{/);
+      expect(script).toMatch(/catch\s*\(\s*e\s*\)/);
     });
   });
 
