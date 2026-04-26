@@ -155,6 +155,12 @@ export async function loadThemeCSS(
     if (blockingLink) {
       blockingLink.id = themeLinkId;
       blockingLink.setAttribute('data-theme-id', theme.id);
+      try {
+        blockingLink.href = resolveAssetPath(theme.cssFile, baseUrl);
+      } catch {
+        logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
+        return;
+      }
       themeLink = blockingLink;
     }
   }

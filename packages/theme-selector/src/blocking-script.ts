@@ -35,7 +35,7 @@ export interface BlockingScriptOptions {
  * The returned string is a complete IIFE that:
  * 1. Migrates legacy storage keys
  * 2. Reads and validates the stored theme against the allowlist
- * 3. Sets `data-theme` on `<html>`
+ * 3. Sets `data-theme` and `theme-{id}` class on `<html>`
  * 4. Sets `window.__INITIAL_THEME__`
  * 5. Updates the CSS `<link>` href if the theme differs from the default
  */
@@ -61,8 +61,10 @@ export function generateBlockingScript(options: BlockingScriptOptions = {}): str
     'if(lv&&!localStorage.getItem(S)){localStorage.setItem(S,lv);localStorage.removeItem(L[i])}}',
     // Read and validate
     'var t=localStorage.getItem(S)||D;if(V.indexOf(t)===-1)t=D;',
-    // Apply to DOM
-    'document.documentElement.setAttribute("data-theme",t);window.__INITIAL_THEME__=t;',
+    // Apply to DOM (data-theme attr + theme-{id} class so initTheme fast-path matches)
+    'var de=document.documentElement;de.setAttribute("data-theme",t);',
+    'var cs=de.classList;for(var j=cs.length-1;j>=0;j--){if(cs[j].indexOf("theme-")===0)cs.remove(cs[j])}',
+    'cs.add("theme-"+t);window.__INITIAL_THEME__=t;',
     // Update CSS link href for non-default theme
     'if(t!==D){var b=document.documentElement.getAttribute("data-baseurl")||"";',
     'var l=document.getElementById(C);',

@@ -336,6 +336,12 @@ var TurboThemeSelector = (function(exports) {
       if (blockingLink) {
         blockingLink.id = themeLinkId;
         blockingLink.setAttribute("data-theme-id", theme.id);
+        try {
+          blockingLink.href = resolveAssetPath(theme.cssFile, baseUrl);
+        } catch {
+          logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
+          return;
+        }
         themeLink = blockingLink;
       }
     }
@@ -938,8 +944,10 @@ var TurboThemeSelector = (function(exports) {
       "if(lv&&!localStorage.getItem(S)){localStorage.setItem(S,lv);localStorage.removeItem(L[i])}}",
       // Read and validate
       "var t=localStorage.getItem(S)||D;if(V.indexOf(t)===-1)t=D;",
-      // Apply to DOM
-      'document.documentElement.setAttribute("data-theme",t);window.__INITIAL_THEME__=t;',
+      // Apply to DOM (data-theme attr + theme-{id} class so initTheme fast-path matches)
+      'var de=document.documentElement;de.setAttribute("data-theme",t);',
+      'var cs=de.classList;for(var j=cs.length-1;j>=0;j--){if(cs[j].indexOf("theme-")===0)cs.remove(cs[j])}',
+      'cs.add("theme-"+t);window.__INITIAL_THEME__=t;',
       // Update CSS link href for non-default theme
       'if(t!==D){var b=document.documentElement.getAttribute("data-baseurl")||"";',
       "var l=document.getElementById(C);",
