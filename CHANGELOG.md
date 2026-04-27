@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.29] - 2026-04-27
+
+### 🐛 Fixed
+
+- update path-to-regexp to 8.4.2 (#435)
+
 ## [0.20.28] - 2026-04-26
 
 ### 🐛 Fixed
