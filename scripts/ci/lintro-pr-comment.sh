@@ -37,20 +37,24 @@ if ((${#OUTPUT} > MAX_BYTES)); then
 …[truncated — see CI logs for full output]"
 fi
 
-# Escape backticks to prevent breaking out of the fenced code block.
-OUTPUT="${OUTPUT//\`\`\`/\`\`\` }"
-
 if [[ "${CHK_EXIT_CODE:-1}" != "0" ]]; then
   STATUS="⚠️ ISSUES FOUND"
 else
   STATUS="✅ PASSED"
 fi
 
+# Choose a fence longer than any backtick run found in OUTPUT so the
+# embedded content cannot prematurely close the markdown code block.
+FENCE='```'
+while printf '%s\n' "$OUTPUT" | grep -qF "$FENCE"; do
+  FENCE="${FENCE}\`"
+done
+
 CONTENT="**Workflow:** 🔍 Performed code quality checks with \`lintro check\`
 
 ### 📋 Results:
-\`\`\`
+${FENCE}
 $OUTPUT
-\`\`\`"
+${FENCE}"
 
 generate_pr_comment "Lintro Code Quality Analysis" "$STATUS" "$CONTENT" "lintro-comment.md" "lintro"
