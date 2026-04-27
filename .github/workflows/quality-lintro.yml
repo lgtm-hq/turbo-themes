@@ -15,6 +15,10 @@ concurrency:
   group: lint-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  # py-lintro 0.61.0 pinned to immutable digest for reproducibility
+  LINTRO_IMAGE: ghcr.io/lgtm-hq/py-lintro:0.61.0@sha256:95b9fd9d62c3ca1227447467767ec915e78a7eef62282dd18c0b1c02ee4d3887
+
 jobs:
   lintro:
     name: 🔍 Code Quality & Linting
@@ -31,29 +35,16 @@ jobs:
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
-            astral.sh:443
-            bun.sh:443
             codeload.github.com:443
-            files.pythonhosted.org:443
-            github-releases.githubusercontent.com:443
             github.com:443
-            npmjs.org:443
+            ghcr.io:443
             objects.githubusercontent.com:443
             pkg-containers.githubusercontent.com:443
-            pipelines.actions.githubusercontent.com:443
-            pypi.org:443
-            raw.githubusercontent.com:443
-            registry.npmjs.org:443
-            release-assets.githubusercontent.com:443
-            releases.astral.sh:443
 
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-        with:
-          node-version: '22'
-          skip-ruby: 'true'
+      - name: Pull py-lintro Docker image
+        run: ./scripts/ci/pull-lintro-image.sh
 
       - name: Run lintro check
         id: lintro
