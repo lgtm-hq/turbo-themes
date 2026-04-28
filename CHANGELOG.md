@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.32] - 2026-04-28
+
+### 🐛 Fixed
+
+- update @pagefind/default-ui to 1.5.2 (#447)
+
 ## [0.20.31] - 2026-04-28
 
 ### 🐛 Fixed
