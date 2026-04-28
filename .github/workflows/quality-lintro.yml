@@ -60,6 +60,7 @@ jobs:
 
       - name: Post PR comment
         if: github.event_name == 'pull_request'
+        continue-on-error: true
         uses: ./.github/actions/post-pr-comment
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
