@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.36] - 2026-05-01
+
+### 🐛 Fixed
+
+- update ajv to 8.20.0 (minor) (#450)
+
 ## [0.20.35] - 2026-05-01
 
 ### 🐛 Fixed
