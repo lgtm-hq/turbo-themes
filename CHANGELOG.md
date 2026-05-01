@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.34] - 2026-05-01
+
+### 🐛 Fixed
+
+- update @axe-core/playwright to 4.11.3 (#446)
+
 ## [0.20.33] - 2026-05-01
 
 ### 🐛 Fixed
