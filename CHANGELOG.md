@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.37] - 2026-05-01
+
+### 🐛 Fixed
+
+- update happy-dom to 20.9.0 (minor) (#451)
+
 ## [0.20.36] - 2026-05-01
 
 ### 🐛 Fixed
