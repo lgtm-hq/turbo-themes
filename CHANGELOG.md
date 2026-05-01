@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.35] - 2026-05-01
+
+### 🐛 Fixed
+
+- update @primer/primitives to 11.7.1 (minor) (#449)
+
 ## [0.20.34] - 2026-05-01
 
 ### 🐛 Fixed
