@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.33] - 2026-05-01
+
+### 🐛 Fixed
+
+- update lintro to 0.61.1 (minor) (#434)
+
 ## [0.20.32] - 2026-04-28
 
 ### 🐛 Fixed
