@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.39] - 2026-05-01
+
+### 🐛 Fixed
+
+- update oxlint to 1.62.0 (minor) (#453)
+
 ## [0.20.38] - 2026-05-01
 
 ### 🐛 Fixed
