@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.42] - 2026-05-03
+
+### 🐛 Fixed
+
+- update devalue to 5.8.0 (minor) (#469)
+
 ## [0.20.41] - 2026-05-03
 
 ### 🐛 Fixed
