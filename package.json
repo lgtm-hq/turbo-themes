@@ -218,7 +218,7 @@
     "basic-ftp": "5.3.0",
     "uuid": "14.0.0",
     "follow-redirects": "1.16.0",
-    "astro": "6.1.6",
+    "astro": "6.2.1",
     "smol-toml": "1.6.1",
     "path-to-regexp": "8.4.2",
     "@isaacs/brace-expansion": "5.0.1",

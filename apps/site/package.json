@@ -15,7 +15,7 @@
   "dependencies": {
     "@astrojs/sitemap": "3.7.2",
     "@lgtm-hq/turbo-themes-core": "workspace:*",
-    "astro": "6.1.6"
+    "astro": "6.2.1"
   },
   "devDependencies": {
     "@pagefind/default-ui": "1.5.2"
