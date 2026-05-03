@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.40] - 2026-05-02
+
+### 🐛 Fixed
+
+- update sass to 1.99.0 (minor) (#454)
+
 ## [0.20.39] - 2026-05-01
 
 ### 🐛 Fixed
