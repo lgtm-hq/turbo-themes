@@ -153,7 +153,7 @@ function deepMerge(target, source) {
       value &&
       typeof value === "object" &&
       !Array.isArray(value) &&
-      !("value" in value) && // Don't recurse into token objects
+      !("$value" in value) && // Don't recurse into W3C token objects
       result[key] &&
       typeof result[key] === "object" &&
       !Array.isArray(result[key])
