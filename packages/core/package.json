@@ -38,7 +38,7 @@
     "test": "vitest run --config vitest.config.ts"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.0",
     "vitest": "^4.1.3"
   }
 }
