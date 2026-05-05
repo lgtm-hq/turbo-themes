@@ -48,12 +48,16 @@ trap cleanup EXIT
 
 # Probe osv-scanner without suppressions (--config /dev/null bypasses .osv-scanner.toml)
 # to see which vulnerabilities still exist in the current lockfiles.
+# The py-lintro image's default entrypoint is `python -m lintro`; override it to
+# call the osv-scanner binary directly so we get raw osv-scanner JSON (which
+# parse_osv_scanner_output in classify-suppressions.py expects).
 log_info "Probing osv-scanner without suppressions..."
 PROBE_DIAG=""
 PROBE_OUTPUT=$(
   docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
+    --entrypoint osv-scanner \
     -v "$PWD:/code" -w /code "${LINTRO_IMAGE}" \
-    osv-scanner scan --format json --config /dev/null --recursive . \
+    scan --format json --config /dev/null --recursive . \
     2>"${PROBE_TMPFILE}.diag" || true
 )
 PROBE_DIAG=$(cat "${PROBE_TMPFILE}.diag" 2>/dev/null || true)
@@ -89,10 +93,11 @@ log_info "Classifying suppressions..."
 printf '%s' "${PROBE_OUTPUT}" >"${PROBE_TMPFILE}"
 CLASSIFICATION_JSON=$(
   docker run --rm \
+    --entrypoint sh \
     -v "$PWD:/code" -w /code \
     -v "${PROBE_TMPFILE}:/tmp/probe-output.json:ro" \
     "${LINTRO_IMAGE}" \
-    sh -c 'python3 /code/scripts/ci/classify-suppressions.py < /tmp/probe-output.json'
+    -c '/app/.venv/bin/python3 /code/scripts/ci/classify-suppressions.py < /tmp/probe-output.json'
 )
 
 # Validate that CLASSIFICATION_JSON is well-formed before extracting arrays.
