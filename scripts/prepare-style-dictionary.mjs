@@ -9,23 +9,23 @@
  * Output: dist/tokens/style-dictionary/themes.json
  */
 
-import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { validateThemeId } from './utils/validation.mjs';
+import { createHash } from "node:crypto";
+import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { validateThemeId } from "./utils/validation.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const projectRoot = join(__dirname, '..');
+const projectRoot = join(__dirname, "..");
 
-const themesDir = join(projectRoot, 'schema', 'tokens', 'themes');
-const sharedTokensPath = join(projectRoot, 'schema', 'tokens', '_shared.tokens.json');
-const outputDir = join(projectRoot, 'dist', 'tokens', 'style-dictionary');
-const packageJsonPath = join(projectRoot, 'package.json');
+const themesDir = join(projectRoot, "schema", "tokens", "themes");
+const sharedTokensPath = join(projectRoot, "schema", "tokens", "_shared.tokens.json");
+const outputDir = join(projectRoot, "dist", "tokens", "style-dictionary");
+const packageJsonPath = join(projectRoot, "package.json");
 
 // Get version from package.json
-const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
 const version = packageJson.version;
 
 /**
@@ -47,7 +47,7 @@ function extractValues(obj) {
   }
 
   // If it's a W3C token with $value, extract it
-  if (typeof obj === 'object' && '$value' in obj) {
+  if (typeof obj === "object" && "$value" in obj) {
     return obj.$value;
   }
 
@@ -57,11 +57,11 @@ function extractValues(obj) {
   }
 
   // If it's an object, recursively process each property
-  if (typeof obj === 'object') {
+  if (typeof obj === "object") {
     const result = {};
     for (const [key, value] of Object.entries(obj)) {
       // Skip schema metadata keys
-      if (key.startsWith('$')) continue;
+      if (key.startsWith("$")) continue;
       result[key] = extractValues(value);
     }
     return result;
@@ -73,15 +73,18 @@ function extractValues(obj) {
 
 // Vendor metadata for byVendor grouping
 const vendorMeta = {
-  bulma: { name: 'Bulma', homepage: 'https://bulma.io/' },
-  catppuccin: { name: 'Catppuccin (synced)', homepage: 'https://catppuccin.com/palette/' },
-  dracula: { name: 'Dracula', homepage: 'https://draculatheme.com/' },
-  gruvbox: { name: 'Gruvbox', homepage: 'https://github.com/morhetz/gruvbox' },
-  github: { name: 'GitHub (synced)', homepage: 'https://primer.style/' },
-  nord: { name: 'Nord', homepage: 'https://www.nordtheme.com/' },
-  'rose-pine': { name: 'Rosé Pine (synced)', homepage: 'https://rosepinetheme.com/' },
-  solarized: { name: 'Solarized', homepage: 'https://ethanschoonover.com/solarized/' },
-  'tokyo-night': { name: 'Tokyo Night', homepage: 'https://github.com/enkia/tokyo-night-vscode-theme' },
+  bulma: { name: "Bulma", homepage: "https://bulma.io/" },
+  catppuccin: { name: "Catppuccin (synced)", homepage: "https://catppuccin.com/palette/" },
+  dracula: { name: "Dracula", homepage: "https://draculatheme.com/" },
+  gruvbox: { name: "Gruvbox", homepage: "https://github.com/morhetz/gruvbox" },
+  github: { name: "GitHub (synced)", homepage: "https://primer.style/" },
+  nord: { name: "Nord", homepage: "https://www.nordtheme.com/" },
+  "rose-pine": { name: "Rosé Pine (synced)", homepage: "https://rosepinetheme.com/" },
+  solarized: { name: "Solarized", homepage: "https://ethanschoonover.com/solarized/" },
+  "tokyo-night": {
+    name: "Tokyo Night",
+    homepage: "https://github.com/enkia/tokyo-night-vscode-theme",
+  },
 };
 
 /**
@@ -95,7 +98,7 @@ function groupByVendor(themes) {
     if (!vendors[vendor]) {
       vendors[vendor] = {
         name: vendorMeta[vendor]?.name || vendor,
-        homepage: vendorMeta[vendor]?.homepage || '',
+        homepage: vendorMeta[vendor]?.homepage || "",
         themes: [],
       };
     }
@@ -115,7 +118,7 @@ function transformTokenTree(obj, path = []) {
   }
 
   // If it's a W3C token with $value, transform it
-  if (typeof obj === 'object' && '$value' in obj) {
+  if (typeof obj === "object" && "$value" in obj) {
     return transformToken(obj);
   }
 
@@ -125,11 +128,11 @@ function transformTokenTree(obj, path = []) {
   }
 
   // If it's an object, recursively process each property
-  if (typeof obj === 'object') {
+  if (typeof obj === "object") {
     const result = {};
     for (const [key, value] of Object.entries(obj)) {
       // Skip schema metadata keys (except $type which we preserve on tokens)
-      if (key === '$schema' || key === '$description') continue;
+      if (key === "$schema" || key === "$description") continue;
       result[key] = transformTokenTree(value, [...path, key]);
     }
     return result;
@@ -148,11 +151,11 @@ function deepMerge(target, source) {
   for (const [key, value] of Object.entries(source)) {
     if (
       value &&
-      typeof value === 'object' &&
+      typeof value === "object" &&
       !Array.isArray(value) &&
-      !('value' in value) && // Don't recurse into token objects
+      !("value" in value) && // Don't recurse into token objects
       result[key] &&
-      typeof result[key] === 'object' &&
+      typeof result[key] === "object" &&
       !Array.isArray(result[key])
     ) {
       result[key] = deepMerge(result[key], value);
@@ -168,7 +171,7 @@ function deepMerge(target, source) {
  * Load and transform shared tokens
  */
 function loadSharedTokens() {
-  const data = JSON.parse(readFileSync(sharedTokensPath, 'utf-8'));
+  const data = JSON.parse(readFileSync(sharedTokensPath, "utf-8"));
   return transformTokenTree(data);
 }
 
@@ -176,7 +179,7 @@ function loadSharedTokens() {
  * Load and transform a single theme file
  */
 function loadTheme(filePath) {
-  const data = JSON.parse(readFileSync(filePath, 'utf-8'));
+  const data = JSON.parse(readFileSync(filePath, "utf-8"));
 
   // Extract theme metadata
   const { id, label, vendor, appearance, iconUrl, tokens } = data;
@@ -201,7 +204,7 @@ function loadTheme(filePath) {
  * Main function
  */
 function main() {
-  console.log('[prepare-style-dictionary] Starting token transformation...');
+  console.log("[prepare-style-dictionary] Starting token transformation...");
 
   // Ensure output directory exists
   if (!existsSync(outputDir)) {
@@ -214,7 +217,7 @@ function main() {
 
   // Load all theme files
   const themeFiles = readdirSync(themesDir)
-    .filter((f) => f.endsWith('.tokens.json'))
+    .filter((f) => f.endsWith(".tokens.json"))
     .sort();
 
   const themes = {};
@@ -233,10 +236,10 @@ function main() {
 
   // Build output structure for Style Dictionary
   const output = {
-    $schema: 'https://design-tokens.org/schema.json',
+    $schema: "https://design-tokens.org/schema.json",
     $description: `Turbo Themes - Design tokens for ${themeIds.length} themes`,
     $version: version,
-    $generated: '', // replaced with content hash below
+    $generated: "", // replaced with content hash below
     meta: {
       themeIds,
       totalThemes: themeIds.length,
@@ -246,12 +249,14 @@ function main() {
     byVendor,
   };
 
-  // Compute deterministic content hash (excludes $generated itself)
-  const { $generated: _g1, ...outputHashable } = output;
-  output.$generated = createHash('sha256').update(JSON.stringify(outputHashable)).digest('hex');
+  // Compute deterministic content hash (excludes $generated and $version)
+  // $version is excluded so release-time version bumps via sync-version.mjs do
+  // not invalidate the hash on the next regeneration.
+  const { $generated: _g1, $version: _v1, ...outputHashable } = output;
+  output.$generated = createHash("sha256").update(JSON.stringify(outputHashable)).digest("hex");
 
   // Write main themes file (SD format with $value)
-  const outputPath = join(outputDir, 'themes.json');
+  const outputPath = join(outputDir, "themes.json");
   writeFileSync(outputPath, JSON.stringify(output, null, 2));
   console.log(`[prepare-style-dictionary] Wrote ${outputPath}`);
 
@@ -270,10 +275,10 @@ function main() {
   }
 
   const tokensOutput = {
-    $schema: 'https://design-tokens.org/schema.json',
+    $schema: "https://design-tokens.org/schema.json",
     $description: `Turbo Themes - Flat tokens for ${themeIds.length} themes`,
     $version: version,
-    $generated: '', // replaced with content hash below
+    $generated: "", // replaced with content hash below
     meta: {
       themeIds,
       totalThemes: themeIds.length,
@@ -283,12 +288,14 @@ function main() {
     byVendor,
   };
 
-  // Compute deterministic content hash
-  const { $generated: _g2, ...tokensHashable } = tokensOutput;
-  tokensOutput.$generated = createHash('sha256').update(JSON.stringify(tokensHashable)).digest('hex');
+  // Compute deterministic content hash (excludes $generated and $version; see above)
+  const { $generated: _g2, $version: _v2, ...tokensHashable } = tokensOutput;
+  tokensOutput.$generated = createHash("sha256")
+    .update(JSON.stringify(tokensHashable))
+    .digest("hex");
 
   // Write flat tokens file for TypeScript/runtime
-  const tokensPath = join(outputDir, 'tokens.json');
+  const tokensPath = join(outputDir, "tokens.json");
   writeFileSync(tokensPath, JSON.stringify(tokensOutput, null, 2));
   console.log(`[prepare-style-dictionary] Wrote ${tokensPath}`);
 
@@ -304,7 +311,7 @@ function main() {
   }
 
   console.log(`[prepare-style-dictionary] Wrote ${themeIds.length} individual theme files`);
-  console.log('[prepare-style-dictionary] Done!');
+  console.log("[prepare-style-dictionary] Done!");
 }
 
 main();
