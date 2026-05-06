@@ -92,7 +92,7 @@ fi
 log_info "Classifying suppressions..."
 printf '%s' "${PROBE_OUTPUT}" >"${PROBE_TMPFILE}"
 CLASSIFICATION_JSON=$(
-  docker run --rm \
+  docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp \
     --entrypoint sh \
     -v "$PWD:/code" -w /code \
     -v "${PROBE_TMPFILE}:/tmp/probe-output.json:ro" \

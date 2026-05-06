@@ -18,7 +18,10 @@
 
 set -euo pipefail
 
-STATUS_OUTPUT=$(git status --porcelain || true)
+if ! STATUS_OUTPUT=$(git status --porcelain); then
+  echo "git status failed" >&2
+  exit 1
+fi
 
 if [[ -n "$STATUS_OUTPUT" ]]; then
   echo 'Non-deterministic theme generation detected:'
