@@ -16,7 +16,8 @@ set -euo pipefail
 : "${APP_SLUG:?APP_SLUG is required}"
 : "${COMMIT_REF:?COMMIT_REF is required}"
 
-if git diff --quiet -- 'src/themes/packs/*.synced.ts'; then
+if git diff --quiet -- 'src/themes/packs/*.synced.ts' &&
+  [[ -z "$(git ls-files --others --exclude-standard -- 'src/themes/packs/*.synced.ts')" ]]; then
   echo "No theme sync changes — nothing to commit."
   exit 0
 fi
