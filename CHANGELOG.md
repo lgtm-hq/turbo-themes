@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.45] - 2026-05-07
+
+### 🐛 Fixed
+
+- stabilize tokens.json $generated and use osv-scanner entrypoint for vuln probe (#474)
+
 ## [0.20.44] - 2026-05-04
 
 ### 🐛 Fixed
