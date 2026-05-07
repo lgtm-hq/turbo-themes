@@ -26,4 +26,4 @@ git config user.name "${APP_SLUG}[bot]"
 git config user.email "${APP_SLUG}[bot]@users.noreply.github.com"
 git add -- 'src/themes/packs/*.synced.ts'
 git commit -m "chore(deps): regenerate synced themes for ${COMMIT_REF}"
-git push
+git push origin "HEAD:${COMMIT_REF}"
