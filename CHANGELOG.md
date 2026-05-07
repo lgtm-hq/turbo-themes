@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.46] - 2026-05-07
+
+### 🐛 Fixed
+
+- update @vitest/coverage-v8 to 4.1.5 (#475)
+
 ## [0.20.45] - 2026-05-07
 
 ### 🐛 Fixed
