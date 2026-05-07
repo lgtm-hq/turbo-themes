@@ -40,16 +40,3 @@ reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for s
 id = "GHSA-wr4h-v87w-p3r7"
 ignoreUntil = 2026-06-29
 reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
-
-# --- npm packages with impractical remediation ---
-# OSV suggests downgrading to older major versions, which is not viable.
-
-[[IgnoredVulns]]
-id = "GHSA-wf6x-7x77-mvgw"
-ignoreUntil = 2026-09-29
-reason = "immutable@5.1.4 — not actionable, OSV suggests downgrading to v4 (breaking major)"
-
-[[IgnoredVulns]]
-id = "GHSA-mw96-cpmx-2vgc"
-ignoreUntil = 2026-09-29
-reason = "rollup@4.57.0 — not actionable, OSV suggests downgrading to v2 (breaking major)"
