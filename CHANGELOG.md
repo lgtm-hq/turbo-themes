@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.47] - 2026-05-08
+
+### 🐛 Fixed
+
+- update oxfmt to 0.48.0 (minor) (#480)
+
 ## [0.20.46] - 2026-05-07
 
 ### 🐛 Fixed
