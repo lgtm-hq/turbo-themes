@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.20.49] - 2026-05-14
+
+### 🐛 Fixed
+
+- update digest (#483)
+- update astro to 6.3.1 (minor) (#482)
+
 ## [0.20.48] - 2026-05-08
 
 ### 🐛 Fixed
