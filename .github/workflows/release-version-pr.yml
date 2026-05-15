@@ -56,15 +56,11 @@ jobs:
 
       - name: Guard - Check if last commit is a release
         id: guard
-        run: |
-          chmod +x scripts/ci/guard-release-commit.sh
-          scripts/ci/guard-release-commit.sh
+        run: bash scripts/ci/guard-release-commit.sh
 
       - name: Skip if release commit
         if: steps.guard.outputs.is_release == 'true'
-        run: |
-          echo "Skipping version PR - last commit was a release (prevents infinite loop)"
-          exit 0
+        run: bash scripts/ci/skip-version-pr-on-release-commit.sh
 
       - name: Configure Git
         if: steps.guard.outputs.is_release != 'true'
@@ -115,7 +111,8 @@ jobs:
           && steps.version.outputs.bump_type == 'patch'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --squash
+          PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number }}
+        run: bash scripts/ci/enable-auto-merge.sh
 
       - name: Generate Version PR Summary
         if: always()
