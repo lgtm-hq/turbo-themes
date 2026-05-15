@@ -10,113 +10,21 @@ permissions:
   contents: read
 
 concurrency:
-  group: release-version-pr
+  group: release-version-pr-${{ github.repository }}
   cancel-in-progress: false
 
 jobs:
   version-pr:
-    name: Create or Update Version PR
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-release-version-pr.yml@79444626c1b3afa4d959b5840b4b5310a46a4095
+    with:
+      max-bump: minor
+      auto-merge: true
+      version-update-script: scripts/ci/update-version-files.sh
+      tooling-ref: "79444626c1b3afa4d959b5840b4b5310a46a4095"
+    secrets:
+      RELEASE_APP_ID: ${{ secrets.RELEASE_APP_ID }}
+      RELEASE_APP_PRIVATE_KEY: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
     permissions:
       contents: write
       pull-requests: write
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@e3f713f2d8f53843e71c69a996d56f51aa9adfb9 # v2.14.1
-        with:
-          egress-policy: block
-          allowed-endpoints: >
-            github.com:443
-            api.github.com:443
-            codeload.github.com:443
-            objects.githubusercontent.com:443
-            pkg-containers.githubusercontent.com:443
-            github-releases.githubusercontent.com:443
-            release-assets.githubusercontent.com:443
-            pipelines.actions.githubusercontent.com:443
-            registry.npmjs.org:443
-            bun.sh:443
-
-      - name: Create GitHub App installation token
-        id: app-token
-        # yamllint disable-line rule:line-length
-        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
-        with:
-          app-id: ${{ secrets.RELEASE_APP_ID }}
-          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-          token: ${{ steps.app-token.outputs.token }}
-
-      - name: Guard - Check if last commit is a release
-        id: guard
-        run: bash scripts/ci/guard-release-commit.sh
-
-      - name: Skip if release commit
-        if: steps.guard.outputs.is_release == 'true'
-        run: bash scripts/ci/skip-version-pr-on-release-commit.sh
-
-      - name: Configure Git
-        if: steps.guard.outputs.is_release != 'true'
-        run: ./scripts/ci/configure-git.sh
-
-      - name: Setup Bun
-        if: steps.guard.outputs.is_release != 'true'
-        uses: oven-sh/setup-bun@3d267786b128fe76c2f16a390aa2448b815359f3 # v2.1.2
-        with:
-          bun-version: '1.3.8'
-
-      - name: Setup Node.js
-        if: steps.guard.outputs.is_release != 'true'
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
-        with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org
-
-      - name: Install dependencies
-        if: steps.guard.outputs.is_release != 'true'
-        run: bun install --frozen-lockfile
-
-      - name: Compute next version and update files
-        if: steps.guard.outputs.is_release != 'true'
-        id: version
-        run: node scripts/ci/compute-next-version.mjs
-
-      - name: Create or update version PR
-        id: create_pr
-        if: steps.guard.outputs.is_release != 'true' && steps.version.outputs.bump_needed == 'true'
-        uses: peter-evans/create-pull-request@c0f553fe549906ede9cf27b5156039d195d2ece0 # v8
-        env:
-          HUSKY: '0'
-        with:
-          token: ${{ steps.app-token.outputs.token }}
-          commit-message: 'chore(release): version ${{ steps.version.outputs.next_version }}'
-          title: ${{ steps.version.outputs.pr_title }}
-          body-path: ${{ steps.version.outputs.pr_body_file }}
-          branch: release/version-${{ steps.version.outputs.next_version }}
-          base: main
-          labels: |
-            release-bump
-          delete-branch: true
-
-      - name: Enable auto-merge
-        if: >-
-          steps.create_pr.outputs.pull-request-number
-          && steps.version.outputs.bump_type == 'patch'
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number }}
-        run: bash scripts/ci/enable-auto-merge.sh
-
-      - name: Generate Version PR Summary
-        if: always()
-        env:
-          BUMP_NEEDED: ${{ steps.version.outputs.bump_needed }}
-          NEXT_VERSION: ${{ steps.version.outputs.next_version }}
-        run: ./scripts/ci/generate-version-pr-summary.sh
