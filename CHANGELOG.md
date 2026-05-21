@@ -8,9 +8,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 ### Added
 
-- Set `data-appearance="light|dark"` on `document.documentElement` alongside
-  `data-theme` in the blocking script and runtime theme application, so consumers can
-  style by appearance without hardcoding theme IDs
+- TBD
+
+## [0.21.0] - 2026-05-21
+
+### ✨ Added
+
+- set data-appearance on document root (#491)
 
 ## [0.20.49] - 2026-05-14
 
