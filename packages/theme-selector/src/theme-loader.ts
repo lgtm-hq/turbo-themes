@@ -3,6 +3,7 @@
  * Theme CSS loading utilities
  */
 
+import { resolveThemeAppearance } from './appearance.js';
 import { CSS_LINK_ID, DOM_SELECTORS } from './constants.js';
 import { ThemeErrors, logThemeError } from './errors.js';
 
@@ -136,6 +137,8 @@ export function applyThemeClass(doc: Document, themeId: string): void {
 
   // Add the new theme class
   doc.documentElement.classList.add(`theme-${themeId}`);
+
+  doc.documentElement.setAttribute('data-appearance', resolveThemeAppearance(themeId));
 }
 
 /**

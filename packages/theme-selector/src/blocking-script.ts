@@ -15,7 +15,8 @@
  * <Fragment set:html={`<script>${blockingScript}</script>`} />
  */
 
-import { DEFAULT_THEME, VALID_THEMES } from '@lgtm-hq/turbo-themes-core';
+import { DEFAULT_THEME, THEME_APPEARANCES, VALID_THEMES } from '@lgtm-hq/turbo-themes-core';
+import type { ThemeAppearance } from './appearance.js';
 import { CSS_LINK_ID, STORAGE_KEY, LEGACY_STORAGE_KEYS } from './constants.js';
 
 export interface BlockingScriptOptions {
@@ -27,13 +28,15 @@ export interface BlockingScriptOptions {
   storageKey?: string;
   /** Legacy localStorage keys to migrate from. Defaults to LEGACY_STORAGE_KEYS from core. */
   legacyKeys?: readonly string[];
+  /** Light/dark mapping per theme ID. Defaults to THEME_APPEARANCES from core. */
+  themeAppearances?: Readonly<Record<string, ThemeAppearance>>;
 }
 
 /**
  * Generates a self-contained inline IIFE that prevents FOUC. It:
  * 1. Migrates legacy storage keys to the current `storageKey`
  * 2. Reads and validates the stored theme against the allowlist
- * 3. Sets `data-theme` and the `theme-{id}` class on `<html>`
+ * 3. Sets `data-theme`, `data-appearance`, and the `theme-{id}` class on `<html>`
  * 4. Sets `window.__INITIAL_THEME__` so `initTheme` can short-circuit
  * 5. Updates the existing CSS `<link>` href when the theme is non-default
  *
@@ -47,6 +50,7 @@ export function generateBlockingScript(options: BlockingScriptOptions = {}): str
     defaultTheme = DEFAULT_THEME,
     storageKey = STORAGE_KEY,
     legacyKeys = LEGACY_STORAGE_KEYS,
+    themeAppearances = THEME_APPEARANCES,
   } = options;
 
   const config = {
@@ -54,6 +58,7 @@ export function generateBlockingScript(options: BlockingScriptOptions = {}): str
     defaultTheme: JSON.stringify(defaultTheme),
     validThemes: JSON.stringify(validThemes),
     legacyKeys: JSON.stringify(legacyKeys),
+    themeAppearances: JSON.stringify(themeAppearances),
     cssLinkId: JSON.stringify(CSS_LINK_ID),
   };
 
@@ -63,6 +68,7 @@ export function generateBlockingScript(options: BlockingScriptOptions = {}): str
     var defaultTheme = ${config.defaultTheme};
     var validThemes = ${config.validThemes};
     var legacyKeys = ${config.legacyKeys};
+    var themeAppearances = ${config.themeAppearances};
     var cssLinkId = ${config.cssLinkId};
 
     for (var i = 0; i < legacyKeys.length; i++) {
@@ -78,6 +84,7 @@ export function generateBlockingScript(options: BlockingScriptOptions = {}): str
 
     var root = document.documentElement;
     root.setAttribute('data-theme', theme);
+    root.setAttribute('data-appearance', themeAppearances[theme] || 'dark');
     var classes = root.classList;
     for (var j = classes.length - 1; j >= 0; j--) {
       if (classes[j].indexOf('theme-') === 0) classes.remove(classes[j]);
