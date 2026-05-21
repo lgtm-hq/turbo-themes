@@ -124,7 +124,7 @@ export function getCurrentThemeFromClasses(element: HTMLElement): string | null 
 }
 
 /**
- * Applies theme class to document element
+ * Applies theme class and root data attributes to the document element.
  */
 export function applyThemeClass(doc: Document, themeId: string): void {
   // Remove existing theme classes in a single batch operation
@@ -138,6 +138,7 @@ export function applyThemeClass(doc: Document, themeId: string): void {
   // Add the new theme class
   doc.documentElement.classList.add(`theme-${themeId}`);
 
+  doc.documentElement.setAttribute('data-theme', themeId);
   doc.documentElement.setAttribute('data-appearance', resolveThemeAppearance(themeId));
 }
 

@@ -129,9 +129,12 @@ describe('theme-loader', () => {
       expect(document.documentElement.classList.contains('theme-catppuccin-mocha')).toBe(true);
     });
 
-    it('sets data-appearance on documentElement', () => {
+    it('sets data-theme and data-appearance on documentElement', () => {
+      document.documentElement.setAttribute('data-theme', 'catppuccin-mocha');
+
       applyThemeClass(document, 'catppuccin-latte');
 
+      expect(document.documentElement.getAttribute('data-theme')).toBe('catppuccin-latte');
       expect(document.documentElement.getAttribute('data-appearance')).toBe('light');
     });
 
