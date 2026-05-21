@@ -129,6 +129,21 @@ describe('theme-loader', () => {
       expect(document.documentElement.classList.contains('theme-catppuccin-mocha')).toBe(true);
     });
 
+    it('sets data-theme and data-appearance on documentElement', () => {
+      document.documentElement.setAttribute('data-theme', 'catppuccin-mocha');
+
+      applyThemeClass(document, 'catppuccin-latte');
+
+      expect(document.documentElement.getAttribute('data-theme')).toBe('catppuccin-latte');
+      expect(document.documentElement.getAttribute('data-appearance')).toBe('light');
+    });
+
+    it('falls back to dark appearance for unknown theme', () => {
+      applyThemeClass(document, 'unknown-theme');
+
+      expect(document.documentElement.getAttribute('data-appearance')).toBe('dark');
+    });
+
     it('handles multiple existing theme classes', () => {
       document.documentElement.classList.add('theme-theme1');
       document.documentElement.classList.add('theme-theme2');
