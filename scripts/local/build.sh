@@ -371,7 +371,7 @@ fi
 
 # Step 9: HTMLProofer
 print_status "$BLUE" "🔍 Step 9: HTMLProofer validation..."
-if ! command_exists "bundle" || [ ! -d "_site" ]; then
+if ! command_exists "bundle" || [ ! -f "_config.yml" ] || [ ! -d "_site" ]; then
   print_status "$YELLOW" "  ⏭️  Skipping HTMLProofer (no Jekyll site to validate)..."
 elif [ "$PROD_MODE" = true ]; then
   # Production builds: Skip validation (baseurl prefix makes local paths invalid)
