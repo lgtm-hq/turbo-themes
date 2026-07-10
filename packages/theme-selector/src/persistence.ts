@@ -7,6 +7,7 @@
  * and the theme-switching UI script (lines 140-230).
  */
 
+import { resolveThemeAppearance } from './appearance.js';
 import { DEFAULT_THEME } from './constants.js';
 import { migrateLegacyStorage, getSavedTheme } from './storage.js';
 
@@ -83,7 +84,7 @@ export function buildThemeIconSrc(
  * BaseLayout.astro. It:
  * 1. Migrates legacy storage keys
  * 2. Reads and validates the stored theme
- * 3. Sets the `data-theme` attribute on `<html>`
+ * 3. Sets the `data-theme` and `data-appearance` attributes on `<html>`
  * 4. Sets `window.__INITIAL_THEME__` for downstream scripts
  * 5. Updates the CSS link href if the theme differs from the default
  */
@@ -95,6 +96,7 @@ export function applyInitialTheme(
   const theme = resolveInitialTheme(windowObj, validThemes);
 
   doc.documentElement.setAttribute('data-theme', theme);
+  doc.documentElement.setAttribute('data-appearance', resolveThemeAppearance(theme));
   windowObj.__INITIAL_THEME__ = theme;
 
   if (needsCssUpdate(theme)) {

@@ -8,7 +8,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { generateBlockingScript } from '../src/blocking-script.js';
-import { DEFAULT_THEME, VALID_THEMES } from '@lgtm-hq/turbo-themes-core';
+import { DEFAULT_THEME, THEME_APPEARANCES, VALID_THEMES } from '@lgtm-hq/turbo-themes-core';
 import { CSS_LINK_ID, STORAGE_KEY, LEGACY_STORAGE_KEYS } from '../src/constants.js';
 
 describe('generateBlockingScript', () => {
@@ -51,6 +51,16 @@ describe('generateBlockingScript', () => {
     it('embeds LEGACY_STORAGE_KEYS from core by default', () => {
       const script = generateBlockingScript();
       expect(script).toContain(JSON.stringify(LEGACY_STORAGE_KEYS));
+    });
+
+    it('embeds THEME_APPEARANCES from core by default', () => {
+      const script = generateBlockingScript();
+      expect(script).toContain(JSON.stringify(THEME_APPEARANCES));
+    });
+
+    it('sets data-appearance in generated script', () => {
+      const script = generateBlockingScript();
+      expect(script).toContain("setAttribute('data-appearance'");
     });
 
     it('respects custom storageKey option', () => {
@@ -98,6 +108,7 @@ describe('generateBlockingScript', () => {
       // Set up minimal DOM
       document.documentElement.setAttribute('data-baseurl', '');
       document.documentElement.removeAttribute('data-theme');
+      document.documentElement.removeAttribute('data-appearance');
       delete (window as Record<string, unknown>).__INITIAL_THEME__;
 
       // Create theme CSS link element
@@ -123,12 +134,22 @@ describe('generateBlockingScript', () => {
     it('sets data-theme to default when localStorage is empty', () => {
       execScript();
       expect(document.documentElement.getAttribute('data-theme')).toBe(DEFAULT_THEME);
+      expect(document.documentElement.getAttribute('data-appearance')).toBe(
+        THEME_APPEARANCES[DEFAULT_THEME],
+      );
     });
 
     it('sets data-theme to stored theme when valid', () => {
       mockLocalStorage[STORAGE_KEY] = 'dracula';
       execScript();
       expect(document.documentElement.getAttribute('data-theme')).toBe('dracula');
+      expect(document.documentElement.getAttribute('data-appearance')).toBe('dark');
+    });
+
+    it('sets data-appearance to light for light themes', () => {
+      mockLocalStorage[STORAGE_KEY] = 'catppuccin-latte';
+      execScript();
+      expect(document.documentElement.getAttribute('data-appearance')).toBe('light');
     });
 
     it('falls back to default when stored theme is invalid', () => {
@@ -178,6 +199,15 @@ describe('generateBlockingScript', () => {
       execScript();
       const link = document.getElementById(CSS_LINK_ID) as HTMLLinkElement;
       expect(link.href).toContain('/my-site/assets/css/themes/turbo/dracula.css');
+    });
+
+    it('falls back to dark appearance for unknown theme with custom appearances', () => {
+      mockLocalStorage[STORAGE_KEY] = 'custom-theme';
+      execScript({
+        validThemes: ['custom-theme'],
+        themeAppearances: {},
+      });
+      expect(document.documentElement.getAttribute('data-appearance')).toBe('dark');
     });
 
     it('handles localStorage exceptions gracefully', () => {
