@@ -71,15 +71,27 @@ import '@lgtm-hq/turbo-themes-css/turbo-base.css';
 import '@lgtm-hq/turbo-themes-css/themes/catppuccin-mocha.css';
 ```
 
+### Option 4: Framework Integration (e.g. Starlight, Docusaurus)
+
+When the host framework provides its own `:root` design tokens, use only the scoped
+theme selectors — no `:root` defaults:
+
+```js
+import '@lgtm-hq/turbo-themes/css/themes-all';
+```
+
+See [ADR-0005](../../docs/adr/0005-css-only-theme-switching.md) for details.
+
 ## Available Files
 
-| File               | Size  | Description                                        |
-| ------------------ | ----- | -------------------------------------------------- |
-| `turbo.css`        | ~20KB | Combined bundle with all themes                    |
-| `turbo-core.css`   | ~2KB  | Default CSS variables in `:root`                   |
-| `turbo-base.css`   | ~4KB  | Optional semantic styles (typography, forms, etc.) |
-| `turbo-syntax.css` | ~3KB  | Syntax highlighting styles for code blocks         |
-| `themes/<id>.css`  | ~2KB  | Individual theme files                             |
+| File                   | Size  | Description                                            |
+| ---------------------- | ----- | ------------------------------------------------------ |
+| `turbo.css`            | ~20KB | Combined bundle with all themes                        |
+| `turbo-core.css`       | ~2KB  | Default CSS variables in `:root`                       |
+| `turbo-base.css`       | ~4KB  | Optional semantic styles (typography, forms, etc.)     |
+| `turbo-syntax.css`     | ~3KB  | Syntax highlighting styles for code blocks             |
+| `themes/<id>.css`      | ~2KB  | Individual theme files                                 |
+| `turbo-themes-all.css` | ~82KB | All themes, `[data-theme]` selectors only (no `:root`) |
 
 ## Available Themes
 
