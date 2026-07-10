@@ -16,6 +16,13 @@ export default defineConfig({
     emptyOutDir: true,
     minify: false,
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        // Restore Vite 7 behavior: strip comments from library output
+        // (Rolldown preserves JSDoc/legal comments by default, inflating bundles)
+        comments: false,
+      },
+    },
   },
   resolve: {
     alias: [

@@ -3,7 +3,9 @@ import { statSync, existsSync } from 'fs';
 
 // Size budgets in bytes (generous to allow growth, but catch major issues)
 const SIZE_BUDGETS: Record<string, number> = {
-  'packages/theme-selector/dist/index.js': 81_920, // 80KB (accounts for theme data growth)
+  'packages/theme-selector/dist/index.js': 92_160, // 90KB (Vite 8/Rolldown escapes the
+  // embedded theme JSON with double quotes, adding ~7KB of escaping overhead vs Vite 7;
+  // gzipped size is unchanged)
   'packages/adapters/tailwind/dist/preset.js': 30_000, // 30KB
   'packages/adapters/tailwind/dist/colors.js': 20_000, // 20KB
   'packages/css/dist/index.js': 35_000, // 35KB (increased: component CSS vars now emitted for all themes)
