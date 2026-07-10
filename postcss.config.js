@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: MIT
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+// purgecss 8 ships a CommonJS default export (the plugin function) instead of
+// the named purgeCSSPlugin export from v7
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 import purgecssConfig from './purgecss.config.js';
 import cssnano from 'cssnano';
 
