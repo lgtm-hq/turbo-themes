@@ -1,6 +1,6 @@
 # Maintainers
 
-- Primary: Turbo Coder <security@example.com>
+- Primary: Turbo Coder <turbocoder13@gmail.com>
 - Backups: Open to additional maintainers via CONTRIBUTING.md process
 
 Contact rules:
