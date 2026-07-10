@@ -1,77 +1,53 @@
-.PHONY: all clean test test-fast test-parallel test-browser-parallel playground-html playground-jekyll playground-swift playground-tailwind playground-bootstrap playground-react playground-vue playground-python playground-all playground-help \
-	build-help build-all build-core build-themes build-js build-js-only build-html build-site build-tailwind build-swift build-examples examples-prep build-gem \
+.PHONY: all clean help test test-fast test-parallel test-browser-parallel playground-html playground-jekyll playground-swift playground-tailwind playground-bootstrap playground-react playground-vue playground-python playground-all \
+	build-all build-core build-themes build-js build-js-only build-html build-site build-tailwind build-swift build-examples examples-prep build-gem \
 	test-unit test-e2e test-examples test-example-bootstrap test-example-html test-example-jekyll test-example-react test-example-tailwind test-example-vue \
-	test-python test-swift test-lhci test-links test-all test-help ensure-deps ensure-report-dirs copy-reports serve-reports _serve serve serve-quick
+	test-python test-swift test-lhci test-links test-all ensure-deps ensure-report-dirs copy-reports serve-reports _serve serve serve-quick \
+	test-workflows test-workflows-quick test-workflows-list test-workflows-dry test-workflows-clean
 
-all: build-all
+.DEFAULT_GOAL := help
 
-clean:
+##@ General
+
+help: ## Show this help message
+	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage: make <target>\n"} /^[a-zA-Z0-9_-]+:.*?##/ { printf "  \033[36m%-24s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) }' $(MAKEFILE_LIST)
+
+all: build-all ## Build everything (alias for build-all)
+
+clean: ## Remove build artifacts and test outputs
 	@echo "🧹 Cleaning build artifacts..."
 	@rm -rf dist/ apps/site/dist/ apps/site/.astro/ coverage/ htmlcov/ .lighthouse/ lighthouse-reports/ playwright-report/ test-results/ .test-results/
 	@find . -name "*.gem" -type f -delete
 	@echo "✅ Clean complete"
 
-playground-help:
-	@echo "Playground targets (run example sites):"
-	@echo "  playground-html       Open vanilla HTML example"
-	@echo "  playground-jekyll     Serve Jekyll example (demonstrates gem usage)"
-	@echo "  playground-swift      Open SwiftUI example in Xcode"
-	@echo "  playground-tailwind   Run Vite dev server for Tailwind example"
-	@echo "  playground-bootstrap  Run Vite dev server for Bootstrap example"
-	@echo "  playground-react      Run Vite dev server for React example"
-	@echo "  playground-vue        Run Vite dev server for Vue example"
-	@echo "  playground-python     Python example (placeholder)"
-	@echo "  playground-all        Open HTML, Jekyll, Tailwind, React, Vue examples"
+##@ Playground (run example sites)
 
-playground-html:
+playground-html: ## Open vanilla HTML example
 	@./scripts/playground.sh html
 
-playground-jekyll:
+playground-jekyll: ## Serve Jekyll example (demonstrates gem usage)
 	@./scripts/playground.sh jekyll
 
-playground-swift:
+playground-swift: ## Open SwiftUI example in Xcode
 	@./scripts/playground.sh swift
 
-playground-tailwind:
+playground-tailwind: ## Run Vite dev server for Tailwind example
 	@./scripts/playground.sh tailwind
 
-playground-bootstrap:
+playground-bootstrap: ## Run Vite dev server for Bootstrap example
 	@cd examples/bootstrap && bun install && bun run dev
 
-playground-react:
+playground-react: ## Run Vite dev server for React example
 	@cd examples/react && bun install && bun run dev
 
-playground-vue:
+playground-vue: ## Run Vite dev server for Vue example
 	@cd examples/vue && bun install && bun run dev
 
-playground-python:
+playground-python: ## Python example (placeholder)
 	@echo "Python example placeholder - add implementation in examples/python-report/"
 
-playground-all: playground-html playground-jekyll playground-tailwind playground-react playground-vue
+playground-all: playground-html playground-jekyll playground-tailwind playground-react playground-vue ## Open HTML, Jekyll, Tailwind, React, Vue examples
 
-# Test targets
-test-help:
-	@echo "Test targets:"
-	@echo "  test              - Run all tests in optimized parallel phases"
-	@echo "  test-fast         - Run without lighthouse (good for local dev)"
-	@echo "  test-parallel     - Phase 1: unit + python + swift in parallel"
-	@echo "  test-browser-parallel - Phase 3: examples + e2e in parallel"
-	@echo "  test-unit         - Run TypeScript/Vitest unit tests"
-	@echo "  test-e2e          - Run Playwright E2E tests"
-	@echo "  test-examples     - Run Playwright tests for all examples"
-	@echo "  test-python       - Run Python unit tests"
-	@echo "  test-swift        - Run Swift unit tests with coverage"
-	@echo "  test-lhci         - Run Lighthouse CI against apps/site/dist"
-	@echo "  test-links        - Validate internal links with html-proofer"
-	@echo "  test-all          - Alias for test"
-	@echo ""
-	@echo "Parallel execution phases:"
-	@echo "  Phase 1: Unit + Python + Swift (parallel)"
-	@echo "  Phase 2: Build examples (sequential, required for browser tests)"
-	@echo "  Phase 3: Examples + E2E (parallel)"
-	@echo "  Phase 4: Lighthouse (sequential)"
-	@echo ""
-	@echo "CPU cores detected: $$(nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+##@ Test
 
 # Detect number of CPU cores for parallel execution
 NPROC := $(shell nproc 2>/dev/null || sysctl -n hw.ncpu 2>/dev/null || echo 4)
@@ -89,10 +65,10 @@ endef
 # Phase 2: Build examples (required for browser tests)
 # Phase 3: Examples + E2E (parallel)
 # Phase 4: Lighthouse (sequential, needs server)
-test: ensure-deps test-parallel build-examples examples-prep test-browser-parallel test-lhci
+test: ensure-deps test-parallel build-examples examples-prep test-browser-parallel test-lhci ## Run all tests in optimized parallel phases
 
 # Phase 1: Fast parallel tests (unit, python, swift)
-test-parallel:
+test-parallel: ## Phase 1: unit + python + swift in parallel
 	@echo "🚀 Phase 1: Running unit tests in parallel ($(NPROC) CPUs available)..."
 	@rm -rf .test-results && mkdir -p .test-results
 	@( $(MAKE) test-unit > .test-results/unit.log 2>&1 && touch .test-results/unit.ok ) & \
@@ -107,43 +83,41 @@ test-parallel:
 	[ -f .test-results/unit.ok ] && [ -f .test-results/python.ok ] && [ -f .test-results/swift.ok ]
 
 # Phase 3: Browser-based tests (sequential suites, each internally parallelized)
-test-browser-parallel:
+test-browser-parallel: ## Phase 3: run e2e then examples sequentially
 	@echo "🚀 Phase 3: Running browser test suites sequentially..."
 	@$(MAKE) test-e2e
 	@$(MAKE) test-examples
 
-# Fast tests without lighthouse (for quick local verification)
-test-fast: ensure-deps test-parallel build-examples examples-prep test-browser-parallel
+test-fast: ensure-deps test-parallel build-examples examples-prep test-browser-parallel ## Run without lighthouse (good for local dev)
 
 # Individual example test targets
-test-example-bootstrap:
+test-example-bootstrap: ## Run Playwright tests for the Bootstrap example
 	@node scripts/test-examples.mjs bootstrap
 
-test-example-html:
+test-example-html: ## Run Playwright tests for the vanilla HTML example
 	@node scripts/test-examples.mjs html-vanilla
 
-test-example-jekyll:
+test-example-jekyll: ## Run Playwright tests for the Jekyll example
 	@node scripts/test-examples.mjs jekyll
 
-test-example-react:
+test-example-react: ## Run Playwright tests for the React example
 	@node scripts/test-examples.mjs react
 
-test-example-tailwind:
+test-example-tailwind: ## Run Playwright tests for the Tailwind example
 	@node scripts/test-examples.mjs tailwind
 
-test-example-vue:
+test-example-vue: ## Run Playwright tests for the Vue example
 	@node scripts/test-examples.mjs vue
 
-# Run all example tests (sequential, used for standalone runs)
-test-examples:
+test-examples: ## Run Playwright tests for all examples
 	@echo "🧪 Running all example tests..."
 	@bun run examples:test
 
-test-unit:
+test-unit: ## Run TypeScript/Vitest unit tests
 	$(call check_bun)
 	@bun run test
 
-test-e2e:
+test-e2e: ## Run Playwright E2E tests
 	@if [ "$${SKIP_E2E:-0}" = "1" ]; then \
 		echo "⏭️  Skipping E2E (SKIP_E2E=1)"; \
 	elif ! command -v bun >/dev/null 2>&1 || [ ! -f "package.json" ]; then \
@@ -153,7 +127,7 @@ test-e2e:
 		bun run e2e:ci; \
 	fi
 
-test-lhci:
+test-lhci: ## Run Lighthouse CI against apps/site/dist
 	@if [ "$${SKIP_LHCI:-0}" = "1" ]; then \
 		echo "⏭️  Skipping Lighthouse (SKIP_LHCI=1)"; \
 	elif ! command -v bun >/dev/null 2>&1 || [ ! -f "package.json" ]; then \
@@ -163,7 +137,7 @@ test-lhci:
 		bunx lhci autorun --config=lighthouserc.json --collect.numberOfRuns=1; \
 	fi
 
-test-links: build-site
+test-links: build-site ## Validate internal links with html-proofer
 	@echo "🔗 Running link validation with html-proofer..."
 	@if [ "$${SKIP_LINKS:-0}" = "1" ]; then \
 		echo "⏭️  Skipping link tests (SKIP_LINKS=1)"; \
@@ -179,10 +153,10 @@ test-links: build-site
 		echo "✅ Link validation passed"; \
 	fi
 
-test-python:
+test-python: ## Run Python unit tests
 	@cd python && uv sync --extra dev && uv run pytest tests/ -v
 
-test-swift:
+test-swift: ## Run Swift unit tests with coverage
 	@if [ "$${SKIP_SWIFT:-0}" = "1" ]; then \
 		echo "⏭️  Skipping Swift tests (SKIP_SWIFT=1)"; \
 	else \
@@ -218,37 +192,25 @@ test-swift:
 		fi; \
 	fi
 
-test-all: test
+test-all: test ## Alias for test
 
-# Workflow testing with ACT
-.PHONY: test-workflows-help test-workflows test-workflows-quick test-workflows-list test-workflows-dry test-workflows-clean
-test-workflows-help:
-	@echo "Workflow testing targets (requires ACT + Docker):"
-	@echo "  test-workflows       - Run all testable workflows"
-	@echo "  test-workflows-quick - Run quality workflows only (fastest)"
-	@echo "  test-workflows-list  - List all available workflows"
-	@echo "  test-workflows-dry   - Dry-run (show commands without executing)"
-	@echo ""
-	@echo "Options (pass via environment):"
-	@echo "  WORKFLOW=name        - Test specific workflow (e.g., WORKFLOW=quality-ci-main)"
-	@echo "  CATEGORY=cat         - Filter by category (quality|security|publish|release|maintenance|reporting|deploy|other)"
-	@echo "  EVENT=type           - Force event type (push|pull_request|tag|workflow_dispatch)"
+##@ Workflow testing (requires ACT + Docker)
 
-test-workflows:
+test-workflows: ## Run all testable workflows (WORKFLOW=name, CATEGORY=cat, EVENT=type)
 	@./scripts/local/test-workflows-act.sh $(if $(WORKFLOW),$(WORKFLOW),) \
 		$(if $(CATEGORY),--category $(CATEGORY),) \
 		$(if $(EVENT),--event $(EVENT),)
 
-test-workflows-quick:
+test-workflows-quick: ## Run quality workflows only (fastest)
 	@./scripts/local/test-workflows-act.sh --category quality
 
-test-workflows-list:
+test-workflows-list: ## List all available workflows
 	@./scripts/local/test-workflows-act.sh --list
 
-test-workflows-dry:
+test-workflows-dry: ## Dry-run (show commands without executing)
 	@./scripts/local/test-workflows-act.sh --dry-run $(if $(WORKFLOW),$(WORKFLOW),)
 
-test-workflows-clean:
+test-workflows-clean: ## Clean up stale ACT containers
 	@echo "Cleaning up stale ACT containers..."
 	@# Note: removed -r flag from xargs for macOS/BSD compatibility
 	@docker ps -a --filter "name=act-" -q | xargs docker rm -f 2>/dev/null || true
@@ -275,88 +237,67 @@ ensure-deps:
 ensure-report-dirs:
 	@mkdir -p coverage lighthouse-reports playwright-report
 
-# Copy test reports to site dist (run after tests to update reports in dist)
-copy-reports:
+##@ Serve & Reports
+
+copy-reports: ## Copy test reports to apps/site/dist
 	@echo "📊 Copying test reports to site dist..."
 	@cd apps/site && node scripts/post-build.mjs
 
-serve-reports:
+serve-reports: ## Serve apps/site/dist (and reports) on http://127.0.0.1:4173
 	@if ! command -v bunx >/dev/null 2>&1; then \
 		echo "❌ bunx required to serve reports (http-server)."; exit 1; \
 	fi
 	@echo "Serving apps/site/dist (and reports if present) on http://127.0.0.1:4173 ..."
 	@bunx --no-install http-server apps/site/dist -a 127.0.0.1 -p 4173 -c-1
 
-# Build targets
-build-help:
-	@echo "Build targets:"
-	@echo "  build-core      bun run build (tokens/ts)"
-	@echo "  build-themes    bun run build:themes (CSS themes)"
-	@echo "  build-js        bun run build:js (theme selector JS)"
-	@echo "  build-html      build core+themes+js for vanilla demo"
-	@echo "  build-site      build core+themes+js and Astro site"
-	@echo "  build-examples  build all framework examples (React, Vue, Bootstrap, Tailwind)"
-	@echo "  build-tailwind  bun build inside examples/tailwind"
-	@echo "  build-swift     SwiftUI preview (open in Xcode)"
-	@echo "  build-gem       Ruby gem for Jekyll"
-	@echo "  examples-prep   copy built examples into site dist"
-	@echo "  copy-reports    copy test reports to site dist"
-	@echo "  build-all       core + js + examples + site + prep + gem"
-	@echo "  serve           serve existing dist (copies reports first)"
-	@echo "  serve-quick     build site and serve (no tests)"
-
-build-core:
-	bun run build
-
-build-themes:
-	bun run build:themes
-
-build-js:
-	bun run build:js
-
-# JS bundle only (dev + prod) - use after build-core to avoid redundancy
-build-js-only:
-	bun run build:js:dev && bun run build:js:prod
-
-build-html: build-core build-js-only
-	@echo "HTML demo built. Open examples/html-vanilla/index.html"
-
-build-site: build-core build-js-only ensure-report-dirs
-	cd apps/site && bun run build
-
 # Internal serve target (shared by all serve variants)
 _serve:
 	@echo "🚀 Starting preview server..."
 	@cd apps/site && bun run preview
 
-# Serve existing dist (use after: make build-all && make test)
-serve: copy-reports
+serve: copy-reports ## Serve existing dist (copies reports first)
 	@$(MAKE) _serve
 
-# Build site and serve (no tests)
-serve-quick: build-site
+serve-quick: build-site ## Build site and serve (no tests)
 	@$(MAKE) _serve
 
-build-tailwind:
+##@ Build
+
+build-core: ## bun run build (tokens/ts)
+	bun run build
+
+build-themes: ## bun run build:themes (CSS themes)
+	bun run build:themes
+
+build-js: ## bun run build:js (theme selector JS)
+	bun run build:js
+
+# JS bundle only (dev + prod) - use after build-core to avoid redundancy
+build-js-only: ## bun run build:js:dev + build:js:prod (skip build-core)
+	bun run build:js:dev && bun run build:js:prod
+
+build-html: build-core build-js-only ## Build core+themes+js for vanilla demo
+	@echo "HTML demo built. Open examples/html-vanilla/index.html"
+
+build-site: build-core build-js-only ensure-report-dirs ## Build core+themes+js and Astro site
+	cd apps/site && bun run build
+
+build-tailwind: ## bun build inside examples/tailwind
 	cd examples/tailwind && bun install && bun run build
 
-build-examples:
+build-examples: ## Build all framework examples (React, Vue, Bootstrap, Tailwind)
 	@echo "📦 Building all examples..."
 	@bun run examples:build
 
-# Copy built examples into site dist (needed for browser tests)
-examples-prep:
+examples-prep: ## Copy built examples into site dist
 	@echo "📋 Preparing examples in site dist..."
 	@bun run examples:prep
 
-build-swift:
+build-swift: ## SwiftUI preview (open in Xcode)
 	@echo "Open examples/swift-swiftui/Package.swift in Xcode to build previews."
 
-build-gem:
+build-gem: ## Build Ruby gem for Jekyll
 	@echo "💎 Building Ruby gem..."
 	@./scripts/build-gem.sh
 
-build-all: build-core build-js-only build-examples build-site examples-prep build-gem
-
-help: playground-help build-help test-help test-workflows-help
-
+build-all: build-core build-js-only build-examples build-site examples-prep build-gem ## core + js + examples + site + prep + gem
