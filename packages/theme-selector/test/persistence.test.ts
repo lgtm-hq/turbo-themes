@@ -266,6 +266,7 @@ describe('persistence', () => {
       // Clean up any elements added during tests
       document.getElementById('turbo-theme-css')?.remove();
       document.documentElement.removeAttribute('data-theme');
+      document.documentElement.removeAttribute('data-appearance');
       document.documentElement.removeAttribute('data-baseurl');
       delete window.__INITIAL_THEME__;
     });
@@ -276,7 +277,16 @@ describe('persistence', () => {
       const result = applyInitialTheme(document, window, ['dracula', 'catppuccin-mocha']);
 
       expect(document.documentElement.getAttribute('data-theme')).toBe('dracula');
+      expect(document.documentElement.getAttribute('data-appearance')).toBe('dark');
       expect(result).toBe('dracula');
+    });
+
+    it('sets data-appearance to light for light themes', () => {
+      mockLocalStorage.getItem = vi.fn(() => 'catppuccin-latte');
+
+      applyInitialTheme(document, window, ['catppuccin-latte', 'catppuccin-mocha']);
+
+      expect(document.documentElement.getAttribute('data-appearance')).toBe('light');
     });
 
     it('sets window.__INITIAL_THEME__', () => {

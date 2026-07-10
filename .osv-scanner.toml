@@ -13,30 +13,49 @@
 
 [[IgnoredVulns]]
 id = "GHSA-22cc-p3c6-wpvm"
-ignoreUntil = 2026-06-29
+ignoreUntil = 2026-10-04
 reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
 
 [[IgnoredVulns]]
 id = "GHSA-26f5-8h2x-34xh"
-ignoreUntil = 2026-06-29
+ignoreUntil = 2026-10-04
 reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
 
 [[IgnoredVulns]]
 id = "GHSA-3vj8-jmxq-cgj5"
-ignoreUntil = 2026-06-29
+ignoreUntil = 2026-10-04
 reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
 
 [[IgnoredVulns]]
 id = "GHSA-4hxc-9384-m385"
-ignoreUntil = 2026-06-29
+ignoreUntil = 2026-10-04
 reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
 
 [[IgnoredVulns]]
 id = "GHSA-q5pr-72pq-83v3"
-ignoreUntil = 2026-06-29
+ignoreUntil = 2026-10-04
 reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
 
 [[IgnoredVulns]]
 id = "GHSA-wr4h-v87w-p3r7"
-ignoreUntil = 2026-06-29
+ignoreUntil = 2026-10-04
 reason = "h3@2.0.0 — fix only in RC, transitive via astro/nitro, waiting for stable release"
+
+# --- vite: fix requires the vite 8.0.16 major; toolchain (vitest 4, astro 6) pins vite 7 ---
+
+[[IgnoredVulns]]
+id = "GHSA-fx2h-pf6j-xcff"
+ignoreUntil = 2026-10-04
+reason = "vite 7.3.2/8.0.7 — fix in 8.0.16; dev/build-time only, blocked until vitest/astro support vite 8.0.16+"
+
+[[IgnoredVulns]]
+id = "GHSA-v6wh-96g9-6wx3"
+ignoreUntil = 2026-10-04
+reason = "vite 7.3.2/8.0.7 — fix in 8.0.16; dev/build-time only, blocked until vitest/astro support vite 8.0.16+"
+
+# --- ws: advisory lists no fixed version in the 8.x line ---
+
+[[IgnoredVulns]]
+id = "GHSA-96hv-2xvq-fx4p"
+ignoreUntil = 2026-10-04
+reason = "ws@8.20.1 — advisory fix listed only for the 5.x line; no patched 8.x release yet"
