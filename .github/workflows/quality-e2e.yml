@@ -81,6 +81,7 @@ jobs:
             playwright.azureedge.net:443
             playwright.download.prss.microsoft.com:443
             pypi.org:443
+            raw.githubusercontent.com:443
             registry.npmjs.org:443
             release-assets.githubusercontent.com:443
             rubygems-downloads.global.ssl.fastly.net:443
