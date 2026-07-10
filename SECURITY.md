@@ -11,9 +11,11 @@ prevent potential exploitation while we work on a fix.
 
 ### **How to Report**
 
-1. **Email**: Send details to `turbocoder13@gmail.com`
-2. **Subject**: Include "SECURITY: Turbo Themes" in the subject line
-3. **Details**: Provide a clear description of the issue
+1. **GitHub (preferred)**: Report privately via
+   [GitHub Security Advisories](https://github.com/lgtm-hq/turbo-themes/security/advisories/new)
+2. **Email**: Send details to `turbocoder13@gmail.com`
+3. **Subject**: Include "SECURITY: Turbo Themes" in the subject line
+4. **Details**: Provide a clear description of the issue
 
 ### **What to Include**
 
