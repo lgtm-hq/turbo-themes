@@ -83,7 +83,7 @@ test-parallel: ## Phase 1: unit + python + swift in parallel
 	[ -f .test-results/unit.ok ] && [ -f .test-results/python.ok ] && [ -f .test-results/swift.ok ]
 
 # Phase 3: Browser-based tests (sequential suites, each internally parallelized)
-test-browser-parallel: ## Phase 3: examples + e2e in parallel
+test-browser-parallel: ## Phase 3: run e2e then examples sequentially
 	@echo "🚀 Phase 3: Running browser test suites sequentially..."
 	@$(MAKE) test-e2e
 	@$(MAKE) test-examples
