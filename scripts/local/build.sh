@@ -339,13 +339,13 @@ if [ -f "package.json" ] && grep -q '"build:js"' package.json >/dev/null 2>&1; t
   print_status "$GREEN" "  ✅ JavaScript minified successfully"
 fi
 
-# Step 7: Jekyll build
+# Step 7: Jekyll build (legacy — root Jekyll site removed; skips unless _config.yml exists)
 print_status "$BLUE" "🏗️  Step 7: Jekyll build..."
-if command_exists "bundle"; then
+if command_exists "bundle" && [ -f "_config.yml" ]; then
   print_status "$YELLOW" "  Building Jekyll site..."
   bundle exec jekyll build --config "$JEKYLL_CONFIG" --trace --strict_front_matter
 else
-  print_status "$YELLOW" "  ⏭️  Skipping Jekyll build (bundle not available)..."
+  print_status "$YELLOW" "  ⏭️  Skipping Jekyll build (no root Jekyll site)..."
 fi
 
 # Step 8: E2E tests with Playwright (skip in quick mode or if --skip-tests flag is set)
@@ -371,7 +371,7 @@ fi
 
 # Step 9: HTMLProofer
 print_status "$BLUE" "🔍 Step 9: HTMLProofer validation..."
-if ! command_exists "bundle"; then
+if ! command_exists "bundle" || [ ! -d "_site" ]; then
   print_status "$YELLOW" "  ⏭️  Skipping HTMLProofer (no Jekyll site to validate)..."
 elif [ "$PROD_MODE" = true ]; then
   # Production builds: Skip validation (baseurl prefix makes local paths invalid)
@@ -431,9 +431,9 @@ if [ "$FULL_MODE" = true ]; then
   fi
 fi
 
-# Step 12: Final Jekyll build to include all reports
+# Step 12: Final Jekyll build to include all reports (legacy — skips unless _config.yml exists)
 print_status "$BLUE" "🏗️  Step 12: Final Jekyll build (including all reports)..."
-if command_exists "bundle"; then
+if command_exists "bundle" && [ -f "_config.yml" ]; then
   print_status "$YELLOW" "  Rebuilding Jekyll to include all test reports..."
   print_status "$YELLOW" "  The Jekyll plugin simplify_urls.rb will automatically create simplified paths (/coverage/, /playwright/, /lighthouse/)"
   if ! bundle exec jekyll build --config "$JEKYLL_CONFIG" --trace --strict_front_matter; then
@@ -485,8 +485,12 @@ if [ "$QUICK_MODE" = false ] && [ "$FULL_MODE" = false ]; then
   fi
 
   # Allow non-interactive flag: --serve or --no-serve
+  # Serving requires the legacy root Jekyll site; skip when it is absent.
   response_prompted=false
-  if [ "$SERVE_MODE" = true ]; then
+  if [ ! -f "_config.yml" ]; then
+    response="n"
+    response_prompted=true
+  elif [ "$SERVE_MODE" = true ]; then
     response="y"
     response_prompted=true
     if [ "$CI_ENV" = true ]; then

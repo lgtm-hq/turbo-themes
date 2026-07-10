@@ -1,3 +1,10 @@
+# This Gemfile is for the turbo-themes Ruby gem (build/publish/test tooling),
+# NOT the docs site — the site is built with Astro (see apps/site/). It backs:
+#   - `bun run build:gem` / scripts/build-gem.sh
+#   - RSpec tests in spec/ (see Rakefile, scripts/local/build.sh Step 5.6)
+#   - .github/workflows/publish-gem.yml (bundler-cache: true)
+# The `jekyll` gem is a runtime dependency of the published gem itself
+# (see turbo-themes.gemspec), used by consumers building Jekyll sites with it.
 source "https://rubygems.org"
 
 gem "jekyll", "~> 4.4"
