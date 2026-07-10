@@ -49,6 +49,10 @@
       "types": "./packages/css/dist/turbo-core.css.d.ts",
       "default": "./packages/css/dist/turbo-core.css"
     },
+    "./css/themes-all": {
+      "types": "./packages/css/dist/turbo-themes-all.css.d.ts",
+      "default": "./packages/css/dist/turbo-themes-all.css"
+    },
     "./css/base": {
       "types": "./packages/css/dist/turbo-base.css.d.ts",
       "default": "./packages/css/dist/turbo-base.css"
