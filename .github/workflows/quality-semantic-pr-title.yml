@@ -3,18 +3,23 @@ name: Quality Check - PR Title Validation
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened, ready_for_review]
+  merge_group:
 
 permissions:
   contents: read
   pull-requests: write
 
 concurrency:
-  group: semantic-pr-${{ github.head_ref }}
+  group: semantic-pr-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
   check:
     name: ✅ Validate Conventional Commits
+    # amannn/action-semantic-pull-request needs PR context; on merge_group the
+    # job is skipped (a skipped check satisfies the required check) — the
+    # title was already validated on the pull_request event.
+    if: github.event_name != 'merge_group'
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
