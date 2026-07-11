@@ -45,6 +45,7 @@ exclude = [
   ".lintro/",
   "**/.build/",
   ".husky/**",
+  ".lgtm-ci-tooling/",
   "python/src/turbo_themes/generated/",
 ]
 
