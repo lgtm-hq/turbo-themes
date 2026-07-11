@@ -8,8 +8,6 @@ turbo-themes, their triggers, and purposes.
 | Workflow                        | Push (main) | Push (tags) | Pull Request | Schedule  | Manual | workflow_run |
 | ------------------------------- | ----------- | ----------- | ------------ | --------- | ------ | ------------ |
 | quality-ci-main                 | ✅          |             | ✅           |           |        |              |
-| reusable-quality                |             |             |              |           |        | Called       |
-| reusable-build                  |             |             |              |           |        | Called       |
 | reusable-sbom                   |             |             |              |           |        | Called       |
 | reporting-lighthouse-ci         | ✅          |             | ✅           |           |        |              |
 | security-codeql                 | ✅          |             | ✅           | ✅ Weekly |        |              |
@@ -52,16 +50,6 @@ turbo-themes, their triggers, and purposes.
 - Validates HTML
 - Uploads coverage to Codecov
 - Posts coverage comment on PRs
-
-#### reusable-quality.yml
-
-**Triggers:** Called by other workflows  
-**Purpose:** Reusable quality checks (lint, format, typecheck)
-
-#### reusable-build.yml
-
-**Triggers:** Called by other workflows  
-**Purpose:** Reusable build workflow (TypeScript + Jekyll)
 
 #### quality-semantic-pr-title.yml
 

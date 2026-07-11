@@ -39,7 +39,7 @@ jobs:
     steps:
       - name: Harden Runner
         if: ${{ !env.ACT }}
-        uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
         with:
           egress-policy: block
           allowed-endpoints: >
@@ -66,12 +66,11 @@ jobs:
       - name: Update internal references
         run: ./scripts/ci/update-internal-refs.sh "${{ steps.sha.outputs.sha }}"
 
-      - name: Detect changes
-        id: diff
-        run: ./scripts/ci/detect-changes.sh
-
+      # No explicit change detection: peter-evans/create-pull-request exits
+      # silently without creating a PR when the working tree has no changes.
+      # The local scripts/ci/detect-changes.sh gate was retired (lgtm-ci#484);
+      # path-filter use cases use the lgtm-ci detect-changes composite instead.
       - name: Create Pull Request
-        if: steps.diff.outputs.has_changes == 'true'
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

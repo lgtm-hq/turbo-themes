@@ -68,5 +68,9 @@ assets/js/theme-selector.js
 .github/**
 .allstar/**
 
+# lgtm-ci tooling sparse checkout (created inside reusable workflow jobs)
+.lgtm-ci-tooling/**
+**/.lgtm-ci-tooling/**
+
 # Husky internal files (auto-generated)
 .husky/_/**
