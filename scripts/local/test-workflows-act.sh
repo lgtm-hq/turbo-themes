@@ -87,7 +87,7 @@ workflow_support_level() {
   security-codeql.yml | security-dependency-review.yml | security-scorecards.yml)
     echo "unsupported"
     ;;
-  reusable-build.yml | reusable-quality.yml | reusable-sbom.yml)
+  reusable-sbom.yml)
     echo "unsupported"
     ;;
   *)
