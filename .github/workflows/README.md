@@ -24,9 +24,10 @@ Following py-lintro standards:
 ### Security
 
 - `security-codeql.yml` - CodeQL security analysis
-- `security-dependency-review.yml` - Dependency vulnerability scanning
+- `security-dependency-review.yml` - PR dependency review and OSV vulnerability
+  scanning (lgtm-ci reusables)
 - `security-sbom.yml` - Software Bill of Materials generation
-- `security-scorecards.yml` - OpenSSF Scorecard analysis
+- `security-scorecards.yml` - OpenSSF Scorecard analysis (lgtm-ci reusable)
 
 ### Deploy
 

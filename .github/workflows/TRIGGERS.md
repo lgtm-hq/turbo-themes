@@ -11,9 +11,9 @@ turbo-themes, their triggers, and purposes.
 | reusable-sbom                   |             |             |              |           |        | Called       |
 | reporting-lighthouse-ci         | ✅          |             | ✅           |           |        |              |
 | security-codeql                 | ✅          |             | ✅           | ✅ Weekly |        |              |
-| security-dependency-review      |             |             | ✅           |           |        |              |
+| security-dependency-review      | ✅          |             | ✅           | ✅ Weekly | ✅     |              |
 | security-sbom                   | ✅          |             | ✅           |           | ✅     |              |
-| security-scorecards             | ✅          |             |              |           |        |              |
+| security-scorecards             | ✅          |             |              | ✅ Weekly | ✅     |              |
 | quality-theme-sync              | ✅          |             | ✅           |           |        |              |
 | quality-semantic-pr-title       |             |             | ✅           |           |        |              |
 | quality-validate-action-pinning | ✅          |             | ✅           |           |        |              |
@@ -77,8 +77,9 @@ turbo-themes, their triggers, and purposes.
 
 #### security-dependency-review.yml
 
-**Triggers:** Pull requests  
-**Purpose:** Reviews dependencies for security vulnerabilities
+**Triggers:** Pull requests, Merge groups, Push to main, Weekly schedule, Manual  
+**Purpose:** Reviews PR dependency changes (GitHub dependency review) and scans
+dependencies for known vulnerabilities (OSV audit)
 
 #### security-sbom.yml
 
@@ -87,8 +88,8 @@ turbo-themes, their triggers, and purposes.
 
 #### security-scorecards.yml
 
-**Triggers:** Push to main  
-**Purpose:** OpenSSF Scorecard security analysis
+**Triggers:** Push to main, Weekly schedule, Manual  
+**Purpose:** OpenSSF Scorecard security analysis (lgtm-ci reusable)
 
 #### reusable-sbom.yml
 
