@@ -30,8 +30,21 @@ jobs:
       tooling-ref: '66cad82ead0e5d119928c895c7d7da9c837989e5' # v0.52.3
       egress-policy: block
       egress-preset: github-tooling
-      allowed-endpoints-mode: append
-      allowed-endpoints: release-assets.githubusercontent.com:443
+      # Complete list, not append: the reusable feeds allowed-endpoints
+      # directly to the harden-runner pre hook at job start, where a partial
+      # list REPLACES the baked-in baseline (preset merging happens later in
+      # resolve-egress-allowlist and cannot widen the already-armed agent).
+      allowed-endpoints: >
+        github.com:443
+        api.github.com:443
+        codeload.github.com:443
+        objects.githubusercontent.com:443
+        raw.githubusercontent.com:443
+        uploads.github.com:443
+        pipelines.actions.githubusercontent.com:443
+        github-releases.githubusercontent.com:443
+        release-assets.githubusercontent.com:443
+        pkg-containers.githubusercontent.com:443
     permissions:
       contents: read
       security-events: write
