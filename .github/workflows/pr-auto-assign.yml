@@ -28,4 +28,5 @@ jobs:
       egress-preset: github-tooling
     permissions:
       contents: read
+      # the reusable assigns a random CODEOWNER to the pull request
       pull-requests: write

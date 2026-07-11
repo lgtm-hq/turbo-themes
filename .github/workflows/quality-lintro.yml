@@ -31,6 +31,7 @@ jobs:
       egress-preset: quality
     permissions:
       contents: read
+      # pull the pinned ghcr.io/lgtm-hq/py-lintro image
       packages: read
 
   publish-quality-summary:
