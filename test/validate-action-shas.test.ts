@@ -53,9 +53,11 @@ describe('validate-action-shas.sh', () => {
       env: { ...process.env, GITHUB_TOKEN: '' },
     });
 
-    // Should find actions in our workflows
+    // Should find actions in our workflows. github/codeql-action is no longer
+    // pinned directly (it lives inside the lgtm-ci reusables); assert on the
+    // SHA-pinned lgtm-ci reusable workflows instead.
     expect(result).toContain('actions/checkout');
-    expect(result).toContain('github/codeql-action');
+    expect(result).toContain('lgtm-hq/lgtm-ci');
 
     // Should show summary statistics
     expect(result).toMatch(/Total unique SHAs found: \d+/);
