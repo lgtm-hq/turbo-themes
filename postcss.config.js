@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-import { purgeCSSPlugin } from '@fullhuman/postcss-purgecss';
+import purgeCSSPlugin from '@fullhuman/postcss-purgecss';
 import purgecssConfig from './purgecss.config.js';
 import cssnano from 'cssnano';
 
