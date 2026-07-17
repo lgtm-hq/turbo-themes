@@ -262,7 +262,7 @@ server {
 
 ```apache
 <IfModule mod_headers.c>
-    Header set Content-Security-Policy \
+    Header always set Content-Security-Policy \
         "default-src 'self'; \
          style-src 'self' https://fonts.googleapis.com; \
          font-src 'self' https://fonts.gstatic.com; \
