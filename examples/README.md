@@ -49,7 +49,8 @@ scheme.
 
 All examples include:
 
-- **Theme Switching** - A dropdown selector to switch between available themes (see `themeIds` for the full list)
+- **Theme Switching** - A dropdown selector to switch between available themes (see
+  `themeIds` for the full list)
 - **localStorage Persistence** - Selected theme persists across page reloads
 - **FOUC Prevention** - Blocking script prevents flash of unstyled content
 - **CSS Custom Properties** - All styling uses `var(--turbo-*)` tokens

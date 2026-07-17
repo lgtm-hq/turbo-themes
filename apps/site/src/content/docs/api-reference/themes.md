@@ -9,8 +9,8 @@ next: api-reference/javascript-api
 
 # Theme Definitions
 
-Turbo Themes includes 24 color schemes across 9 vendor families. The canonical
-list is always available at runtime:
+Turbo Themes includes 24 color schemes across 9 vendor families. The canonical list is
+always available at runtime:
 
 ```typescript
 import { themeIds } from '@lgtm-hq/turbo-themes';
@@ -19,32 +19,32 @@ import { themeIds } from '@lgtm-hq/turbo-themes';
 
 ## Theme Overview
 
-| Theme                   | Vendor      | Appearance | ID                      |
-| ----------------------- | ----------- | ---------- | ----------------------- |
-| Catppuccin Mocha        | Catppuccin  | Dark       | `catppuccin-mocha`      |
-| Catppuccin Macchiato    | Catppuccin  | Dark       | `catppuccin-macchiato`  |
-| Catppuccin Frappé       | Catppuccin  | Dark       | `catppuccin-frappe`     |
-| Catppuccin Latte        | Catppuccin  | Light      | `catppuccin-latte`      |
-| Dracula                 | Dracula     | Dark       | `dracula`               |
-| Gruvbox Dark Hard       | Gruvbox     | Dark       | `gruvbox-dark-hard`     |
-| Gruvbox Dark            | Gruvbox     | Dark       | `gruvbox-dark`          |
-| Gruvbox Dark Soft       | Gruvbox     | Dark       | `gruvbox-dark-soft`     |
-| Gruvbox Light Hard      | Gruvbox     | Light      | `gruvbox-light-hard`    |
-| Gruvbox Light           | Gruvbox     | Light      | `gruvbox-light`         |
-| Gruvbox Light Soft      | Gruvbox     | Light      | `gruvbox-light-soft`    |
-| GitHub Dark             | GitHub      | Dark       | `github-dark`           |
-| GitHub Light            | GitHub      | Light      | `github-light`          |
-| Bulma Dark              | Bulma       | Dark       | `bulma-dark`            |
-| Bulma Light             | Bulma       | Light      | `bulma-light`           |
-| Nord                    | Nord        | Dark       | `nord`                  |
-| Rosé Pine               | Rosé Pine   | Dark       | `rose-pine`             |
-| Rosé Pine Moon          | Rosé Pine   | Dark       | `rose-pine-moon`        |
-| Rosé Pine Dawn          | Rosé Pine   | Light      | `rose-pine-dawn`        |
-| Solarized Dark          | Solarized   | Dark       | `solarized-dark`        |
-| Solarized Light         | Solarized   | Light      | `solarized-light`       |
-| Tokyo Night Dark        | Tokyo Night | Dark       | `tokyo-night-dark`      |
-| Tokyo Night Storm       | Tokyo Night | Dark       | `tokyo-night-storm`     |
-| Tokyo Night Light       | Tokyo Night | Light      | `tokyo-night-light`     |
+| Theme                | Vendor      | Appearance | ID                     |
+| -------------------- | ----------- | ---------- | ---------------------- |
+| Catppuccin Mocha     | Catppuccin  | Dark       | `catppuccin-mocha`     |
+| Catppuccin Macchiato | Catppuccin  | Dark       | `catppuccin-macchiato` |
+| Catppuccin Frappé    | Catppuccin  | Dark       | `catppuccin-frappe`    |
+| Catppuccin Latte     | Catppuccin  | Light      | `catppuccin-latte`     |
+| Dracula              | Dracula     | Dark       | `dracula`              |
+| Gruvbox Dark Hard    | Gruvbox     | Dark       | `gruvbox-dark-hard`    |
+| Gruvbox Dark         | Gruvbox     | Dark       | `gruvbox-dark`         |
+| Gruvbox Dark Soft    | Gruvbox     | Dark       | `gruvbox-dark-soft`    |
+| Gruvbox Light Hard   | Gruvbox     | Light      | `gruvbox-light-hard`   |
+| Gruvbox Light        | Gruvbox     | Light      | `gruvbox-light`        |
+| Gruvbox Light Soft   | Gruvbox     | Light      | `gruvbox-light-soft`   |
+| GitHub Dark          | GitHub      | Dark       | `github-dark`          |
+| GitHub Light         | GitHub      | Light      | `github-light`         |
+| Bulma Dark           | Bulma       | Dark       | `bulma-dark`           |
+| Bulma Light          | Bulma       | Light      | `bulma-light`          |
+| Nord                 | Nord        | Dark       | `nord`                 |
+| Rosé Pine            | Rosé Pine   | Dark       | `rose-pine`            |
+| Rosé Pine Moon       | Rosé Pine   | Dark       | `rose-pine-moon`       |
+| Rosé Pine Dawn       | Rosé Pine   | Light      | `rose-pine-dawn`       |
+| Solarized Dark       | Solarized   | Dark       | `solarized-dark`       |
+| Solarized Light      | Solarized   | Light      | `solarized-light`      |
+| Tokyo Night Dark     | Tokyo Night | Dark       | `tokyo-night-dark`     |
+| Tokyo Night Storm    | Tokyo Night | Dark       | `tokyo-night-storm`    |
+| Tokyo Night Light    | Tokyo Night | Light      | `tokyo-night-light`    |
 
 ## Curating a theme subset
 
@@ -63,10 +63,10 @@ const all = themeIds;
 
 // Vendor opt-in
 const catppuccin = getThemesByVendor('catppuccin').map((f) => f.id);
-const github     = getThemesByVendor('github').map((f) => f.id);
+const github = getThemesByVendor('github').map((f) => f.id);
 
 // Appearance filter
-const darkOnly  = getThemesByAppearance('dark').map((f) => f.id);
+const darkOnly = getThemesByAppearance('dark').map((f) => f.id);
 const lightOnly = getThemesByAppearance('light').map((f) => f.id);
 
 // Hardcoded minimal set (copy-paste friendly)
@@ -79,9 +79,8 @@ const minimal = [
 ];
 ```
 
-> **Planned (#495):** `themeSets` (pre-defined named subsets) and
-> `createThemeCatalog()` (vendor + appearance filter in one call) will
-> ship as part of issue #495.
+> **Planned (#495):** `themeSets` (pre-defined named subsets) and `createThemeCatalog()`
+> (vendor + appearance filter in one call) will ship as part of issue #495.
 
 ## Catppuccin Themes
 
@@ -272,8 +271,8 @@ Based on the [Bulma CSS framework](https://bulma.io/) default colors.
 
 ## Nord Theme
 
-[Nord](https://www.nordtheme.com/) is an arctic, north-bluish color palette with a
-clean aesthetic.
+[Nord](https://www.nordtheme.com/) is an arctic, north-bluish color palette with a clean
+aesthetic.
 
 ### Nord (Dark)
 
@@ -329,8 +328,8 @@ tones.
 
 ## Solarized Themes
 
-[Solarized](https://ethanschoonover.com/solarized/) is a precision color scheme with
-16 carefully chosen colors.
+[Solarized](https://ethanschoonover.com/solarized/) is a precision color scheme with 16
+carefully chosen colors.
 
 ### Solarized Dark
 
@@ -407,7 +406,7 @@ A slightly lighter dark variant.
 ```typescript
 import { getThemesByAppearance } from '@lgtm-hq/turbo-themes';
 
-const darkThemes  = getThemesByAppearance('dark').map((f) => f.id);  // 15 themes
+const darkThemes = getThemesByAppearance('dark').map((f) => f.id); // 15 themes
 const lightThemes = getThemesByAppearance('light').map((f) => f.id); // 9 themes
 ```
 

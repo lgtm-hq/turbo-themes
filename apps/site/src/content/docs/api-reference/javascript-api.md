@@ -21,15 +21,14 @@ npm install @lgtm-hq/turbo-themes
 
 ### `themeIds`
 
-A readonly array of all 24 theme IDs sorted by vendor then variant. Use this
-as the single source of truth so your catalog stays in sync when the package
-is upgraded.
+A readonly array of all 24 theme IDs sorted by vendor then variant. Use this as the
+single source of truth so your catalog stays in sync when the package is upgraded.
 
 ```typescript
 import { themeIds } from '@lgtm-hq/turbo-themes';
 
 console.log(themeIds.length); // 24
-console.log(themeIds[0]);     // 'bulma-dark'
+console.log(themeIds[0]); // 'bulma-dark'
 ```
 
 ### `flavors`
@@ -65,7 +64,7 @@ Returns all `ThemeFlavor` entries matching `'dark'` or `'light'`.
 ```typescript
 import { getThemesByAppearance } from '@lgtm-hq/turbo-themes';
 
-const dark  = getThemesByAppearance('dark');  // 15 themes
+const dark = getThemesByAppearance('dark'); // 15 themes
 const light = getThemesByAppearance('light'); //  9 themes
 ```
 
@@ -79,14 +78,17 @@ import { DEFAULT_THEME } from '@lgtm-hq/turbo-themes';
 
 ### `VENDOR_GROUPS`
 
-An ordered array of vendor groupings, each with an `id`, `label`, and
-`themes` array. Useful for building grouped `<select>` elements.
+An ordered array of vendor groupings, each with an `id`, `label`, and `themes` array.
+Useful for building grouped `<select>` elements.
 
 ```typescript
 import { VENDOR_GROUPS } from '@lgtm-hq/turbo-themes';
 
 for (const group of VENDOR_GROUPS) {
-  console.log(group.id, group.themes.map((t) => t.id));
+  console.log(
+    group.id,
+    group.themes.map((t) => t.id)
+  );
 }
 ```
 
@@ -99,14 +101,14 @@ import { packages } from '@lgtm-hq/turbo-themes';
 
 const mocha = tokens.themes['catppuccin-mocha'];
 mocha.appearance; // 'dark'
-mocha.vendor;     // 'catppuccin'
-mocha.tokens;     // CSS custom-property values
+mocha.vendor; // 'catppuccin'
+mocha.tokens; // CSS custom-property values
 ```
 
 ## Curating a theme catalog
 
-A "catalog" is the subset of themes your app exposes to users. The right
-pattern depends on whether you have a build step.
+A "catalog" is the subset of themes your app exposes to users. The right pattern depends
+on whether you have a build step.
 
 ### Hardcoded list (no build step)
 
@@ -138,7 +140,7 @@ const CATALOG = [
 ```typescript
 import { getThemesByAppearance } from '@lgtm-hq/turbo-themes';
 
-const DARK_CATALOG  = getThemesByAppearance('dark').map((f) => f.id);
+const DARK_CATALOG = getThemesByAppearance('dark').map((f) => f.id);
 const LIGHT_CATALOG = getThemesByAppearance('light').map((f) => f.id);
 ```
 
@@ -150,25 +152,30 @@ import { themeIds } from '@lgtm-hq/turbo-themes';
 const CATALOG = themeIds; // all 24
 ```
 
-> **Planned (#495):** `themeSets` (named pre-defined subsets like
-> `themeSets.minimal` and `themeSets.dark`) and `createThemeCatalog()`
-> (filter by vendor _and_ appearance in one call) will ship in `#495`.
+> **Planned (#495):** `themeSets` (named pre-defined subsets like `themeSets.minimal`
+> and `themeSets.dark`) and `createThemeCatalog()` (filter by vendor _and_ appearance in
+> one call) will ship in `#495`.
 
 ## FOUC prevention
 
 ### `generateBlockingScript()` — `@lgtm-hq/turbo-theme-selector`
 
-The `@lgtm-hq/turbo-theme-selector` package exports a `generateBlockingScript()`
-helper that builds a self-contained IIFE from your catalog. Inline the result
-in `<head>` at build time so the saved theme is applied before first paint.
+The `@lgtm-hq/turbo-theme-selector` package exports a `generateBlockingScript()` helper
+that builds a self-contained IIFE from your catalog. Inline the result in `<head>` at
+build time so the saved theme is applied before first paint.
 
 ```typescript
 import { generateBlockingScript } from '@lgtm-hq/turbo-theme-selector';
 
 // Pass your curated catalog via validThemes:
 const script = generateBlockingScript({
-  validThemes: ['catppuccin-mocha', 'catppuccin-latte', 'dracula',
-                'github-dark', 'github-light'],
+  validThemes: [
+    'catppuccin-mocha',
+    'catppuccin-latte',
+    'dracula',
+    'github-dark',
+    'github-light',
+  ],
   defaultTheme: 'catppuccin-mocha',
 });
 // → embed the returned string inside a <script> tag in <head>
@@ -188,8 +195,8 @@ const blockingScript = generateBlockingScript();
 
 ### Inline FOUC script (plain HTML, no build step)
 
-For static pages, write the script directly. Keep `VALID_THEMES` in sync with
-your `<select>` options:
+For static pages, write the script directly. Keep `VALID_THEMES` in sync with your
+`<select>` options:
 
 ```html
 <script>
@@ -197,17 +204,30 @@ your `<select>` options:
     try {
       var DEFAULT_THEME = 'catppuccin-mocha';
       var VALID_THEMES = [
-        'bulma-dark',        'bulma-light',
-        'catppuccin-frappe', 'catppuccin-latte',
-        'catppuccin-macchiato', 'catppuccin-mocha',
+        'bulma-dark',
+        'bulma-light',
+        'catppuccin-frappe',
+        'catppuccin-latte',
+        'catppuccin-macchiato',
+        'catppuccin-mocha',
         'dracula',
-        'github-dark',       'github-light',
-        'gruvbox-dark-hard', 'gruvbox-dark-soft', 'gruvbox-dark',
-        'gruvbox-light-hard', 'gruvbox-light-soft', 'gruvbox-light',
+        'github-dark',
+        'github-light',
+        'gruvbox-dark-hard',
+        'gruvbox-dark-soft',
+        'gruvbox-dark',
+        'gruvbox-light-hard',
+        'gruvbox-light-soft',
+        'gruvbox-light',
         'nord',
-        'rose-pine-dawn',    'rose-pine-moon',    'rose-pine',
-        'solarized-dark',    'solarized-light',
-        'tokyo-night-dark',  'tokyo-night-light', 'tokyo-night-storm',
+        'rose-pine-dawn',
+        'rose-pine-moon',
+        'rose-pine',
+        'solarized-dark',
+        'solarized-light',
+        'tokyo-night-dark',
+        'tokyo-night-light',
+        'tokyo-night-storm',
       ];
 
       var saved = localStorage.getItem('turbo-theme');
@@ -228,11 +248,7 @@ your `<select>` options:
 ### Vanilla JavaScript
 
 ```typescript
-import {
-  themeIds,
-  DEFAULT_THEME,
-  getThemesByAppearance,
-} from '@lgtm-hq/turbo-themes';
+import { themeIds, DEFAULT_THEME, getThemesByAppearance } from '@lgtm-hq/turbo-themes';
 
 const STORAGE_KEY = 'turbo-theme';
 

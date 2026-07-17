@@ -13,14 +13,13 @@ Learn how to implement theme switching that persists across page loads.
 
 ## Choosing your theme catalog
 
-Turbo Themes ships with 24 themes across 9 vendor families. A "catalog" is
-simply the subset of themes you expose to users in your app. The right approach
-depends on your build tooling.
+Turbo Themes ships with 24 themes across 9 vendor families. A "catalog" is simply the
+subset of themes you expose to users in your app. The right approach depends on your
+build tooling.
 
 ### Approach A — hardcoded list (no build step required)
 
-The simplest pattern. Maintain a plain array and update it when you upgrade
-the package:
+The simplest pattern. Maintain a plain array and update it when you upgrade the package:
 
 ```javascript
 // Minimal set — copy-paste friendly
@@ -36,8 +35,7 @@ const CATALOG = [
 ### Approach B — filter by vendor or appearance (TS/ESM build)
 
 The `@lgtm-hq/turbo-themes` package exports `getThemesByVendor()` and
-`getThemesByAppearance()` so your catalog stays in sync with the package
-automatically:
+`getThemesByAppearance()` so your catalog stays in sync with the package automatically:
 
 ```typescript
 import {
@@ -61,9 +59,9 @@ const allThemes = themeIds; // readonly string[], 24 entries
 ```
 
 > **Planned (#495):** A `themeSets` object (pre-defined subsets like
-> `themeSets.minimal`, `themeSets.dark`) and a `createThemeCatalog()` factory
-> (filter by vendor _and_ appearance in one call) will ship in `#495` and
-> make these patterns even more concise.
+> `themeSets.minimal`, `themeSets.dark`) and a `createThemeCatalog()` factory (filter by
+> vendor _and_ appearance in one call) will ship in `#495` and make these patterns even
+> more concise.
 
 ## Basic Implementation
 
@@ -86,7 +84,11 @@ Give your theme CSS link an ID so JavaScript can swap it:
 
 ```javascript
 const CATALOG = [
-  'catppuccin-mocha', 'catppuccin-latte', 'dracula', 'github-dark', 'github-light',
+  'catppuccin-mocha',
+  'catppuccin-latte',
+  'dracula',
+  'github-dark',
+  'github-light',
 ];
 
 function setTheme(themeName) {
@@ -110,22 +112,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 ## Preventing FOUC
 
-Flash of Unstyled Content (FOUC) happens when the page renders with the wrong
-theme before JavaScript runs. A blocking script in `<head>` applies the saved
-theme synchronously before first paint.
+Flash of Unstyled Content (FOUC) happens when the page renders with the wrong theme
+before JavaScript runs. A blocking script in `<head>` applies the saved theme
+synchronously before first paint.
 
 ### Option 1 — Use `generateBlockingScript()`
 
-The `@lgtm-hq/turbo-theme-selector` package generates a self-contained IIFE
-from your catalog. Run it at build time and inline the result:
+The `@lgtm-hq/turbo-theme-selector` package generates a self-contained IIFE from your
+catalog. Run it at build time and inline the result:
 
 ```typescript
 import { generateBlockingScript } from '@lgtm-hq/turbo-theme-selector';
 import { themeIds } from '@lgtm-hq/turbo-themes';
 
 // Derive validThemes from your curated catalog (or pass themeIds for all):
-const validThemes = ['catppuccin-mocha', 'catppuccin-latte', 'dracula',
-                     'github-dark', 'github-light'];
+const validThemes = [
+  'catppuccin-mocha',
+  'catppuccin-latte',
+  'dracula',
+  'github-dark',
+  'github-light',
+];
 const blockingScript = generateBlockingScript({ validThemes });
 // → embed blockingScript in a <script> tag in <head>
 ```
@@ -152,16 +159,30 @@ For plain HTML files, write the script directly using your hardcoded catalog:
     try {
       var DEFAULT_THEME = 'catppuccin-mocha';
       var VALID_THEMES = [
-        'bulma-dark',        'bulma-light',
-        'catppuccin-frappe', 'catppuccin-latte', 'catppuccin-macchiato', 'catppuccin-mocha',
+        'bulma-dark',
+        'bulma-light',
+        'catppuccin-frappe',
+        'catppuccin-latte',
+        'catppuccin-macchiato',
+        'catppuccin-mocha',
         'dracula',
-        'github-dark',       'github-light',
-        'gruvbox-dark-hard', 'gruvbox-dark-soft', 'gruvbox-dark',
-        'gruvbox-light-hard', 'gruvbox-light-soft', 'gruvbox-light',
+        'github-dark',
+        'github-light',
+        'gruvbox-dark-hard',
+        'gruvbox-dark-soft',
+        'gruvbox-dark',
+        'gruvbox-light-hard',
+        'gruvbox-light-soft',
+        'gruvbox-light',
         'nord',
-        'rose-pine-dawn',    'rose-pine-moon',    'rose-pine',
-        'solarized-dark',    'solarized-light',
-        'tokyo-night-dark',  'tokyo-night-light', 'tokyo-night-storm',
+        'rose-pine-dawn',
+        'rose-pine-moon',
+        'rose-pine',
+        'solarized-dark',
+        'solarized-light',
+        'tokyo-night-dark',
+        'tokyo-night-light',
+        'tokyo-night-storm',
       ];
 
       var saved = localStorage.getItem('turbo-theme');
@@ -177,8 +198,8 @@ For plain HTML files, write the script directly using your hardcoded catalog:
 </script>
 ```
 
-Keep `VALID_THEMES` in sync with your `<select>` options. Trim the list to
-only the themes your app supports.
+Keep `VALID_THEMES` in sync with your `<select>` options. Trim the list to only the
+themes your app supports.
 
 ## Theme Selector UI
 
@@ -210,7 +231,12 @@ only the themes your app supports.
 When you have a build step, generate the `<option>` elements from your catalog:
 
 ```typescript
-import { themeIds, flavors, getThemesByVendor, VENDOR_GROUPS } from '@lgtm-hq/turbo-themes';
+import {
+  themeIds,
+  flavors,
+  getThemesByVendor,
+  VENDOR_GROUPS,
+} from '@lgtm-hq/turbo-themes';
 
 const flavorMap = new Map(flavors.map((f) => [f.id, f]));
 
@@ -241,8 +267,13 @@ function populateSelector(select: HTMLSelectElement, catalog: readonly string[])
 ### Light/Dark Toggle
 
 ```javascript
-const DARK_THEMES = ['catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-frappe',
-                     'dracula', 'github-dark'];
+const DARK_THEMES = [
+  'catppuccin-mocha',
+  'catppuccin-macchiato',
+  'catppuccin-frappe',
+  'dracula',
+  'github-dark',
+];
 const LIGHT_THEMES = ['catppuccin-latte', 'github-light'];
 
 // Or derive from getThemesByAppearance():
