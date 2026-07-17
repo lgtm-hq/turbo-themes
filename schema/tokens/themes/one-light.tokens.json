@@ -166,7 +166,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#f0f0f0",
+          "$value": "#e5e5e6",
           "$type": "color"
         }
       },
@@ -176,7 +176,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#f0f0f0",
+          "$value": "#e5e5e6",
           "$type": "color"
         }
       },

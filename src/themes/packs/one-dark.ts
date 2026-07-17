@@ -172,11 +172,11 @@ export const oneDarkThemes: ThemePackage = {
           },
           codeInline: {
             fg: '#a626a4',
-            bg: '#f0f0f0',
+            bg: '#e5e5e6',
           },
           codeBlock: {
             fg: '#383a42',
-            bg: '#f0f0f0',
+            bg: '#e5e5e6',
           },
           table: {
             border: '#d0d0d1',
