@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.22.1] - 2026-07-17
+
+### 🔧 Changed
+
+- add AGENTS.md with Cursor Cloud dev environment instructions (#542)
+
 ## [0.22.0] - 2026-07-16
 
 ### ✨ Added
