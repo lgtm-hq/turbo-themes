@@ -416,27 +416,29 @@ node_modules/@lgtm-hq/turbo-themes/assets/img/
 
 ```bash
 # package.json postinstall, or build script:
-cp -r node_modules/@lgtm-hq/turbo-themes/assets/img public/assets/img
+mkdir -p public/assets
+cp -r node_modules/@lgtm-hq/turbo-themes/assets/img public/assets/
 ```
 
-Then pass your site's base URL to `wireFlavorSelector`:
+The selector reads the base URL from the `data-baseurl` attribute on `<html>`. With
+icons copied to `public/assets/img`, the default empty-string base URL works
+automatically:
 
 ```typescript
 import { wireFlavorSelector } from '@lgtm-hq/turbo-themes/selector';
 
-// icons resolve to: <baseUrl>/assets/img/<icon>
 await wireFlavorSelector(document, window);
 ```
 
-### Option 2 — Bundler asset import (Vite / webpack)
+### Option 2 — Bundler (Vite / webpack)
 
-```typescript
-// vite.config.ts — copy assets/img at build time
-import { defineConfig } from 'vite';
+Copy the icons during the build using a postinstall script or a copy plugin (e.g.
+`vite-plugin-static-copy`), then serve them from a known path:
 
-export default defineConfig({
-  assetsInclude: ['**/*.png', '**/*.webp'],
-});
+```bash
+# Same postinstall script as Option 1, runs before the bundler build:
+mkdir -p public/assets
+cp -r node_modules/@lgtm-hq/turbo-themes/assets/img public/assets/
 ```
 
 ### Option 3 — CDN / URL override

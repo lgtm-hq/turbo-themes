@@ -11,26 +11,31 @@ import { join } from 'node:path';
 import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 import { VENDOR_ICON_MAP, type AppearanceIcons } from '../src/theme-mapper.js';
+import { FALLBACK_ICON_FILE } from '../src/persistence.js';
 
 const require = createRequire(import.meta.url);
 
 // Repo root is 3 levels up from packages/theme-selector/test/
 const REPO_ROOT = join(import.meta.dirname, '..', '..', '..');
 
-/** Fallback icon used by buildThemeIconSrc when no themeIcons entry exists */
-const FALLBACK_ICON = 'catppuccin-logo-macchiato.png';
-
 /** Globs from package.json `files` that should cover assets/img/ */
 const IMG_GLOBS = ['assets/img/*.png', 'assets/img/*.webp'];
 
 function isAppearanceIcons(v: string | AppearanceIcons): v is AppearanceIcons {
-  return typeof v === 'object' && v !== null && 'light' in v && 'dark' in v;
+  return (
+    typeof v === 'object' &&
+    v !== null &&
+    'light' in v &&
+    'dark' in v &&
+    typeof (v as AppearanceIcons).light === 'string' &&
+    typeof (v as AppearanceIcons).dark === 'string'
+  );
 }
 
 /** Collect every relative path referenced in VENDOR_ICON_MAP */
 function collectIconPaths(): string[] {
   const paths = new Set<string>();
-  paths.add(`assets/img/${FALLBACK_ICON}`);
+  paths.add(`assets/img/${FALLBACK_ICON_FILE}`);
   for (const config of Object.values(VENDOR_ICON_MAP)) {
     if (typeof config === 'string') {
       paths.add(config);
@@ -44,11 +49,16 @@ function collectIconPaths(): string[] {
 
 /** Check whether a relative asset path is covered by the files globs */
 function coveredByFilesGlob(relativePath: string): boolean {
-  // Simple glob match: `assets/img/*.ext` covers any file directly in assets/img/
+  // Match `assets/img/*.ext`: file must be directly in assets/img/ (no subdirectories)
   return IMG_GLOBS.some(glob => {
     const prefix = glob.slice(0, glob.lastIndexOf('/') + 1); // "assets/img/"
     const suffix = glob.slice(glob.lastIndexOf('*') + 1); // ".png" or ".webp"
-    return relativePath.startsWith(prefix) && relativePath.endsWith(suffix);
+    const fileName = relativePath.slice(prefix.length);
+    return (
+      relativePath.startsWith(prefix) &&
+      relativePath.endsWith(suffix) &&
+      !fileName.includes('/')
+    );
   });
 }
 

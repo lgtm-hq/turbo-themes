@@ -65,6 +65,9 @@ export function needsCssUpdate(
   return themeId !== defaultTheme;
 }
 
+/** Default fallback icon filename used when no theme-specific icon is found. */
+export const FALLBACK_ICON_FILE = 'catppuccin-logo-macchiato.png';
+
 /**
  * Builds the theme icon image src path.
  */
@@ -72,7 +75,7 @@ export function buildThemeIconSrc(
   baseUrl: string,
   themeIcons: Record<string, string>,
   themeId: string,
-  fallbackIcon: string = 'catppuccin-logo-macchiato.png',
+  fallbackIcon: string = FALLBACK_ICON_FILE,
 ): string {
   return `${baseUrl}/assets/img/${themeIcons[themeId] || fallbackIcon}`;
 }
