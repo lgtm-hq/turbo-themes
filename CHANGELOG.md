@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.1] - 2026-07-17
+
+### 🔧 Changed
+
+- recommend uv for Python installation (#554)
+
 ## [0.23.0] - 2026-07-17
 
 ### ✨ Added
