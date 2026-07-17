@@ -2,10 +2,22 @@
  * Tests for initNavbar function.
  * Tests navbar highlighting, path matching, and reports dropdown handling.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { initNavbar } from '../src/index';
 import { setupDocumentMocks } from '../../../test/helpers/mocks.js';
+
+/** Typed mock for navbar anchor items returned by querySelectorAll. */
+interface MockNavItem {
+  href?: string;
+  classList: { add: ReturnType<typeof vi.fn>; remove: ReturnType<typeof vi.fn> };
+  setAttribute: ReturnType<typeof vi.fn>;
+  removeAttribute: ReturnType<typeof vi.fn>;
+}
+
+/** Typed mock for the reports-dropdown link element. */
+interface MockReportsLink {
+  classList: { add: ReturnType<typeof vi.fn>; remove: ReturnType<typeof vi.fn> };
+}
 
 describe('initNavbar', () => {
   beforeEach(() => {
@@ -26,12 +38,12 @@ describe('initNavbar', () => {
   });
 
   it('highlights navbar item matching current path', () => {
-    const mockNavbarItem = {
+    const mockNavbarItem: MockNavItem = {
       href: 'http://localhost/components/',
       classList: { add: vi.fn(), remove: vi.fn() },
       setAttribute: vi.fn(),
       removeAttribute: vi.fn(),
-    } as any;
+    };
 
     Object.defineProperty(document, 'querySelectorAll', {
       value: vi.fn(() => [mockNavbarItem]),
@@ -46,11 +58,12 @@ describe('initNavbar', () => {
   });
 
   it('removes active class from non-matching navbar items', () => {
-    const mockNavbarItem = {
+    const mockNavbarItem: MockNavItem = {
       href: 'http://localhost/forms/',
       classList: { add: vi.fn(), remove: vi.fn() },
+      setAttribute: vi.fn(),
       removeAttribute: vi.fn(),
-    } as any;
+    };
 
     Object.defineProperty(document, 'querySelectorAll', {
       value: vi.fn(() => [mockNavbarItem]),
@@ -70,12 +83,12 @@ describe('initNavbar', () => {
       writable: true,
     });
 
-    const mockNavbarItem = {
+    const mockNavbarItem: MockNavItem = {
       href: 'http://localhost/components/',
       classList: { add: vi.fn(), remove: vi.fn() },
       setAttribute: vi.fn(),
       removeAttribute: vi.fn(),
-    } as any;
+    };
 
     Object.defineProperty(document, 'querySelectorAll', {
       value: vi.fn(() => [mockNavbarItem]),
@@ -94,12 +107,12 @@ describe('initNavbar', () => {
       writable: true,
     });
 
-    const mockNavbarItem = {
+    const mockNavbarItem: MockNavItem = {
       href: 'http://localhost/',
       classList: { add: vi.fn(), remove: vi.fn() },
       setAttribute: vi.fn(),
       removeAttribute: vi.fn(),
-    } as any;
+    };
 
     Object.defineProperty(document, 'querySelectorAll', {
       value: vi.fn(() => [mockNavbarItem]),
@@ -113,10 +126,12 @@ describe('initNavbar', () => {
   });
 
   it('handles invalid URLs gracefully', () => {
-    const mockNavbarItem = {
+    const mockNavbarItem: MockNavItem = {
       href: 'invalid-url',
       classList: { add: vi.fn(), remove: vi.fn() },
-    } as any;
+      setAttribute: vi.fn(),
+      removeAttribute: vi.fn(),
+    };
 
     Object.defineProperty(document, 'querySelectorAll', {
       value: vi.fn(() => [mockNavbarItem]),
@@ -129,9 +144,11 @@ describe('initNavbar', () => {
   });
 
   it('handles navbar items without href', () => {
-    const mockNavbarItem = {
+    const mockNavbarItem: MockNavItem = {
       classList: { add: vi.fn(), remove: vi.fn() },
-    } as any;
+      setAttribute: vi.fn(),
+      removeAttribute: vi.fn(),
+    };
 
     Object.defineProperty(document, 'querySelectorAll', {
       value: vi.fn(() => [mockNavbarItem]),
@@ -150,12 +167,12 @@ describe('initNavbar', () => {
       writable: true,
     });
 
-    const mockNavbarItem = {
+    const mockNavbarItem: MockNavItem = {
       href: 'http://localhost/components/',
       classList: { add: vi.fn(), remove: vi.fn() },
       setAttribute: vi.fn(),
       removeAttribute: vi.fn(),
-    } as any;
+    };
 
     Object.defineProperty(document, 'querySelectorAll', {
       value: vi.fn(() => [mockNavbarItem]),
@@ -178,9 +195,9 @@ describe('initNavbar', () => {
           writable: true,
         });
 
-        const mockReportsLink = {
+        const mockReportsLink: MockReportsLink = {
           classList: { add: vi.fn(), remove: vi.fn() },
-        } as any;
+        };
 
         Object.defineProperty(document, 'querySelectorAll', {
           value: vi.fn(() => []),
@@ -208,9 +225,9 @@ describe('initNavbar', () => {
         writable: true,
       });
 
-      const mockReportsLink = {
+      const mockReportsLink: MockReportsLink = {
         classList: { add: vi.fn(), remove: vi.fn() },
-      } as any;
+      };
 
       Object.defineProperty(document, 'querySelectorAll', {
         value: vi.fn(() => []),
@@ -237,9 +254,9 @@ describe('initNavbar', () => {
         writable: true,
       });
 
-      const mockReportsLink = {
+      const mockReportsLink: MockReportsLink = {
         classList: { add: vi.fn(), remove: vi.fn() },
-      } as any;
+      };
 
       Object.defineProperty(document, 'querySelectorAll', {
         value: vi.fn(() => []),
