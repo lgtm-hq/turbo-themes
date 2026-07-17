@@ -23,10 +23,10 @@ project.
 
 ## Platform Libraries
 
-| Platform                               | Package        | Installation               |
-| -------------------------------------- | -------------- | -------------------------- |
-| [Python](/docs/integrations/python/)   | `turbo-themes` | `pip install turbo-themes` |
-| [SwiftUI](/docs/integrations/swiftui/) | `TurboThemes`  | Swift Package              |
+| Platform                               | Package        | Installation                                  |
+| -------------------------------------- | -------------- | --------------------------------------------- |
+| [Python](/docs/integrations/python/)   | `turbo-themes` | `uv pip install` / `pip install turbo-themes` |
+| [SwiftUI](/docs/integrations/swiftui/) | `TurboThemes`  | Swift Package                                 |
 
 ## How Integrations Work
 

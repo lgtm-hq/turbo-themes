@@ -57,7 +57,7 @@ projects:
 | Platform                  | Package Manager | Install Command                                   |
 | ------------------------- | --------------- | ------------------------------------------------- |
 | **JavaScript/TypeScript** | npm / bun       | `npm install @lgtm-hq/turbo-themes`               |
-| **Python**                | pip / uv        | `pip install turbo-themes`                        |
+| **Python**                | uv / pip        | `uv pip install turbo-themes`                     |
 | **Ruby**                  | bundler         | `gem "turbo-themes", "~> 0.12"`                   |
 | **Swift**                 | SPM             | Add `https://github.com/lgtm-hq/turbo-themes.git` |
 
@@ -74,9 +74,11 @@ npm install @lgtm-hq/turbo-themes
 ### Python
 
 ```bash
+# Using uv (recommended)
+uv pip install turbo-themes
+
+# Or using pip
 pip install turbo-themes
-# or
-uv add turbo-themes
 ```
 
 ### Ruby (Jekyll)
