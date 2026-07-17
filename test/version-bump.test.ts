@@ -80,7 +80,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       (type) => {
         const commits = [
           fakeCommit(type, 'update workflow'),
-          fakeCommit('fix', 'real fix'), // ensure bumpType is non-null
+          fakeCommit('fix', 'real fix'), // included so the entry is non-empty (ignored types produce no output)
         ];
         const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
         expect(entry).not.toContain('update workflow');

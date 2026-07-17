@@ -33,6 +33,16 @@ const CONFIG = {
   packageFile: join(projectRoot, 'package.json'),
 };
 
+// Enforce the invariant: every fixType must also be a patchType.
+for (const t of CONFIG.fixTypes) {
+  if (!CONFIG.patchTypes.includes(t)) {
+    throw new Error(
+      `CONFIG invariant violated: fixType "${t}" is not present in patchTypes. ` +
+        'Add it to patchTypes or remove it from fixTypes.',
+    );
+  }
+}
+
 /**
  * Parse conventional commit message
  */
