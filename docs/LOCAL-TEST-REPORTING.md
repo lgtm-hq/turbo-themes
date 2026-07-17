@@ -62,8 +62,7 @@ This creates the `lighthouse-reports/` directory with detailed audit results.
 
 View at `http://localhost:3001/`
 
-**Note:** When accessed through the Jekyll server at `http://localhost:4000`, the report
-is available at `/lighthouse/` (simplified from `lighthouse-reports/`).
+**Note:** The Lighthouse report is available locally in `lighthouse-reports/` after running the CI script.
 
 ## Using the Multi-Server Script
 
@@ -82,14 +81,6 @@ starts the appropriate servers:
 ./scripts/local/serve-reports.sh
 ```
 
-**Note**: The Jekyll server is optional and only needed if you want to access reports
-through the Jekyll site (see "Accessing Reports Through Jekyll" section below). If you
-want to use Jekyll, start it separately:
-
-```bash
-bundle exec jekyll serve --livereload --incremental
-```
-
 **Output example:**
 
 ```
@@ -102,8 +93,6 @@ bundle exec jekyll serve --livereload --incremental
 ✅ Lighthouse Reports found
    📍 View at: http://localhost:3001/
 
-Jekyll Site: http://localhost:4000
-
 Starting report servers...
 
 ✅ Playwright server started (PID: 12345)
@@ -111,36 +100,6 @@ Starting report servers...
 
 Press Ctrl+C to stop all servers
 ```
-
-## Accessing Reports Through Jekyll
-
-### Prerequisites
-
-Before accessing reports through Jekyll, ensure:
-
-- Scripts in `scripts/` are executable (e.g.,
-  `chmod +x ./scripts/local/serve-reports.sh`)
-- Required tools are installed: `bash`, `Jekyll`
-- Jekyll server is started separately:
-
-  ```bash
-  bundle exec jekyll serve --livereload --incremental
-  ```
-
-The reports can also be included in the Jekyll build if they exist:
-
-```yaml
-# _config.yml
-include:
-  - playwright-report # Playwright E2E test report
-  - lighthouse-reports # Lighthouse performance reports
-```
-
-When these directories exist, Jekyll will copy them to `_site/` and make them available
-through the main Jekyll server at:
-
-- `http://localhost:4000/playwright/` (simplified from `playwright-report/`)
-- `http://localhost:4000/lighthouse/` (simplified from `lighthouse-reports/`)
 
 ## CI Deployment
 
@@ -295,6 +254,6 @@ After freeing the port, restart the server.
    ```
 
 3. Open browsers to:
-   - **Main site**: http://localhost:4000
+   - **Docs site**: http://localhost:4321 (Astro dev server: `cd apps/site && bun run dev`)
    - **Tests**: http://localhost:9323 (if available)
    - **Performance**: http://localhost:3001/ (if available)
