@@ -99,7 +99,18 @@ ones, because the nonce travels in the HTTP header and in the `nonce` attribute 
 
 **Steps for an Astro SSR deployment:**
 
-1. Generate a cryptographically-random nonce in server middleware:
+1. Declare the `cspNonce` type so TypeScript knows about `Astro.locals.cspNonce`:
+
+   ```typescript
+   // src/env.d.ts  (or any file included in tsconfig)
+   declare namespace App {
+     interface Locals {
+       cspNonce: string;
+     }
+   }
+   ```
+
+2. Generate a cryptographically-random nonce in server middleware:
 
    ```typescript
    // src/middleware.ts
@@ -129,9 +140,26 @@ ones, because the nonce travels in the HTTP header and in the `nonce` attribute 
    });
    ```
 
-2. Pass the nonce through the layout chain and add a `nonce` attribute to each
-   `<script is:inline>` block. Astro's `define:vars` scripts automatically carry the
-   `nonce` attribute when the parent layout propagates it.
+3. Add a `nonce` attribute to every `<script is:inline>` block in your layouts so
+   the browser can match the header value against the script tag:
+
+   ```astro
+   ---
+   // src/layouts/BaseLayout.astro
+   const nonce = Astro.locals.cspNonce;
+   ---
+   <!-- FOUC-prevention script — must run before first paint -->
+   <script is:inline nonce={nonce} define:vars={{ validThemeIds }}>
+     /* ... FOUC script body ... */
+   </script>
+   <!-- Theme dropdown script -->
+   <script is:inline nonce={nonce} define:vars={{ themeNames, themeIcons }}>
+     /* ... dropdown script body ... */
+   </script>
+   ```
+
+   Apply the same `nonce={Astro.locals.cspNonce}` pattern to every `<script is:inline>`
+   in `DocsLayout.astro` and any other layout that emits inline scripts.
 
 **For static site generation (SSG):** Nonces require a server to generate a new random
 value per request; they cannot be embedded in pre-built HTML files. Use hash-based CSP
@@ -154,32 +182,55 @@ well for scripts whose rendered content does not change between page loads.
 
 **Computing hashes from a built site:**
 
-After running `bun run build`, extract the inline script body from the built HTML and
-hash it:
+After running `bun run build`, extract each inline script body and hash it.
+All three scripts must be listed in `script-src` — missing any one will block that
+feature:
 
 ```bash
-# 1. Pull out the raw script text (adjust the page path as needed):
+# Extract and hash the FOUC-prevention script (BaseLayout.astro, define:vars)
 node -e "
 const fs = require('fs');
 const html = fs.readFileSync('apps/site/dist/index.html', 'utf8');
-// Match the first <script> block that contains the FOUC keyword
-const m = html.match(/<script[^>]*>(([\s\S]*?FOUC[\s\S]*?))<\/script>/);
+const m = html.match(/<script[^>]*>(([\s\S]*?validThemeIds[\s\S]*?))<\/script>/);
 if (m) process.stdout.write(m[1]);
 " > fouc-script.txt
+FOUC_HASH=$(openssl dgst -sha256 -binary fouc-script.txt | openssl base64 -A)
 
-# 2. Compute the SHA-256 and base64-encode it:
-openssl dgst -sha256 -binary fouc-script.txt | openssl base64 -A
+# Extract and hash the theme-dropdown script (BaseLayout.astro, define:vars)
+node -e "
+const fs = require('fs');
+const html = fs.readFileSync('apps/site/dist/index.html', 'utf8');
+const m = html.match(/<script[^>]*>(([\s\S]*?themeNames[\s\S]*?))<\/script>/);
+if (m) process.stdout.write(m[1]);
+" > dropdown-script.txt
+DROPDOWN_HASH=$(openssl dgst -sha256 -binary dropdown-script.txt | openssl base64 -A)
+
+# Extract and hash the sidebar-toggle script (DocsLayout.astro, static)
+# Use a docs page that renders DocsLayout, e.g. the first docs page:
+node -e "
+const fs = require('fs'), path = require('path'), glob = require('glob');
+const pages = glob.sync('apps/site/dist/docs/**/*.html');
+if (!pages.length) { process.stderr.write('No docs pages found\n'); process.exit(1); }
+const html = fs.readFileSync(pages[0], 'utf8');
+const m = html.match(/<script[^>]*>(([\s\S]*?sidebar[\s\S]*?))<\/script>/i);
+if (m) process.stdout.write(m[1]);
+" > sidebar-script.txt
+SIDEBAR_HASH=$(openssl dgst -sha256 -binary sidebar-script.txt | openssl base64 -A)
+
+echo "FOUC_HASH:     $FOUC_HASH"
+echo "DROPDOWN_HASH: $DROPDOWN_HASH"
+echo "SIDEBAR_HASH:  $SIDEBAR_HASH"
 ```
 
-Use the resulting string in your CSP:
+Use all three values in your CSP:
 
 ```
-script-src 'self' 'sha256-<output-from-above>';
+script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH';
 ```
 
-> **Important:** recompute and update the hash every time you run `bun run build` if
-> theme metadata has changed. A stale hash will silently block the FOUC script and cause
-> theme flashing.
+> **Important:** recompute and update all three hashes every time you run `bun run build`
+> if theme metadata has changed. A stale hash will silently block that script and cause
+> theme-flashing or broken navigation.
 
 ### unsafe-inline (last resort)
 
