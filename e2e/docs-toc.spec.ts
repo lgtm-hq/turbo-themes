@@ -16,6 +16,8 @@ test.describe('Docs TOC @smoke', () => {
     await page.waitForLoadState('domcontentloaded');
 
     const toc = page.getByTestId('docs-toc');
+    // .docs-toc is hidden below 1280 px; the desktop Playwright project uses
+    // viewport { width: 1280, height: 800 } which satisfies min-width: 1280px.
     await expect(toc).toBeVisible();
 
     const tocTitle = toc.locator('.docs-toc-title');
