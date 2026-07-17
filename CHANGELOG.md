@@ -14,7 +14,7 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 ### 🐛 Fixed
 
-- pin setup-node comments to exact v6.4.0 (#548)
+- pin setup-node commits to exact v6.4.0 (#548)
 
 ## [0.22.1] - 2026-07-17
 
