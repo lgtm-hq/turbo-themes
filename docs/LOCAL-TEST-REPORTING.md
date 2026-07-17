@@ -62,7 +62,8 @@ This creates the `lighthouse-reports/` directory with detailed audit results.
 
 View at `http://localhost:3001/`
 
-**Note:** The Lighthouse report is available locally in `lighthouse-reports/` after running the CI script.
+**Note:** The Lighthouse report is available locally in `lighthouse-reports/` after
+running the CI script.
 
 ## Using the Multi-Server Script
 
@@ -254,6 +255,7 @@ After freeing the port, restart the server.
    ```
 
 3. Open browsers to:
-   - **Docs site**: http://localhost:4321 (Astro dev server: `cd apps/site && bun run dev`)
+   - **Docs site**: http://localhost:4321 (Astro dev server:
+     `cd apps/site && bun run dev`)
    - **Tests**: http://localhost:9323 (if available)
    - **Performance**: http://localhost:3001/ (if available)

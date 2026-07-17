@@ -449,7 +449,7 @@ if [ "$QUICK_MODE" = false ] && [ "$FULL_MODE" = false ]; then
   else
     print_status "$BLUE" "📋 Build completed successfully!"
     print_status "$YELLOW" "To serve the Astro docs site, run:"
-    echo "   cd apps/site && bun run dev"
+    echo "   cd apps/site && $PKG_RUN dev"
     echo ""
     print_status "$GREEN" "✨ Your build artifacts are ready in dist/!"
   fi
