@@ -207,10 +207,17 @@ DROPDOWN_HASH=$(openssl dgst -sha256 -binary dropdown-script.txt | openssl base6
 # Extract and hash the sidebar-toggle script (DocsLayout.astro, static)
 # Use a docs page that renders DocsLayout, e.g. the first docs page:
 node -e "
-const fs = require('fs'), path = require('path'), glob = require('glob');
-const pages = glob.sync('apps/site/dist/docs/**/*.html');
-if (!pages.length) { process.stderr.write('No docs pages found\n'); process.exit(1); }
-const html = fs.readFileSync(pages[0], 'utf8');
+const fs = require('fs'), path = require('path');
+function findHtml(dir) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, e.name);
+    if (e.isDirectory()) { const r = findHtml(full); if (r) return r; }
+    else if (e.name.endsWith('.html')) return full;
+  }
+}
+const page = findHtml('apps/site/dist/docs');
+if (!page) { process.stderr.write('No docs pages found\n'); process.exit(1); }
+const html = fs.readFileSync(page, 'utf8');
 const m = html.match(/<script[^>]*>(([\s\S]*?sidebar[\s\S]*?))<\/script>/i);
 if (m) process.stdout.write(m[1]);
 " > sidebar-script.txt
