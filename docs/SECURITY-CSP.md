@@ -140,8 +140,8 @@ ones, because the nonce travels in the HTTP header and in the `nonce` attribute 
    });
    ```
 
-3. Add a `nonce` attribute to every `<script is:inline>` block in your layouts so
-   the browser can match the header value against the script tag:
+3. Add a `nonce` attribute to every `<script is:inline>` block in your layouts so the
+   browser can match the header value against the script tag:
 
    ```astro
    ---
@@ -182,9 +182,8 @@ well for scripts whose rendered content does not change between page loads.
 
 **Computing hashes from a built site:**
 
-After running `bun run build`, extract each inline script body and hash it.
-All three scripts must be listed in `script-src` — missing any one will block that
-feature:
+After running `bun run build`, extract each inline script body and hash it. All three
+scripts must be listed in `script-src` — missing any one will block that feature:
 
 ```bash
 # Extract and hash the FOUC-prevention script (BaseLayout.astro, define:vars)
@@ -228,9 +227,9 @@ Use all three values in your CSP:
 script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH';
 ```
 
-> **Important:** recompute and update all three hashes every time you run `bun run build`
-> if theme metadata has changed. A stale hash will silently block that script and cause
-> theme-flashing or broken navigation.
+> **Important:** recompute and update all three hashes every time you run
+> `bun run build` if theme metadata has changed. A stale hash will silently block that
+> script and cause theme-flashing or broken navigation.
 
 ### unsafe-inline (last resort)
 
