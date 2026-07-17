@@ -69,13 +69,7 @@ jobs:
 
       - name: Verify HTML vanilla example
         if: matrix.example.name == 'html-vanilla'
-        run: |
-          # Check that required files exist
-          test -f examples/html-vanilla/index.html
-          # Validate HTML structure
-          grep -q 'id="theme-selector"' examples/html-vanilla/index.html
-          grep -q 'id="theme-css"' examples/html-vanilla/index.html
-          grep -q 'data-theme=' examples/html-vanilla/index.html
+        run: ./scripts/ci/verify-html-example.sh
 
       - name: Upload build artifact
         if: matrix.example.build
