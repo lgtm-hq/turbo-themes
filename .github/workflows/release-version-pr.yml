@@ -98,6 +98,7 @@ jobs:
 
       - name: Create or update version PR
         id: create_pr
+        continue-on-error: true
         if: steps.guard.outputs.is_release != 'true' && steps.version.outputs.bump_needed == 'true'
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8
         env:
@@ -114,22 +115,49 @@ jobs:
             release-bump
           delete-branch: true
 
-      - name: Request CODEOWNER review
-        if: steps.create_pr.outputs.pull-request-number != ''
+      - name: Retry release branch push on transient rejection
+        id: push_retry
+        if: >-
+          steps.guard.outputs.is_release != 'true' &&
+          steps.version.outputs.bump_needed == 'true' &&
+          steps.create_pr.outcome == 'failure'
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-          PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number }}
+          RELEASE_BRANCH: release/version-${{ steps.version.outputs.next_version }}
+          PR_TITLE: ${{ steps.version.outputs.pr_title }}
+          PR_BODY_FILE: ${{ steps.version.outputs.pr_body_file }}
+        run: ./scripts/ci/retry-release-branch-push.sh
+
+      - name: Fail if push could not be completed
+        if: >-
+          steps.create_pr.outcome == 'failure' &&
+          steps.push_retry.outcome != 'success'
+        run: ./scripts/ci/fail-release-push.sh
+
+      - name: Request CODEOWNER review
+        if: >-
+          steps.create_pr.outputs.pull-request-number != '' ||
+          steps.push_retry.outputs.pull-request-number != ''
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number || steps.push_retry.outputs.pull-request-number }}
         run: ./scripts/ci/request-codeowner-review.sh
 
       - name: Enable auto-merge
-        if: steps.create_pr.outputs.pull-request-number
+        if: >-
+          steps.create_pr.outputs.pull-request-number ||
+          steps.push_retry.outputs.pull-request-number
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --squash
+        run: |
+          PR="${{ steps.create_pr.outputs.pull-request-number || steps.push_retry.outputs.pull-request-number }}"
+          gh pr merge "${PR}" --auto --squash
 
       - name: Generate Version PR Summary
         if: always()
         env:
           BUMP_NEEDED: ${{ steps.version.outputs.bump_needed }}
           NEXT_VERSION: ${{ steps.version.outputs.next_version }}
+          PUSH_RETRY_TRIGGERED: ${{ steps.create_pr.outcome == 'failure' && steps.push_retry.outcome == 'success' }}
+          JOB_STATUS: ${{ job.status }}
         run: ./scripts/ci/generate-version-pr-summary.sh
