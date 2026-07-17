@@ -56,12 +56,20 @@
         "$value": "#e45649",
         "$type": "color"
       },
+      "infoText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
       "successText": {
-        "$value": "#383a42",
+        "$value": "#000000",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#383a42",
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#000000",
         "$type": "color"
       }
     },

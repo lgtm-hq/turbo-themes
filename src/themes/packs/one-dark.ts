@@ -126,8 +126,10 @@ export const oneDarkThemes: ThemePackage = {
           success: '#50a14f',
           warning: '#c18401',
           danger: '#e45649',
-          successText: '#383a42',
-          warningText: '#383a42',
+          infoText: '#000000',
+          successText: '#000000',
+          warningText: '#000000',
+          dangerText: '#000000',
         },
         border: {
           default: '#d0d0d1',
