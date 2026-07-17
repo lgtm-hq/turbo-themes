@@ -115,7 +115,7 @@ const examples = [
         <h4 class="examples-category">{section.category}</h4>
         <div class="examples-grid">
           {section.items.map((example) => (
-            <ExampleCard {...example} slug={example.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')} />
+            <ExampleCard {...example} />
           ))}
         </div>
       </div>

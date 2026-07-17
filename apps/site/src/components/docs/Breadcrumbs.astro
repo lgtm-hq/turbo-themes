@@ -28,7 +28,7 @@ const showTitle = title !== categoryLabel;
     {showTitle ? (
       <>
         <li class="breadcrumb-item">
-          <a href={`${baseUrl}/docs/${category}/`} class="breadcrumb-link" data-testid="docs-breadcrumb-category">{categoryLabel}</a>
+          <a href={`${baseUrl}/docs/${category}/`} class="breadcrumb-link" data-testid={`docs-breadcrumb-category-${category}`}>{categoryLabel}</a>
         </li>
         <li class="breadcrumb-separator" aria-hidden="true">/</li>
         <li class="breadcrumb-item" aria-current="page">
