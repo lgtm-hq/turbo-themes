@@ -153,3 +153,4 @@ Turbo Themes CSS is standard CSS custom properties - no PostCSS processing requi
 - Learn about [CDN installation](/docs/installation/cdn/) for no-build-step usage
 - Explore [framework integrations](/docs/integrations/) for Tailwind, Bulma, and more
 - Check the [CSS Variables Reference](/docs/api-reference/css-variables/)
+- Building an Astro doc site? See the [Astro + GitHub Pages integration guide](/docs/integrations/astro-github-pages/) for CSS load order, Shiki binding, and CI setup.

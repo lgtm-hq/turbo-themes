@@ -4,7 +4,7 @@ description: Use Turbo Themes in iOS and macOS applications with the Swift packa
 category: integrations
 order: 6
 prev: integrations/python
-next: api-reference/index
+next: integrations/astro-github-pages
 ---
 
 # SwiftUI Integration
