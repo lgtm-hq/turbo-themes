@@ -7,7 +7,7 @@ set -euo pipefail
 npm pack --dry-run 2>&1 | tee pack-output.txt
 
 # Use tail -1 to capture only the tarball filename, skipping prepare-script output.
-TARBALL=$(npm pack 2>/dev/null | tail -1)
+TARBALL=$(npm pack | tail -1)
 
 if [ ! -f "$TARBALL" ]; then
   echo "❌ Tarball not found: $TARBALL"
