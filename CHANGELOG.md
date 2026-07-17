@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.4] - 2026-07-17
+
+### 🔧 Changed
+
+- document consumer theme curation patterns (#565)
+
 ## [0.23.3] - 2026-07-17
 
 ### 🔧 Changed
