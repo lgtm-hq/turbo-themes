@@ -1,8 +1,10 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { execSync, execFileSync } from 'child_process';
-import { mkdtempSync, rmSync, writeFileSync } from 'fs';
+import { mkdtempSync, rmSync, copyFileSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
+
+const fixturesDir = join(process.cwd(), 'test/fixtures/external-consumption');
 
 describe('External package consumption', () => {
   let testDir: string | undefined;
@@ -21,7 +23,7 @@ describe('External package consumption', () => {
     execSync('bun init -y', { cwd: testDir, stdio: 'pipe' });
     // Use execFileSync with array args to avoid shell injection with path
     execFileSync('bun', ['add', tarballPath], { cwd: testDir, stdio: 'pipe' });
-  });
+  }, 120_000);
 
   afterAll(() => {
     // Cleanup temp directory
@@ -32,17 +34,11 @@ describe('External package consumption', () => {
     if (tarballPath) {
       rmSync(tarballPath, { force: true });
     }
-  });
+  }, 30_000);
 
   it('can import main entry point without resolution errors', () => {
     const testFile = join(testDir!, 'test-main.mjs');
-    writeFileSync(
-      testFile,
-      `
-      import { flavors, getTheme, themeIds } from '@lgtm-hq/turbo-themes';
-      console.log(JSON.stringify({ flavors: flavors.length, themeIds: themeIds.length }));
-    `,
-    );
+    copyFileSync(join(fixturesDir, 'test-main.mjs'), testFile);
 
     const output = execFileSync('node', [testFile], { encoding: 'utf-8' });
     const result = JSON.parse(output.trim());
@@ -52,16 +48,7 @@ describe('External package consumption', () => {
 
   it('can import /selector subpath without resolution errors', () => {
     const testFile = join(testDir!, 'test-selector.mjs');
-    writeFileSync(
-      testFile,
-      `
-      import { initTheme, wireFlavorSelector } from '@lgtm-hq/turbo-themes/selector';
-      console.log(JSON.stringify({
-        hasInitTheme: typeof initTheme === 'function',
-        hasWireFlavorSelector: typeof wireFlavorSelector === 'function'
-      }));
-    `,
-    );
+    copyFileSync(join(fixturesDir, 'test-selector.mjs'), testFile);
 
     const output = execFileSync('node', [testFile], { encoding: 'utf-8' });
     const result = JSON.parse(output.trim());
@@ -71,13 +58,7 @@ describe('External package consumption', () => {
 
   it('can import /tokens subpath without resolution errors', () => {
     const testFile = join(testDir!, 'test-tokens.mjs');
-    writeFileSync(
-      testFile,
-      `
-      import { flavors, themeIds } from '@lgtm-hq/turbo-themes/tokens';
-      console.log(JSON.stringify({ flavors: flavors.length, themeIds: themeIds.length }));
-    `,
-    );
+    copyFileSync(join(fixturesDir, 'test-tokens.mjs'), testFile);
 
     const output = execFileSync('node', [testFile], { encoding: 'utf-8' });
     const result = JSON.parse(output.trim());
