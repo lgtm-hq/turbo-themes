@@ -10,6 +10,9 @@ export default defineConfig({
   base: './',
   resolve: {
     alias: {
+      // Resolve published import path to local monorepo build during development.
+      // In a real consumer project, install @lgtm-hq/turbo-themes from npm.
+      '@lgtm-hq/turbo-themes': corePackagePath,
       '@lgtm-hq/turbo-themes-core': corePackagePath,
     },
   },
