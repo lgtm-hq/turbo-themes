@@ -142,6 +142,67 @@ let mocha = ThemeRegistry.themes[.catppuccinMocha]
 | `@lgtm-hq/turbo-themes/tokens`      | TypeScript tokens with types  |
 | `@lgtm-hq/turbo-themes/css/*`       | Pre-built CSS files           |
 
+## Choosing Themes
+
+Turbo Themes ships with 24 curated themes. Use the existing API exports to build a
+catalog that stays in sync with the package automatically.
+
+### Utility exports
+
+```typescript
+import {
+  themeIds, // readonly string[] — all 24 IDs
+  flavors, // ThemeFlavor[] — full metadata
+  getThemesByVendor, // filter by vendor string
+  getThemesByAppearance, // filter by 'dark' | 'light'
+} from '@lgtm-hq/turbo-themes';
+```
+
+### Consumer curation patterns
+
+```typescript
+// a) All themes
+const CATALOG = themeIds;
+
+// b) Hardcoded minimal set (copy-paste friendly, no build required)
+const CATALOG = [
+  'catppuccin-mocha',
+  'catppuccin-latte',
+  'dracula',
+  'github-dark',
+  'github-light',
+];
+
+// c) Vendor opt-in — stays in sync automatically
+const CATALOG = getThemesByVendor('catppuccin').map((f) => f.id);
+
+// d) Appearance filter
+const darkCatalog = getThemesByAppearance('dark').map((f) => f.id); // 15
+const lightCatalog = getThemesByAppearance('light').map((f) => f.id); //  9
+```
+
+> **Planned in [#495](https://github.com/lgtm-hq/turbo-themes/issues/495):** A
+> `themeSets` object (named pre-defined subsets) and a `createThemeCatalog()` factory
+> (filter vendor + appearance in one call) will make these patterns even more concise.
+
+### FOUC prevention with `generateBlockingScript()`
+
+The `@lgtm-hq/turbo-theme-selector` package exports `generateBlockingScript()`, which
+generates a self-contained inline script from your catalog. Inject it into `<head>` at
+build time to apply the user's saved theme before first paint:
+
+```typescript
+import { generateBlockingScript } from '@lgtm-hq/turbo-theme-selector';
+
+const script = generateBlockingScript({
+  validThemes: ['catppuccin-mocha', 'catppuccin-latte', 'dracula'],
+});
+// Inline the returned string in a <script> tag in <head>
+```
+
+See the [theme switching guide](apps/site/src/content/docs/guides/theme-switching.md)
+for a complete walkthrough.
+
 ## Examples
 
 Complete, working examples demonstrating Turbo Themes integration with various

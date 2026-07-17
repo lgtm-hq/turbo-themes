@@ -1,41 +1,61 @@
-import { themeIds, flavors } from '@lgtm-hq/turbo-themes-core/tokens';
+import { themeIds, flavors, getThemesByAppearance } from '@lgtm-hq/turbo-themes';
 
 const STORAGE_KEY = 'turbo-theme';
 const DEFAULT_THEME = 'catppuccin-mocha';
 
-// Import theme IDs from core package (single source of truth)
-const VALID_THEMES = themeIds;
+/**
+ * Curated theme catalog for this app.
+ *
+ * Consumer curation patterns (using existing APIs):
+ *
+ * a) Hardcoded minimal set (copy-paste friendly):
+ *      const CATALOG: readonly string[] = [
+ *        'catppuccin-mocha', 'catppuccin-latte', 'dracula', 'github-dark', 'github-light',
+ *      ];
+ *
+ * b) Filter by vendor using getThemesByVendor() (import it if needed):
+ *      import { getThemesByVendor } from '@lgtm-hq/turbo-themes';
+ *      const CATALOG = getThemesByVendor('catppuccin').map((f) => f.id);
+ *
+ * c) Filter by appearance:
+ *      const CATALOG = getThemesByAppearance('dark').map((f) => f.id);
+ *
+ * d) All themes (default):
+ *      const CATALOG: readonly string[] = themeIds;
+ *
+ * Note: a `themeSets` helper and `createThemeCatalog()` factory are planned
+ * in #495 and will make these patterns more ergonomic.
+ */
+const CATALOG: readonly string[] = themeIds;
 
-type ThemeId = (typeof themeIds)[number];
+type ThemeId = string;
 
-// Derive light themes from flavor appearance (single source of truth)
-const LIGHT_THEMES: string[] = flavors.filter((f) => f.appearance === 'light').map((f) => f.id);
+const flavorMap = new Map(flavors.map((f) => [f.id, f]));
+
+const LIGHT_THEMES: ReadonlySet<string> = new Set(
+  getThemesByAppearance('light').map((f) => f.id)
+);
 
 function isValidTheme(theme: string): theme is ThemeId {
-  return VALID_THEMES.includes(theme as ThemeId);
+  return (CATALOG as readonly string[]).includes(theme);
 }
 
 function applyTheme(themeId: ThemeId): void {
-  // Set data-theme attribute
   document.documentElement.setAttribute('data-theme', themeId);
 
-  // Set Bootstrap's data-bs-theme for light/dark mode
-  const bsTheme = LIGHT_THEMES.includes(themeId) ? 'light' : 'dark';
+  const bsTheme = LIGHT_THEMES.has(themeId) ? 'light' : 'dark';
   document.documentElement.setAttribute('data-bs-theme', bsTheme);
 
-  // Update CSS link
   const themeLink = document.getElementById('theme-css') as HTMLLinkElement | null;
   if (themeLink) {
     themeLink.href = `./turbo-themes/themes/${themeId}.css`;
   }
 
-  // Update footer display
   const currentThemeEl = document.getElementById('current-theme');
   if (currentThemeEl) {
-    currentThemeEl.textContent = themeId;
+    currentThemeEl.textContent = flavorMap.get(themeId)?.label ?? themeId;
   }
 
-  // Persist to localStorage
   try {
     localStorage.setItem(STORAGE_KEY, themeId);
   } catch {
@@ -55,6 +75,30 @@ function getInitialTheme(): ThemeId {
   return DEFAULT_THEME;
 }
 
+function populateSelector(selector: HTMLSelectElement): void {
+  selector.innerHTML = '';
+
+  const vendorGroups = new Map<string, HTMLOptGroupElement>();
+
+  for (const id of CATALOG) {
+    const flavor = flavorMap.get(id);
+    if (!flavor) continue;
+
+    let group = vendorGroups.get(flavor.vendor);
+    if (!group) {
+      group = document.createElement('optgroup');
+      group.label = flavor.vendor.charAt(0).toUpperCase() + flavor.vendor.slice(1);
+      selector.appendChild(group);
+      vendorGroups.set(flavor.vendor, group);
+    }
+
+    const option = document.createElement('option');
+    option.value = id;
+    option.textContent = flavor.label;
+    group.appendChild(option);
+  }
+}
+
 function init(): void {
   const selector = document.getElementById('theme-selector') as HTMLSelectElement | null;
 
@@ -63,12 +107,12 @@ function init(): void {
     return;
   }
 
-  // Set initial value
+  populateSelector(selector);
+
   const initialTheme = getInitialTheme();
   selector.value = initialTheme;
   applyTheme(initialTheme);
 
-  // Listen for changes
   selector.addEventListener('change', (e) => {
     const target = e.target as HTMLSelectElement;
     const newTheme = target.value;
@@ -81,7 +125,6 @@ function init(): void {
   });
 }
 
-// Initialize when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {

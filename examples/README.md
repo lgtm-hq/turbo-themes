@@ -49,7 +49,8 @@ scheme.
 
 All examples include:
 
-- **Theme Switching** - A dropdown selector to switch between 9 built-in themes
+- **Theme Switching** - A dropdown selector to switch between available themes (see
+  `themeIds` for the full list)
 - **localStorage Persistence** - Selected theme persists across page reloads
 - **FOUC Prevention** - Blocking script prevents flash of unstyled content
 - **CSS Custom Properties** - All styling uses `var(--turbo-*)` tokens
@@ -86,7 +87,7 @@ Want to add a new example? Here's how:
 2. Include:
    - A complete, working implementation
    - A `README.md` with setup instructions
-   - Theme switching with all 9 themes
+   - Theme switching with your curated theme list
    - localStorage persistence
    - FOUC prevention script
 3. Add tests in a `test/` subdirectory

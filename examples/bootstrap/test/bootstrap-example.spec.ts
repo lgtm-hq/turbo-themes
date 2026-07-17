@@ -169,10 +169,10 @@ test.describe('Bootstrap Example', () => {
   test.describe('Footer', () => {
     test('should show current theme in footer', async () => {
       const footer = bootstrapPage.getFooter();
-      await expect(footer).toContainText('catppuccin-mocha');
+      await expect(footer).toContainText('Catppuccin Mocha');
 
       await bootstrapPage.selectTheme('dracula');
-      await expect(footer).toContainText('dracula');
+      await expect(footer).toContainText('Dracula');
     });
   });
 

@@ -12,54 +12,81 @@
       rel="stylesheet"
       href="./turbo-themes/themes/catppuccin-mocha.css"
     />
-    <!-- FOUC Prevention -->
+    <!--
+      FOUC Prevention — keeps the saved theme applied before first paint.
+
+      In an SSR/build context, generate this script automatically using
+      generateBlockingScript() from @lgtm-hq/turbo-theme-selector so the
+      VALID_THEMES list always matches your curated catalog:
+
+        import { generateBlockingScript } from '@lgtm-hq/turbo-theme-selector';
+        import { themeIds } from '@lgtm-hq/turbo-themes';
+
+        // Curate inline — or build from getThemesByVendor() / getThemesByAppearance():
+        const validThemes = ['catppuccin-mocha', 'catppuccin-latte', 'dracula',
+                              'github-dark', 'github-light'];
+
+        const script = generateBlockingScript({ validThemes });
+        // → inject returned string into a <script> tag in <head>
+
+      Note: a themeSets / createThemeCatalog() shorthand is planned in #495.
+    -->
     <script>
       (function () {
-        var DEFAULT_THEME = 'catppuccin-mocha';
-        var VALID_THEMES = [
-          'catppuccin-mocha',
-          'catppuccin-macchiato',
-          'catppuccin-frappe',
-          'catppuccin-latte',
-          'dracula',
-          'gruvbox-dark-hard',
-          'gruvbox-dark',
-          'gruvbox-dark-soft',
-          'gruvbox-light-hard',
-          'gruvbox-light',
-          'gruvbox-light-soft',
-          'github-dark',
-          'github-light',
-          'bulma-dark',
-          'bulma-light',
-          'nord',
-          'solarized-dark',
-          'solarized-light',
-          'rose-pine',
-          'rose-pine-moon',
-          'rose-pine-dawn',
-        ];
-        var lightThemes = [
-          'catppuccin-latte',
-          'gruvbox-light-hard',
-          'gruvbox-light',
-          'gruvbox-light-soft',
-          'github-light',
-          'bulma-light',
-          'solarized-light',
-          'rose-pine-dawn',
-        ];
+        try {
+          var DEFAULT_THEME = 'catppuccin-mocha';
+          var VALID_THEMES = [
+            'bulma-dark',
+            'bulma-light',
+            'catppuccin-frappe',
+            'catppuccin-latte',
+            'catppuccin-macchiato',
+            'catppuccin-mocha',
+            'dracula',
+            'github-dark',
+            'github-light',
+            'gruvbox-dark-hard',
+            'gruvbox-dark-soft',
+            'gruvbox-dark',
+            'gruvbox-light-hard',
+            'gruvbox-light-soft',
+            'gruvbox-light',
+            'nord',
+            'rose-pine-dawn',
+            'rose-pine-moon',
+            'rose-pine',
+            'solarized-dark',
+            'solarized-light',
+            'tokyo-night-dark',
+            'tokyo-night-light',
+            'tokyo-night-storm',
+          ];
+          var lightThemes = [
+            'bulma-light',
+            'catppuccin-latte',
+            'github-light',
+            'gruvbox-light-hard',
+            'gruvbox-light-soft',
+            'gruvbox-light',
+            'rose-pine-dawn',
+            'solarized-light',
+            'tokyo-night-light',
+          ];
 
-        var saved = localStorage.getItem('turbo-theme');
-        var theme = saved && VALID_THEMES.indexOf(saved) !== -1 ? saved : DEFAULT_THEME;
+          var saved = localStorage.getItem('turbo-theme');
+          var theme =
+            saved && VALID_THEMES.indexOf(saved) !== -1 ? saved : DEFAULT_THEME;
 
-        document.documentElement.setAttribute('data-theme', theme);
-        document.documentElement.setAttribute(
-          'data-bs-theme',
-          lightThemes.indexOf(theme) !== -1 ? 'light' : 'dark'
-        );
-        var link = document.getElementById('theme-css');
-        if (link) link.href = './turbo-themes/themes/' + theme + '.css';
+          document.documentElement.setAttribute('data-theme', theme);
+          document.documentElement.setAttribute(
+            'data-bs-theme',
+            lightThemes.indexOf(theme) !== -1 ? 'light' : 'dark'
+          );
+          var link = document.getElementById('theme-css');
+          if (link) link.href = './turbo-themes/themes/' + theme + '.css';
+        } catch (e) {
+          console.warn('Unable to load saved theme:', e);
+        }
       })();
     </script>
     <!-- Bootstrap + Custom Styles -->
@@ -72,34 +99,17 @@
         <div class="d-flex align-items-center gap-3">
           <label class="d-flex align-items-center gap-2">
             <span class="text-body-secondary small">Theme</span>
+            <!--
+              Options are populated dynamically from CATALOG in src/main.ts.
+              Curate CATALOG via a hardcoded array, getThemesByVendor(), or
+              getThemesByAppearance() — no hardcoded option list to maintain.
+            -->
             <select
               id="theme-selector"
               class="form-select form-select-sm"
               style="width: auto"
               aria-label="Select theme"
-            >
-              <option value="catppuccin-mocha">Catppuccin Mocha</option>
-              <option value="catppuccin-macchiato">Catppuccin Macchiato</option>
-              <option value="catppuccin-frappe">Catppuccin Frappe</option>
-              <option value="catppuccin-latte">Catppuccin Latte</option>
-              <option value="dracula">Dracula</option>
-              <option value="gruvbox-dark-hard">Gruvbox Dark Hard</option>
-              <option value="gruvbox-dark">Gruvbox Dark</option>
-              <option value="gruvbox-dark-soft">Gruvbox Dark Soft</option>
-              <option value="gruvbox-light-hard">Gruvbox Light Hard</option>
-              <option value="gruvbox-light">Gruvbox Light</option>
-              <option value="gruvbox-light-soft">Gruvbox Light Soft</option>
-              <option value="github-dark">GitHub Dark</option>
-              <option value="github-light">GitHub Light</option>
-              <option value="bulma-dark">Bulma Dark</option>
-              <option value="bulma-light">Bulma Light</option>
-              <option value="nord">Nord</option>
-              <option value="solarized-dark">Solarized Dark</option>
-              <option value="solarized-light">Solarized Light</option>
-              <option value="rose-pine">Rosé Pine</option>
-              <option value="rose-pine-moon">Rosé Pine Moon</option>
-              <option value="rose-pine-dawn">Rosé Pine Dawn</option>
-            </select>
+            ></select>
           </label>
         </div>
       </div>

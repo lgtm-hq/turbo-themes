@@ -102,28 +102,66 @@
       </div>
       <label>
         <span class="muted">Theme</span><br />
+        <!--
+          Vendor opt-in: list only the themes you want to expose.
+
+          In a build/SSR context you can generate this list dynamically:
+
+            import { themeIds, getThemesByVendor, getThemesByAppearance }
+              from '@lgtm-hq/turbo-themes';
+
+            // All 24 themes:  themeIds
+            // Vendor filter:  getThemesByVendor('catppuccin').map(f => f.id)
+            // Appearance:     getThemesByAppearance('dark').map(f => f.id)
+            // Hardcoded set:  ['catppuccin-mocha', 'catppuccin-latte', 'dracula', ...]
+
+          A themeSets / createThemeCatalog() helper is planned in #495.
+          For now the <option> list below is the canonical curated selection.
+          VALID_THEMES in the script below is derived from these <option>s.
+        -->
         <select id="theme-selector">
-          <option value="catppuccin-mocha">Catppuccin Mocha</option>
-          <option value="catppuccin-macchiato">Catppuccin Macchiato</option>
-          <option value="catppuccin-frappe">Catppuccin Frappe</option>
-          <option value="catppuccin-latte">Catppuccin Latte</option>
-          <option value="dracula">Dracula</option>
-          <option value="gruvbox-dark-hard">Gruvbox Dark Hard</option>
-          <option value="gruvbox-dark">Gruvbox Dark</option>
-          <option value="gruvbox-dark-soft">Gruvbox Dark Soft</option>
-          <option value="gruvbox-light-hard">Gruvbox Light Hard</option>
-          <option value="gruvbox-light">Gruvbox Light</option>
-          <option value="gruvbox-light-soft">Gruvbox Light Soft</option>
-          <option value="github-dark">GitHub Dark</option>
-          <option value="github-light">GitHub Light</option>
-          <option value="bulma-dark">Bulma Dark</option>
-          <option value="bulma-light">Bulma Light</option>
-          <option value="nord">Nord</option>
-          <option value="solarized-dark">Solarized Dark</option>
-          <option value="solarized-light">Solarized Light</option>
-          <option value="rose-pine">Rosé Pine</option>
-          <option value="rose-pine-moon">Rosé Pine Moon</option>
-          <option value="rose-pine-dawn">Rosé Pine Dawn</option>
+          <optgroup label="Catppuccin">
+            <option value="catppuccin-mocha">Catppuccin Mocha</option>
+            <option value="catppuccin-macchiato">Catppuccin Macchiato</option>
+            <option value="catppuccin-frappe">Catppuccin Frappe</option>
+            <option value="catppuccin-latte">Catppuccin Latte</option>
+          </optgroup>
+          <optgroup label="Dracula">
+            <option value="dracula">Dracula</option>
+          </optgroup>
+          <optgroup label="Gruvbox">
+            <option value="gruvbox-dark-hard">Gruvbox Dark Hard</option>
+            <option value="gruvbox-dark">Gruvbox Dark</option>
+            <option value="gruvbox-dark-soft">Gruvbox Dark Soft</option>
+            <option value="gruvbox-light-hard">Gruvbox Light Hard</option>
+            <option value="gruvbox-light">Gruvbox Light</option>
+            <option value="gruvbox-light-soft">Gruvbox Light Soft</option>
+          </optgroup>
+          <optgroup label="GitHub">
+            <option value="github-dark">GitHub Dark</option>
+            <option value="github-light">GitHub Light</option>
+          </optgroup>
+          <optgroup label="Bulma">
+            <option value="bulma-dark">Bulma Dark</option>
+            <option value="bulma-light">Bulma Light</option>
+          </optgroup>
+          <optgroup label="Nord">
+            <option value="nord">Nord</option>
+          </optgroup>
+          <optgroup label="Solarized">
+            <option value="solarized-dark">Solarized Dark</option>
+            <option value="solarized-light">Solarized Light</option>
+          </optgroup>
+          <optgroup label="Rosé Pine">
+            <option value="rose-pine">Rosé Pine</option>
+            <option value="rose-pine-moon">Rosé Pine Moon</option>
+            <option value="rose-pine-dawn">Rosé Pine Dawn</option>
+          </optgroup>
+          <optgroup label="Tokyo Night">
+            <option value="tokyo-night-dark">Tokyo Night Dark</option>
+            <option value="tokyo-night-storm">Tokyo Night Storm</option>
+            <option value="tokyo-night-light">Tokyo Night Light</option>
+          </optgroup>
         </select>
       </label>
     </header>

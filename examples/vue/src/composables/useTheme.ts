@@ -1,11 +1,32 @@
 import { ref, onMounted, watch } from 'vue';
-import { themeIds, flavors } from '@lgtm-hq/turbo-themes-core/tokens';
+import { themeIds, flavors, getThemesByVendor, getThemesByAppearance } from '@lgtm-hq/turbo-themes';
 
 const STORAGE_KEY = 'turbo-theme';
 const DEFAULT_THEME = 'catppuccin-mocha';
 
-// Import theme IDs from core package (single source of truth)
-export const VALID_THEMES = themeIds;
+/**
+ * Curated theme catalog for this app.
+ *
+ * Consumer curation patterns (using existing APIs):
+ *
+ * a) Hardcoded minimal set (copy-paste friendly):
+ *      const CATALOG: readonly string[] = [
+ *        'catppuccin-mocha', 'catppuccin-latte', 'dracula', 'github-dark', 'github-light',
+ *      ];
+ *
+ * b) Filter by vendor using getThemesByVendor():
+ *      const CATALOG = getThemesByVendor('catppuccin').map((f) => f.id);
+ *
+ * c) Filter by appearance using getThemesByAppearance():
+ *      const CATALOG = getThemesByAppearance('dark').map((f) => f.id);
+ *
+ * d) All themes (default):
+ *      const CATALOG: readonly string[] = themeIds;
+ *
+ * Note: a `themeSets` helper and `createThemeCatalog()` factory are planned
+ * in #495 and will make these patterns more ergonomic.
+ */
+const CATALOG: readonly string[] = themeIds;
 
 export type ThemeId = (typeof themeIds)[number];
 
@@ -14,16 +35,18 @@ export interface ThemeOption {
   label: string;
 }
 
-// Generate theme options from core flavors
-export const THEME_OPTIONS: ThemeOption[] = flavors.map((f) => ({
-  id: f.id as ThemeId,
-  label: f.label,
+const flavorMap = new Map(flavors.map((f) => [f.id, f]));
+
+/** Theme options derived from the curated catalog. */
+export const THEME_OPTIONS: ThemeOption[] = CATALOG.map((id) => ({
+  id: id as ThemeId,
+  label: flavorMap.get(id)?.label ?? id,
 }));
 
 function getInitialTheme(): ThemeId {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved && VALID_THEMES.includes(saved as ThemeId)) {
+    if (saved && (CATALOG as readonly string[]).includes(saved)) {
       return saved as ThemeId;
     }
   } catch {
@@ -51,7 +74,7 @@ export function useTheme() {
   const theme = ref<ThemeId>(getInitialTheme());
 
   function setTheme(newTheme: ThemeId) {
-    if (!VALID_THEMES.includes(newTheme)) {
+    if (!(CATALOG as readonly string[]).includes(newTheme)) {
       console.warn('Invalid theme ID:', newTheme);
       return;
     }
@@ -78,3 +101,6 @@ export function useTheme() {
     themes: THEME_OPTIONS,
   };
 }
+
+// Re-export helpers for consumers building their own catalog
+export { getThemesByVendor, getThemesByAppearance };
