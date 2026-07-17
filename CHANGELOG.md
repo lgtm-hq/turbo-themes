@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.2] - 2026-07-17
+
+### 🐛 Fixed
+
+- bucket docs/style/refactor/perf/test/chore under Changed (#570)
+
 ## [0.23.1] - 2026-07-17
 
 ### 🔧 Changed
