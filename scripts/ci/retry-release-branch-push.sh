@@ -47,21 +47,19 @@ if [[ -n "${EXISTING_PR}" ]]; then
   gh pr edit "${EXISTING_PR}" \
     --repo "${GITHUB_REPOSITORY}" \
     --title "${PR_TITLE}" \
-    --body-file "${PR_BODY_FILE}"
+    --body-file "${PR_BODY_FILE}" \
+    --add-label "release-bump"
   PR_NUMBER="${EXISTING_PR}"
 else
   echo "🆕 Creating new PR for '${RELEASE_BRANCH}'..."
-  gh pr create \
+  PR_URL=$(gh pr create \
     --repo "${GITHUB_REPOSITORY}" \
     --base main \
     --head "${RELEASE_BRANCH}" \
     --title "${PR_TITLE}" \
     --body-file "${PR_BODY_FILE}" \
-    --label "release-bump"
-  PR_NUMBER=$(gh pr view "${RELEASE_BRANCH}" \
-    --repo "${GITHUB_REPOSITORY}" \
-    --json number \
-    --jq '.number')
+    --label "release-bump")
+  PR_NUMBER="${PR_URL##*/}"
 fi
 
 echo "✅ PR #${PR_NUMBER} ready"

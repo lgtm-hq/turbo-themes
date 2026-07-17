@@ -16,7 +16,12 @@ REFSPEC="${2:?usage: push-with-retry.sh <remote> <refspec>}"
 
 MAX_RETRIES="${MAX_RETRIES:-3}"
 INITIAL_DELAY="${INITIAL_DELAY:-5}"
+# BACKOFF_MULTIPLIER must be a positive integer; bash $((...)) truncates floats silently.
 BACKOFF_MULTIPLIER="${BACKOFF_MULTIPLIER:-2}"
+if ! [[ "${BACKOFF_MULTIPLIER}" =~ ^[0-9]+$ ]]; then
+  echo "❌ BACKOFF_MULTIPLIER must be a non-negative integer, got: '${BACKOFF_MULTIPLIER}'"
+  exit 1
+fi
 
 attempt=1
 delay="${INITIAL_DELAY}"

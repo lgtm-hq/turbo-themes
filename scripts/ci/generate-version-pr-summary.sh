@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Generate a GitHub Step Summary for the Release Version PR workflow.
-# Expected env vars: BUMP_NEEDED, NEXT_VERSION, JOB_STATUS, PUSH_RETRY_TRIGGERED
+# Expected env vars: BUMP_NEEDED, NEXT_VERSION, PUSH_FAILED, PUSH_RETRY_TRIGGERED
 set -euo pipefail
 
 {
   echo "## Release Version PR Status"
   if [ "${BUMP_NEEDED:-}" = "true" ]; then
-    if [ "${JOB_STATUS:-}" = "failure" ]; then
+    if [ "${PUSH_FAILED:-}" = "true" ]; then
       echo "❌ **Push failed** — release branch for v${NEXT_VERSION} could not be pushed."
       echo ""
       echo "Both the primary push attempt and the transient-error retry failed."

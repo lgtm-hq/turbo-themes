@@ -159,5 +159,5 @@ jobs:
           BUMP_NEEDED: ${{ steps.version.outputs.bump_needed }}
           NEXT_VERSION: ${{ steps.version.outputs.next_version }}
           PUSH_RETRY_TRIGGERED: ${{ steps.create_pr.outcome == 'failure' && steps.push_retry.outcome == 'success' }}
-          JOB_STATUS: ${{ job.status }}
+          PUSH_FAILED: ${{ steps.create_pr.outcome == 'failure' && steps.push_retry.outcome != 'success' }}
         run: ./scripts/ci/generate-version-pr-summary.sh
