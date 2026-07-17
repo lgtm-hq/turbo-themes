@@ -48,7 +48,7 @@ export default defineConfig({
         'test/**',
         'e2e/**',
         // Generated theme data files — produced by scripts/sync-*.mjs, not hand-authored logic
-        'src/themes/packs/*.synced.ts',
+        'src/themes/packs/**/*.synced.ts',
         // Type-only files — only TypeScript interface/type declarations, no runtime logic
         'packages/core/src/themes/types.ts',
         'packages/core/src/themes/css/types.ts',
