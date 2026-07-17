@@ -65,4 +65,4 @@ else
 fi
 
 echo "✅ PR #${PR_NUMBER} ready"
-echo "pull-request-number=${PR_NUMBER}" >> "${GITHUB_OUTPUT}"
+echo "pull-request-number=${PR_NUMBER}" >>"${GITHUB_OUTPUT}"
