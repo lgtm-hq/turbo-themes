@@ -38,6 +38,12 @@ prevent potential exploitation while we work on a fix.
 - Never commit sensitive data (API keys, passwords, etc.)
 - Follow secure coding practices
 
+## Content Security Policy
+
+For guidance on CSP headers when deploying turbo-themes — including Google Fonts
+allowlisting, inline-script nonce/hash handling, CDN origins, and platform-specific
+examples — see **[docs/SECURITY-CSP.md](docs/SECURITY-CSP.md)**.
+
 ## Contact
 
 - **Primary**: `turbocoder13@gmail.com`
