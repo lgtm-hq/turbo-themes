@@ -99,7 +99,9 @@
     "packages/adapters/*/dist/**",
     "assets/css/themes/*.css",
     "assets/css/turbo-core.css",
-    "assets/css/adapters/*.css"
+    "assets/css/adapters/*.css",
+    "assets/img/*.png",
+    "assets/img/*.webp"
   ],
   "scripts": {
     "build": "bun run build:tokens && bun run build:packages && bun run theme:sync && bun run build:root && node scripts/copy-adapters.mjs && bun run generate:css",
