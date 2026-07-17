@@ -10,7 +10,7 @@
     "$version": { "type": "string" },
     "$generated": {
       "type": "string",
-      "description": "SHA-256 hash of the file content excluding the $generated field itself. Covers all other fields including $version, so the hash changes on every regeneration or version bump. Use this field to detect stale caches or verify file integrity.",
+      "description": "SHA-256 hex digest of JSON.stringify(content excluding $generated). Hashing is over the normalized JSON representation, not raw file bytes, so whitespace-only edits do not invalidate the hash. Covers all other fields including $version, so the hash changes on every regeneration or version bump. Use this field to detect stale caches or verify structural integrity.",
       "pattern": "^[a-f0-9]{64}$",
       "minLength": 64,
       "maxLength": 64

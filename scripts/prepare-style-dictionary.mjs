@@ -252,9 +252,10 @@ function main() {
     byVendor,
   };
 
-  // Compute deterministic content hash over all fields except $generated itself.
-  // $version is included so that the hash always reflects the full committed file
-  // content; sync-version.mjs recomputes the hash after every version bump.
+  // Compute SHA-256(JSON.stringify(content excluding $generated)).
+  // Hashing is over the normalized JSON representation, not raw file bytes, so
+  // whitespace/newline changes do not affect the hash.  $version is included so
+  // the hash changes on every version bump; sync-version.mjs recomputes it.
   const { $generated: _g1, ...outputHashable } = output;
   output.$generated = createHash("sha256").update(JSON.stringify(outputHashable)).digest("hex");
 
@@ -291,7 +292,7 @@ function main() {
     byVendor,
   };
 
-  // Compute deterministic content hash over all fields except $generated itself (see above).
+  // Same SHA-256(JSON.stringify(...)) contract as the main output above.
   const { $generated: _g2, ...tokensHashable } = tokensOutput;
   tokensOutput.$generated = createHash("sha256")
     .update(JSON.stringify(tokensHashable))

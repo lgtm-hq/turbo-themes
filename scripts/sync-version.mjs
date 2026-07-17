@@ -56,14 +56,13 @@ const tokenFiles = [
 ];
 for (const tokenFile of tokenFiles) {
   if (fs.existsSync(tokenFile)) {
-    writeJsonVersion(tokenFile, ['$version'], { trailingNewline: false });
-    // Recompute $generated hash after bumping $version so the hash always
-    // reflects the full committed file content (see prepare-style-dictionary.mjs).
+    // Read once, update $version and $generated in memory, write once.
     const data = JSON.parse(fs.readFileSync(tokenFile, 'utf8'));
+    data['$version'] = version;
     const { $generated: _, ...hashable } = data;
-    data.$generated = createHash('sha256').update(JSON.stringify(hashable)).digest('hex');
+    data['$generated'] = createHash('sha256').update(JSON.stringify(hashable)).digest('hex');
     fs.writeFileSync(tokenFile, JSON.stringify(data, null, 2));
-    log(`recomputed $generated hash in ${path.relative(root, tokenFile)}`);
+    log(`synced $version and recomputed $generated hash in ${path.relative(root, tokenFile)}`);
   }
 }
 
