@@ -10,6 +10,28 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.22.0] - 2026-07-16
+
+### ✨ Added
+
+- adopt lgtm-ci reusable workflows at v0.52.3 (#526)
+- add merge_group triggers for merge queue support (#507)
+
+### 🐛 Fixed
+
+- bump postcss-purgecss to 8.0.0 (#541)
+- re-enable scorecard publish-results on lgtm-ci v0.52.4 (#532)
+- adopt reusable scorecards and dependency review (#530)
+- adopt canonical emoji check names (#528)
+- add self-documenting help target (#521)
+- remove leftover Jekyll files from previous docs setup (#520)
+- add SECURITY.md (#487)
+- remove js-yaml direct dep conflicting with security override (#524)
+- update vite to 8.0.12 (major) (#457)
+- update actions/cache to v5.0.5 (#390)
+- export turbo-themes-all.css as ./css/themes-all (#518)
+- update lintro to 0.62.1 (minor) (#479)
+
 ## [0.21.0] - 2026-05-21
 
 ### ✨ Added
