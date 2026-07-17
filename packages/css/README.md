@@ -90,6 +90,8 @@ See [ADR-0005](../../docs/adr/0005-css-only-theme-switching.md) for details.
 | `turbo-core.css`       | ~2KB  | Default CSS variables in `:root`                       |
 | `turbo-base.css`       | ~4KB  | Optional semantic styles (typography, forms, etc.)     |
 | `turbo-syntax.css`     | ~3KB  | Syntax highlighting styles for code blocks             |
+| `turbo-components.css` | ~15KB | All pre-built UI components (buttons, cards, pills…)   |
+| `turbo-doc-links.css`  | ~2KB  | Standalone smart-link / doc-link pill styles only      |
 | `themes/<id>.css`      | ~2KB  | Individual theme files                                 |
 | `turbo-themes-all.css` | ~82KB | All themes, `[data-theme]` selectors only (no `:root`) |
 
@@ -106,6 +108,61 @@ See [ADR-0005](../../docs/adr/0005-css-only-theme-switching.md) for details.
 | GitHub Light         | `github-light`         | Light      |
 | Bulma Dark           | `bulma-dark`           | Dark       |
 | Bulma Light          | `bulma-light`          | Light      |
+
+## Smart Link / Doc Link Pills
+
+Documentation sites can use compact pill-link components to cross-reference pages or
+external docs without copying per-site CSS.
+
+### Quick import (standalone — no other components required)
+
+```js
+import '@lgtm-hq/turbo-themes-css/turbo-doc-links.css';
+```
+
+or in CSS:
+
+```css
+@import '@lgtm-hq/turbo-themes-css/turbo-doc-links.css';
+```
+
+The classes are also included in `turbo-components.css`.
+
+### HTML
+
+```html
+<!-- Internal cross-reference chip with favicon -->
+<a class="turbo-smart-link" href="/path/to/page">
+  <img class="turbo-smart-link-icon" src="/favicon.png" alt="" />
+  Page Title
+</a>
+
+<!-- External / API doc chip with ↗ glyph -->
+<a class="turbo-doc-link" href="https://docs.example.com">
+  <span class="turbo-smart-link-icon-glyph" aria-hidden="true">↗</span>
+  API Reference
+</a>
+
+<!-- Group of pills -->
+<div class="turbo-doc-link-group">
+  <a class="turbo-smart-link" href="/api">API</a>
+  <a class="turbo-doc-link" href="/guide">Guide</a>
+</div>
+```
+
+### Classes
+
+| Class                          | Purpose                                                  |
+| ------------------------------ | -------------------------------------------------------- |
+| `.turbo-smart-link`            | Pill for internal cross-reference links                  |
+| `.turbo-doc-link`              | Pill for external / API doc links (slightly deeper tint) |
+| `.turbo-smart-link-icon`       | 16 × 16 favicon `<img>` inside a pill                    |
+| `.turbo-smart-link-icon-glyph` | Inline ↗ or similar text badge inside a pill             |
+| `.turbo-doc-link-group`        | Flex row wrapper with gap for multiple pills             |
+
+All colors are derived exclusively from theme tokens (`--turbo-brand-primary`,
+`--turbo-bg-surface`, `--turbo-border-default`, `--turbo-text-primary`) so they
+automatically adapt to every flavor and appearance.
 
 ## CSS Variables Reference
 

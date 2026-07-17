@@ -18,6 +18,7 @@
     "./turbo-syntax.css": "./dist/turbo-syntax.css",
     "./turbo-themes-all.css": "./dist/turbo-themes-all.css",
     "./turbo-components.css": "./dist/turbo-components.css",
+    "./turbo-doc-links.css": "./dist/turbo-doc-links.css",
     "./themes/*": "./dist/themes/*",
     "./components": "./dist/turbo-components.css",
     "./components/*": "./dist/components/*"

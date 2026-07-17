@@ -32,6 +32,7 @@ const tabs = [
   { id: 'tabs', label: 'Tabs' },
   { id: 'progress', label: 'Progress' },
   { id: 'sidebar', label: 'Sidebar' },
+  { id: 'doc-links', label: 'Doc Links' },
   { id: 'code', label: 'Code' },
   { id: 'typography', label: 'Typography' },
 ];
@@ -636,6 +637,73 @@ const tabs = [
         <li><strong>Groups:</strong> Organize items into labeled sections</li>
         <li><strong>Mobile responsive:</strong> Slide-out drawer on small screens</li>
       </ul>
+    </div>
+      </section>
+
+      <section id="panel-doc-links" class="component-panel" role="tabpanel" aria-labelledby="tab-doc-links">
+    <h2>Doc Links</h2>
+    <p>Compact pill-link components for documentation cross-references. Token-driven colors adapt to every theme.</p>
+
+    <div class="component-preview">
+      <h3>Smart Links (internal cross-references)</h3>
+      <div class="turbo-doc-link-group">
+        <a class="turbo-smart-link" href="#">
+          <img class="turbo-smart-link-icon" src="https://astro.build/favicon.svg" alt="" width="16" height="16" />
+          Astro Docs
+        </a>
+        <a class="turbo-smart-link" href="#">
+          <img class="turbo-smart-link-icon" src="https://vitejs.dev/logo.svg" alt="" width="16" height="16" />
+          Vite Docs
+        </a>
+        <a class="turbo-smart-link" href="#">
+          <img class="turbo-smart-link-icon" src="https://bun.sh/logo.svg" alt="" width="16" height="16" />
+          Bun Runtime
+        </a>
+      </div>
+    </div>
+
+    <div class="component-preview">
+      <h3>Doc Links (external / API references)</h3>
+      <div class="turbo-doc-link-group">
+        <a class="turbo-doc-link" href="#">
+          <span class="turbo-smart-link-icon-glyph" aria-hidden="true">↗</span>
+          API Reference
+        </a>
+        <a class="turbo-doc-link" href="#">
+          <span class="turbo-smart-link-icon-glyph" aria-hidden="true">↗</span>
+          Changelog
+        </a>
+        <a class="turbo-doc-link" href="#">
+          <span class="turbo-smart-link-icon-glyph" aria-hidden="true">↗</span>
+          Contributing Guide
+        </a>
+      </div>
+    </div>
+
+    <div class="component-preview">
+      <h3>Mixed group</h3>
+      <div class="turbo-doc-link-group">
+        <a class="turbo-smart-link" href="#">
+          <img class="turbo-smart-link-icon" src="https://github.com/favicon.ico" alt="" width="16" height="16" />
+          GitHub
+        </a>
+        <a class="turbo-doc-link" href="#">
+          <span class="turbo-smart-link-icon-glyph" aria-hidden="true">↗</span>
+          npm Package
+        </a>
+        <a class="turbo-smart-link" href="#">
+          Installation
+        </a>
+      </div>
+    </div>
+
+    <div class="component-preview">
+      <h3>Usage</h3>
+      <p>Import the standalone stylesheet or rely on <code>turbo-components.css</code>:</p>
+      <pre><code>import '@lgtm-hq/turbo-themes-css/turbo-doc-links.css';</code></pre>
+      <p>Available classes: <code>.turbo-smart-link</code>, <code>.turbo-doc-link</code>,
+         <code>.turbo-smart-link-icon</code>, <code>.turbo-smart-link-icon-glyph</code>,
+         <code>.turbo-doc-link-group</code>.</p>
     </div>
       </section>
 

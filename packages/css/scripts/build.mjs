@@ -43,6 +43,7 @@ const COMPONENT_FILES = [
   'notifications.css',
   'navigation.css',
   'sidebar.css',
+  'doc-links.css',
 ];
 
 function ensureDir(dir) {
@@ -94,6 +95,14 @@ function buildComponents() {
   // Write the combined bundle
   const bundlePath = path.join(distDir, 'turbo-components.css');
   writeFile(bundlePath, bundleContent);
+
+  // Write the standalone doc-links file for consumers who only need pill styles
+  const docLinksFile = 'doc-links.css';
+  const docLinksSrc = path.join(componentsSrcDir, docLinksFile);
+  if (fs.existsSync(docLinksSrc)) {
+    const docLinksContent = fs.readFileSync(docLinksSrc, 'utf8');
+    writeFile(path.join(distDir, 'turbo-doc-links.css'), docLinksContent);
+  }
 
   return { totalSize, bundleSize: Buffer.byteLength(bundleContent, 'utf8') };
 }
