@@ -82,6 +82,7 @@ const vendorMeta = {
   "one-dark": { name: "One", homepage: "https://github.com/Binaryify/OneDark-Pro" },
   "rose-pine": { name: "Rosé Pine (synced)", homepage: "https://rosepinetheme.com/" },
   solarized: { name: "Solarized", homepage: "https://ethanschoonover.com/solarized/" },
+  turbo: { name: "Terminal", homepage: "https://github.com/lgtm-hq/turbo-themes" },
   "tokyo-night": {
     name: "Tokyo Night",
     homepage: "https://github.com/enkia/tokyo-night-vscode-theme",

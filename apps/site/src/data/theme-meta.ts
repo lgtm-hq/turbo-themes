@@ -50,6 +50,7 @@ const VENDOR_ICON_CONFIG: Record<string, { dark: string; light: string }> = {
   solarized: { dark: 'solarized-dark.png', light: 'solarized-light.png' },
   'rose-pine': { dark: 'rose-pine.png', light: 'rose-pine-dawn.png' },
   'tokyo-night': { dark: 'turbo-themes-logo-dark.png', light: 'turbo-themes-logo.png' },
+  turbo: { dark: 'terminal.png', light: 'terminal.png' },
 };
 
 /** Per-theme icon overrides (where the vendor-level default is wrong). */
