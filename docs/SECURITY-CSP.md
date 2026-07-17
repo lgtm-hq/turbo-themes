@@ -1,8 +1,8 @@
 # Content Security Policy (CSP) Guide
 
-This guide covers recommended Content Security Policy headers for deployments
-that serve turbo-themes — whether you are hosting the Astro demo/docs site or
-embedding turbo-themes stylesheets in your own application.
+This guide covers recommended Content Security Policy headers for deployments that serve
+turbo-themes — whether you are hosting the Astro demo/docs site or embedding
+turbo-themes stylesheets in your own application.
 
 ## Table of Contents
 
@@ -25,9 +25,8 @@ embedding turbo-themes stylesheets in your own application.
 
 ## Baseline CSP
 
-The following policy covers a turbo-themes deployment that loads Google Fonts,
-serves its own CSS, and runs the FOUC-prevention inline script with a
-per-request nonce:
+The following policy covers a turbo-themes deployment that loads Google Fonts, serves
+its own CSS, and runs the FOUC-prevention inline script with a per-request nonce:
 
 ```
 Content-Security-Policy:
@@ -39,8 +38,8 @@ Content-Security-Policy:
   connect-src 'self';
 ```
 
-Replace `{random}` with a cryptographically-random, base64-encoded value that
-is unique per HTTP response (see [Nonce-based CSP](#nonce-based-csp-recommended)).
+Replace `{random}` with a cryptographically-random, base64-encoded value that is unique
+per HTTP response (see [Nonce-based CSP](#nonce-based-csp-recommended)).
 
 If you self-host fonts (no Google Fonts), drop both `fonts.googleapis.com` and
 `fonts.gstatic.com` from the policy entirely.
@@ -49,24 +48,24 @@ If you self-host fonts (no Google Fonts), drop both `fonts.googleapis.com` and
 
 ## Google Fonts
 
-`apps/site/src/layouts/BaseLayout.astro` preconnects to and loads fonts from
-two Google Fonts domains:
+`apps/site/src/layouts/BaseLayout.astro` preconnects to and loads fonts from two Google
+Fonts domains:
 
 | Directive   | Domain                         | Purpose                          |
 | ----------- | ------------------------------ | -------------------------------- |
 | `style-src` | `https://fonts.googleapis.com` | Font CSS (Inter, JetBrains Mono) |
 | `font-src`  | `https://fonts.gstatic.com`    | Actual font binary files         |
 
-Both domains are required when using Google Fonts.  Omitting either will block
-font loading and cause a visible fallback.
+Both domains are required when using Google Fonts. Omitting either will block font
+loading and cause a visible fallback.
 
 Turbo-themes token files also expose a `webFonts` array pointing at
-`fonts.googleapis.com`, so downstream consumers who use those tokens in their
-own Astro/React/Vue apps also need these two entries.
+`fonts.googleapis.com`, so downstream consumers who use those tokens in their own
+Astro/React/Vue apps also need these two entries.
 
-**Self-hosted alternative:** Download the font files and serve them from your
-own origin.  With self-hosted fonts you can remove both external domains and
-add the font file path to `font-src 'self'`.
+**Self-hosted alternative:** Download the font files and serve them from your own
+origin. With self-hosted fonts you can remove both external domains and add the font
+file path to `font-src 'self'`.
 
 ---
 
@@ -80,22 +79,21 @@ add the font file path to `font-src 'self'`.
 | `apps/site/src/layouts/BaseLayout.astro:140` | `<script is:inline define:vars={{ themeNames, themeIcons }}>` | Yes            | Theme dropdown — wires click handlers, active state, and nav highlight       |
 | `apps/site/src/layouts/DocsLayout.astro:92`  | `<script is:inline>`                                          | No             | Sidebar toggle — opens/closes the mobile docs navigation                     |
 
-The two scripts that use Astro's `define:vars` are rendered with injected
-JavaScript variable declarations at the top of the script block (e.g.
-`const validThemeIds=[...];`).  These values come from the theme metadata at
-build time, which means the rendered script content changes whenever themes are
-added or renamed.  This matters for hash-based CSP.
+The two scripts that use Astro's `define:vars` are rendered with injected JavaScript
+variable declarations at the top of the script block (e.g.
+`const validThemeIds=[...];`). These values come from the theme metadata at build time,
+which means the rendered script content changes whenever themes are added or renamed.
+This matters for hash-based CSP.
 
-The FOUC-prevention script in particular **must run synchronously and before
-first paint** — it is intentionally a blocking `<script>` in `<head>`.  Any CSP
-that blocks it will cause a flash of unstyled/wrong-theme content.
+The FOUC-prevention script in particular **must run synchronously and before first
+paint** — it is intentionally a blocking `<script>` in `<head>`. Any CSP that blocks it
+will cause a flash of unstyled/wrong-theme content.
 
 ### Nonce-based CSP (recommended)
 
-A per-request nonce works with all three inline scripts, including the
-`define:vars` ones, because the nonce travels in the HTTP header and in the
-`nonce` attribute on each `<script>` element — the script content itself does
-not need to be known in advance.
+A per-request nonce works with all three inline scripts, including the `define:vars`
+ones, because the nonce travels in the HTTP header and in the `nonce` attribute on each
+`<script>` element — the script content itself does not need to be known in advance.
 
 **Steps for an Astro SSR deployment:**
 
@@ -119,7 +117,7 @@ not need to be known in advance.
            "font-src 'self' https://fonts.gstatic.com",
            `script-src 'self' 'nonce-${nonce}'`,
            "img-src 'self' data:",
-         ].join('; '),
+         ].join('; ')
        );
        return response;
      });
@@ -127,33 +125,32 @@ not need to be known in advance.
    ```
 
 2. Pass the nonce through the layout chain and add a `nonce` attribute to each
-   `<script is:inline>` block.  Astro's `define:vars` scripts automatically
-   carry the `nonce` attribute when the parent layout propagates it.
+   `<script is:inline>` block. Astro's `define:vars` scripts automatically carry the
+   `nonce` attribute when the parent layout propagates it.
 
-**For static site generation (SSG):** Nonces require a server to generate a
-new random value per request; they cannot be embedded in pre-built HTML files.
-Use hash-based CSP instead (see below), or set headers at the edge with a
-platform that supports dynamic header injection (Vercel/Netlify edge functions).
+**For static site generation (SSG):** Nonces require a server to generate a new random
+value per request; they cannot be embedded in pre-built HTML files. Use hash-based CSP
+instead (see below), or set headers at the edge with a platform that supports dynamic
+header injection (Vercel/Netlify edge functions).
 
 ### Hash-based CSP (static builds)
 
 Hash-based CSP (`'sha256-...'`) lets you allow a specific script without
-`'unsafe-inline'` by listing the exact SHA-256 of its content in the policy.
-This works well for scripts whose rendered content does not change between
-page loads.
+`'unsafe-inline'` by listing the exact SHA-256 of its content in the policy. This works
+well for scripts whose rendered content does not change between page loads.
 
 **Caveats for turbo-themes:**
 
-- The two `define:vars` scripts (`validThemeIds`, `themeNames`, `themeIcons`)
-  produce different rendered content each time themes are added or renamed.
-  Their hash must be recomputed after every build that changes theme metadata.
-- The DocsLayout sidebar toggle (`<script is:inline>` without `define:vars`)
-  has static content and is stable between builds.
+- The two `define:vars` scripts (`validThemeIds`, `themeNames`, `themeIcons`) produce
+  different rendered content each time themes are added or renamed. Their hash must be
+  recomputed after every build that changes theme metadata.
+- The DocsLayout sidebar toggle (`<script is:inline>` without `define:vars`) has static
+  content and is stable between builds.
 
 **Computing hashes from a built site:**
 
-After running `bun run build`, extract the inline script body from the built
-HTML and hash it:
+After running `bun run build`, extract the inline script body from the built HTML and
+hash it:
 
 ```bash
 # 1. Pull out the raw script text (adjust the page path as needed):
@@ -175,9 +172,9 @@ Use the resulting string in your CSP:
 script-src 'self' 'sha256-<output-from-above>';
 ```
 
-> **Important:** recompute and update the hash every time you run `bun run
-> build` if theme metadata has changed.  A stale hash will silently block the
-> FOUC script and cause theme flashing.
+> **Important:** recompute and update the hash every time you run `bun run build` if
+> theme metadata has changed. A stale hash will silently block the FOUC script and cause
+> theme flashing.
 
 ### unsafe-inline (last resort)
 
@@ -185,21 +182,21 @@ script-src 'self' 'sha256-<output-from-above>';
 script-src 'self' 'unsafe-inline';
 ```
 
-`'unsafe-inline'` defeats much of the XSS protection that CSP provides and is
-not recommended for production.  Use it only during local development or when
-neither nonces nor hashes are feasible.
+`'unsafe-inline'` defeats much of the XSS protection that CSP provides and is not
+recommended for production. Use it only during local development or when neither nonces
+nor hashes are feasible.
 
-> **Note:** when a `nonce-*` or `sha256-*` source is present in `script-src`,
-> browsers that support CSP Level 2 will ignore `'unsafe-inline'` entirely,
-> making it safe to include for backward-compatibility with very old browsers
-> that only understand CSP Level 1 — but this is rarely necessary in practice.
+> **Note:** when a `nonce-*` or `sha256-*` source is present in `script-src`, browsers
+> that support CSP Level 2 will ignore `'unsafe-inline'` entirely, making it safe to
+> include for backward-compatibility with very old browsers that only understand CSP
+> Level 1 — but this is rarely necessary in practice.
 
 ---
 
 ## CDN Usage
 
-If your users install turbo-themes from a CDN rather than bundling it, they
-need the CDN origin in `style-src`:
+If your users install turbo-themes from a CDN rather than bundling it, they need the CDN
+origin in `style-src`:
 
 | CDN      | Addition to `style-src`    |
 | -------- | -------------------------- |
@@ -217,8 +214,8 @@ Content-Security-Policy:
   img-src 'self' data:;
 ```
 
-CDN origins are broad by design — if you want a tighter policy, self-host the
-CSS file and remove the CDN entry.
+CDN origins are broad by design — if you want a tighter policy, self-host the CSS file
+and remove the CDN entry.
 
 ---
 
@@ -258,8 +255,8 @@ server {
 </IfModule>
 ```
 
-For static sites served by Apache, replace `'nonce-REPLACE_WITH_NONCE'` with
-the `'sha256-...'` values computed at build time.
+For static sites served by Apache, replace `'nonce-REPLACE_WITH_NONCE'` with the
+`'sha256-...'` values computed at build time.
 
 ### Vercel
 
@@ -279,17 +276,16 @@ the `'sha256-...'` values computed at build time.
 }
 ```
 
-Replace each `*_HASH` placeholder with the SHA-256 computed from the built
-output (see [Hash-based CSP](#hash-based-csp-static-builds)).
+Replace each `*_HASH` placeholder with the SHA-256 computed from the built output (see
+[Hash-based CSP](#hash-based-csp-static-builds)).
 
-For server-side rendering on Vercel (Node.js or Edge runtime), use an Astro
-middleware to generate a per-request nonce and set the header dynamically
-instead of using static hashes in `vercel.json`.
+For server-side rendering on Vercel (Node.js or Edge runtime), use an Astro middleware
+to generate a per-request nonce and set the header dynamically instead of using static
+hashes in `vercel.json`.
 
 ### Netlify
 
-In your `netlify.toml` or a `_headers` file placed in the site's publish
-directory:
+In your `netlify.toml` or a `_headers` file placed in the site's publish directory:
 
 **`netlify.toml`:**
 
@@ -309,8 +305,8 @@ directory:
 
 ### GitHub Pages
 
-GitHub Pages serves static files and does **not** support custom HTTP response
-headers.  The only CSP option on Pages is the `<meta>` tag approach:
+GitHub Pages serves static files and does **not** support custom HTTP response headers.
+The only CSP option on Pages is the `<meta>` tag approach:
 
 ```html
 <meta
@@ -329,16 +325,15 @@ Add this tag inside `<head>` in your base layout.
 
 **Limitations of `<meta>` CSP:**
 
-- The `<meta>` tag is processed by the HTML parser, not the network layer, so
-  it does not restrict `frame-ancestors`, `sandbox`, or `report-uri`/`report-to`
-  directives.  Those only work in HTTP headers.
-- The FOUC-prevention script appears _after_ the `<meta>` tag in the same
-  `<head>` block, so the browser will have already parsed the policy before
-  encountering the script.
+- The `<meta>` tag is processed by the HTML parser, not the network layer, so it does
+  not restrict `frame-ancestors`, `sandbox`, or `report-uri`/`report-to` directives.
+  Those only work in HTTP headers.
+- The FOUC-prevention script appears _after_ the `<meta>` tag in the same `<head>`
+  block, so the browser will have already parsed the policy before encountering the
+  script.
 
-For strongest protection, deploy on a platform that supports HTTP response
-headers (Vercel, Netlify, Nginx, Apache, Cloudflare Pages) and set the policy
-there.
+For strongest protection, deploy on a platform that supports HTTP response headers
+(Vercel, Netlify, Nginx, Apache, Cloudflare Pages) and set the policy there.
 
 ---
 
@@ -346,5 +341,5 @@ there.
 
 - [SECURITY.md](../SECURITY.md) — vulnerability reporting policy
 - [MDN: Content Security Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP)
-- [CSP Evaluator](https://csp-evaluator.withgoogle.com/) — Google tool for
-  auditing your policy
+- [CSP Evaluator](https://csp-evaluator.withgoogle.com/) — Google tool for auditing your
+  policy
