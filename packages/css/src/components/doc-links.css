@@ -29,7 +29,7 @@
   align-items: center;
   gap: 0.3rem;
   padding: 0.15rem 0.5rem 0.15rem 0.35rem;
-  border-radius: var(--turbo-radius-full, 9999px);
+  border-radius: var(--radius-full);
   font-size: 0.82rem;
   font-weight: 600;
   line-height: 1.4;
@@ -45,9 +45,9 @@
   white-space: nowrap;
   cursor: pointer;
   transition:
-    background var(--turbo-transition-fast, 150ms ease),
-    border-color var(--turbo-transition-fast, 150ms ease),
-    color var(--turbo-transition-fast, 150ms ease);
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 /* --------------------------------------------------------------------------
@@ -97,7 +97,7 @@
   line-height: 1;
   flex-shrink: 0;
   opacity: 0.75;
-  transition: opacity var(--turbo-transition-fast, 150ms ease);
+  transition: opacity var(--transition-fast);
 }
 
 .turbo-smart-link:hover .turbo-smart-link-icon-glyph,
@@ -133,5 +133,5 @@
 .turbo-doc-link-group {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-sm, 0.5rem);
+  gap: var(--space-sm);
 }
