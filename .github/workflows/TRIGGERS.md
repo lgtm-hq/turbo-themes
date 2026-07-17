@@ -63,7 +63,7 @@ turbo-themes, their triggers, and purposes.
 
 #### quality-validate-action-pinning.yml
 
-**Triggers:** Push to main, Pull requests  
+**Triggers:** Pull requests (all), Merge queue, Manual  
 **Purpose:** Ensures all GitHub Actions use SHA pinning
 
 ### Security
