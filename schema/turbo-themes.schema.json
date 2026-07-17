@@ -10,7 +10,7 @@
     "$version": { "type": "string" },
     "$generated": {
       "type": "string",
-      "description": "SHA-256 content hash of the generated content (deterministic snapshot)",
+      "description": "SHA-256 hash of the file content excluding the $generated field itself. Covers all other fields including $version, so the hash changes on every regeneration or version bump. Use this field to detect stale caches or verify file integrity.",
       "pattern": "^[a-f0-9]{64}$",
       "minLength": 64,
       "maxLength": 64

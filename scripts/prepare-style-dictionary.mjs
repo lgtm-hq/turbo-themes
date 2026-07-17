@@ -252,10 +252,10 @@ function main() {
     byVendor,
   };
 
-  // Compute deterministic content hash (excludes $generated and $version)
-  // $version is excluded so release-time version bumps via sync-version.mjs do
-  // not invalidate the hash on the next regeneration.
-  const { $generated: _g1, $version: _v1, ...outputHashable } = output;
+  // Compute deterministic content hash over all fields except $generated itself.
+  // $version is included so that the hash always reflects the full committed file
+  // content; sync-version.mjs recomputes the hash after every version bump.
+  const { $generated: _g1, ...outputHashable } = output;
   output.$generated = createHash("sha256").update(JSON.stringify(outputHashable)).digest("hex");
 
   // Write main themes file (SD format with $value)
@@ -291,8 +291,8 @@ function main() {
     byVendor,
   };
 
-  // Compute deterministic content hash (excludes $generated and $version; see above)
-  const { $generated: _g2, $version: _v2, ...tokensHashable } = tokensOutput;
+  // Compute deterministic content hash over all fields except $generated itself (see above).
+  const { $generated: _g2, ...tokensHashable } = tokensOutput;
   tokensOutput.$generated = createHash("sha256")
     .update(JSON.stringify(tokensHashable))
     .digest("hex");
