@@ -9,18 +9,19 @@
  */
 
 import { packages } from '../tokens/index.js';
+import type { ThemeId } from '../themes/theme-ids.js';
 import { createThemeCatalog, type ThemeCatalog } from './index.js';
 
 /**
  * The curated "minimal" starter set: one light + one dark theme from the two
  * most common vendors.
  */
-const MINIMAL_THEME_IDS = [
+const MINIMAL_THEME_IDS: readonly ThemeId[] = [
   'catppuccin-mocha',
   'catppuccin-latte',
   'github-light',
   'github-dark',
-] as const;
+];
 
 /**
  * Named theme presets. Known keys (`minimal`, `dark`, `light`) are always

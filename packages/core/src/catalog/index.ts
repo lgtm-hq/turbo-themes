@@ -18,6 +18,11 @@ import type { ThemeId } from '../themes/theme-ids.js';
 import { flavors, themeIds as allThemeIds } from '../tokens/index.js';
 import { VENDOR_GROUPS, type VendorGroup } from '../themes/metadata.js';
 
+// Bundlers (esbuild, Vite, webpack) replace `process.env.NODE_ENV` with a
+// string literal at build time; this declaration lets tsc compile without
+// @types/node while preserving dead-code elimination in production bundles.
+declare const process: { readonly env: { readonly NODE_ENV?: string } } | undefined;
+
 /** Options controlling which themes a {@link ThemeCatalog} contains. */
 export interface ThemeCatalogOptions {
   /**
@@ -50,12 +55,13 @@ export interface ThemeCatalog {
 const KNOWN_THEME_IDS: ReadonlySet<string> = new Set(allThemeIds);
 
 /**
- * Emit a dev-time warning for unknown IDs. Mirrors the unconditional
- * `console.warn` validation convention used in `../themes/metadata.ts`; bundlers
- * strip these when minifying for production.
+ * Emit a dev-time warning for unknown IDs. Bundlers replace
+ * `process.env.NODE_ENV` with the literal `"production"` and eliminate this
+ * branch via dead-code removal, so production builds never log.
  */
 function warnInvalidIds(source: 'include' | 'exclude', ids: readonly string[]): void {
   if (ids.length === 0) return;
+  if (process?.env.NODE_ENV === 'production') return;
   console.warn(
     `[catalog] createThemeCatalog: ignoring unknown ${source} theme ID(s): ${ids.join(', ')}. ` +
       'Valid IDs come from the exported `themeIds`.',
