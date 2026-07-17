@@ -114,7 +114,7 @@ ones, because the nonce travels in the HTTP header and in the `nonce` attribute 
        response.headers.set(
          'Content-Security-Policy',
          [
-         "default-src 'self'",
+           "default-src 'self'",
            "style-src 'self' https://fonts.googleapis.com",
            "font-src 'self' https://fonts.gstatic.com",
            `script-src 'self' 'nonce-${nonce}'`,
@@ -122,7 +122,7 @@ ones, because the nonce travels in the HTTP header and in the `nonce` attribute 
            "connect-src 'self'",
            "base-uri 'self'",
            "object-src 'none'",
-           ].join('; ')
+         ].join('; ')
        );
        return response;
      });
