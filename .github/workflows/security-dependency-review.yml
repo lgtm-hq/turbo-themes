@@ -53,7 +53,9 @@ jobs:
     permissions:
       # Read repository manifests and lockfiles.
       contents: read
-      # Read pull-request metadata for dependency review.
+      # Read-only: write is intentionally withheld so any reusable-internal
+      # comment attempt fails explicitly rather than silently on fork PRs
+      # (fork PRs do not receive secrets / write tokens from the base repo).
       pull-requests: read
 
   # Org ruleset (checks-turbo-themes): security-audit / 🔐 Security Audit

@@ -28,9 +28,12 @@ jobs:
       target-type: dir
       sbom-format: cyclonedx-json
       scan-vulnerabilities: true
-      # Advisory-only to preserve the pre-migration posture (the hand-rolled
-      # SBOM job never gated on scan findings). The v0.52 default is
-      # fail-on-severity: critical — revisit once the baseline is clean.
+      # Advisory-only: empty string is the documented sentinel in
+      # reusable-sbom.yml for disabling the severity gate entirely (not a
+      # severity level — valid levels are critical/high/medium/low/none).
+      # Pre-migration posture preserved — the hand-rolled SBOM job never
+      # gated on scan findings. Default in v0.52 is critical; revisit once
+      # the vulnerability baseline is clean.
       fail-on-severity: ''
       create-attestation: true
       runner-image: ubuntu-24.04
