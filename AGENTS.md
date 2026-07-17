@@ -1,4 +1,4 @@
-# AGENTS.md
+# turbo-themes — Agent & Cloud Dev Guide
 
 ## Cursor Cloud specific instructions
 
@@ -30,9 +30,9 @@ the source of truth. Notes below are non-obvious caveats for this environment.
   invocation is slower).
 - E2E: `bun run e2e` / `bun run e2e:smoke`. Playwright's `webServer` runs
   `bun run e2e:start`, which serves `apps/site/dist` on port **4173** and auto-runs the
-  heavy `bun run e2e:prep` build only when `apps/site/dist/index.html` is missing. Set
-  `PLAYWRIGHT_SKIP_SERVER=1` to use an externally managed server, or `SKIP_E2E=1` to
-  disable E2E entirely.
+  heavy `bun run e2e:prep` build only when `apps/site/dist/index.html` is missing (set
+  `SKIP_PREP=1` to skip the prep build unconditionally). Set `PLAYWRIGHT_SKIP_SERVER=1`
+  to use an externally managed server, or `SKIP_E2E=1` to disable E2E entirely.
 
 ### Gotchas
 
