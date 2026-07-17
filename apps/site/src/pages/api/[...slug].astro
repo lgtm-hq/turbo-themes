@@ -10,7 +10,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 export async function getStaticPaths() {
   const entries = await getCollection('api');
   return entries.map((entry) => ({
-    params: { slug: entry.id },
+    params: { slug: entry.id === 'index' ? undefined : entry.id },
     props: { entry },
   }));
 }
@@ -19,12 +19,13 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 
 const pageTitle = entry.data.title ?? entry.id.split('/').pop()?.replace(/[-_]/g, ' ') ?? 'API Reference';
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
 <BaseLayout title={`${pageTitle} | API Reference`} description={`TypeScript API reference for ${pageTitle}`}>
   <article class="api-reference">
     <nav class="api-breadcrumb" aria-label="API Reference navigation">
-      <a href={`${import.meta.env.BASE_URL}api/`}>API Reference</a>
+      <a href={`${baseUrl}/api/`}>API Reference</a>
       {entry.id !== 'index' && (
         <span aria-hidden="true"> / </span>
         <span>{pageTitle}</span>
