@@ -3,6 +3,10 @@
 1. Install:
 
    ```bash
+   # Using uv (recommended)
+   uv pip install turbo-themes
+
+   # Or using pip
    pip install turbo-themes
    ```
 
