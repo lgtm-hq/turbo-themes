@@ -17,6 +17,12 @@
 // Re-export types for consumers
 export type { ThemeTokens, ThemeFlavor, ThemePackage } from '../themes/types.js';
 
+// Re-export the generated ThemeId union and its backing tuple. These have no
+// runtime dependencies, so exposing them here is import-cycle-safe (the runtime
+// curation API lives in ../catalog to avoid a metadata<->tokens init cycle).
+export type { ThemeId } from '../themes/theme-ids.js';
+export { THEME_IDS } from '../themes/theme-ids.js';
+
 import type { ThemeFlavor, ThemeTokens } from '../themes/types.js';
 
 // Import tokens data (copied from dist/tokens.json during build)
