@@ -390,9 +390,8 @@ onMounted(() => {
 
 ## Theme Selector Icons
 
-The `@lgtm-hq/turbo-themes` npm package ships theme icon images under
-`assets/img/` so the selector is fully self-contained — no manual asset
-downloading required.
+The `@lgtm-hq/turbo-themes` npm package ships theme icon images under `assets/img/` so
+the selector is fully self-contained — no manual asset downloading required.
 
 ### Icons shipped with the package
 
@@ -442,8 +441,8 @@ export default defineConfig({
 
 ### Option 3 — CDN / URL override
 
-Pass a custom `baseUrl` via `data-turbo-base-url` on the `<script>` tag or
-configure the selector `baseUrl` option to point at any URL serving the icons.
+Pass a custom `baseUrl` via `data-turbo-base-url` on the `<script>` tag or configure the
+selector `baseUrl` option to point at any URL serving the icons.
 
 ## Next Steps
 
