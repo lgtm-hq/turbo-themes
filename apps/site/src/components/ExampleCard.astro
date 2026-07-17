@@ -7,12 +7,14 @@ export interface Props {
   playgroundUrl: string | null;
   tags: string[];
   size: string;
+  slug?: string;
 }
 
-const { name, description, icon, sourceUrl, playgroundUrl, tags, size } = Astro.props;
+const { name, description, icon, sourceUrl, playgroundUrl, tags, size, slug } = Astro.props;
+const cardSlug = slug ?? name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 ---
 
-<article class="example-card">
+<article class="example-card" data-testid={`example-card-${cardSlug}`}>
   <div class="example-bubble">
     <span class="example-icon" set:html={icon} /></div>
   <div class="example-body">
@@ -25,7 +27,7 @@ const { name, description, icon, sourceUrl, playgroundUrl, tags, size } = Astro.
       <span class="example-size">{size}</span>
     </div>
     <div class="example-actions">
-      <a href={sourceUrl} class="btn btn-outline" target="_blank" rel="noopener">
+      <a href={sourceUrl} class="btn btn-outline" target="_blank" rel="noopener" data-testid={`example-card-source-${cardSlug}`}>
         View Source
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
@@ -34,7 +36,7 @@ const { name, description, icon, sourceUrl, playgroundUrl, tags, size } = Astro.
         </svg>
       </a>
       {playgroundUrl && (
-        <a href={playgroundUrl} class="btn btn-primary" target="_blank" rel="noopener">
+        <a href={playgroundUrl} class="btn btn-primary" target="_blank" rel="noopener" data-testid={`example-card-stackblitz-${cardSlug}`}>
           Try in StackBlitz
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>

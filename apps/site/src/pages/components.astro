@@ -48,6 +48,7 @@ const tabs = [
           aria-selected={index === 0 ? 'true' : 'false'}
           aria-controls={`panel-${tab.id}`}
           tabindex={index === 0 ? 0 : -1}
+          data-testid={`components-tab-${tab.id}`}
         >
           {tab.label}
         </button>
