@@ -20,9 +20,9 @@ final class ThemeRegistryTests: XCTestCase {
     }
 
     func testExpectedThemeCount() {
-        // We expect 21 themes based on the ThemeId enum
-        XCTAssertEqual(ThemeId.allCases.count, 21)
-        XCTAssertEqual(ThemeRegistry.allThemes.count, 21)
+        // We expect 23 themes based on the ThemeId enum
+        XCTAssertEqual(ThemeId.allCases.count, 23)
+        XCTAssertEqual(ThemeRegistry.allThemes.count, 23)
     }
 
     // MARK: - Theme Lookup Tests
@@ -73,6 +73,8 @@ final class ThemeRegistryTests: XCTestCase {
             .rosePine: "Rosé Pine",
             .rosePineMoon: "Rosé Pine Moon",
             .rosePineDawn: "Rosé Pine Dawn",
+            .oneDark: "One Dark",
+            .oneLight: "One Light",
         ]
 
         for (themeId, expectedLabel) in expectedLabels {
@@ -103,6 +105,8 @@ final class ThemeRegistryTests: XCTestCase {
         XCTAssertEqual(ThemeId.rosePine.rawValue, "rose-pine")
         XCTAssertEqual(ThemeId.rosePineMoon.rawValue, "rose-pine-moon")
         XCTAssertEqual(ThemeId.rosePineDawn.rawValue, "rose-pine-dawn")
+        XCTAssertEqual(ThemeId.oneDark.rawValue, "one-dark")
+        XCTAssertEqual(ThemeId.oneLight.rawValue, "one-light")
     }
 
     // MARK: - Default Palette Tests

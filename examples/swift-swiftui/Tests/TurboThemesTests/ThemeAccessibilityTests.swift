@@ -177,6 +177,8 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .rosePine: return "#191724"
         case .rosePineMoon: return "#232136"
         case .rosePineDawn: return "#faf4ed"
+        case .oneDark: return "#282c34"
+        case .oneLight: return "#fafafa"
         }
     }
 
@@ -198,6 +200,8 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .solarizedLight: return "#586e75"
         case .rosePine, .rosePineMoon: return "#e0def4"
         case .rosePineDawn: return "#575279"
+        case .oneDark: return "#abb2bf"
+        case .oneLight: return "#383a42"
         }
     }
 
@@ -218,6 +222,8 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .solarizedDark, .solarizedLight: return "#657b83"
         case .rosePine, .rosePineMoon: return "#908caa"
         case .rosePineDawn: return "#797593"
+        case .oneDark: return "#828997"
+        case .oneLight: return "#696c77"
         }
     }
 
@@ -238,6 +244,8 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .solarizedDark, .solarizedLight: return "#268bd2"
         case .rosePine, .rosePineMoon: return "#e0def4"
         case .rosePineDawn: return "#575279"
+        case .oneDark: return "#61afef"
+        case .oneLight: return "#4078f2"
         }
     }
 
@@ -275,6 +283,10 @@ final class ThemeAccessibilityTests: XCTestCase {
             return ["#3e8fb0", "#eb6f92", "#f6c177", "#9ccfd8"]
         case .rosePineDawn:
             return ["#56949f", "#b4637a", "#ea9d34", "#d7827e"]
+        case .oneDark:
+            return ["#98c379", "#e06c75", "#e5c07b", "#56b6c2"]
+        case .oneLight:
+            return ["#50a14f", "#e45649", "#c18401", "#0184bc"]
         }
     }
 

@@ -20,6 +20,8 @@ export const THEMES = [
   { id: 'rose-pine-dawn', name: 'Rosé Pine Dawn' },
   { id: 'solarized-dark', name: 'Solarized Dark' },
   { id: 'solarized-light', name: 'Solarized Light' },
+  { id: 'one-dark', name: 'One Dark' },
+  { id: 'one-light', name: 'One Light' },
 ] as const;
 
 export const VALID_THEME_IDS = THEMES.map(t => t.id);

@@ -11,7 +11,7 @@ final class ThemeIdTests: XCTestCase {
     }
 
     func testThemeIdCaseCount() {
-        XCTAssertEqual(ThemeId.allCases.count, 21)
+        XCTAssertEqual(ThemeId.allCases.count, 23)
     }
 
     func testAllCasesContainsExpectedThemes() {
@@ -38,6 +38,8 @@ final class ThemeIdTests: XCTestCase {
         XCTAssertTrue(allCases.contains(.rosePine))
         XCTAssertTrue(allCases.contains(.rosePineMoon))
         XCTAssertTrue(allCases.contains(.rosePineDawn))
+        XCTAssertTrue(allCases.contains(.oneDark))
+        XCTAssertTrue(allCases.contains(.oneLight))
     }
 
     // MARK: - RawValue Tests

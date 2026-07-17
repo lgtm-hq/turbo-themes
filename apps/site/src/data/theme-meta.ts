@@ -46,6 +46,7 @@ const VENDOR_ICON_CONFIG: Record<string, { dark: string; light: string }> = {
   github: { dark: 'github-logo-dark.png', light: 'github-logo-light.png' },
   bulma: { dark: 'turbo-themes-logo-dark.png', light: 'turbo-themes-logo.png' },
   nord: { dark: 'nord.png', light: 'nord.png' },
+  'one-dark': { dark: 'one-dark.png', light: 'one-light.png' },
   solarized: { dark: 'solarized-dark.png', light: 'solarized-light.png' },
   'rose-pine': { dark: 'rose-pine.png', light: 'rose-pine-dawn.png' },
   'tokyo-night': { dark: 'turbo-themes-logo-dark.png', light: 'turbo-themes-logo.png' },

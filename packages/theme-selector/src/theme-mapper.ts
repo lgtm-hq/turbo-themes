@@ -35,6 +35,7 @@ const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
   gruvbox: 'gruvbox',
   github: 'github',
   nord: 'nord',
+  'one-dark': 'one-dark',
   'rose-pine': 'rose-pine',
   solarized: 'solarized',
   'tokyo-night': 'tokyo-night',
@@ -64,6 +65,10 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
     dark: 'assets/img/github-logo-dark.png',
   },
   nord: 'assets/img/nord.png',
+  'one-dark': {
+    light: 'assets/img/one-light.png',
+    dark: 'assets/img/one-dark.png',
+  },
   'rose-pine': {
     light: 'assets/img/rose-pine-dawn.png',
     dark: 'assets/img/rose-pine.png',
@@ -93,6 +98,8 @@ const FLAVOR_DESCRIPTIONS: Record<string, string> = {
   'github-light': 'GitHub-inspired light theme suited for documentation and UI heavy pages.',
   'github-dark': 'GitHub dark theme optimized for code-heavy views.',
   nord: 'Arctic, north-bluish color palette inspired by the polar night.',
+  'one-dark': 'The classic Atom One Dark palette with vivid syntax accents.',
+  'one-light': 'Companion One Light palette for bright, daytime editing.',
   'rose-pine': 'Elegant dark theme with natural pine and soho vibes.',
   'rose-pine-moon': 'Deeper variant of Rosé Pine with enhanced contrast.',
   'rose-pine-dawn': 'Light Rosé Pine variant for daytime use.',

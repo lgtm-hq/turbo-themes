@@ -46,6 +46,7 @@ export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
   gruvbox: { name: 'Gruvbox', description: 'Retro groove palette with warm, earthy tones' },
   github: { name: 'GitHub', description: 'GitHub-inspired themes' },
   nord: { name: 'Nord', description: 'Arctic, north-bluish color palette' },
+  'one-dark': { name: 'One', description: 'The iconic Atom editor palette in dark and light' },
   'rose-pine': { name: 'Rosé Pine', description: 'All natural pine, faux fur and a bit of soho vibes' },
   solarized: { name: 'Solarized', description: 'Precision-balanced light and dark modes' },
   'tokyo-night': { name: 'Tokyo Night', description: 'Neon-infused nightscape with crisp contrast' },

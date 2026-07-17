@@ -42,6 +42,7 @@ export const VENDOR_ORDER: readonly string[] = [
   'solarized',
   'rose-pine',
   'tokyo-night',
+  'one-dark',
 ];
 
 /** A vendor group with its display name and ordered theme IDs. */
