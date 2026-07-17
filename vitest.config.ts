@@ -31,6 +31,8 @@ export default defineConfig({
       reportsDirectory: './coverage',
       all: true,
       include: ['src/**/*.ts', 'packages/*/src/**/*.ts', 'packages/adapters/*/src/**/*.ts'],
+      // Exclusion audit: last reviewed 2026-07-17.
+      // Re-review quarterly, or whenever a new entry is added.
       exclude: [
         'node_modules/**',
         'dist/**',
@@ -45,21 +47,23 @@ export default defineConfig({
         'coverage/**',
         'test/**',
         'e2e/**',
-        'packages/core/src/themes/packs/**/*.synced.ts',
+        // Generated theme data files — produced by scripts/sync-*.mjs, not hand-authored logic
+        'src/themes/packs/*.synced.ts',
+        // Type-only files — only TypeScript interface/type declarations, no runtime logic
         'packages/core/src/themes/types.ts',
-        // Re-export only files (no runtime logic to test)
-        'packages/core/src/index.ts',
-        'packages/core/src/themes/registry.ts',
-        'packages/core/src/themes/factories/index.ts',
-        // Re-export and type-only files (no runtime logic)
-        'packages/core/src/themes/css/global-overrides.ts',
         'packages/core/src/themes/css/types.ts',
         'packages/theme-selector/src/types.ts',
-        'src/index.ts',
-        // Root src/ legacy files (covered by packages/ or type-only)
-        'src/themes/css.ts',
         'src/themes/types.ts',
-        'src/tokens/index.ts',
+        // Re-export-only files — all logic lives in the modules they re-export from
+        'packages/core/src/index.ts',                      // re-exports tokens, registry, types, metadata
+        'packages/core/src/themes/registry.ts',            // single re-export: flavors from tokens/index
+        'packages/core/src/themes/css/global-overrides.ts', // re-exports from ./overrides/index
+        // Root src/ shim files — re-export from packages/*/dist at runtime, no own logic
+        'src/index.ts',          // re-exports packages/core/dist and packages/theme-selector/dist
+        'src/tokens/index.ts',   // re-exports packages/core/dist/tokens/index
+        // Legacy pre-modularisation duplicate — identical logic covered in packages/core/src/themes/css/
+        // (tested via packages/core/test/css/); not imported by any non-test file
+        'src/themes/css.ts',
       ],
       thresholds: {
         lines: 85,
