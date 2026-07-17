@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.3] - 2026-07-17
+
+### 🔧 Changed
+
+- add Content Security Policy guide (#556)
+
 ## [0.23.2] - 2026-07-17
 
 ### 🐛 Fixed
