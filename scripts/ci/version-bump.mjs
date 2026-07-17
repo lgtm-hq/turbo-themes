@@ -24,11 +24,24 @@ const CONFIG = {
   // The matching logic uses parseCommit() which extracts type from "type(scope):"
   minorTypes: ['feat', 'feature'],
   patchTypes: ['fix', 'bugfix', 'patch', 'docs', 'style', 'refactor', 'perf', 'test', 'chore'],
+  // Subset of patchTypes that represent true defect fixes (→ "🐛 Fixed" changelog bucket).
+  // All other patchTypes (docs, style, refactor, perf, test, chore) go to "🔧 Changed".
+  fixTypes: ['fix', 'bugfix', 'patch'],
   ignoreTypes: ['ci', 'build', 'release'],
   ignorePatterns: ['chore(release):'], // Full prefix patterns to skip entirely
   changelogFile: join(projectRoot, 'CHANGELOG.md'),
   packageFile: join(projectRoot, 'package.json'),
 };
+
+// Enforce the invariant: every fixType must also be a patchType.
+for (const t of CONFIG.fixTypes) {
+  if (!CONFIG.patchTypes.includes(t)) {
+    throw new Error(
+      `CONFIG invariant violated: fixType "${t}" is not present in patchTypes. ` +
+        'Add it to patchTypes or remove it from fixTypes.',
+    );
+  }
+}
 
 /**
  * Parse conventional commit message
@@ -192,9 +205,10 @@ function generateChangelogEntry(commits, version, bumpType) {
       breaking.push(entry);
     } else if (CONFIG.minorTypes.includes(parsed.type)) {
       features.push(entry);
-    } else if (CONFIG.patchTypes.includes(parsed.type)) {
+    } else if (CONFIG.fixTypes.includes(parsed.type)) {
       fixes.push(entry);
     } else {
+      // docs, style, refactor, perf, test, chore → "### 🔧 Changed"
       others.push(entry);
     }
   }

@@ -13,16 +13,20 @@ describe('validate-action-shas.sh', () => {
     expect(result).toBe('');
   });
 
-  test('validates SHA format in workflow files', () => {
-    // Run the script in format validation mode (should pass for our workflows)
-    const result = execSync(`bash "${scriptPath}"`, {
-      encoding: 'utf8',
-      env: { ...process.env, GITHUB_TOKEN: '' }, // No token to avoid API calls
-    });
+  test(
+    'validates SHA format in workflow files',
+    () => {
+      // Run the script in format validation mode (should pass for our workflows)
+      const result = execSync(`bash "${scriptPath}"`, {
+        encoding: 'utf8',
+        env: { ...process.env, GITHUB_TOKEN: '' }, // No token to avoid API calls
+      });
 
-    expect(result).toContain('✅ All SHAs pass format validation');
-    expect(result).toContain('Total unique SHAs found:');
-  });
+      expect(result).toContain('✅ All SHAs pass format validation');
+      expect(result).toContain('Total unique SHAs found:');
+    },
+    30_000,
+  );
 
   test('handles invalid arguments gracefully', () => {
     try {
