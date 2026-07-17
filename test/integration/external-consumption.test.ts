@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { execSync, execFileSync } from 'child_process';
 import { mkdtempSync, rmSync, copyFileSync } from 'fs';
-import { join } from 'path';
+import { fileURLToPath } from 'url';
+import { join, dirname } from 'path';
 import { tmpdir } from 'os';
 
-const fixturesDir = join(process.cwd(), 'test/fixtures/external-consumption');
+const fixturesDir = join(dirname(fileURLToPath(import.meta.url)), '../fixtures/external-consumption');
 
 describe('External package consumption', () => {
   let testDir: string | undefined;
