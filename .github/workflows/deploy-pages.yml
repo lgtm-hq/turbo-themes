@@ -76,6 +76,8 @@ jobs:
         run: bun run build:js
       - name: Build CSS Themes
         run: bun run build:themes
+      - name: Generate API reference
+        run: bun run docs:api
       - name: Build Astro site
         run: bun run build:ci:site
         env:

@@ -1,0 +1,19 @@
+{
+	"$schema": "https://typedoc.org/schema.json",
+	"tsconfig": "./tsconfig.typedoc.json",
+	"entryPoints": [
+		"packages/core/src/index.ts",
+		"packages/css/src/index.ts",
+		"packages/theme-selector/src/index.ts"
+	],
+	"entryPointStrategy": "expand",
+	"plugin": ["typedoc-plugin-markdown"],
+	"out": "apps/site/src/content/api",
+	"readme": "none",
+	"hideBreadcrumbs": true,
+	"githubPages": false,
+	"useCodeBlocks": true,
+	"expandObjects": true,
+	"fileExtension": ".md",
+	"entryFileName": "index.md"
+}

@@ -1,4 +1,5 @@
 # Ignore generated and external content
+apps/site/src/content/api/
 node_modules/
 vendor/
 vendor/**

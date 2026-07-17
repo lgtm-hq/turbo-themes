@@ -47,6 +47,7 @@ exclude = [
   ".husky/**",
   ".lgtm-ci-tooling/",
   "python/src/turbo_themes/generated/",
+  "apps/site/src/content/api/",
 ]
 
 [tool.lintro.tool.semgrep]
@@ -75,6 +76,10 @@ exclude = [
   "src/turbo_themes/mapping_config.py",
   "tests/test_css_variables.py",
 ]
+
+[tool.lintro.tool.markdownlint]
+# Exclude TypeDoc-generated API reference (auto-generated, gitignored, not hand-authored)
+exclude = ["apps/site/src/content/api/**"]
 
 [tool.lintro.tool.hadolint]
 exclude = ["_site/Dockerfile"]
