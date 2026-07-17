@@ -36,6 +36,8 @@ Content-Security-Policy:
   script-src 'self' 'nonce-{random}';
   img-src 'self' data:;
   connect-src 'self';
+  base-uri 'self';
+  object-src 'none';
 ```
 
 Replace `{random}` with a cryptographically-random, base64-encoded value that is unique
@@ -112,12 +114,15 @@ ones, because the nonce travels in the HTTP header and in the `nonce` attribute 
        response.headers.set(
          'Content-Security-Policy',
          [
-           "default-src 'self'",
+         "default-src 'self'",
            "style-src 'self' https://fonts.googleapis.com",
            "font-src 'self' https://fonts.gstatic.com",
            `script-src 'self' 'nonce-${nonce}'`,
            "img-src 'self' data:",
-         ].join('; ')
+           "connect-src 'self'",
+           "base-uri 'self'",
+           "object-src 'none'",
+           ].join('; ')
        );
        return response;
      });
@@ -212,6 +217,9 @@ Content-Security-Policy:
   font-src 'self' https://fonts.gstatic.com;
   script-src 'self' 'nonce-{random}';
   img-src 'self' data:;
+  connect-src 'self';
+  base-uri 'self';
+  object-src 'none';
 ```
 
 CDN origins are broad by design — if you want a tighter policy, self-host the CSS file
@@ -223,24 +231,32 @@ and remove the CDN entry.
 
 ### Nginx
 
+For static sites served by Nginx, use precomputed `'sha256-...'` hashes (see
+[Hash-based CSP](#hash-based-csp-static-builds)):
+
 ```nginx
 server {
     # ... other config ...
 
-    # Generate a per-request nonce with a Lua or njs module, or use a static
-    # hash for pre-built sites:
     add_header Content-Security-Policy
         "default-src 'self'; \
          style-src 'self' https://fonts.googleapis.com; \
          font-src 'self' https://fonts.gstatic.com; \
-         script-src 'self' 'nonce-$request_id'; \
-         img-src 'self' data:;"
+         script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH'; \
+         img-src 'self' data:; \
+         connect-src 'self'; \
+         base-uri 'self'; \
+         object-src 'none';"
         always;
 }
 ```
 
-> For static deployments where you cannot inject a nonce per request, replace
-> `'nonce-$request_id'` with the precomputed `'sha256-...'` hashes.
+> **Nonce-based approach for Nginx:** `$request_id` is an nginx-internal hex identifier
+> that sets the CSP header, but the pre-built HTML `<script>` tags have no matching
+> `nonce="..."` attributes. To use nonces with Nginx you must also rewrite the HTML via
+> an `ngx_http_sub_module` `sub_filter` or an njs/Lua module that injects the nonce into
+> every `<script>` tag. For static turbo-themes builds, the hash-based approach above is
+> simpler and fully functional.
 
 ### Apache
 
@@ -251,7 +267,10 @@ server {
          style-src 'self' https://fonts.googleapis.com; \
          font-src 'self' https://fonts.gstatic.com; \
          script-src 'self' 'nonce-REPLACE_WITH_NONCE'; \
-         img-src 'self' data:;"
+         img-src 'self' data:; \
+         connect-src 'self'; \
+         base-uri 'self'; \
+         object-src 'none';"
 </IfModule>
 ```
 
@@ -268,7 +287,7 @@ For static sites served by Apache, replace `'nonce-REPLACE_WITH_NONCE'` with the
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH'; img-src 'self' data:;"
+          "value": "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; object-src 'none';"
         }
       ]
     }
@@ -293,14 +312,14 @@ In your `netlify.toml` or a `_headers` file placed in the site's publish directo
 [[headers]]
   for = "/*"
   [headers.values]
-    Content-Security-Policy = "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH'; img-src 'self' data:;"
+    Content-Security-Policy = "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; object-src 'none';"
 ```
 
 **`_headers` file:**
 
 ```
 /*
-  Content-Security-Policy: default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH'; img-src 'self' data:;
+  Content-Security-Policy: default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; object-src 'none';
 ```
 
 ### GitHub Pages
@@ -317,6 +336,9 @@ The only CSP option on Pages is the `<meta>` tag approach:
     font-src 'self' https://fonts.gstatic.com;
     script-src 'self' 'sha256-FOUC_HASH' 'sha256-DROPDOWN_HASH' 'sha256-SIDEBAR_HASH';
     img-src 'self' data:;
+    connect-src 'self';
+    base-uri 'self';
+    object-src 'none';
   "
 />
 ```
