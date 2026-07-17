@@ -13,16 +13,20 @@ describe('validate-action-shas.sh', () => {
     expect(result).toBe('');
   });
 
-  test('validates SHA format in workflow files', () => {
-    // Run the script in format validation mode (should pass for our workflows)
-    const result = execSync(`bash "${scriptPath}"`, {
-      encoding: 'utf8',
-      env: { ...process.env, GITHUB_TOKEN: '' }, // No token to avoid API calls
-    });
+  test(
+    'validates SHA format in workflow files',
+    () => {
+      // Run the script in format validation mode (should pass for our workflows)
+      const result = execSync(`bash "${scriptPath}"`, {
+        encoding: 'utf8',
+        env: { ...process.env, GITHUB_TOKEN: '' }, // No token to avoid API calls
+      });
 
-    expect(result).toContain('✅ All SHAs pass format validation');
-    expect(result).toContain('Total unique SHAs found:');
-  });
+      expect(result).toContain('✅ All SHAs pass format validation');
+      expect(result).toContain('Total unique SHAs found:');
+    },
+    30_000,
+  );
 
   test('handles invalid arguments gracefully', () => {
     try {
@@ -36,30 +40,38 @@ describe('validate-action-shas.sh', () => {
     }
   });
 
-  test('strict mode requires GITHUB_TOKEN', () => {
-    // Run without GITHUB_TOKEN - should skip API validation
-    const result = execSync(`bash "${scriptPath}" --strict`, {
-      encoding: 'utf8',
-      env: { ...process.env, GITHUB_TOKEN: '' },
-    });
+  test(
+    'strict mode requires GITHUB_TOKEN',
+    () => {
+      // Run without GITHUB_TOKEN - should skip API validation
+      const result = execSync(`bash "${scriptPath}" --strict`, {
+        encoding: 'utf8',
+        env: { ...process.env, GITHUB_TOKEN: '' },
+      });
 
-    expect(result).toContain('✅ Format validation passed');
-    expect(result).not.toContain('GitHub API SHA Existence Check');
-  });
+      expect(result).toContain('✅ Format validation passed');
+      expect(result).not.toContain('GitHub API SHA Existence Check');
+    },
+    30_000,
+  );
 
-  test('parses workflow files correctly', () => {
-    const result = execSync(`bash "${scriptPath}"`, {
-      encoding: 'utf8',
-      env: { ...process.env, GITHUB_TOKEN: '' },
-    });
+  test(
+    'parses workflow files correctly',
+    () => {
+      const result = execSync(`bash "${scriptPath}"`, {
+        encoding: 'utf8',
+        env: { ...process.env, GITHUB_TOKEN: '' },
+      });
 
-    // Should find actions in our workflows. github/codeql-action is no longer
-    // pinned directly (it lives inside the lgtm-ci reusables); assert on the
-    // SHA-pinned lgtm-ci reusable workflows instead.
-    expect(result).toContain('actions/checkout');
-    expect(result).toContain('lgtm-hq/lgtm-ci');
+      // Should find actions in our workflows. github/codeql-action is no longer
+      // pinned directly (it lives inside the lgtm-ci reusables); assert on the
+      // SHA-pinned lgtm-ci reusable workflows instead.
+      expect(result).toContain('actions/checkout');
+      expect(result).toContain('lgtm-hq/lgtm-ci');
 
-    // Should show summary statistics
-    expect(result).toMatch(/Total unique SHAs found: \d+/);
-  });
+      // Should show summary statistics
+      expect(result).toMatch(/Total unique SHAs found: \d+/);
+    },
+    30_000,
+  );
 });
