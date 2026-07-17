@@ -34,14 +34,20 @@
   font-weight: 600;
   line-height: 1.4;
   color: var(--turbo-text-primary);
-  background: color-mix(in srgb, var(--turbo-brand-primary) 12%, var(--turbo-bg-surface));
-  border: 1px solid color-mix(in srgb, var(--turbo-brand-primary) 40%, var(--turbo-border-default));
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 12%,
+    var(--turbo-bg-surface)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--turbo-brand-primary) 40%, var(--turbo-border-default));
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
-  transition: background var(--turbo-transition-fast, 150ms ease),
-              border-color var(--turbo-transition-fast, 150ms ease),
-              color var(--turbo-transition-fast, 150ms ease);
+  transition:
+    background var(--turbo-transition-fast, 150ms ease),
+    border-color var(--turbo-transition-fast, 150ms ease),
+    color var(--turbo-transition-fast, 150ms ease);
 }
 
 /* --------------------------------------------------------------------------
@@ -50,8 +56,16 @@
 
 .turbo-smart-link:hover,
 .turbo-doc-link:hover {
-  background: color-mix(in srgb, var(--turbo-brand-primary) 22%, var(--turbo-bg-surface));
-  border-color: color-mix(in srgb, var(--turbo-brand-primary) 70%, var(--turbo-border-default));
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 22%,
+    var(--turbo-bg-surface)
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 70%,
+    var(--turbo-border-default)
+  );
   color: var(--turbo-text-primary);
   text-decoration: none;
 }
@@ -97,11 +111,19 @@
    -------------------------------------------------------------------------- */
 
 .turbo-doc-link {
-  background: color-mix(in srgb, var(--turbo-brand-primary) 16%, var(--turbo-bg-surface));
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 16%,
+    var(--turbo-bg-surface)
+  );
 }
 
 .turbo-doc-link:hover {
-  background: color-mix(in srgb, var(--turbo-brand-primary) 28%, var(--turbo-bg-surface));
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 28%,
+    var(--turbo-bg-surface)
+  );
 }
 
 /* --------------------------------------------------------------------------
