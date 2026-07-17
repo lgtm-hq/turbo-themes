@@ -1,6 +1,8 @@
 ---
 title: Astro + GitHub Pages
-description: Deploy a turbo-themes-powered Astro doc site to GitHub Pages with Shiki syntax highlighting, a theme switcher, and Pagefind search.
+description:
+  Deploy a turbo-themes-powered Astro doc site to GitHub Pages with Shiki syntax
+  highlighting, a theme switcher, and Pagefind search.
 category: integrations
 order: 7
 prev: integrations/swiftui
@@ -16,15 +18,15 @@ keywords:
 
 # Astro + GitHub Pages Integration
 
-This guide documents the **recommended integration path** used by consumer doc sites such
-as [py-lintro](https://github.com/lgtm-hq/py-lintro) and
-[Rustume](https://github.com/lgtm-hq/Rustume).  It covers every piece of wiring that
-new sites need so you don't have to rediscover it: CSS load order, Shiki
-`css-variables` binding, a persistent theme switcher, GitHub Pages subpath handling,
-and optional Pagefind search.
+This guide documents the **recommended integration path** used by consumer doc sites
+such as [py-lintro](https://github.com/lgtm-hq/py-lintro) and
+[Rustume](https://github.com/lgtm-hq/Rustume). It covers every piece of wiring that new
+sites need so you don't have to rediscover it: CSS load order, Shiki `css-variables`
+binding, a persistent theme switcher, GitHub Pages subpath handling, and optional
+Pagefind search.
 
 > **Upcoming:** The Terminal flavor (#502) will ship a first-party Terminal theme and
-> replace the native-theme workaround described in §5 below.  Until it lands, use the
+> replace the native-theme workaround described in §5 below. Until it lands, use the
 > pattern shown here.
 
 ---
@@ -40,16 +42,14 @@ bun add @lgtm-hq/turbo-themes astro @astrojs/sitemap pagefind
 ### Copy CSS at build time
 
 Consumer sites copy CSS from the installed package into `public/` so Astro can serve
-them as static assets.  Create `scripts/copy-assets.mjs`:
+them as static assets. Create `scripts/copy-assets.mjs`:
 
 ```js
 // scripts/copy-assets.mjs
 import { cp } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
-const src = resolve(
-  'node_modules/@lgtm-hq/turbo-themes/packages/css/dist',
-);
+const src = resolve('node_modules/@lgtm-hq/turbo-themes/packages/css/dist');
 const dest = resolve('public/assets/css');
 
 await cp(src, dest, { recursive: true });
@@ -86,8 +86,8 @@ public/assets/css/
 
 ## 2. BaseLayout CSS Load Order
 
-Load the CSS bundles in this exact order inside your `<head>`.  `{base}` is the
-GitHub Pages subpath (see §5):
+Load the CSS bundles in this exact order inside your `<head>`. `{base}` is the GitHub
+Pages subpath (see §5):
 
 ```html
 <!-- 1. Token definitions (required) -->
@@ -110,15 +110,15 @@ GitHub Pages subpath (see §5):
 />
 ```
 
-> The **order matters**: `turbo-syntax.css` must come after `turbo-core.css` because
-> it reads `--turbo-syntax-*` variables defined by the core file.
+> The **order matters**: `turbo-syntax.css` must come after `turbo-core.css` because it
+> reads `--turbo-syntax-*` variables defined by the core file.
 
 ---
 
 ## 3. Astro Markdown Config and Shiki Binding
 
 Set `shikiConfig.theme` to `"css-variables"` so Shiki emits `--astro-code-*` custom
-properties instead of hard-coded colors.  `turbo-syntax.css` already maps those
+properties instead of hard-coded colors. `turbo-syntax.css` already maps those
 properties onto `--turbo-syntax-*` tokens:
 
 ```
@@ -141,16 +141,16 @@ const base = process.env.ASTRO_BASE ?? '';
 
 export default defineConfig({
   site: 'https://<org>.github.io',
-  base,                          // e.g. '/my-repo' for GitHub Pages
+  base, // e.g. '/my-repo' for GitHub Pages
   integrations: [sitemap()],
   markdown: {
     shikiConfig: {
-      theme: 'css-variables',   // required for turbo-syntax binding
+      theme: 'css-variables', // required for turbo-syntax binding
       wrap: true,
     },
     rehypePlugins: [
       rehypeUnwrapHeadingLinks,
-      [rehypeDocLinks, { base }],  // rewrites internal links to include base
+      [rehypeDocLinks, { base }], // rewrites internal links to include base
     ],
   },
 });
@@ -187,7 +187,7 @@ Set `data-theme` and `data-appearance` on `<html>` before content renders to avo
 flash of unstyled content:
 
 ```html
-<html data-theme="catppuccin-mocha" data-appearance="dark">
+<html data-theme="catppuccin-mocha" data-appearance="dark"></html>
 ```
 
 ### Inline blocking script
@@ -198,16 +198,26 @@ Place this **before** any stylesheets to restore the last-used theme instantly:
 <script>
   (function () {
     var THEMES = [
-      'catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-frappe',
-      'catppuccin-latte', 'dracula', 'github-dark', 'github-light',
-      'bulma-dark', 'bulma-light',
+      'catppuccin-mocha',
+      'catppuccin-macchiato',
+      'catppuccin-frappe',
+      'catppuccin-latte',
+      'dracula',
+      'github-dark',
+      'github-light',
+      'bulma-dark',
+      'bulma-light',
     ];
     var DARK = new Set([
-      'catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-frappe',
-      'dracula', 'github-dark', 'bulma-dark',
+      'catppuccin-mocha',
+      'catppuccin-macchiato',
+      'catppuccin-frappe',
+      'dracula',
+      'github-dark',
+      'bulma-dark',
     ]);
     var saved = localStorage.getItem('turbo-theme');
-    var theme = (saved && THEMES.includes(saved)) ? saved : 'catppuccin-mocha';
+    var theme = saved && THEMES.includes(saved) ? saved : 'catppuccin-mocha';
     var html = document.documentElement;
     html.setAttribute('data-theme', theme);
     html.setAttribute('data-appearance', DARK.has(theme) ? 'dark' : 'light');
@@ -219,8 +229,12 @@ Place this **before** any stylesheets to restore the last-used theme instantly:
 
 ```js
 const DARK_THEMES = new Set([
-  'catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-frappe',
-  'dracula', 'github-dark', 'bulma-dark',
+  'catppuccin-mocha',
+  'catppuccin-macchiato',
+  'catppuccin-frappe',
+  'dracula',
+  'github-dark',
+  'bulma-dark',
 ]);
 
 /**
@@ -239,9 +253,7 @@ function setTheme(themeId, base = '') {
 
   localStorage.setItem('turbo-theme', themeId);
 
-  html.dispatchEvent(
-    new CustomEvent('turbo-theme-applied', { detail: { themeId } }),
-  );
+  html.dispatchEvent(new CustomEvent('turbo-theme-applied', { detail: { themeId } }));
 }
 ```
 
@@ -260,8 +272,8 @@ document.documentElement.addEventListener('turbo-theme-applied', (e) => {
 
 ## 5. GitHub Pages: `base` / `site` Config
 
-GitHub Pages serves repositories at `https://<org>.github.io/<repo>/`.  Set `base`
-in `astro.config.mjs` via an environment variable so local dev still works at `/`:
+GitHub Pages serves repositories at `https://<org>.github.io/<repo>/`. Set `base` in
+`astro.config.mjs` via an environment variable so local dev still works at `/`:
 
 ```bash
 # .env.production (or set in GitHub Actions)
@@ -284,9 +296,9 @@ call so hotlinked CSS paths are correct on the deployed subdomain.
 
 ### Image and link prefixing
 
-Astro handles `<Image />` and `<a href="…">` automatically when `base` is set.  For
-raw `<img src="…">` tags in Markdown, use the `{base}` variable injected by your
-layout component:
+Astro handles `<Image />` and `<a href="…">` automatically when `base` is set. For raw
+`<img src="…">` tags in Markdown, use the `{base}` variable injected by your layout
+component:
 
 ```astro
 ---
@@ -299,8 +311,8 @@ const { base } = Astro.props;
 
 ## 6. Pagefind Search
 
-[Pagefind](https://pagefind.app/) indexes your built site and provides a zero-JS
-runtime search UI.
+[Pagefind](https://pagefind.app/) indexes your built site and provides a zero-JS runtime
+search UI.
 
 ### Setup
 
@@ -420,10 +432,10 @@ jobs:
 
 These production sites use this stack and are kept up to date:
 
-| Site | Theme | Notes |
-| ---- | ----- | ----- |
+| Site                                                                               | Theme                     | Notes                    |
+| ---------------------------------------------------------------------------------- | ------------------------- | ------------------------ |
 | [py-lintro `apps/site/`](https://github.com/lgtm-hq/py-lintro/tree/main/apps/site) | Terminal (default flavor) | Resources footer pattern |
-| [Rustume `apps/site/`](https://github.com/lgtm-hq/Rustume/tree/main/apps/site) | Craft (native theme) | Minimal scaffold |
+| [Rustume `apps/site/`](https://github.com/lgtm-hq/Rustume/tree/main/apps/site)     | Craft (native theme)      | Minimal scaffold         |
 
 ---
 
@@ -432,4 +444,5 @@ These production sites use this stack and are kept up to date:
 - [CSS Variables Reference](/docs/api-reference/css-variables/) — full token listing
 - [Theme Switching Guide](/docs/guides/theme-switching/) — more switcher patterns
 - [npm/Bun Installation](/docs/installation/npm/) — installing turbo-themes packages
-- [CSS Package README](https://github.com/lgtm-hq/turbo-themes/blob/main/packages/css/README.md) — programmatic CSS generation
+- [CSS Package README](https://github.com/lgtm-hq/turbo-themes/blob/main/packages/css/README.md)
+  — programmatic CSS generation
