@@ -268,6 +268,12 @@ const css = generateThemeCss(theme);
 console.log(css);
 ```
 
+## Using with Astro and GitHub Pages
+
+For a complete guide covering CSS load order, Shiki `css-variables` binding, a
+persistent theme switcher, and GitHub Pages CI setup, see the
+[Astro + GitHub Pages integration guide](https://lgtm-hq.github.io/turbo-themes/docs/integrations/astro-github-pages/).
+
 ## License
 
 MIT

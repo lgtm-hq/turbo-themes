@@ -28,6 +28,12 @@ project.
 | [Python](/docs/integrations/python/)   | `turbo-themes` | `uv pip install` / `pip install turbo-themes` |
 | [SwiftUI](/docs/integrations/swiftui/) | `TurboThemes`  | Swift Package                                 |
 
+## Doc Site Stacks
+
+| Stack                                                          | Coverage                       | Complexity |
+| -------------------------------------------------------------- | ------------------------------ | ---------- |
+| [Astro + GitHub Pages](/docs/integrations/astro-github-pages/) | Shiki, CSS, theme switcher, CI | Moderate   |
+
 ## How Integrations Work
 
 ### Pure CSS (No Framework)
@@ -106,3 +112,4 @@ Choose your integration:
 - [Bootstrap Integration](/docs/integrations/bootstrap/)
 - [Python Library](/docs/integrations/python/)
 - [SwiftUI Package](/docs/integrations/swiftui/)
+- [Astro + GitHub Pages](/docs/integrations/astro-github-pages/)
