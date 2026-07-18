@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.24.0] - 2026-07-18
+
+### ✨ Added
+
+- add smart-link and doc-link pill component styles (#557)
+
 ## [0.23.10] - 2026-07-18
 
 ### 🐛 Fixed
