@@ -9,148 +9,154 @@ on:
 
 permissions:
   contents: read
-  actions: read
   pull-requests: write
 
 concurrency:
   group: e2e-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  CHECKOUT_FETCH_DEPTH: 1
-  NODE_VERSION: 22
-
+# Thin callers over the lgtm-ci Playwright reusable (lgtm-ci#520).
+#
+# Notes on the migrated shape:
+# - The reusable has no dedicated "prep" hook and the playwright.config
+#   webServer timeout (120s) is too short for a cold `e2e:prep` build, so the
+#   heavy site/examples build is chained into test-command before Playwright
+#   runs (`bun run e2e:start` then only serves the prebuilt dist).
+# - The full suite includes @visual Jekyll snapshots; the hosted ubuntu-24.04
+#   image has no ruby/bundler on PATH (the old job used ruby/setup-ruby via
+#   setup-env skip-ruby=false), so scripts/ci/bootstrap-e2e-full.sh installs
+#   Ruby + bundler, vendors the bundle, runs e2e:prep, then execs the
+#   Playwright command forwarding the reusable's appended filter/reporter
+#   flags.
+# - allowed-endpoints is the complete enforced allowlist (pre-enforcement
+#   replace semantics, lgtm-ci#467): playwright preset + Playwright CDN
+#   fallbacks + Ubuntu apt mirrors (+ RubyGems on the full-suite leg).
 jobs:
-  e2e-matrix:
-    name: ${{ matrix.display_name }}
-    runs-on: ubuntu-24.04
-    timeout-minutes: ${{ matrix.timeout }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - id: e2e
-            display_name: '🎭 E2E Tests'
-            run_command: 'bun run e2e:ci'
-            timeout: 30
-            artifact_prefix: 'playwright'
-            comment_marker: 'playwright-e2e-comment'
-            comment_file: 'playwright-e2e-comment.md'
-          - id: smoke
-            display_name: '🔥 E2E Smoke Tests'
-            run_command: 'bun run e2e:smoke'
-            timeout: 15
-            artifact_prefix: 'playwright-smoke'
-            comment_marker: 'playwright-e2e-smoke-comment'
-            comment_file: 'playwright-e2e-smoke-comment.md'
-          - id: a11y
-            display_name: '♿ E2E Accessibility Tests'
-            run_command: 'bun run e2e:a11y'
-            timeout: 15
-            artifact_prefix: 'playwright-a11y'
-            comment_marker: 'playwright-e2e-a11y-comment'
-            comment_file: 'playwright-e2e-a11y-comment.md'
-    steps:
-      - name: Harden Runner
-        if: ${{ !env.ACT }}
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
-        with:
-          egress-policy: block
-          allowed-endpoints: >
-            api.github.com:443
-            api.rubygems.org:443
-            archive.ubuntu.com:443
-            azure.archive.ubuntu.com:443
-            bun.sh:443
-            bundler.rubygems.org:443
-            cache.ruby-lang.org:443
-            cdn.playwright.dev:443
-            codeload.github.com:443
-            esm.ubuntu.com:443
-            files.pythonhosted.org:443
-            github-releases.githubusercontent.com:443
-            github.com:443
-            index.rubygems.org:443
-            motd.ubuntu.com:443
-            npmjs.org:443
-            objects.githubusercontent.com:443
-            packages.microsoft.com:443
-            pkg-containers.githubusercontent.com:443
-            playwright-akamai.azureedge.net:443
-            playwright-verizon.azureedge.net:443
-            playwright.azureedge.net:443
-            playwright.download.prss.microsoft.com:443
-            pypi.org:443
-            raw.githubusercontent.com:443
-            registry.npmjs.org:443
-            release-assets.githubusercontent.com:443
-            rubygems-downloads.global.ssl.fastly.net:443
-            rubygems.global.ssl.fastly.net:443
-            rubygems.org:443
-            security.ubuntu.com:443
-            storage.googleapis.com:443
-            uploads.github.com:443
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          fetch-depth: ${{ env.CHECKOUT_FETCH_DEPTH }}
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-        with:
-          node-version: '${{ env.NODE_VERSION }}'
-          skip-ruby: 'false'
-      - name: Cache Playwright browsers
-        uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('**/bun.lock') }}
-          restore-keys: |
-            playwright-${{ runner.os }}-
-      - name: Install Playwright browsers
-        env:
-          PLAYWRIGHT_DOWNLOAD_HOST: https://cdn.playwright.dev
-        run: bun run e2e:install
-      - name: Build Astro site
-        run: bun run e2e:prep
-      - name: Run tests
-        run: ${{ matrix.run_command }}
-      - name: Generate Playwright PR comment
-        if: github.event_name == 'pull_request' && always()
-        run: ./scripts/ci/generate-playwright-comment.sh
-        env:
-          GITHUB_RUN_ID: ${{ github.run_id }}
-          GITHUB_SHA: ${{ github.sha }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          COMMENT_MARKER: ${{ matrix.comment_marker }}
-          COMMENT_FILE: ${{ matrix.comment_file }}
-      - name: Post Playwright comment on PR
-        if: github.event_name == 'pull_request' && always()
-        uses: ./.github/actions/post-pr-comment
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          comment-file: ${{ matrix.comment_file }}
-          marker: ${{ matrix.comment_marker }}
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: ${{ matrix.artifact_prefix }}-report
-          path: playwright-report/
-          retention-days: 30
-          if-no-files-found: ignore
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        with:
-          name: e2e-${{ matrix.id }}-results
-          path: test-results/
-          retention-days: 30
-          if-no-files-found: ignore
-      - name: Validate action pinning (strict)
-        if: matrix.id == 'e2e'
-        run: ./scripts/ci/validate-action-pinning.sh --strict
-      - name: Validate action SHAs (strict)
-        if: matrix.id == 'e2e'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: ./scripts/ci/validate-action-shas.sh --strict
+  # Org ruleset context: e2e / 🎭 E2E Tests
+  e2e:
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    with:
+      job-name: '🎭 E2E Tests'
+      test-command: ./scripts/ci/bootstrap-e2e-full.sh
+      node-version: '22'
+      browsers: chromium
+      package-manager: bun
+      comment-marker: playwright-e2e-comment
+      timeout-minutes: 30
+      tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c'  # v0.59.0
+      egress-policy: block
+      allowed-endpoints: >-
+        github.com:443
+        api.github.com:443
+        codeload.github.com:443
+        objects.githubusercontent.com:443
+        raw.githubusercontent.com:443
+        release-assets.githubusercontent.com:443
+        pipelines.actions.githubusercontent.com:443
+        registry.npmjs.org:443
+        bun.sh:443
+        cdn.playwright.dev:443
+        playwright.azureedge.net:443
+        playwright-akamai.azureedge.net:443
+        playwright-verizon.azureedge.net:443
+        playwright.download.prss.microsoft.com:443
+        storage.googleapis.com:443
+        archive.ubuntu.com:80
+        security.ubuntu.com:80
+        azure.archive.ubuntu.com:80
+        esm.ubuntu.com:443
+        packages.microsoft.com:443
+        rubygems.org:443
+        api.rubygems.org:443
+        index.rubygems.org:443
+        bundler.rubygems.org:443
+        rubygems.global.ssl.fastly.net:443
+        rubygems-downloads.global.ssl.fastly.net:443
+    permissions:
+      contents: read
+      pull-requests: write
+
+  # Org ruleset context: smoke / 🔥 E2E Smoke Tests
+  smoke:
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    with:
+      job-name: '🔥 E2E Smoke Tests'
+      test-command: >-
+        bun run e2e:prep &&
+        bun run e2e:ci
+      grep: '@smoke'
+      node-version: '22'
+      browsers: chromium
+      package-manager: bun
+      comment-marker: playwright-e2e-smoke-comment
+      timeout-minutes: 15
+      tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c'  # v0.59.0
+      egress-policy: block
+      allowed-endpoints: >-
+        github.com:443
+        api.github.com:443
+        codeload.github.com:443
+        objects.githubusercontent.com:443
+        raw.githubusercontent.com:443
+        release-assets.githubusercontent.com:443
+        pipelines.actions.githubusercontent.com:443
+        registry.npmjs.org:443
+        bun.sh:443
+        cdn.playwright.dev:443
+        playwright.azureedge.net:443
+        playwright-akamai.azureedge.net:443
+        playwright-verizon.azureedge.net:443
+        playwright.download.prss.microsoft.com:443
+        storage.googleapis.com:443
+        archive.ubuntu.com:80
+        security.ubuntu.com:80
+        azure.archive.ubuntu.com:80
+        esm.ubuntu.com:443
+        packages.microsoft.com:443
+    permissions:
+      contents: read
+      pull-requests: write
+
+  # Org ruleset context: a11y / ♿ E2E Accessibility Tests
+  a11y:
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    with:
+      job-name: '♿ E2E Accessibility Tests'
+      test-command: >-
+        bun run e2e:prep &&
+        bun run e2e:ci
+      grep: '@a11y'
+      node-version: '22'
+      browsers: chromium
+      package-manager: bun
+      comment-marker: playwright-e2e-a11y-comment
+      timeout-minutes: 15
+      tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c'  # v0.59.0
+      egress-policy: block
+      allowed-endpoints: >-
+        github.com:443
+        api.github.com:443
+        codeload.github.com:443
+        objects.githubusercontent.com:443
+        raw.githubusercontent.com:443
+        release-assets.githubusercontent.com:443
+        pipelines.actions.githubusercontent.com:443
+        registry.npmjs.org:443
+        bun.sh:443
+        cdn.playwright.dev:443
+        playwright.azureedge.net:443
+        playwright-akamai.azureedge.net:443
+        playwright-verizon.azureedge.net:443
+        playwright.download.prss.microsoft.com:443
+        storage.googleapis.com:443
+        archive.ubuntu.com:80
+        security.ubuntu.com:80
+        azure.archive.ubuntu.com:80
+        esm.ubuntu.com:443
+        packages.microsoft.com:443
+    permissions:
+      contents: read
+      pull-requests: write
