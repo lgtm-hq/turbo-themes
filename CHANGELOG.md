@@ -10,6 +10,16 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.29.0] - 2026-07-18
+
+### 🐛 Fixed
+
+- Derive ThemeLoader.themeIds from bundled tokens at runtime (#642)
+
+### 🤖 Internal
+
+- Filter ci/build scopes from consumer changelog (#602)
+
 ## [0.28.9] - 2026-07-18
 
 ### 🐛 Fixed
