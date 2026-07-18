@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.28.8] - 2026-07-18
+
+### 🐛 Fixed
+
+- repair terminal theme entries in example markup (#626)
+
 ## [0.28.7] - 2026-07-18
 
 ### 🐛 Fixed
