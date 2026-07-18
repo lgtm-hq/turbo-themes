@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.5] - 2026-07-18
+
+### 🔧 Changed
+
+- add Astro + GitHub Pages integration guide (#564)
+
 ## [0.23.4] - 2026-07-17
 
 ### 🔧 Changed
