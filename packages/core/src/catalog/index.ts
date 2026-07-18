@@ -55,13 +55,14 @@ export interface ThemeCatalog {
 const KNOWN_THEME_IDS: ReadonlySet<string> = new Set(allThemeIds);
 
 /**
- * Emit a dev-time warning for unknown IDs. Bundlers replace
- * `process.env.NODE_ENV` with the literal `"production"` and eliminate this
- * branch via dead-code removal, so production builds never log.
+ * Emit a dev-time warning for unknown IDs. The `typeof` guard is safe even
+ * when `process` is an undeclared identifier (browsers/workers without a
+ * shim), and keeps the contiguous `process.env.NODE_ENV` token sequence so
+ * bundler define-replacement and dead-code elimination still apply.
  */
 function warnInvalidIds(source: 'include' | 'exclude', ids: readonly string[]): void {
   if (ids.length === 0) return;
-  if (process?.env.NODE_ENV === 'production') return;
+  if (typeof process !== 'undefined' && process.env.NODE_ENV === 'production') return;
   console.warn(
     `[catalog] createThemeCatalog: ignoring unknown ${source} theme ID(s): ${ids.join(', ')}. ` +
       'Valid IDs come from the exported `themeIds`.',
