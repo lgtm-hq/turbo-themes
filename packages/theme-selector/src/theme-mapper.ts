@@ -43,12 +43,12 @@ const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
 const DEFAULT_FAMILY: ThemeFamily = 'bulma';
 
 /** Icon configuration - string for single icon, object for appearance-specific */
-interface AppearanceIcons {
+export interface AppearanceIcons {
   light: string;
   dark: string;
 }
 
-const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
+export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
   bulma: 'assets/img/turbo-themes-logo.png',
   catppuccin: {
     light: 'assets/img/catppuccin-logo-latte.png',

@@ -354,6 +354,104 @@ onMounted(() => {
 </template>
 ```
 
+### With Svelte
+
+```svelte
+<script lang="ts">
+  import { onMount } from 'svelte';
+  import { themeIds, DEFAULT_THEME } from '@lgtm-hq/turbo-themes';
+
+  let currentTheme: string = DEFAULT_THEME;
+
+  function setTheme(theme: string) {
+    currentTheme = theme;
+    localStorage.setItem('turbo-theme', theme);
+
+    const link = document.getElementById('theme-css') as HTMLLinkElement;
+    if (link) {
+      link.href = `/css/themes/turbo/${theme}.css`;
+    }
+  }
+
+  onMount(() => {
+    const stored = localStorage.getItem('turbo-theme');
+    if (stored && themeIds.includes(stored)) {
+      setTheme(stored);
+    }
+  });
+</script>
+
+<select bind:value={currentTheme} on:change={() => setTheme(currentTheme)}>
+  {#each themeIds as theme}
+    <option value={theme}>{theme}</option>
+  {/each}
+</select>
+```
+
+## Theme Selector Icons
+
+The `@lgtm-hq/turbo-themes` npm package ships theme icon images under `assets/img/` so
+the selector is fully self-contained — no manual asset downloading required.
+
+### Icons shipped with the package
+
+```
+node_modules/@lgtm-hq/turbo-themes/assets/img/
+  turbo-themes-logo.png
+  catppuccin-logo-latte.png
+  catppuccin-logo-macchiato.png
+  dracula-logo.png
+  gruvbox-light.png / gruvbox-dark.png
+  github-logo-light.png / github-logo-dark.png
+  nord.png
+  rose-pine-dawn.png / rose-pine.png
+  solarized-light.png / solarized-dark.png
+  tokyo-night.png
+  … (plus .webp variants for every PNG)
+```
+
+### Serving icons in your app
+
+### Option 1 — Copy to your public directory (recommended for static sites)
+
+```bash
+# package.json postinstall, or build script:
+mkdir -p public/assets
+cp -r node_modules/@lgtm-hq/turbo-themes/assets/img public/assets/
+```
+
+The selector reads the base URL from the `data-baseurl` attribute on `<html>`. With
+icons copied to `public/assets/img`, the default empty-string base URL works
+automatically:
+
+```typescript
+import { wireFlavorSelector } from '@lgtm-hq/turbo-themes/selector';
+
+await wireFlavorSelector(document, window);
+```
+
+### Option 2 — Bundler (Vite / webpack)
+
+Copy the icons during the build using a postinstall script or a copy plugin (e.g.
+`vite-plugin-static-copy`), then serve them from a known path:
+
+```bash
+# Same postinstall script as Option 1, runs before the bundler build:
+mkdir -p public/assets
+cp -r node_modules/@lgtm-hq/turbo-themes/assets/img public/assets/
+```
+
+### Option 3 — CDN / URL override
+
+Set `data-baseurl` on the `<html>` element to point asset resolution at any same-origin
+path prefix serving the icons (protocol-relative and cross-origin URLs are rejected):
+
+```html
+<html data-baseurl="/my-app">
+  <!-- icons resolve to: /my-app/assets/img/<icon> -->
+</html>
+```
+
 ## Next Steps
 
 - Explore [theme switching guide](/docs/guides/theme-switching/)
