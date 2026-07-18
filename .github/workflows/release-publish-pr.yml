@@ -20,19 +20,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  sbom:
-    name: 📋 Generate & Sign SBOM
-    uses: ./.github/workflows/reusable-sbom.yml
-    permissions:
-      contents: read
-      id-token: write
-
   # Note: npm, PyPI, and RubyGems publishing are handled by separate workflows
   # (publish-npm.yml, publish-python.yml, publish-gem.yml) triggered on tag push
 
   github-release:
     name: 🚀 Create GitHub Release
-    needs: [sbom]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -56,26 +48,10 @@ jobs:
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
-      - name: Download SBOM artifacts
-        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
-        with:
-          name: sbom-all-formats
-          path: sbom/
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           token: ${{ steps.app-token.outputs.token }}
-          files: |
-            sbom/sbom.cyclonedx.json
-            sbom/sbom.cyclonedx.json.sig
-            sbom/sbom.cyclonedx.json.cert
-            sbom/sbom.spdx.json
-            sbom/sbom.spdx.json.sig
-            sbom/sbom.spdx.json.cert
-            sbom/sbom.cyclonedx.xml
-            sbom/sbom.cyclonedx.xml.sig
-            sbom/sbom.cyclonedx.xml.cert
           body: |
             ## 📦 @turbocoder13/turbo-themes ${{ github.ref_name }}
 
@@ -84,9 +60,9 @@ jobs:
             ### 📋 Software Bill of Materials (SBOM)
 
             This release includes signed SBOM files in multiple formats:
-            - **CycloneDX JSON**: `sbom.cyclonedx.json` (+ signature & certificate)
-            - **SPDX JSON**: `sbom.spdx.json` (+ signature & certificate)
-            - **CycloneDX XML**: `sbom.cyclonedx.xml` (+ signature & certificate)
+            - **CycloneDX JSON**: `sbom.cyclonedx.json` (+ signature bundle)
+            - **SPDX JSON**: `sbom.spdx.json` (+ signature bundle)
+            - **CycloneDX XML**: `sbom.cyclonedx.xml` (+ signature bundle)
 
             All SBOM files are signed using [Sigstore](https://www.sigstore.dev/) keyless signing.
 
@@ -106,3 +82,25 @@ jobs:
             echo "## GitHub Release Summary"
             echo "✅ Release ${{ github.ref_name }} published and released"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  # Generate multi-format SBOMs at the release tag, cosign-sign them, and
+  # attach them to the release created above (lgtm-ci reusable-sbom.yml
+  # release-assets mode; lgtm-ci#520).
+  sbom:
+    needs: [github-release]
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-sbom.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    with:
+      mode: release-assets
+      job-name: '📋 Generate & Sign SBOM'
+      target: .
+      target-type: dir
+      formats: 'spdx-json,cyclonedx-json,cyclonedx-xml'
+      sign: true
+      release-tag: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+      tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c'  # v0.59.0
+      egress-policy: block
+      egress-preset: sbom
+    permissions:
+      contents: write
+      id-token: write

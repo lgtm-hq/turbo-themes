@@ -31,17 +31,62 @@ env:
   CHECKOUT_FETCH_DEPTH: 1
 
 jobs:
+  # Matrix build legs via the lgtm-ci build-artifact reusable (lgtm-ci#520).
+  # Org ruleset contexts: build / 🏗️ Build & Quality Checks (20) and (22).
+  # Matrix mode appends -<node-version> to the artifact name, so the legs
+  # upload js-dist-20 / js-dist-22; downstream consumers download js-dist-22.
+  # The node-22-only reporting side effects of the old matrix job (Codecov,
+  # coverage comment/badges, Pages coverage-html, SBOM artifact) are not
+  # expressible through the reusable's inputs and live in the reporting job.
   build:
-    name: 🏗️ Build & Quality Checks
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-build-artifact.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    with:
+      job-name: '🏗️ Build & Quality Checks'
+      node-version-matrix: '["20","22"]'
+      build-command: ./scripts/ci/bootstrap-build-quick.sh
+      artifact-name: js-dist
+      artifact-path: dist
+      retention-days: 7
+      timeout-minutes: 45
+      tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c'  # v0.59.0
+      egress-policy: block
+      # Complete enforced allowlist (pre-enforcement replace semantics):
+      # GitHub + npm/bun + uv/lintro (astral, PyPI) + test fixtures
+      # (bulma.io, cdn.jsdelivr.net).
+      allowed-endpoints: >-
+        github.com:443
+        api.github.com:443
+        codeload.github.com:443
+        objects.githubusercontent.com:443
+        raw.githubusercontent.com:443
+        release-assets.githubusercontent.com:443
+        github-releases.githubusercontent.com:443
+        pipelines.actions.githubusercontent.com:443
+        pkg-containers.githubusercontent.com:443
+        uploads.github.com:443
+        registry.npmjs.org:443
+        npmjs.org:443
+        nodejs.org:443
+        bun.sh:443
+        bulma.io:443
+        cdn.jsdelivr.net:443
+        pypi.org:443
+        files.pythonhosted.org:443
+        astral.sh:443
+        releases.astral.sh:443
+    permissions:
+      contents: read
+
+  # Retained from the pre-migration node-22 matrix leg: coverage reporting,
+  # Pages artifacts, and the repo SBOM artifact. Not a required context.
+  reporting:
+    name: 📊 Coverage & Reporting
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     permissions:
       contents: read
       pull-requests: write
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [20, 22]
     steps:
       - name: Harden Runner
         if: ${{ !env.ACT }}
@@ -79,7 +124,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup-env
         with:
-          node-version: '${{ matrix.node }}'
+          node-version: '22'
           skip-ruby: 'true'
 
       - name: Validate commit messages
@@ -91,15 +136,16 @@ jobs:
         run: ./scripts/ci/verify-semantic-release-trigger.sh
 
       - name: Validate version sync
-        if: matrix.node == 22
         run: ./scripts/ci/validate-version-sync.sh
 
+      # Lint already gates the build legs (and quality-lintro.yml); skip it
+      # here to avoid a third lintro pass.
       - name: Run CI pipeline
-        run: ./scripts/local/build.sh --quick
+        run: ./scripts/local/build.sh --quick --skip-lint
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@75cd11691c0faa626561e295848008c8a7dddffe # v5.5.4
-        if: matrix.node == 22 && !env.ACT
+        if: ${{ !env.ACT }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/lcov.info
@@ -110,7 +156,7 @@ jobs:
 
       - name: Upload coverage HTML for Pages
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: matrix.node == 22 && github.ref == 'refs/heads/main' && !env.ACT
+        if: github.ref == 'refs/heads/main' && !env.ACT
         with:
           name: coverage-html
           path: coverage/
@@ -118,11 +164,11 @@ jobs:
           overwrite: true
 
       - name: Generate coverage summary for PR comment
-        if: matrix.node == 22 && github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request'
         run: ./scripts/ci/generate-coverage-summary.sh
 
       - name: Post coverage comment on PR
-        if: matrix.node == 22 && github.event_name == 'pull_request' && !env.ACT
+        if: github.event_name == 'pull_request' && !env.ACT
         uses: ./.github/actions/post-pr-comment
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -135,24 +181,16 @@ jobs:
 
       - name: Upload coverage badges
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: matrix.node == 22 && always() && !env.ACT
+        if: always() && !env.ACT
         with:
           name: coverage-badges
           path: assets/static/badges
           if-no-files-found: ignore
           overwrite: true
 
-      - name: Upload JS dist artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: matrix.node == 22 && always() && !env.ACT
-        with:
-          name: js-dist
-          path: dist/
-          overwrite: true
-
       - name: Upload built site artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: matrix.node == 22 && always() && !env.ACT
+        if: always() && !env.ACT
         with:
           name: site-build
           path: apps/site/dist/
@@ -166,7 +204,7 @@ jobs:
 
       - name: Upload SBOM artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
-        if: matrix.node == 22 && always() && !env.ACT
+        if: always() && !env.ACT
         with:
           name: sbom-cyclonedx
           path: sbom.cyclonedx.json
@@ -217,7 +255,8 @@ jobs:
       - name: Download built JS artifacts
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
-          name: js-dist
+          # Matrix mode of reusable-build-artifact appends -<node-version>.
+          name: js-dist-22
           path: dist/
 
       - name: Build core packages
