@@ -102,8 +102,6 @@ function generatePRDescription(commits, version, bumpType, lastTag) {
   description += `  - Python: \`python/pyproject.toml\`\n`;
   description += `  - Ruby: \`lib/turbo-themes/version.rb\`\n`;
   description += `  - Swift: \`swift/Sources/TurboThemes/Version.swift\`\n`;
-  description += `  - Dart: \`dart/pubspec.yaml\`\n`;
-  description += `  - Kotlin: \`kotlin/build.gradle.kts\`\n`;
   description += `- Updated \`CHANGELOG.md\` with new version entry\n\n`;
 
   description += `### Next Steps\n\n`;
@@ -195,7 +193,7 @@ function main() {
   console.log(`Updated VERSION file to ${nextVersion}`);
 
   // Run sync-version.mjs to update all platform packages
-  // This syncs: package.json, tokens.json, Python, Ruby, Swift, Dart, Kotlin
+  // This syncs: package.json, tokens.json, Python, Ruby, Swift
   execFileSync('node', [CONFIG.syncScript], { cwd: projectRoot, stdio: 'inherit' });
   console.log(`Synced version across all platforms`);
 
