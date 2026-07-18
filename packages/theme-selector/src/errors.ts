@@ -10,10 +10,12 @@
 export const LOG_PREFIX = '[turbo-themes]';
 
 /** Error severity levels */
-export enum ErrorLevel {
-  WARN = 'warn',
-  ERROR = 'error',
-}
+export const ErrorLevel = {
+  WARN: 'warn',
+  ERROR: 'error',
+} as const;
+
+export type ErrorLevel = (typeof ErrorLevel)[keyof typeof ErrorLevel];
 
 /** Structured theme error with code, message, level, and optional context */
 export interface ThemeError {
