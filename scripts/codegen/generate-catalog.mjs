@@ -14,27 +14,41 @@
  * Run via: bun run build:tokens (after prepare-style-dictionary)
  */
 
-import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { createHash } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const projectRoot = join(__dirname, '..', '..');
+const projectRoot = join(__dirname, "..", "..");
 
-const tokensPath = join(projectRoot, 'dist', 'tokens', 'style-dictionary', 'tokens.json');
-const coreCatalogPath = join(projectRoot, 'packages', 'core', 'src', 'catalog', 'catalog.json');
-const distCatalogPath = join(projectRoot, 'dist', 'catalog.json');
+const tokensPath = join(projectRoot, "dist", "tokens", "style-dictionary", "tokens.json");
+const coreCatalogPath = join(projectRoot, "packages", "core", "src", "catalog", "catalog.json");
+const distCatalogPath = join(projectRoot, "dist", "catalog.json");
 
 /**
  * Extract the four preview colors used by theme pickers.
  * Mirrors packages/theme-selector extractPreviewColors (build-time, not runtime).
  *
  * @param {object} tokens - Flat theme tokens
+ * @param {string} themeId - Theme id for error context
  * @returns {{ bg: string, surface: string, accent: string, text: string }}
  */
-function extractPreviewColors(tokens) {
+function extractPreviewColors(tokens, themeId) {
+  const required = [
+    ["background", "base"],
+    ["background", "surface"],
+    ["brand", "primary"],
+    ["text", "primary"],
+  ];
+  for (const [group, key] of required) {
+    if (!tokens?.[group]?.[key]) {
+      throw new Error(
+        `[generate-catalog] Theme "${themeId}" is missing token path "${group}.${key}"`,
+      );
+    }
+  }
   return {
     bg: tokens.background.base,
     surface: tokens.background.surface,
@@ -53,7 +67,7 @@ function toCatalogEntry(theme) {
     label: theme.label,
     vendor: theme.vendor,
     appearance: theme.appearance,
-    preview: extractPreviewColors(theme.tokens),
+    preview: extractPreviewColors(theme.tokens, theme.id),
   };
   if (theme.iconUrl) {
     entry.iconUrl = theme.iconUrl;
@@ -63,13 +77,11 @@ function toCatalogEntry(theme) {
 
 function main() {
   if (!existsSync(tokensPath)) {
-    console.error(
-      `[generate-catalog] Missing ${tokensPath}. Run prepare-style-dictionary first.`,
-    );
+    console.error(`[generate-catalog] Missing ${tokensPath}. Run prepare-style-dictionary first.`);
     process.exit(1);
   }
 
-  const tokensData = JSON.parse(readFileSync(tokensPath, 'utf-8'));
+  const tokensData = JSON.parse(readFileSync(tokensPath, "utf-8"));
   const themes = tokensData.themes ?? {};
   const themeIds = tokensData.meta?.themeIds ?? Object.keys(themes);
 
@@ -85,7 +97,7 @@ function main() {
   // is prettier-formatted so `lintro chk` / prettier CI stay green.
   const compactPayload = JSON.stringify(catalog);
   const prettyPayload = `${JSON.stringify(catalog, null, 2)}\n`;
-  const hash = createHash('sha256').update(compactPayload).digest('hex').slice(0, 12);
+  const hash = createHash("sha256").update(compactPayload).digest("hex").slice(0, 12);
 
   const outputs = [
     { path: coreCatalogPath, payload: prettyPayload },
