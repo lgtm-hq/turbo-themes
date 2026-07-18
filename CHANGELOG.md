@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.28.3] - 2026-07-18
+
+### 🐛 Fixed
+
+- regenerate committed tokens.json artifacts to 27 themes (#624)
+
 ## [0.28.2] - 2026-07-18
 
 ### 🔧 Changed
