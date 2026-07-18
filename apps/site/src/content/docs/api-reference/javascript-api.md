@@ -376,7 +376,7 @@ onMounted(() => {
   onMount(() => {
     const stored = localStorage.getItem('turbo-theme');
     if (stored && themeIds.includes(stored)) {
-      currentTheme = stored;
+      setTheme(stored);
     }
   });
 </script>
