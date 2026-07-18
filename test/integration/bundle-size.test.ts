@@ -3,8 +3,8 @@ import { statSync, existsSync } from 'fs';
 
 // Size budgets in bytes (generous to allow growth, but catch major issues)
 const SIZE_BUDGETS: Record<string, number> = {
-  'packages/theme-selector/dist/index.js': 135_168, // 132KB (embedded theme JSON grows
-  // with each theme pack — 40 themes as of the Kanagawa pack (~124.4KB actual);
+  'packages/theme-selector/dist/index.js': 143_360, // 140KB (embedded theme JSON grows
+  // with each theme pack — 43 themes as of the Ayu pack;
   // Vite 8/Rolldown also adds ~7KB of quote-escaping overhead vs Vite 7; gzipped
   // size is unchanged)
   'packages/adapters/tailwind/dist/preset.js': 30_000, // 30KB
