@@ -28,9 +28,10 @@ const CONFIG = {
   // All other patchTypes (docs, style, refactor, perf, test, chore) go to "🔧 Changed".
   fixTypes: ['fix', 'bugfix', 'patch'],
   ignoreTypes: ['ci', 'build', 'release'],
-  // Scopes omitted from consumer-facing changelog sections (Fixed/Added/Changed).
+  // Scopes routed to the non-consumer "Internal" changelog section (not Fixed/Added/Changed).
   // These commits still participate in version bump decisions via their type.
-  changelogIgnoreScopes: ['ci', 'build'],
+  // Breaking changes always stay in BREAKING CHANGES regardless of scope.
+  changelogInternalScopes: ['ci', 'build'],
   ignorePatterns: ['chore(release):'], // Full prefix patterns to skip entirely
   changelogFile: join(projectRoot, 'CHANGELOG.md'),
   packageFile: join(projectRoot, 'package.json'),
@@ -50,25 +51,40 @@ for (const t of CONFIG.fixTypes) {
  * Parse conventional commit message
  */
 function parseCommit(commit) {
-  const match = commit.match(/^(\w+)(\(.+\))?: (.+)$/);
+  // Support optional `!` breaking marker: type(scope)!: description
+  const match = commit.match(/^(\w+)(\([^)]+\))?(!)?: (.+)$/);
   if (!match) return null;
 
-  const [, type, scope, description] = match;
+  const [, type, scope, breakingMarker, description] = match;
+  const desc = description.trim();
   return {
     type: type.toLowerCase(),
     scope: scope ? scope.slice(1, -1) : null,
-    description: description.trim(),
-    breaking: description.includes('BREAKING CHANGE') || description.includes('BREAKING CHANGES'),
+    description: desc,
+    breaking:
+      Boolean(breakingMarker) ||
+      desc.includes('BREAKING CHANGE') ||
+      desc.includes('BREAKING CHANGES'),
   };
 }
 
 /**
- * Whether a commit's scope should be omitted from consumer-facing changelog sections.
+ * Whether a commit's scope belongs in the non-consumer Internal changelog section.
  * Version bump logic is unaffected — only changelog rendering consults this.
  */
-function isChangelogIgnoredScope(scope) {
+function isChangelogInternalScope(scope) {
   if (!scope) return false;
-  return CONFIG.changelogIgnoreScopes.includes(scope.toLowerCase());
+  return CONFIG.changelogInternalScopes.includes(scope.toLowerCase());
+}
+
+/**
+ * Whether a parsed commit (plus raw message) is a breaking change.
+ */
+function isBreakingCommit(parsed, message) {
+  return (
+    parsed.breaking ||
+    CONFIG.majorKeywords.some((keyword) => message.toLowerCase().includes(keyword.toLowerCase()))
+  );
 }
 
 /**
@@ -137,10 +153,7 @@ function determineBumpType(commits) {
       continue;
     }
 
-    if (
-      parsed.breaking ||
-      CONFIG.majorKeywords.some((keyword) => message.toLowerCase().includes(keyword.toLowerCase()))
-    ) {
+    if (isBreakingCommit(parsed, message)) {
       hasBreaking = true;
     } else if (CONFIG.minorTypes.includes(parsed.type)) {
       hasFeature = true;
@@ -200,6 +213,7 @@ function generateChangelogEntry(commits, version, bumpType) {
   const fixes = [];
   const breaking = [];
   const others = [];
+  const internal = [];
 
   for (const commit of commits) {
     // Extract commit message (remove hash prefix)
@@ -217,20 +231,24 @@ function generateChangelogEntry(commits, version, bumpType) {
       continue;
     }
 
-    // Omit non-consumer scopes (e.g. fix(ci): …) from user-facing sections.
-    // Bump decisions still use these commits via determineBumpType().
-    if (isChangelogIgnoredScope(parsed.scope)) {
+    const entry = `- ${formatChangelogDescription(parsed.description)}`;
+    const isBreaking = isBreakingCommit(parsed, message);
+
+    // Breaking changes always appear under BREAKING CHANGES, even for ci/build scopes,
+    // so a major bump is never unexplained in the changelog.
+    if (isBreaking) {
+      breaking.push(entry);
       continue;
     }
 
-    const entry = `- ${formatChangelogDescription(parsed.description)}`;
+    // Route non-consumer scopes (e.g. fix(ci): …) to Internal — not Fixed/Added/Changed.
+    // Bump decisions still use these commits via determineBumpType().
+    if (isChangelogInternalScope(parsed.scope)) {
+      internal.push(entry);
+      continue;
+    }
 
-    if (
-      parsed.breaking ||
-      CONFIG.majorKeywords.some((keyword) => message.toLowerCase().includes(keyword.toLowerCase()))
-    ) {
-      breaking.push(entry);
-    } else if (CONFIG.minorTypes.includes(parsed.type)) {
+    if (CONFIG.minorTypes.includes(parsed.type)) {
       features.push(entry);
     } else if (CONFIG.fixTypes.includes(parsed.type)) {
       fixes.push(entry);
@@ -261,6 +279,11 @@ function generateChangelogEntry(commits, version, bumpType) {
   if (others.length > 0) {
     changelog += `### 🔧 Changed\n\n`;
     changelog += others.join('\n') + '\n\n';
+  }
+
+  if (internal.length > 0) {
+    changelog += `### 🤖 Internal\n\n`;
+    changelog += internal.join('\n') + '\n\n';
   }
 
   return changelog;
@@ -367,5 +390,7 @@ export {
   calculateNextVersion,
   generateChangelogEntry,
   formatChangelogDescription,
-  isChangelogIgnoredScope,
+  isChangelogInternalScope,
+  isBreakingCommit,
+  parseCommit,
 };

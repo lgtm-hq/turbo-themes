@@ -3,7 +3,8 @@
  *
  * Regression coverage for:
  * - GitHub issue #546: docs/style/refactor/perf/test/chore under Changed (not Fixed)
- * - GitHub issue #581: scope-aware filtering (ci/build) + human-readable descriptions
+ * - GitHub issue #581: scope-aware Internal section (ci/build) + human-readable descriptions
+ * - Greptile P1 on #602: breaking changes with ci/build scopes must not be dropped
  */
 import { describe, expect, it } from 'vitest';
 
@@ -14,15 +15,22 @@ const {
   generateChangelogEntry,
   determineBumpType,
   formatChangelogDescription,
-  isChangelogIgnoredScope,
+  isChangelogInternalScope,
+  parseCommit,
 } = await import('../scripts/ci/version-bump.mjs');
 
 /**
  * Simulate a git-log --oneline line the way getCommitsSinceLastTag() produces it.
  */
-function fakeCommit(type: string, description: string, scope?: string): string {
+function fakeCommit(
+  type: string,
+  description: string,
+  scope?: string,
+  options?: { breakingMarker?: boolean },
+): string {
   const scopePart = scope ? `(${scope})` : '';
-  return `abc1234 ${type}${scopePart}: ${description}`;
+  const bang = options?.breakingMarker ? '!' : '';
+  return `abc1234 ${type}${scopePart}${bang}: ${description}`;
 }
 
 describe('generateChangelogEntry – changelog section bucketing', () => {
@@ -35,6 +43,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
         expect(entry).toContain('### 🐛 Fixed');
         expect(entry).toContain('- Resolve null pointer');
         expect(entry).not.toContain('### 🔧 Changed');
+        expect(entry).not.toContain('### 🤖 Internal');
       },
     );
   });
@@ -93,9 +102,9 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
     );
   });
 
-  describe('issue #581: changelog-ignored scopes (ci/build) omitted from consumer sections', () => {
+  describe('issue #581: ci/build scopes → ### 🤖 Internal (not consumer sections)', () => {
     it.each(['ci', 'build'] as const)(
-      'fix(%s) does not appear under Fixed',
+      'fix(%s) appears under Internal, not Fixed',
       (scope) => {
         const commits = [
           fakeCommit('fix', 'address greptile findings', scope),
@@ -105,13 +114,16 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
 
         expect(entry).toContain('### 🐛 Fixed');
         expect(entry).toContain('- Resolve token lookup');
-        expect(entry).not.toContain('address greptile findings');
-        expect(entry).not.toContain('Address greptile findings');
+        expect(entry).toContain('### 🤖 Internal');
+        expect(entry).toContain('- Address greptile findings');
+        // Must not also appear under Fixed
+        const fixedSection = entry.split('### 🤖 Internal')[0];
+        expect(fixedSection).not.toContain('Address greptile findings');
       },
     );
 
     it.each(['ci', 'build'] as const)(
-      'feat(%s) does not appear under Added',
+      'feat(%s) appears under Internal, not Added',
       (scope) => {
         const commits = [
           fakeCommit('feat', 'wire release workflow', scope),
@@ -121,13 +133,15 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
 
         expect(entry).toContain('### ✨ Added');
         expect(entry).toContain('- Add theme export');
-        expect(entry).not.toContain('wire release workflow');
-        expect(entry).not.toContain('Wire release workflow');
+        expect(entry).toContain('### 🤖 Internal');
+        expect(entry).toContain('- Wire release workflow');
+        const addedSection = entry.split('### 🤖 Internal')[0];
+        expect(addedSection).not.toContain('Wire release workflow');
       },
     );
 
     it.each(['ci', 'build'] as const)(
-      'chore(%s) does not appear under Changed',
+      'chore(%s) appears under Internal, not Changed',
       (scope) => {
         const commits = [
           fakeCommit('chore', 'tweak pipeline cache', scope),
@@ -137,8 +151,10 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
 
         expect(entry).toContain('### 🔧 Changed');
         expect(entry).toContain('- Update README');
-        expect(entry).not.toContain('tweak pipeline cache');
-        expect(entry).not.toContain('Tweak pipeline cache');
+        expect(entry).toContain('### 🤖 Internal');
+        expect(entry).toContain('- Tweak pipeline cache');
+        const changedSection = entry.split('### 🤖 Internal')[0];
+        expect(changedSection).not.toContain('Tweak pipeline cache');
       },
     );
 
@@ -149,15 +165,52 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       ];
       const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
       expect(entry).toContain('- Real consumer fix');
-      expect(entry).not.toContain('uppercase scope noise');
-      expect(entry).not.toContain('Uppercase scope noise');
+      expect(entry).toContain('### 🤖 Internal');
+      expect(entry).toContain('- Uppercase scope noise');
     });
 
-    it('non-ignored scopes still appear in the correct section', () => {
+    it('non-internal scopes still appear in the correct section', () => {
       const commits = [fakeCommit('fix', 'resolve token lookup', 'core')];
       const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
       expect(entry).toContain('### 🐛 Fixed');
       expect(entry).toContain('- Resolve token lookup');
+      expect(entry).not.toContain('### 🤖 Internal');
+    });
+  });
+
+  describe('Greptile P1 #602: breaking changes bypass Internal scope routing', () => {
+    it('fix(ci) with BREAKING CHANGE in description appears under BREAKING CHANGES', () => {
+      const commits = [
+        fakeCommit('fix', 'BREAKING CHANGE drop Node 16 support', 'ci'),
+      ];
+      const entry = generateChangelogEntry(commits, '2.0.0', 'major');
+
+      expect(entry).toContain('### ⚠️ BREAKING CHANGES');
+      expect(entry).toContain('- BREAKING CHANGE drop Node 16 support');
+      expect(entry).not.toContain('### 🤖 Internal');
+      expect(entry).not.toContain('### 🐛 Fixed');
+    });
+
+    it('fix(ci)!: breaking marker appears under BREAKING CHANGES', () => {
+      const commits = [
+        fakeCommit('fix', 'drop Node 16 support', 'ci', { breakingMarker: true }),
+      ];
+      const entry = generateChangelogEntry(commits, '2.0.0', 'major');
+
+      expect(entry).toContain('### ⚠️ BREAKING CHANGES');
+      expect(entry).toContain('- Drop Node 16 support');
+      expect(entry).not.toContain('### 🤖 Internal');
+    });
+
+    it('feat(build)!: still bumps major and documents the break', () => {
+      const commits = [
+        fakeCommit('feat', 'remove legacy build pipeline', 'build', { breakingMarker: true }),
+      ];
+      expect(determineBumpType(commits)).toBe('major');
+      const entry = generateChangelogEntry(commits, '2.0.0', 'major');
+      expect(entry).toContain('### ⚠️ BREAKING CHANGES');
+      expect(entry).toContain('- Remove legacy build pipeline');
+      expect(entry).not.toContain('### 🤖 Internal');
     });
   });
 
@@ -191,7 +244,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
         fakeCommit('chore', 'bump deps'),
         fakeCommit('refactor', 'simplify renderer'),
         fakeCommit('ci', 'add lint job'), // ignored type
-        fakeCommit('fix', 'address greptile P2 findings', 'ci'), // ignored scope
+        fakeCommit('fix', 'address greptile P2 findings', 'ci'), // Internal scope
       ];
       const entry = generateChangelogEntry(commits, '1.1.1', 'minor');
 
@@ -207,8 +260,8 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       expect(entry).toContain('- Simplify renderer');
 
       expect(entry).not.toContain('add lint job');
-      expect(entry).not.toContain('address greptile P2 findings');
-      expect(entry).not.toContain('Address greptile P2 findings');
+      expect(entry).toContain('### 🤖 Internal');
+      expect(entry).toContain('- Address greptile P2 findings');
     });
   });
 
@@ -229,18 +282,35 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
   });
 });
 
-describe('isChangelogIgnoredScope', () => {
-  it.each(['ci', 'build', 'CI', 'Build'] as const)('"%s" is ignored', (scope) => {
-    expect(isChangelogIgnoredScope(scope)).toBe(true);
+describe('isChangelogInternalScope', () => {
+  it.each(['ci', 'build', 'CI', 'Build'] as const)('"%s" is internal', (scope) => {
+    expect(isChangelogInternalScope(scope)).toBe(true);
   });
 
-  it.each(['core', 'site', 'deps'] as const)('"%s" is not ignored', (scope) => {
-    expect(isChangelogIgnoredScope(scope)).toBe(false);
+  it.each(['core', 'site', 'deps'] as const)('"%s" is not internal', (scope) => {
+    expect(isChangelogInternalScope(scope)).toBe(false);
   });
 
-  it('null/undefined scopes are not ignored', () => {
-    expect(isChangelogIgnoredScope(null)).toBe(false);
-    expect(isChangelogIgnoredScope(undefined)).toBe(false);
+  it('null/undefined scopes are not internal', () => {
+    expect(isChangelogInternalScope(null)).toBe(false);
+    expect(isChangelogInternalScope(undefined)).toBe(false);
+  });
+});
+
+describe('parseCommit – breaking marker', () => {
+  it('detects type(scope)!: as breaking', () => {
+    const parsed = parseCommit('fix(ci)!: drop Node 16 support');
+    expect(parsed).toMatchObject({
+      type: 'fix',
+      scope: 'ci',
+      description: 'drop Node 16 support',
+      breaking: true,
+    });
+  });
+
+  it('detects BREAKING CHANGE in description without !', () => {
+    const parsed = parseCommit('fix(ci): BREAKING CHANGE drop Node 16 support');
+    expect(parsed?.breaking).toBe(true);
   });
 });
 
@@ -277,6 +347,13 @@ describe('determineBumpType – patchTypes still trigger patch bump', () => {
     it('type ci (not scope) still does not trigger a bump', () => {
       const commits = [fakeCommit('ci', 'update workflow')];
       expect(determineBumpType(commits)).toBeNull();
+    });
+
+    it('fix(ci)!: triggers a major bump', () => {
+      const commits = [
+        fakeCommit('fix', 'drop Node 16 support', 'ci', { breakingMarker: true }),
+      ];
+      expect(determineBumpType(commits)).toBe('major');
     });
   });
 });
