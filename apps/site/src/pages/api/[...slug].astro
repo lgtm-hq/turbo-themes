@@ -1,0 +1,108 @@
+---
+/**
+ * Dynamic route for auto-generated TypeScript API reference pages.
+ * Content is sourced from the "api" content collection, which is populated
+ * by running `bun run docs:api` (typedoc-plugin-markdown) before the build.
+ */
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('api');
+  return entries.map((entry) => ({
+    params: { slug: entry.id === 'index' ? undefined : entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const pageTitle = entry.data.title ?? entry.id.split('/').pop()?.replace(/[-_]/g, ' ') ?? 'API Reference';
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<BaseLayout title={`${pageTitle} | API Reference`} description={`TypeScript API reference for ${pageTitle}`}>
+  <article class="api-reference">
+    <nav class="api-breadcrumb" aria-label="API Reference navigation">
+      <a href={`${baseUrl}/api/`}>API Reference</a>
+      {entry.id !== 'index' && (
+        <span aria-hidden="true"> / </span>
+        <span>{pageTitle}</span>
+      )}
+    </nav>
+    <Content />
+  </article>
+</BaseLayout>
+
+<style>
+  .api-reference {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .api-breadcrumb {
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--turbo-text-secondary);
+  }
+
+  .api-breadcrumb a {
+    color: var(--turbo-accent-link);
+    text-decoration: none;
+  }
+
+  .api-breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .api-reference :global(h1),
+  .api-reference :global(h2),
+  .api-reference :global(h3) {
+    color: var(--turbo-text-primary);
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .api-reference :global(code) {
+    background: var(--turbo-bg-surface);
+    border: 1px solid var(--turbo-border-default);
+    border-radius: 0.25rem;
+    padding: 0.125rem 0.375rem;
+    font-size: 0.875em;
+  }
+
+  .api-reference :global(pre) {
+    background: var(--turbo-bg-surface);
+    border: 1px solid var(--turbo-border-default);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  .api-reference :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.875rem;
+  }
+
+  .api-reference :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+
+  .api-reference :global(th),
+  .api-reference :global(td) {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--turbo-border-default);
+  }
+
+  .api-reference :global(th) {
+    background: var(--turbo-bg-surface);
+    font-weight: 600;
+  }
+</style>

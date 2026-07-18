@@ -127,3 +127,6 @@ plan-performance-improvements.md
 .act/
 
 report.xml
+
+# TypeDoc generated API reference (bun run docs:api)
+apps/site/src/content/api/
