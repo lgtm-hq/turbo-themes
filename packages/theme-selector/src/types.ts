@@ -15,4 +15,5 @@ export type ThemeFamily =
   | 'one-dark'
   | 'rose-pine'
   | 'solarized'
+  | 'terminal'
   | 'tokyo-night';

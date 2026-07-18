@@ -6,7 +6,7 @@
 import { migrateLegacyStorage, getSavedTheme, saveTheme, DEFAULT_THEME } from './storage.js';
 import { getBaseUrl, getCurrentThemeFromClasses } from './theme-loader.js';
 import { applyTheme, getCurrentTheme } from './apply-theme.js';
-import { CSS_LINK_ID, THEME_FAMILIES } from './constants.js';
+import { THEME_FAMILIES } from './constants.js';
 import { getThemes, getValidThemeIds } from './theme-resolver.js';
 import { createDropdownStateManager, type DropdownState } from './dropdown/state.js';
 import { wireDropdownEventHandlers } from './dropdown/events.js';
@@ -34,17 +34,11 @@ export async function initTheme(documentObj: Document, windowObj: Window): Promi
   const initialTheme = windowObj.__INITIAL_THEME__;
   const savedTheme = getSavedTheme(windowObj, getValidThemeIds());
 
-  // If blocking script already applied theme and it matches saved, just load CSS if needed
+  // If blocking script already applied theme and it matches saved, synchronize UI and return
   if (initialTheme && initialTheme === savedTheme) {
-    const currentTheme = getCurrentThemeFromClasses(documentObj.documentElement);
-    if (currentTheme === savedTheme) {
-      // Theme class already applied by blocking script, just ensure CSS is loaded
-      const themeLinkId = `theme-${savedTheme}-css`;
-      const themeLink = documentObj.getElementById(themeLinkId) || documentObj.getElementById(CSS_LINK_ID);
-      if (!themeLink) {
-        // CSS not loaded yet, load it now
-        await applyTheme(documentObj, savedTheme);
-      }
+    if (getCurrentThemeFromClasses(documentObj.documentElement) === savedTheme) {
+      // Always call applyTheme so the trigger label/icon stay in sync with the active theme
+      await applyTheme(documentObj, savedTheme);
       return;
     }
   }
@@ -136,8 +130,9 @@ if (typeof document !== 'undefined' && typeof window !== 'undefined') {
       const { cleanup } = await wireFlavorSelector(document, window);
       enhanceAccessibility(document);
 
-      // Register cleanup to run on teardown
-      const pagehideHandler = () => {
+      // Register cleanup on full page unload; skip for bfcache restores
+      const pagehideHandler = (event: PageTransitionEvent) => {
+        if (event.persisted) return;
         cleanup();
         window.removeEventListener('pagehide', pagehideHandler);
       };

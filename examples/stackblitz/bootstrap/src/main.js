@@ -18,6 +18,7 @@ const THEMES = [
   { id: 'rose-pine', isLight: false },
   { id: 'rose-pine-moon', isLight: false },
   { id: 'rose-pine-dawn', isLight: true },
+  { id: 'terminal', isLight: false },
   { id: 'solarized-dark', isLight: false },
   { id: 'solarized-light', isLight: true },
   { id: 'one-dark', isLight: false },

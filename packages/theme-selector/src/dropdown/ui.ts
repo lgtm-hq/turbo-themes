@@ -112,13 +112,16 @@ export function createThemeItemElement(
   check.appendChild(createCheckmarkIcon(documentObj));
   item.appendChild(check);
 
-  // Click handler
+  // Click handler: route through the native select when present so the theme
+  // is applied exactly once via the change listener; fall back to direct call
+  // when there is no select element.
   item.addEventListener('click', (e) => {
     e.preventDefault();
-    onThemeSelect(theme.id);
     if (selectEl) {
       selectEl.value = theme.id;
       selectEl.dispatchEvent(new Event('change', { bubbles: true }));
+    } else {
+      onThemeSelect(theme.id);
     }
     closeDropdown({ restoreFocus: true });
   });

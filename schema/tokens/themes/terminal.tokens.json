@@ -1,0 +1,194 @@
+{
+  "$schema": "../../turbo-themes.schema.json#/$defs/ThemeFile",
+  "id": "terminal",
+  "label": "Terminal",
+  "vendor": "turbo",
+  "appearance": "dark",
+  "tokens": {
+    "background": {
+      "base": {
+        "$value": "#0d0d0d",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#080808",
+        "$type": "color"
+      },
+      "overlay": {
+        "$value": "#111111",
+        "$type": "color"
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "#c8ffc8",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#8fbc8f",
+        "$type": "color"
+      },
+      "inverse": {
+        "$value": "#0d0d0d",
+        "$type": "color"
+      }
+    },
+    "brand": {
+      "primary": {
+        "$value": "#39ff14",
+        "$type": "color"
+      }
+    },
+    "state": {
+      "info": {
+        "$value": "#7dd3fc",
+        "$type": "color"
+      },
+      "success": {
+        "$value": "#39ff14",
+        "$type": "color"
+      },
+      "warning": {
+        "$value": "#ffb000",
+        "$type": "color"
+      },
+      "danger": {
+        "$value": "#ff4444",
+        "$type": "color"
+      }
+    },
+    "border": {
+      "default": {
+        "$value": "#1f3d1f",
+        "$type": "color"
+      }
+    },
+    "accent": {
+      "link": {
+        "$value": "#7dd3fc",
+        "$type": "color"
+      }
+    },
+    "typography": {
+      "fonts": {
+        "sans": {
+          "$value": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+          "$type": "fontFamily"
+        },
+        "mono": {
+          "$value": "\"IBM Plex Mono\", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+          "$type": "fontFamily"
+        }
+      },
+      "webFonts": [
+        "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      ]
+    },
+    "content": {
+      "heading": {
+        "h1": {
+          "$value": "#39ff14",
+          "$type": "color"
+        },
+        "h2": {
+          "$value": "#7dd3fc",
+          "$type": "color"
+        },
+        "h3": {
+          "$value": "#ffb000",
+          "$type": "color"
+        },
+        "h4": {
+          "$value": "#39ff14",
+          "$type": "color"
+        },
+        "h5": {
+          "$value": "#8fbc8f",
+          "$type": "color"
+        },
+        "h6": {
+          "$value": "#c8ffc8",
+          "$type": "color"
+        }
+      },
+      "body": {
+        "primary": {
+          "$value": "#c8ffc8",
+          "$type": "color"
+        },
+        "secondary": {
+          "$value": "#8fbc8f",
+          "$type": "color"
+        }
+      },
+      "link": {
+        "default": {
+          "$value": "#7dd3fc",
+          "$type": "color"
+        }
+      },
+      "selection": {
+        "fg": {
+          "$value": "#0d0d0d",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#39ff14",
+          "$type": "color"
+        }
+      },
+      "blockquote": {
+        "border": {
+          "$value": "#39ff14",
+          "$type": "color"
+        },
+        "fg": {
+          "$value": "#8fbc8f",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#111111",
+          "$type": "color"
+        }
+      },
+      "codeInline": {
+        "fg": {
+          "$value": "#ffb000",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#111111",
+          "$type": "color"
+        }
+      },
+      "codeBlock": {
+        "fg": {
+          "$value": "#c8ffc8",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#080808",
+          "$type": "color"
+        }
+      },
+      "table": {
+        "border": {
+          "$value": "#1f3d1f",
+          "$type": "color"
+        },
+        "stripe": {
+          "$value": "#111111",
+          "$type": "color"
+        },
+        "theadBg": {
+          "$value": "#080808",
+          "$type": "color"
+        },
+        "headerFg": {
+          "$value": "#c8ffc8",
+          "$type": "color"
+        }
+      }
+    }
+  }
+}

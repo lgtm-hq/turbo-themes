@@ -49,5 +49,6 @@ export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
   'one-dark': { name: 'One', description: 'The iconic Atom editor palette in dark and light' },
   'rose-pine': { name: 'Rosé Pine', description: 'All natural pine, faux fur and a bit of soho vibes' },
   solarized: { name: 'Solarized', description: 'Precision-balanced light and dark modes' },
+  terminal: { name: 'Terminal', description: 'CRT phosphor green on void' },
   'tokyo-night': { name: 'Tokyo Night', description: 'Neon-infused nightscape with crisp contrast' },
 };

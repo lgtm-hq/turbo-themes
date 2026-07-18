@@ -11,6 +11,7 @@ import { nordThemes } from './packs/nord.js';
 import { oneDarkThemes } from './packs/one-dark.js';
 import { rosePineSynced } from './packs/rose-pine.synced.js';
 import { solarizedThemes } from './packs/solarized.js';
+import { terminalThemes } from './packs/terminal.js';
 import { tokyoNightThemes } from './packs/tokyo-night.js';
 
 // Collect all flavors from all theme packages
@@ -24,6 +25,7 @@ const allFlavors: ThemeFlavor[] = [
   ...oneDarkThemes.flavors,
   ...rosePineSynced.flavors,
   ...solarizedThemes.flavors,
+  ...terminalThemes.flavors,
   ...tokyoNightThemes.flavors,
 ];
 

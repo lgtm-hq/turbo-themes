@@ -38,6 +38,7 @@ const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
   'one-dark': 'one-dark',
   'rose-pine': 'rose-pine',
   solarized: 'solarized',
+  turbo: 'terminal',
   'tokyo-night': 'tokyo-night',
 };
 
@@ -77,6 +78,7 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
     light: 'assets/img/solarized-light.png',
     dark: 'assets/img/solarized-dark.png',
   },
+  turbo: 'assets/img/terminal.png',
   'tokyo-night': 'assets/img/tokyo-night.png',
 };
 
@@ -108,6 +110,7 @@ const FLAVOR_DESCRIPTIONS: Record<string, string> = {
   'tokyo-night-dark': 'Deep midnight blues with neon accents.',
   'tokyo-night-storm': 'Stormy variant with richer contrast and depth.',
   'tokyo-night-light': 'Clean daylight palette inspired by Tokyo mornings.',
+  terminal: 'CRT phosphor green on void with IBM Plex Mono.',
 };
 
 // ============================================================================
