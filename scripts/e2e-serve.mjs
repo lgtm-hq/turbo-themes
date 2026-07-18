@@ -2,7 +2,7 @@
 
 /**
  * Cross-platform script to prepare and serve the Astro site for E2E tests.
- * This script runs the build prep and then starts http-server.
+ * This script runs the build prep and then starts astro preview.
  */
 
 import { execSync, spawn } from 'child_process';
@@ -36,49 +36,47 @@ try {
     });
   }
 
-  // Step 2: Start http-server
+  // Step 2: Start astro preview
   const host = process.env.HOST ?? '127.0.0.1';
   const port = Number(process.env.PORT ?? 4173);
   if (isNaN(port) || port < 1 || port > 65535) {
     console.error(`Invalid PORT: ${process.env.PORT}. Must be a number between 1 and 65535.`);
     process.exit(1);
   }
-  console.log(`Starting http-server on http://${host}:${port}...`);
+  console.log(`Starting astro preview on http://${host}:${port}...`);
   const bunxCmd = process.platform === 'win32' ? 'bunx.cmd' : 'bunx';
   const serverArgs = [
     '--no-install',
-    'http-server',
-    'apps/site/dist',
-    '-a',
-    host,
-    '-p',
+    'astro',
+    'preview',
+    '--port',
     String(port),
-    '-c-1',
-    '-s',
+    '--host',
+    host,
   ];
   const serverProcess = spawn(bunxCmd, serverArgs, {
-    cwd: rootDir,
+    cwd: join(rootDir, 'apps', 'site'),
     stdio: 'inherit',
   });
   // Handle spawn errors
   serverProcess.on('error', (error) => {
-    console.error('Failed to start http-server:', error.message);
+    console.error('Failed to start astro preview:', error.message);
     process.exit(1);
   });
 
   // Handle server process exit
   serverProcess.on('exit', (code, signal) => {
     if (signal) {
-      console.log(`http-server terminated by signal: ${signal}`);
+      console.log(`astro preview terminated by signal: ${signal}`);
     } else if (code !== null && code !== 0) {
-      console.error(`http-server exited with code: ${code}`);
+      console.error(`astro preview exited with code: ${code}`);
       process.exit(code);
     }
   });
 
   // Shutdown handling: kill server on process termination
   const shutdown = (signal) => {
-    console.log(`\nReceived ${signal}, shutting down http-server...`);
+    console.log(`\nReceived ${signal}, shutting down astro preview...`);
     if (serverProcess && !serverProcess.killed) {
       serverProcess.kill(signal);
     }
