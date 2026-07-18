@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.10] - 2026-07-18
+
+### 🐛 Fixed
+
+- wire DocsLayout headings/showToc and render on-page TOC (#555)
+
 ## [0.23.9] - 2026-07-18
 
 ### 🐛 Fixed
