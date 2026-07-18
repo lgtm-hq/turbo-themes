@@ -92,6 +92,10 @@ jobs:
         id: version
         run: node scripts/ci/compute-next-version.mjs
 
+      - name: Regenerate version-stamped artifacts
+        if: steps.guard.outputs.is_release != 'true' && steps.version.outputs.bump_needed == 'true'
+        run: ./scripts/ci/regenerate-release-artifacts.sh
+
       - name: Create or update version PR
         id: create_pr
         if: steps.guard.outputs.is_release != 'true' && steps.version.outputs.bump_needed == 'true'

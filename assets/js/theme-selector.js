@@ -4,8 +4,8 @@ var TurboThemeSelector = (function(exports) {
 	var tokens = {
 		$schema: "https://design-tokens.org/schema.json",
 		$description: "Turbo Themes - Flat tokens for 27 themes",
-		$version: "0.26.0",
-		$generated: "97d2eb2a06c98ae3fe744ed4e8a81843f9973a7673916438b57f0ac72d478295",
+		$version: "0.28.5",
+		$generated: "0a15cdec8f6a6a86af377d70e20904bb824a421cd9499039b88a4e97948dcf96",
 		meta: {
 			"themeIds": [
 				"bulma-dark",
@@ -181,6 +181,14 @@ var TurboThemeSelector = (function(exports) {
 	];
 	var _missingFromOrder = Object.keys(packages).filter((id) => !VENDOR_ORDER.includes(id));
 	if (_missingFromOrder.length > 0) console.warn(`[metadata] VENDOR_ORDER is missing vendor IDs present in packages: ${_missingFromOrder.join(", ")}. Append them to VENDOR_ORDER so their themes are included in VENDOR_GROUPS.`);
+	var VENDOR_GROUPS = VENDOR_ORDER.filter((id) => id in packages).map((id) => {
+		const pkg = packages[id];
+		return {
+			id,
+			displayName: pkg.name.replace(/\s*\(synced\)\s*/i, ""),
+			themeIds: pkg.flavors.flatMap((f) => f ? [f.id] : [])
+		};
+	});
 	var flavorById = new Map(flavors.map((f) => [f.id, f]));
 	var shortLabelCache = /* @__PURE__ */ new Map();
 	function getShortLabel(themeId) {
@@ -206,6 +214,48 @@ var TurboThemeSelector = (function(exports) {
 		return result;
 	}
 	flavors.map((f) => [f.id, getShortLabel(f.id)]);
+	var KNOWN_THEME_IDS = new Set(themeIds);
+	function warnInvalidIds(source, ids) {
+		if (ids.length === 0) return;
+		if (process.env.NODE_ENV === "production") return;
+		console.warn(`[catalog] createThemeCatalog: ignoring unknown ${source} theme ID(s): ${ids.join(", ")}. Valid IDs come from the exported \`themeIds\`.`);
+	}
+	function createThemeCatalog(options = {}) {
+		const { vendors, appearances, include = [], exclude = [] } = options;
+		const selected = /* @__PURE__ */ new Set();
+		for (const flavor of flavors) {
+			if (vendors !== void 0 && !vendors.includes(flavor.vendor)) continue;
+			if (appearances !== void 0 && !appearances.includes(flavor.appearance)) continue;
+			selected.add(flavor.id);
+		}
+		const invalidInclude = [];
+		for (const id of include) if (KNOWN_THEME_IDS.has(id)) selected.add(id);
+		else invalidInclude.push(id);
+		warnInvalidIds("include", invalidInclude);
+		const invalidExclude = [];
+		for (const id of exclude) if (KNOWN_THEME_IDS.has(id)) selected.delete(id);
+		else invalidExclude.push(id);
+		warnInvalidIds("exclude", invalidExclude);
+		const selectedFlavors = flavors.filter((flavor) => selected.has(flavor.id));
+		return {
+			themeIds: selectedFlavors.map((flavor) => flavor.id),
+			flavors: selectedFlavors,
+			vendorGroups: VENDOR_GROUPS.map((group) => ({
+				...group,
+				themeIds: group.themeIds.filter((id) => selected.has(id))
+			})).filter((group) => group.themeIds.length > 0)
+		};
+	}
+	var MINIMAL_THEME_IDS = [
+		"catppuccin-mocha",
+		"catppuccin-latte",
+		"github-light",
+		"github-dark"
+	];
+	({ ...Object.fromEntries(Object.keys(packages).map((vendor) => [vendor, createThemeCatalog({ vendors: [vendor] })])) }), createThemeCatalog({
+		vendors: [],
+		include: MINIMAL_THEME_IDS
+	}), createThemeCatalog({ appearances: ["dark"] }), createThemeCatalog({ appearances: ["light"] });
 	var STORAGE_KEY = "turbo-theme";
 	var LEGACY_STORAGE_KEYS = ["bulma-theme-flavor"];
 	var DEFAULT_THEME = DEFAULT_THEME$1;
