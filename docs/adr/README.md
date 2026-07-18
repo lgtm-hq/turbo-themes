@@ -81,6 +81,7 @@ because...
 | [0003](0003-reusable-workflows.md)                          | Adopt Reusable GitHub Actions Workflows        | Accepted | 2025-10-05 |
 | [0004](0004-csp-unsafe-inline-for-theme-blocking-script.md) | CSP 'unsafe-inline' for Theme Blocking Script  | Accepted | 2025-12-05 |
 | [0005](0005-css-only-theme-switching.md)                    | CSS-Only Theme Switching to Eliminate FOUC     | Accepted | 2026-02-06 |
+| [0006](0006-theme-metadata-codegen.md)                      | Generate Theme Metadata Maps from Token Schema | Accepted | 2026-07-18 |
 
 ## Template
 
