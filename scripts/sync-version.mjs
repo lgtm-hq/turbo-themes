@@ -5,6 +5,7 @@
  * Source of truth: ./VERSION
  */
 
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
@@ -55,7 +56,13 @@ const tokenFiles = [
 ];
 for (const tokenFile of tokenFiles) {
   if (fs.existsSync(tokenFile)) {
-    writeJsonVersion(tokenFile, ['$version'], { trailingNewline: false });
+    // Read once, update $version and $generated in memory, write once.
+    const data = JSON.parse(fs.readFileSync(tokenFile, 'utf8'));
+    data['$version'] = version;
+    const { $generated: _, ...hashable } = data;
+    data['$generated'] = createHash('sha256').update(JSON.stringify(hashable)).digest('hex');
+    fs.writeFileSync(tokenFile, JSON.stringify(data, null, 2));
+    log(`synced $version and recomputed $generated hash in ${path.relative(root, tokenFile)}`);
   }
 }
 
