@@ -43,14 +43,6 @@
   --transition-normal: 250ms var(--noir-ease);
   --transition-slow: 300ms var(--noir-ease);
 
-  /* Sharp edges — Noir Editorial default (theme swatches may use 4px later) */
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
-  --radius-full: 0;
-
   /* Neutralize legacy gradient/shadow tokens used by site.css */
   --gradient-primary: var(--noir-accent);
   --gradient-surface: var(--noir-bg-panel);
@@ -63,17 +55,26 @@
   --shadow-glow-sm: 0 0 20px var(--noir-accent-glow);
 }
 
-/* ==========================================================================
-   Global base
-   ========================================================================== */
-
-*,
-*::before,
-*::after {
-  border-radius: 0;
+/*
+ * Sharp-edge tokens scoped to the Noir design context.
+ * Avoid a universal `* { border-radius: 0 }` reset — it overrides themed
+ * component radii. Editorial chrome sets border-radius explicitly instead.
+ * --radius-full stays pill-capable for tags/badges.
+ */
+[data-design='noir'] {
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-full: 9999px;
 }
 
-html:root body {
+/* ==========================================================================
+   Global base (scoped to Noir design context)
+   ========================================================================== */
+
+html[data-design='noir'] body {
   margin: 0;
   padding: 0;
   font-family: var(--font-body);
@@ -88,13 +89,13 @@ html:root body {
     color var(--transition-slow);
 }
 
-html:root h1,
-html:root h2,
-html:root h3,
-html:root .page-title {
+html[data-design='noir'] h1,
+html[data-design='noir'] h2,
+html[data-design='noir'] h3,
+html[data-design='noir'] .page-title {
   font-family: var(--font-display);
   font-weight: 900;
-  line-height: 0.95;
+  line-height: 1.1;
   letter-spacing: -0.03em;
   color: var(--noir-text-primary);
 }

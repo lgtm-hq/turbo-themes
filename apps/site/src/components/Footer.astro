@@ -36,7 +36,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
       <a
         href="https://github.com/lgtm-hq/turbo-themes"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
+        data-testid="footer-link-github"
       >
         GitHub
       </a>
@@ -50,7 +51,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
       <a
         href="https://github.com/lgtm-hq/turbo-themes/blob/main/LICENSE"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
       >
         MIT License
       </a>
@@ -60,15 +61,6 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     <div class="footer-bottom">
       <p class="footer-copyright">Made with care. MIT License.</p>
       <div class="footer-links">
-        <a
-          href="https://github.com/lgtm-hq/turbo-themes"
-          target="_blank"
-          rel="noopener"
-          data-testid="footer-link-github"
-        >
-          GitHub
-        </a>
-        <span class="footer-separator" aria-hidden="true">·</span>
         <a href={`${baseUrl}/docs/`} data-testid="footer-link-docs">Documentation</a>
         <span class="footer-separator" aria-hidden="true">·</span>
         <a href={`${baseUrl}/themes/`} data-testid="footer-link-themes">Themes</a>
