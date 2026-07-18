@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.29.2] - 2026-07-18
+
+### 🔧 Changed
+
+- Replace ErrorLevel enum with as-const object (#552)
+
 ## [0.29.1] - 2026-07-18
 
 ### 🐛 Fixed
