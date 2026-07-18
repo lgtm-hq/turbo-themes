@@ -20,6 +20,11 @@ final class ThemeLoaderTests: XCTestCase {
 
     func testThemeIdsMatchesBundledCatalog() throws {
         let themes = try ThemeLoader.loadThemes()
+        // Pin the primary source so the set-equality below cannot silently
+        // degrade into comparing the fallback against itself.
+        let metaIds = try XCTUnwrap(themes.meta?.themeIds)
+        XCTAssertFalse(metaIds.isEmpty)
+        XCTAssertEqual(Set(ThemeLoader.themeIds), Set(metaIds))
         XCTAssertEqual(Set(ThemeLoader.themeIds), Set(themes.themes.keys))
     }
 

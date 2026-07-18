@@ -4,16 +4,22 @@ import Foundation
 
 /// Loads and provides access to theme definitions from bundled JSON.
 public enum ThemeLoader {
-    /// All available theme IDs, derived from the bundled tokens.json
+    /// All available theme IDs, derived once from the bundled tokens.json
     /// (`meta.themeIds`, falling back to the theme dictionary keys).
-    /// Returns an empty array only if the bundled resource cannot be loaded.
-    public static var themeIds: [String] {
+    ///
+    /// This convenience accessor is deliberately non-throwing for source
+    /// compatibility and returns an empty array only in the exceptional case
+    /// that the bundled resource cannot be loaded; call `loadThemes()` for a
+    /// throwing API with a diagnosable error. Evaluated lazily exactly once
+    /// (`static let` initialization is thread-safe), so repeated access takes
+    /// no lock.
+    public static let themeIds: [String] = {
         guard let themes = try? loadThemes() else { return [] }
         if let ids = themes.meta?.themeIds, !ids.isEmpty {
             return ids
         }
         return themes.themes.keys.sorted()
-    }
+    }()
 
     /// Thread synchronization lock for cache access.
     private static let lock = NSLock()
