@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.28.5] - 2026-07-18
+
+### 🐛 Fixed
+
+- allow PyPI egress in drift job for setup-env Python deps (#633)
+
 ## [0.28.4] - 2026-07-18
 
 ### 🔧 Changed
