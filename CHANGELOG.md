@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.6] - 2026-07-18
+
+### 🐛 Fixed
+
+- remove vestigial .releaserc.json and phantom platform refs (#586)
+
 ## [0.23.5] - 2026-07-18
 
 ### 🔧 Changed
