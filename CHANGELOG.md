@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.26.0] - 2026-07-18
+
+### ✨ Added
+
+- add One Dark theme pack (#573)
+
 ## [0.25.2] - 2026-07-18
 
 ### 🐛 Fixed
