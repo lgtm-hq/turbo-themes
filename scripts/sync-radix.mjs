@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-import { execSync } from 'node:child_process';
 /* SPDX-License-Identifier: MIT */
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { execSync } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 import {
   amber,
@@ -22,17 +22,20 @@ import {
   slateDark,
   violet,
   violetDark,
-} from '@radix-ui/colors';
+} from "@radix-ui/colors";
 
-import { escapeString, isValidIdentifier, stateTextOverrides } from './format-utils.mjs';
+import { escapeString, isValidIdentifier, stateTextOverrides } from "./format-utils.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, '..');
+const projectRoot = path.resolve(__dirname, "..");
 
 // Read package version for source metadata
 const radixPackageJson = JSON.parse(
-  fs.readFileSync(path.join(projectRoot, 'node_modules', '@radix-ui', 'colors', 'package.json'), 'utf8')
+  fs.readFileSync(
+    path.join(projectRoot, "node_modules", "@radix-ui", "colors", "package.json"),
+    "utf8",
+  ),
 );
 const radixVersion = radixPackageJson.version;
 
@@ -43,8 +46,8 @@ const radixVersion = radixPackageJson.version;
  * @returns {string}
  */
 function hex(value, fallback) {
-  if (typeof value !== 'string' || value.length === 0) return fallback;
-  const normalized = value.startsWith('#') ? value : `#${value}`;
+  if (typeof value !== "string" || value.length === 0) return fallback;
+  const normalized = value.startsWith("#") ? value : `#${value}`;
   return normalized.toLowerCase();
 }
 
@@ -92,21 +95,21 @@ function buildTokens(
   dangerScale,
   dangerPrefix,
   accentScale,
-  accentPrefix
+  accentPrefix,
 ) {
-  const bgBase = hex(step(neutral, neutralPrefix, 1), '#111111');
+  const bgBase = hex(step(neutral, neutralPrefix, 1), "#111111");
   const bgSurface = hex(step(neutral, neutralPrefix, 2), bgBase);
   const bgOverlay = hex(step(neutral, neutralPrefix, 3), bgSurface);
-  const textPrimary = hex(step(neutral, neutralPrefix, 12), '#ffffff');
+  const textPrimary = hex(step(neutral, neutralPrefix, 12), "#ffffff");
   const textSecondary = hex(step(neutral, neutralPrefix, 11), textPrimary);
   const brandPrimary = hex(step(brandScale, brandPrefix, 9), textPrimary);
   const linkColor = hex(step(brandScale, brandPrefix, 11), brandPrimary);
-  const borderDefault = hex(step(neutral, neutralPrefix, 6), '#e5e7eb');
+  const borderDefault = hex(step(neutral, neutralPrefix, 6), "#e5e7eb");
 
   const infoColor = hex(step(infoScale, infoPrefix, 9), brandPrimary);
-  const successColor = hex(step(successScale, successPrefix, 9), '#30a46c');
-  const warningColor = hex(step(warningScale, warningPrefix, 9), '#ffc53d');
-  const dangerColor = hex(step(dangerScale, dangerPrefix, 9), '#e5484d');
+  const successColor = hex(step(successScale, successPrefix, 9), "#30a46c");
+  const warningColor = hex(step(warningScale, warningPrefix, 9), "#ffc53d");
+  const dangerColor = hex(step(dangerScale, dangerPrefix, 9), "#e5484d");
 
   // Headings use step 11 (text-friendly) for readable accent hues
   const h1 = hex(step(successScale, successPrefix, 11), successColor);
@@ -139,7 +142,7 @@ function buildTokens(
           danger: dangerColor,
         },
         bgBase,
-        textPrimary
+        textPrimary,
       ),
     },
     border: { default: borderDefault },
@@ -150,8 +153,8 @@ function buildTokens(
         mono: 'JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
       },
       webFonts: [
-        'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap',
-        'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap',
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap",
+        "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap",
       ],
     },
     content: {
@@ -170,80 +173,80 @@ function buildTokens(
 /** @type {Array<{ id: string, label: string, appearance: 'light' | 'dark', neutral: Record<string, string>, neutralPrefix: string, brand: Record<string, string>, brandPrefix: string, info: Record<string, string>, infoPrefix: string, success: Record<string, string>, successPrefix: string, warning: Record<string, string>, warningPrefix: string, danger: Record<string, string>, dangerPrefix: string, accent: Record<string, string>, accentPrefix: string }>} */
 const VARIANTS = [
   {
-    id: 'radix-slate-dark',
-    label: 'Radix Colors Slate Dark',
-    appearance: 'dark',
+    id: "radix-slate-dark",
+    label: "Radix Colors Slate Dark",
+    appearance: "dark",
     neutral: slateDark,
-    neutralPrefix: 'slate',
+    neutralPrefix: "slate",
     brand: blueDark,
-    brandPrefix: 'blue',
+    brandPrefix: "blue",
     info: cyanDark,
-    infoPrefix: 'cyan',
+    infoPrefix: "cyan",
     success: greenDark,
-    successPrefix: 'green',
+    successPrefix: "green",
     warning: amberDark,
-    warningPrefix: 'amber',
+    warningPrefix: "amber",
     danger: redDark,
-    dangerPrefix: 'red',
+    dangerPrefix: "red",
     accent: violetDark,
-    accentPrefix: 'violet',
+    accentPrefix: "violet",
   },
   {
-    id: 'radix-slate-light',
-    label: 'Radix Colors Slate Light',
-    appearance: 'light',
+    id: "radix-slate-light",
+    label: "Radix Colors Slate Light",
+    appearance: "light",
     neutral: slate,
-    neutralPrefix: 'slate',
+    neutralPrefix: "slate",
     brand: blue,
-    brandPrefix: 'blue',
+    brandPrefix: "blue",
     info: cyan,
-    infoPrefix: 'cyan',
+    infoPrefix: "cyan",
     success: green,
-    successPrefix: 'green',
+    successPrefix: "green",
     warning: amber,
-    warningPrefix: 'amber',
+    warningPrefix: "amber",
     danger: red,
-    dangerPrefix: 'red',
+    dangerPrefix: "red",
     accent: violet,
-    accentPrefix: 'violet',
+    accentPrefix: "violet",
   },
   {
-    id: 'radix-mauve-dark',
-    label: 'Radix Colors Mauve Dark',
-    appearance: 'dark',
+    id: "radix-mauve-dark",
+    label: "Radix Colors Mauve Dark",
+    appearance: "dark",
     neutral: mauveDark,
-    neutralPrefix: 'mauve',
+    neutralPrefix: "mauve",
     brand: blueDark,
-    brandPrefix: 'blue',
+    brandPrefix: "blue",
     info: cyanDark,
-    infoPrefix: 'cyan',
+    infoPrefix: "cyan",
     success: greenDark,
-    successPrefix: 'green',
+    successPrefix: "green",
     warning: amberDark,
-    warningPrefix: 'amber',
+    warningPrefix: "amber",
     danger: redDark,
-    dangerPrefix: 'red',
+    dangerPrefix: "red",
     accent: violetDark,
-    accentPrefix: 'violet',
+    accentPrefix: "violet",
   },
   {
-    id: 'radix-mauve-light',
-    label: 'Radix Colors Mauve Light',
-    appearance: 'light',
+    id: "radix-mauve-light",
+    label: "Radix Colors Mauve Light",
+    appearance: "light",
     neutral: mauve,
-    neutralPrefix: 'mauve',
+    neutralPrefix: "mauve",
     brand: blue,
-    brandPrefix: 'blue',
+    brandPrefix: "blue",
     info: cyan,
-    infoPrefix: 'cyan',
+    infoPrefix: "cyan",
     success: green,
-    successPrefix: 'green',
+    successPrefix: "green",
     warning: amber,
-    warningPrefix: 'amber',
+    warningPrefix: "amber",
     danger: red,
-    dangerPrefix: 'red',
+    dangerPrefix: "red",
     accent: violet,
-    accentPrefix: 'violet',
+    accentPrefix: "violet",
   },
 ];
 
@@ -253,7 +256,7 @@ function buildPackage() {
   const flavors = sorted.map((variant) => ({
     id: variant.id,
     label: variant.label,
-    vendor: 'radix',
+    vendor: "radix",
     appearance: variant.appearance,
     iconUrl: `/assets/img/${variant.id}.png`,
     tokens: buildTokens(
@@ -270,23 +273,23 @@ function buildPackage() {
       variant.danger,
       variant.dangerPrefix,
       variant.accent,
-      variant.accentPrefix
+      variant.accentPrefix,
     ),
   }));
 
   return {
-    id: 'radix',
-    name: 'Radix Colors (synced)',
-    homepage: 'https://www.radix-ui.com/colors',
+    id: "radix",
+    name: "Radix Colors (synced)",
+    homepage: "https://www.radix-ui.com/colors",
     license: {
-      spdx: 'MIT',
-      url: 'https://github.com/radix-ui/colors/blob/main/LICENSE',
-      copyright: 'WorkOS',
+      spdx: "MIT",
+      url: "https://github.com/radix-ui/colors/blob/main/LICENSE",
+      copyright: "WorkOS",
     },
     source: {
-      package: '@radix-ui/colors',
+      package: "@radix-ui/colors",
       version: radixVersion,
-      repository: 'https://github.com/radix-ui/colors',
+      repository: "https://github.com/radix-ui/colors",
     },
     flavors,
   };
@@ -300,7 +303,7 @@ function toColorGroup(group) {
   /** @type {Record<string, { $value: string, $type: string }>} */
   const result = {};
   for (const [key, value] of Object.entries(group)) {
-    result[key] = { $value: value, $type: 'color' };
+    result[key] = { $value: value, $type: "color" };
   }
   return result;
 }
@@ -312,7 +315,7 @@ function toColorGroup(group) {
 function writeTokenJson(flavor) {
   const tokens = /** @type {Record<string, any>} */ (flavor.tokens);
   const out = {
-    $schema: '../../turbo-themes.schema.json#/$defs/ThemeFile',
+    $schema: "../../turbo-themes.schema.json#/$defs/ThemeFile",
     id: flavor.id,
     label: flavor.label,
     vendor: flavor.vendor,
@@ -326,8 +329,8 @@ function writeTokenJson(flavor) {
       accent: toColorGroup(tokens.accent),
       typography: {
         fonts: {
-          sans: { $value: tokens.typography.fonts.sans, $type: 'fontFamily' },
-          mono: { $value: tokens.typography.fonts.mono, $type: 'fontFamily' },
+          sans: { $value: tokens.typography.fonts.sans, $type: "fontFamily" },
+          mono: { $value: tokens.typography.fonts.mono, $type: "fontFamily" },
         },
         webFonts: tokens.typography.webFonts,
       },
@@ -344,39 +347,39 @@ function writeTokenJson(flavor) {
     },
   };
 
-  const outDir = path.join(projectRoot, 'schema', 'tokens', 'themes');
+  const outDir = path.join(projectRoot, "schema", "tokens", "themes");
   fs.mkdirSync(outDir, { recursive: true });
   const outPath = path.join(outDir, `${flavor.id}.tokens.json`);
-  fs.writeFileSync(outPath, `${JSON.stringify(out, null, 2)}\n`, 'utf8');
+  fs.writeFileSync(outPath, `${JSON.stringify(out, null, 2)}\n`, "utf8");
   return outPath;
 }
 
 // Generate properly formatted TypeScript content
 function formatObject(obj, indent = 0) {
-  const spaces = '  '.repeat(indent);
+  const spaces = "  ".repeat(indent);
   if (Array.isArray(obj)) {
-    if (obj.length === 0) return '[]';
-    const items = obj.map((item) => `${spaces}  ${formatObject(item, indent + 1)}`).join(',\n');
+    if (obj.length === 0) return "[]";
+    const items = obj.map((item) => `${spaces}  ${formatObject(item, indent + 1)}`).join(",\n");
     return `[\n${items},\n${spaces}]`;
-  } else if (obj && typeof obj === 'object') {
+  } else if (obj && typeof obj === "object") {
     const entries = Object.entries(obj);
-    if (entries.length === 0) return '{}';
+    if (entries.length === 0) return "{}";
     const items = entries
       .map(([key, value]) => {
         const formattedValue = formatObject(value, indent + 1);
         const formattedKey = isValidIdentifier(key) ? key : `'${escapeString(key)}'`;
         return `${spaces}  ${formattedKey}: ${formattedValue}`;
       })
-      .join(',\n');
+      .join(",\n");
     return `{\n${items},\n${spaces}}`;
-  } else if (typeof obj === 'string') {
+  } else if (typeof obj === "string") {
     return `'${escapeString(obj)}'`;
   } else {
     return String(obj);
   }
 }
 
-const outPath = path.join(projectRoot, 'src', 'themes', 'packs', 'radix.synced.ts');
+const outPath = path.join(projectRoot, "src", "themes", "packs", "radix.synced.ts");
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 
 const pkg = buildPackage();
@@ -394,12 +397,12 @@ const rawContent = `import type { ThemePackage } from '../types.js';
 export const radixSynced: ThemePackage = ${formatObject(pkg)} as const;
 `;
 
-fs.writeFileSync(outPath, rawContent, 'utf8');
+fs.writeFileSync(outPath, rawContent, "utf8");
 
 try {
   execSync(`uv run lintro fmt "${outPath}"`, {
     cwd: projectRoot,
-    stdio: 'inherit',
+    stdio: "inherit",
   });
 } catch {
   console.warn(`Warning: lintro fmt failed for ${outPath}, file written but may not be formatted`);
@@ -412,4 +415,6 @@ for (const flavor of pkg.flavors) {
   console.log(`Wrote ${tokenPath}`);
 }
 
-console.log(`Synced ${pkg.flavors.length} Radix Colors themes from @radix-ui/colors@${radixVersion}`);
+console.log(
+  `Synced ${pkg.flavors.length} Radix Colors themes from @radix-ui/colors@${radixVersion}`,
+);
