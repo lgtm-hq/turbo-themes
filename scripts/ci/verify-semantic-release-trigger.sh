@@ -258,6 +258,12 @@ while IFS= read -r commit_msg; do
     continue
   fi
 
+  # Skip release bump commits (excluded via ignorePatterns in version-bump.mjs)
+  if [[ "$commit_msg" =~ ^chore\(release\): ]]; then
+    echo "⏭️  Skipping release commit: $commit_msg"
+    continue
+  fi
+
   # Check for breaking changes
   if [[ "$commit_msg" =~ $BREAKING_PATTERN ]]; then
     echo "🚨 Breaking change detected: $commit_msg"
