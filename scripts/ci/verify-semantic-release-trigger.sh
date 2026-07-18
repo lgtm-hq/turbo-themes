@@ -238,17 +238,11 @@ fi
 # SEMANTIC RELEASE ANALYSIS
 # ============================================================================
 
-# Semantic release rules from .releaserc.json
-# Types that trigger releases:
-# - feat: minor
-# - fix: patch
-# - perf: patch
-# - refactor: patch
-# - revert: patch
-# - build: patch
-# - BREAKING CHANGE: major
+# Release rules aligned with scripts/ci/version-bump.mjs (the release pipeline's
+# single source of truth): feat -> minor; fix/bugfix/patch/docs/style/refactor/
+# perf/test/chore -> patch; BREAKING CHANGE -> major; ci/build/release ignored.
 
-RELEASE_TYPES="feat|fix|perf|refactor|revert|build"
+RELEASE_TYPES="feat|fix|bugfix|patch|docs|style|refactor|perf|test|chore"
 BREAKING_PATTERN="BREAKING CHANGE"
 
 WILL_RELEASE=false
@@ -261,6 +255,12 @@ while IFS= read -r commit_msg; do
   # Skip merge commits
   if [[ "$commit_msg" =~ ^Merge ]]; then
     echo "⏭️  Skipping merge commit: $commit_msg"
+    continue
+  fi
+
+  # Skip release bump commits (excluded via ignorePatterns in version-bump.mjs)
+  if [[ "$commit_msg" =~ ^chore\(release\): ]]; then
+    echo "⏭️  Skipping release commit: $commit_msg"
     continue
   fi
 
