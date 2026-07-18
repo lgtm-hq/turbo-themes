@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.25.0] - 2026-07-18
+
+### ✨ Added
+
+- ship theme icon images in npm package (#575)
+
 ## [0.24.5] - 2026-07-18
 
 ### 🐛 Fixed
