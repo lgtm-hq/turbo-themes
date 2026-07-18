@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.28.6] - 2026-07-18
+
+### 🐛 Fixed
+
+- rebuild committed selector bundles and regenerate on version bumps (#636)
+
 ## [0.28.5] - 2026-07-18
 
 ### 🐛 Fixed
