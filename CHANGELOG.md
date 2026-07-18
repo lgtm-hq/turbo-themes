@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.29.3] - 2026-07-18
+
+### 🔧 Changed
+
+- Replace as-any DOM mocks with typed test doubles (#551)
+
 ## [0.29.2] - 2026-07-18
 
 ### 🔧 Changed
