@@ -119,3 +119,12 @@ export function createThemeCatalog(options: ThemeCatalogOptions = {}): ThemeCata
     vendorGroups,
   };
 }
+
+// Slim, precomputed picker metadata (#497) — coexists with the
+// createThemeCatalog curation API (#495/#563) on the same `./catalog` subpath.
+export {
+  catalog,
+  catalogById,
+  type ThemeCatalogEntry,
+  type ThemeCatalogPreview,
+} from './entries.js';

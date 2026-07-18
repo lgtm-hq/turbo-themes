@@ -66,4 +66,16 @@ describe('External package consumption', () => {
     expect(result.flavors).toBeGreaterThan(0);
     expect(result.themeIds).toBeGreaterThan(0);
   });
+
+  it('can import /catalog subpath and catalog.json without resolution errors', () => {
+    const testFile = join(testDir!, 'test-catalog.mjs');
+    copyFileSync(join(fixturesDir, 'test-catalog.mjs'), testFile);
+
+    const output = execFileSync('node', [testFile], { encoding: 'utf-8' });
+    const result = JSON.parse(output.trim());
+    expect(result.catalog).toBeGreaterThan(0);
+    expect(result.catalogById).toBe(result.catalog);
+    expect(result.catalogJson).toBe(result.catalog);
+    expect(result.hasPreview).toBe(true);
+  });
 });

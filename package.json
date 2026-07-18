@@ -41,6 +41,11 @@
       "import": "./dist/tokens/index.js"
     },
     "./tokens.json": "./dist/tokens.json",
+    "./catalog": {
+      "types": "./dist/catalog/index.d.ts",
+      "import": "./dist/catalog/index.js"
+    },
+    "./catalog.json": "./dist/catalog.json",
     "./css": {
       "types": "./packages/css/dist/turbo.css.d.ts",
       "default": "./packages/css/dist/turbo.css"
@@ -105,9 +110,9 @@
   ],
   "scripts": {
     "build": "bun run build:tokens && bun run build:packages && bun run theme:sync && bun run build:root && node scripts/copy-adapters.mjs && bun run generate:css",
-    "build:tokens": "node scripts/codegen/validate-schema.mjs && node scripts/prepare-style-dictionary.mjs && node scripts/build-style-dictionary.mjs && bun run build:tokens:copy",
-    "build:tokens:copy": "cp dist/tokens/style-dictionary/tokens.json packages/core/src/themes/tokens.json && cp dist/tokens/style-dictionary/tokens.json python/src/turbo_themes/tokens.json && cp dist/tokens/style-dictionary/tokens.json swift/Sources/TurboThemes/Resources/tokens.json",
-    "build:sd": "node scripts/prepare-style-dictionary.mjs && node scripts/build-style-dictionary.mjs",
+    "build:tokens": "node scripts/codegen/validate-schema.mjs && node scripts/prepare-style-dictionary.mjs && node scripts/codegen/generate-catalog.mjs && node scripts/build-style-dictionary.mjs && bun run build:tokens:copy",
+    "build:tokens:copy": "cp dist/tokens/style-dictionary/tokens.json packages/core/src/themes/tokens.json && cp dist/tokens/style-dictionary/tokens.json python/src/turbo_themes/tokens.json && cp dist/tokens/style-dictionary/tokens.json swift/Sources/TurboThemes/Resources/tokens.json && cp packages/core/src/catalog/catalog.json dist/catalog.json",
+    "build:sd": "node scripts/prepare-style-dictionary.mjs && node scripts/codegen/generate-catalog.mjs && node scripts/build-style-dictionary.mjs",
     "build:packages": "bun run build:core && bun run build:selector && bun run build:css-pkg && bun run build:adapters",
     "build:core": "cd packages/core && bun run build",
     "build:selector": "cd packages/theme-selector && bun run build",
