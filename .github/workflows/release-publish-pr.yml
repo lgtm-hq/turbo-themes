@@ -59,7 +59,9 @@ jobs:
 
             ### 📋 Software Bill of Materials (SBOM)
 
-            This release includes signed SBOM files in multiple formats:
+            Signed SBOM files are attached to this release by the SBOM job
+            immediately after publish (allow a few minutes for the assets to
+            appear), in multiple formats:
             - **CycloneDX JSON**: `sbom.cyclonedx.json` (+ signature bundle)
             - **SPDX JSON**: `sbom.spdx.json` (+ signature bundle)
             - **CycloneDX XML**: `sbom.cyclonedx.xml` (+ signature bundle)

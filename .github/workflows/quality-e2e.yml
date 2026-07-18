@@ -22,10 +22,12 @@ concurrency:
 #   webServer timeout (120s) is too short for a cold `e2e:prep` build, so the
 #   heavy site/examples build is chained into test-command before Playwright
 #   runs (`bun run e2e:start` then only serves the prebuilt dist).
-# - The full suite includes @visual Jekyll snapshots; the runner's system Ruby
-#   (>= 3.1 satisfies the gemspec) plus a local-path bundle install makes
-#   `prepare-examples.mjs` build the Jekyll example, matching the old
-#   setup-env skip-ruby=false behaviour.
+# - The full suite includes @visual Jekyll snapshots; the hosted ubuntu-24.04
+#   image has no ruby/bundler on PATH (the old job used ruby/setup-ruby via
+#   setup-env skip-ruby=false), so scripts/ci/bootstrap-e2e-full.sh installs
+#   Ruby + bundler, vendors the bundle, runs e2e:prep, then execs the
+#   Playwright command forwarding the reusable's appended filter/reporter
+#   flags.
 # - allowed-endpoints is the complete enforced allowlist (pre-enforcement
 #   replace semantics, lgtm-ci#467): playwright preset + Playwright CDN
 #   fallbacks + Ubuntu apt mirrors (+ RubyGems on the full-suite leg).
@@ -36,11 +38,7 @@ jobs:
     uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
     with:
       job-name: '🎭 E2E Tests'
-      test-command: >-
-        bundle config set --local path vendor/bundle &&
-        bundle install &&
-        bun run e2e:prep &&
-        bun run e2e:ci
+      test-command: ./scripts/ci/bootstrap-e2e-full.sh
       node-version: '22'
       browsers: chromium
       package-manager: bun

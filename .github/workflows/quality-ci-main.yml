@@ -52,8 +52,8 @@ jobs:
       tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c'  # v0.59.0
       egress-policy: block
       # Complete enforced allowlist (pre-enforcement replace semantics):
-      # GitHub + npm/bun + uv/lintro (astral, PyPI) + test fixtures
-      # (bulma.io, cdn.jsdelivr.net).
+      # GitHub (incl. uv release tarball + python-build-standalone downloads)
+      # + npm/bun + lintro (PyPI) + test fixtures (bulma.io, cdn.jsdelivr.net).
       allowed-endpoints: >-
         github.com:443
         api.github.com:443
@@ -73,8 +73,6 @@ jobs:
         cdn.jsdelivr.net:443
         pypi.org:443
         files.pythonhosted.org:443
-        astral.sh:443
-        releases.astral.sh:443
     permissions:
       contents: read
 
