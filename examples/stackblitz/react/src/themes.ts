@@ -36,6 +36,9 @@ export const THEMES = [
   { id: 'kanagawa-wave', name: 'Kanagawa Wave' },
   { id: 'kanagawa-dragon', name: 'Kanagawa Dragon' },
   { id: 'kanagawa-lotus', name: 'Kanagawa Lotus' },
+  { id: 'ayu-dark', name: 'Ayu Dark' },
+  { id: 'ayu-mirage', name: 'Ayu Mirage' },
+  { id: 'ayu-light', name: 'Ayu Light' },
 ] as const;
 
 export const VALID_THEME_IDS = THEMES.map(t => t.id);

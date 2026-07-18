@@ -38,5 +38,8 @@ public enum ThemeId: String, CaseIterable, Sendable {
     case kanagawaWave = "kanagawa-wave"
     case kanagawaDragon = "kanagawa-dragon"
     case kanagawaLotus = "kanagawa-lotus"
+    case ayuDark = "ayu-dark"
+    case ayuMirage = "ayu-mirage"
+    case ayuLight = "ayu-light"
 }
 

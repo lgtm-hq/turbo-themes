@@ -100,11 +100,11 @@ final class ThemeAccessibilityTests: XCTestCase {
     func testLightThemesHaveLighterBackgrounds() {
         let lightThemes: [ThemeId] = [
             .catppuccinLatte, .githubLight, .bulmaLight, .oneLight, .everforestLight,
-            .kanagawaLotus,
+            .kanagawaLotus, .ayuLight,
         ]
         let darkThemes: [ThemeId] = [
             .catppuccinMocha, .dracula, .githubDark, .bulmaDark, .oneDark, .everforestDark,
-            .kanagawaWave, .kanagawaDragon,
+            .kanagawaWave, .kanagawaDragon, .ayuDark, .ayuMirage,
         ]
 
         for lightId in lightThemes {
@@ -130,6 +130,7 @@ final class ThemeAccessibilityTests: XCTestCase {
         let darkThemes: [ThemeId] = [
             .catppuccinMocha, .catppuccinFrappe, .catppuccinMacchiato,
             .dracula, .githubDark, .bulmaDark, .oneDark, .kanagawaWave, .kanagawaDragon,
+            .ayuDark, .ayuMirage,
         ]
 
         var backgrounds = Set<String>()
@@ -198,6 +199,9 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .kanagawaWave: return "#1F1F28"
         case .kanagawaDragon: return "#181616"
         case .kanagawaLotus: return "#f2ecbc"
+        case .ayuDark: return "#0d1017"
+        case .ayuMirage: return "#1f2430"
+        case .ayuLight: return "#f8f9fa"
         }
     }
 
@@ -230,6 +234,9 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .kanagawaWave: return "#DCD7BA"
         case .kanagawaDragon: return "#c5c9c5"
         case .kanagawaLotus: return "#545464"
+        case .ayuDark: return "#bfbdb6"
+        case .ayuMirage: return "#cccac2"
+        case .ayuLight: return "#5c6166"
         }
     }
 
@@ -260,6 +267,9 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .radixMauveLight: return "#65636d"
         case .kanagawaWave, .kanagawaDragon: return "#C8C093"
         case .kanagawaLotus: return "#43436c"
+        case .ayuDark: return "#5b6876"
+        case .ayuMirage: return "#707a8c"
+        case .ayuLight: return "#828e9f"
         }
     }
 
@@ -291,6 +301,9 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .kanagawaWave: return "#7E9CD8"
         case .kanagawaDragon: return "#8ba4b0"
         case .kanagawaLotus: return "#4d699b"
+        case .ayuDark: return "#ffb454"
+        case .ayuMirage: return "#ffd173"
+        case .ayuLight: return "#f2a300"
         }
     }
 
@@ -344,6 +357,12 @@ final class ThemeAccessibilityTests: XCTestCase {
             return ["#98BB6C", "#E82424", "#FF9E3B", "#658594"]
         case .kanagawaLotus:
             return ["#6f894e", "#e82424", "#e98a00", "#5a7785"]
+        case .ayuDark:
+            return ["#aad94c", "#d95757", "#ff8f40", "#39bae6"]
+        case .ayuMirage:
+            return ["#d5ff80", "#ff6666", "#ffad66", "#5ccfe6"]
+        case .ayuLight:
+            return ["#86b300", "#e65050", "#ff7e33", "#55b4d4"]
         }
     }
 
