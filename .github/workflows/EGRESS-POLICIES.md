@@ -275,40 +275,60 @@ allowed-endpoints: >
 
 ### Deploy Pages Workflows
 
-```yaml
-# deploy-pages.yml (build job)
-allowed-endpoints: >
-  github.com:443
-  api.github.com:443
-  objects.githubusercontent.com:443
-  codeload.github.com:443
-  github-releases.githubusercontent.com:443
-  release-assets.githubusercontent.com:443
-  registry.npmjs.org:443
-  npmjs.org:443
-  rubygems.org:443
-  api.rubygems.org:443
-  index.rubygems.org:443
-  bundler.rubygems.org:443
-  rubygems.global.ssl.fastly.net:443
-  pypi.org:443
-  files.pythonhosted.org:443
+`deploy-pages.yml` is a thin caller of lgtm-ci
+`reusable-deploy-site-with-reports` (Model B). Egress is enforced inside the
+reusable via `step-security/harden-runner` with `egress-policy: block`. Caller
+inputs `allowed-endpoints-build` / `allowed-endpoints-deploy` supply the
+allowlists (a non-empty build list replaces the reusable's first harden-runner
+allowlist, so it must be complete).
 
-# deploy-pages.yml (deploy job)
-allowed-endpoints: >
-  github.com:443
+```yaml
+# deploy-pages.yml → allowed-endpoints-build (complete list)
+allowed-endpoints-build: >
+  actions.githubusercontent.com:443
   api.github.com:443
-  uploads.github.com:443
-  registry.npmjs.org:443
+  api.rubygems.org:443
+  bun.sh:443
+  bundler.rubygems.org:443
+  cache.ruby-lang.org:443
+  codeload.github.com:443
+  files.pythonhosted.org:443
+  github-releases.githubusercontent.com:443
+  github.com:443
+  index.rubygems.org:443
   npmjs.org:443
+  objects.githubusercontent.com:443
+  pkg-containers.githubusercontent.com:443
+  pipelines.actions.githubusercontent.com:443
+  pypi.org:443
+  raw.githubusercontent.com:443
+  release-assets.githubusercontent.com:443
+  releases.astral.sh:443
+  registry.npmjs.org:443
+  rubygems-downloads.global.ssl.fastly.net:443
+  rubygems.global.ssl.fastly.net:443
+  rubygems.org:443
+
+# deploy-pages.yml → allowed-endpoints-deploy
+allowed-endpoints-deploy: >
+  actions.githubusercontent.com:443
+  api.github.com:443
+  github.com:443
+  objects.githubusercontent.com:443
+  pipelines.actions.githubusercontent.com:443
+  release-assets.githubusercontent.com:443
+  uploads.github.com:443
 ```
 
 **Rationale:**
 
-- GitHub: Artifact download (from test workflows), Pages deployment, API access for
-  finding workflow runs
-- npm/rubygems/pypi: Dependency installation
-- No Playwright browser downloads (E2E tests excluded from build phase)
+- GitHub: Checkout, cross-workflow artifact download (bundle manifest), Pages OIDC
+  deploy, Actions API
+- bun/npm: Install and build the Astro site (`scripts/ci/build-pages-site.sh`)
+- rubygems/pypi/astral: Retained for monorepo tooling parity with the former
+  `setup-env` allowlist
+- Contract: see lgtm-ci `docs/pages-publishing.md` (Model B caller permissions /
+  egress)
 
 ## Adding New Endpoints
 

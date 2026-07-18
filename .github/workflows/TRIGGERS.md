@@ -100,21 +100,41 @@ dependencies for known vulnerabilities (OSV audit)
 
 #### deploy-pages.yml
 
-**Triggers:** workflow_run (after Quality Check - CI Pipeline), Manual
-(workflow_dispatch)  
-**Purpose:** Deploys Jekyll site to GitHub Pages with test reports
+**Triggers:** workflow_run (after Quality Check - CI Pipeline succeeds on `main`),
+Manual (workflow_dispatch)  
+**Purpose:** Deploys the Astro docs site to GitHub Pages with bundled test reports
+via lgtm-ci Model B (`reusable-deploy-site-with-reports`)
 
 **What it does:**
 
-- Builds Jekyll site with production configuration (no E2E tests)
-- Downloads test report artifacts from all 3 test workflows:
-  - Coverage reports from `Quality Check - CI Pipeline`
-  - Playwright reports from `Quality Check - E2E Tests`
-  - Lighthouse reports from `Reporting - Lighthouse CI`
-- Merges reports into site before deployment
-- Deploys complete site to GitHub Pages
+- Checks out the triggering commit (`workflow_run.head_sha`, or `github.sha` on
+  dispatch) and builds the Astro site (`scripts/ci/build-pages-site.sh`,
+  `ASTRO_BASE=/turbo-themes/`)
+- Bundles HTML report artifacts per `.github/pages-bundle-manifest.json`:
+  - Coverage → `/coverage/` (`Quality Check - CI Pipeline`)
+  - Playwright → `/playwright/` (`Quality Check - E2E Tests`)
+  - Lighthouse → `/lighthouse/` (`Reporting - Lighthouse CI`)
+  - Examples Playwright → `/playwright-examples/` (`Quality Check - Examples`)
+  - Multi-language coverage → `/coverage-python/`, `/coverage-ruby/`,
+    `/coverage-swift/` (`Quality Check - Multi-Language Coverage`)
+- Deploys one `apps/site/dist` tree to GitHub Pages
 
-**Dependencies:** Waits for test workflows to complete, then downloads their artifacts
+**Artifact fallback policy:** `fallback-ref: main` is set explicitly. Path-triggered
+workflows (Examples, Multi-Language Coverage) may not run for every `main` commit;
+when no run exists for the deploy SHA, lgtm-ci resolves the latest matching
+artifacts from `main` (same behavior as the former
+`download-test-artifacts.sh`).
+
+**workflow_dispatch:** Deploys the ref the workflow is run from (`github.sha`).
+There is no branch input — select the branch/ref in the Actions UI when
+dispatching.
+
+**Concurrency:** Owned by the lgtm-ci reusable
+(`pages-${{ github.repository }}-${{ github.ref }}`, `cancel-in-progress: false`)
+so deploys queue rather than cancel in-flight Pages uploads.
+
+**Dependencies:** Triggered after CI Pipeline succeeds; report artifacts are pulled
+from sibling workflows listed in the bundle manifest.
 
 ### Publishing & Releases
 
@@ -288,8 +308,12 @@ Merge to main
 ### Pages Deployment
 
 ```
-quality-ci-main, quality-e2e, reporting-lighthouse-ci
-  └── deploy-pages (via workflow_run, downloads artifacts from all 3)
+quality-ci-main (workflow_run trigger)
+  └── deploy-pages (lgtm-ci Model B)
+        ├── build apps/site/dist
+        └── bundle artifacts from quality-ci-main, quality-e2e,
+            reporting-lighthouse-ci, quality-examples, quality-coverage-multi
+            (manifest: .github/pages-bundle-manifest.json; fallback-ref: main)
 ```
 
 **Note:** Release workflows use the **trust-and-skip pattern** to avoid duplicate
