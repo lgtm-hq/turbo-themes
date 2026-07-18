@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.9] - 2026-07-18
+
+### 🐛 Fixed
+
+- stabilize external-consumption hooks and commit fixtures (#553)
+
 ## [0.23.8] - 2026-07-18
 
 ### 🔧 Changed
