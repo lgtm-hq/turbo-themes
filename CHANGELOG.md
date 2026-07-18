@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.29.1] - 2026-07-18
+
+### 🐛 Fixed
+
+- Retry transient push rejection for version PRs (#568)
+
 ## [0.29.0] - 2026-07-18
 
 ### 🐛 Fixed
