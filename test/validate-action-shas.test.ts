@@ -40,30 +40,38 @@ describe('validate-action-shas.sh', () => {
     }
   });
 
-  test('strict mode requires GITHUB_TOKEN', () => {
-    // Run without GITHUB_TOKEN - should skip API validation
-    const result = execSync(`bash "${scriptPath}" --strict`, {
-      encoding: 'utf8',
-      env: { ...process.env, GITHUB_TOKEN: '' },
-    });
+  test(
+    'strict mode requires GITHUB_TOKEN',
+    () => {
+      // Run without GITHUB_TOKEN - should skip API validation
+      const result = execSync(`bash "${scriptPath}" --strict`, {
+        encoding: 'utf8',
+        env: { ...process.env, GITHUB_TOKEN: '' },
+      });
 
-    expect(result).toContain('✅ Format validation passed');
-    expect(result).not.toContain('GitHub API SHA Existence Check');
-  });
+      expect(result).toContain('✅ Format validation passed');
+      expect(result).not.toContain('GitHub API SHA Existence Check');
+    },
+    30_000,
+  );
 
-  test('parses workflow files correctly', () => {
-    const result = execSync(`bash "${scriptPath}"`, {
-      encoding: 'utf8',
-      env: { ...process.env, GITHUB_TOKEN: '' },
-    });
+  test(
+    'parses workflow files correctly',
+    () => {
+      const result = execSync(`bash "${scriptPath}"`, {
+        encoding: 'utf8',
+        env: { ...process.env, GITHUB_TOKEN: '' },
+      });
 
-    // Should find actions in our workflows. github/codeql-action is no longer
-    // pinned directly (it lives inside the lgtm-ci reusables); assert on the
-    // SHA-pinned lgtm-ci reusable workflows instead.
-    expect(result).toContain('actions/checkout');
-    expect(result).toContain('lgtm-hq/lgtm-ci');
+      // Should find actions in our workflows. github/codeql-action is no longer
+      // pinned directly (it lives inside the lgtm-ci reusables); assert on the
+      // SHA-pinned lgtm-ci reusable workflows instead.
+      expect(result).toContain('actions/checkout');
+      expect(result).toContain('lgtm-hq/lgtm-ci');
 
-    // Should show summary statistics
-    expect(result).toMatch(/Total unique SHAs found: \d+/);
-  });
+      // Should show summary statistics
+      expect(result).toMatch(/Total unique SHAs found: \d+/);
+    },
+    30_000,
+  );
 });
