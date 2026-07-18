@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.24.3] - 2026-07-18
+
+### 🔧 Changed
+
+- fix Playwright CDN mirror fallback and DEP0066 E2E warning (#571)
+
 ## [0.24.2] - 2026-07-18
 
 ### 🐛 Fixed
