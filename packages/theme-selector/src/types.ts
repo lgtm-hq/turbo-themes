@@ -5,15 +5,6 @@
 
 export type ThemeMode = 'theme';
 export type ThemeAppearance = 'light' | 'dark';
-export type ThemeFamily =
-  | 'bulma'
-  | 'catppuccin'
-  | 'github'
-  | 'dracula'
-  | 'gruvbox'
-  | 'nord'
-  | 'one-dark'
-  | 'rose-pine'
-  | 'solarized'
-  | 'terminal'
-  | 'tokyo-night';
+
+/** Theme family identifiers — generated from schema/tokens/_vendors.json. */
+export type { ThemeFamily } from './generated/theme-maps.js';

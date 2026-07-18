@@ -5,10 +5,23 @@
  * All display metadata (names, appearances, vendor groups) is computed from
  * the canonical token data at module evaluation time. Consumers should import
  * from here instead of maintaining their own hardcoded copies.
+ *
+ * Vendor order and ThemeId come from build-time codegen
+ * (`packages/core/src/themes/generated/metadata.ts`).
  */
 
 import type { ThemeFlavor } from '../themes/types.js';
 import { flavors, themeIds, packages } from '../tokens/index.js';
+import { VENDOR_ORDER as GENERATED_VENDOR_ORDER } from './generated/metadata.js';
+
+export type { ThemeId, VendorId } from './generated/metadata.js';
+export {
+  THEME_IDS,
+  THEME_DESCRIPTIONS,
+  THEME_ICONS,
+  VENDOR_ICONS,
+  VENDOR_FAMILY_META,
+} from './generated/metadata.js';
 
 /** Default theme applied when no preference is stored. */
 export const DEFAULT_THEME = 'catppuccin-mocha' as const;
@@ -30,21 +43,9 @@ export const THEME_APPEARANCES: Readonly<Record<string, 'light' | 'dark'>> =
 
 /**
  * Ordered list of vendor IDs controlling display order in dropdowns.
- * New vendors should be appended here.
+ * Generated from schema/tokens/_vendors.json — do not edit by hand.
  */
-export const VENDOR_ORDER: readonly string[] = [
-  'catppuccin',
-  'dracula',
-  'gruvbox',
-  'github',
-  'bulma',
-  'nord',
-  'solarized',
-  'rose-pine',
-  'tokyo-night',
-  'one-dark',
-  'turbo',
-];
+export const VENDOR_ORDER: readonly string[] = GENERATED_VENDOR_ORDER;
 
 /** A vendor group with its display name and ordered theme IDs. */
 export interface VendorGroup {
@@ -63,7 +64,7 @@ const _missingFromOrder = _packageKeys.filter((id) => !VENDOR_ORDER.includes(id)
 if (_missingFromOrder.length > 0) {
   console.warn(
     `[metadata] VENDOR_ORDER is missing vendor IDs present in packages: ${_missingFromOrder.join(', ')}. ` +
-      'Append them to VENDOR_ORDER so their themes are included in VENDOR_GROUPS.',
+      'Append them to schema/tokens/_vendors.json and regenerate metadata.',
   );
 }
 

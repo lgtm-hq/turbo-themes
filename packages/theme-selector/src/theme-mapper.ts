@@ -5,6 +5,15 @@
 
 import type { ThemeFlavor as CanonicalThemeFlavor } from '@lgtm-hq/turbo-themes-core';
 import type { ThemeFamily } from './types.js';
+import {
+  VENDOR_FAMILY_MAP,
+  VENDOR_ICON_MAP,
+  FLAVOR_DESCRIPTIONS,
+  type AppearanceIcons,
+} from './generated/theme-maps.js';
+
+export type { AppearanceIcons };
+export { VENDOR_ICON_MAP };
 
 export interface ThemeColors {
   bg: string;
@@ -23,95 +32,7 @@ export interface ThemeFlavor extends Pick<CanonicalThemeFlavor, 'id' | 'appearan
   colors: ThemeColors;
 }
 
-// ============================================================================
-// Lookup Tables
-// ============================================================================
-
-/** Vendor to family mapping */
-const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
-  bulma: 'bulma',
-  catppuccin: 'catppuccin',
-  dracula: 'dracula',
-  gruvbox: 'gruvbox',
-  github: 'github',
-  nord: 'nord',
-  'one-dark': 'one-dark',
-  'rose-pine': 'rose-pine',
-  solarized: 'solarized',
-  turbo: 'terminal',
-  'tokyo-night': 'tokyo-night',
-};
-
 const DEFAULT_FAMILY: ThemeFamily = 'bulma';
-
-/** Icon configuration - string for single icon, object for appearance-specific */
-export interface AppearanceIcons {
-  light: string;
-  dark: string;
-}
-
-export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
-  bulma: 'assets/img/turbo-themes-logo.png',
-  catppuccin: {
-    light: 'assets/img/catppuccin-logo-latte.png',
-    dark: 'assets/img/catppuccin-logo-macchiato.png',
-  },
-  dracula: 'assets/img/dracula-logo.png',
-  gruvbox: {
-    light: 'assets/img/gruvbox-light.png',
-    dark: 'assets/img/gruvbox-dark.png',
-  },
-  github: {
-    light: 'assets/img/github-logo-light.png',
-    dark: 'assets/img/github-logo-dark.png',
-  },
-  nord: 'assets/img/nord.png',
-  'one-dark': {
-    light: 'assets/img/one-light.png',
-    dark: 'assets/img/one-dark.png',
-  },
-  'rose-pine': {
-    light: 'assets/img/rose-pine-dawn.png',
-    dark: 'assets/img/rose-pine.png',
-  },
-  solarized: {
-    light: 'assets/img/solarized-light.png',
-    dark: 'assets/img/solarized-dark.png',
-  },
-  turbo: 'assets/img/terminal.png',
-  'tokyo-night': 'assets/img/tokyo-night.png',
-};
-
-/** Predefined flavor descriptions */
-const FLAVOR_DESCRIPTIONS: Record<string, string> = {
-  'bulma-light': 'Classic Bulma look with a bright, neutral palette.',
-  'bulma-dark': 'Dark Bulma theme tuned for low-light reading.',
-  'catppuccin-latte': 'Light, soft Catppuccin palette for daytime use.',
-  'catppuccin-frappe': 'Balanced dark Catppuccin theme for focused work.',
-  'catppuccin-macchiato': 'Deep, atmospheric Catppuccin variant with rich contrast.',
-  'catppuccin-mocha': 'Cozy, high-contrast Catppuccin theme for late-night sessions.',
-  dracula: 'Iconic Dracula dark theme with vibrant accents.',
-  'gruvbox-dark-hard': 'Highest contrast dark Gruvbox palette with deep shadows.',
-  'gruvbox-dark': 'Classic Gruvbox dark palette with warm, muted tones.',
-  'gruvbox-dark-soft': 'Softer dark Gruvbox palette with reduced contrast.',
-  'gruvbox-light-hard': 'Bright, crisp Gruvbox light palette with extra contrast.',
-  'gruvbox-light': 'Classic Gruvbox light palette with warm paper tones.',
-  'gruvbox-light-soft': 'Soft, low-contrast Gruvbox light palette for long sessions.',
-  'github-light': 'GitHub-inspired light theme suited for documentation and UI heavy pages.',
-  'github-dark': 'GitHub dark theme optimized for code-heavy views.',
-  nord: 'Arctic, north-bluish color palette inspired by the polar night.',
-  'one-dark': 'The classic Atom One Dark palette with vivid syntax accents.',
-  'one-light': 'Companion One Light palette for bright, daytime editing.',
-  'rose-pine': 'Elegant dark theme with natural pine and soho vibes.',
-  'rose-pine-moon': 'Deeper variant of Rosé Pine with enhanced contrast.',
-  'rose-pine-dawn': 'Light Rosé Pine variant for daytime use.',
-  'solarized-dark': 'Solarized Dark with a balanced, low-contrast palette.',
-  'solarized-light': 'Solarized Light tuned for bright, daylight-friendly UIs.',
-  'tokyo-night-dark': 'Deep midnight blues with neon accents.',
-  'tokyo-night-storm': 'Stormy variant with richer contrast and depth.',
-  'tokyo-night-light': 'Clean daylight palette inspired by Tokyo mornings.',
-  terminal: 'CRT phosphor green on void with IBM Plex Mono.',
-};
 
 // ============================================================================
 // Helper Functions

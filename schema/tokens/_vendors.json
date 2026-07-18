@@ -82,6 +82,23 @@
       "description": "Neon-infused nightscape with crisp contrast",
       "homepage": "https://github.com/enkia/tokyo-night-vscode-theme",
       "icon": "tokyo-night.png"
+    },
+    {
+      "id": "one-dark",
+      "name": "One",
+      "description": "The iconic Atom editor palette in dark and light",
+      "homepage": "https://github.com/Binaryify/OneDark-Pro",
+      "icon": {
+        "light": "one-light.png",
+        "dark": "one-dark.png"
+      }
+    },
+    {
+      "id": "turbo",
+      "name": "Terminal",
+      "description": "CRT phosphor green on void",
+      "homepage": "https://github.com/lgtm-hq/turbo-themes",
+      "icon": "terminal.png"
     }
   ]
 }

@@ -141,6 +141,9 @@ jobs:
       - name: Run CI pipeline
         run: ./scripts/local/build.sh --quick --skip-lint
 
+      - name: Verify generated tokens and metadata are committed
+        run: ./scripts/ci/verify-generated-tokens.sh
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@75cd11691c0faa626561e295848008c8a7dddffe # v5.5.4
         if: ${{ !env.ACT }}

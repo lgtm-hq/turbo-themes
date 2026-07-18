@@ -71,23 +71,28 @@ function extractValues(obj) {
   return obj;
 }
 
-// Vendor metadata for byVendor grouping
-const vendorMeta = {
-  bulma: { name: "Bulma", homepage: "https://bulma.io/" },
-  catppuccin: { name: "Catppuccin (synced)", homepage: "https://catppuccin.com/palette/" },
-  dracula: { name: "Dracula", homepage: "https://draculatheme.com/" },
-  gruvbox: { name: "Gruvbox", homepage: "https://github.com/morhetz/gruvbox" },
-  github: { name: "GitHub (synced)", homepage: "https://primer.style/" },
-  nord: { name: "Nord", homepage: "https://www.nordtheme.com/" },
-  "one-dark": { name: "One", homepage: "https://github.com/Binaryify/OneDark-Pro" },
-  "rose-pine": { name: "Rosé Pine (synced)", homepage: "https://rosepinetheme.com/" },
-  solarized: { name: "Solarized", homepage: "https://ethanschoonover.com/solarized/" },
-  turbo: { name: "Terminal", homepage: "https://github.com/lgtm-hq/turbo-themes" },
-  "tokyo-night": {
-    name: "Tokyo Night",
-    homepage: "https://github.com/enkia/tokyo-night-vscode-theme",
-  },
-};
+const vendorsPath = join(projectRoot, "schema", "tokens", "_vendors.json");
+
+/**
+ * Load vendor metadata from schema/tokens/_vendors.json.
+ * Falls back to id-as-name when a vendor is missing (dev-time safety net).
+ */
+function loadVendorMeta() {
+  const data = JSON.parse(readFileSync(vendorsPath, "utf-8"));
+  /** @type {Record<string, { name: string, homepage: string }>} */
+  const meta = {};
+  for (const vendor of data.vendors ?? []) {
+    // Preserve historical "(synced)" suffix for synced palettes in tokens.json
+    const name = vendor.synced ? `${vendor.name} (synced)` : vendor.name;
+    meta[vendor.id] = {
+      name,
+      homepage: vendor.homepage ?? "",
+    };
+  }
+  return meta;
+}
+
+const vendorMeta = loadVendorMeta();
 
 /**
  * Group themes by vendor
