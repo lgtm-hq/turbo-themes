@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.28.4] - 2026-07-18
+
+### 🔧 Changed
+
+- enforce drift checks for generated artifacts (#628)
+
 ## [0.28.3] - 2026-07-18
 
 ### 🐛 Fixed
