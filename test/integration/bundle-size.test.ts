@@ -3,9 +3,15 @@ import { statSync, existsSync } from 'fs';
 
 // Size budgets in bytes (generous to allow growth, but catch major issues)
 const SIZE_BUDGETS: Record<string, number> = {
+<<<<<<< HEAD
   'packages/theme-selector/dist/index.js': 98_304, // 96KB (embedded theme JSON grows
   // with each theme pack — 27 themes as of One Dark + Terminal; Vite 8/Rolldown also
   // adds ~7KB of quote-escaping overhead vs Vite 7; gzipped size is unchanged)
+=======
+  'packages/theme-selector/dist/index.js': 98_304, // 96KB (Radix Colors pack + Vite 8/Rolldown
+  // escapes the embedded theme JSON with double quotes, adding ~7KB of escaping overhead vs
+  // Vite 7; gzipped size is unchanged)
+>>>>>>> 71f10f1 (feat(themes): add Radix Colors theme pack)
   'packages/adapters/tailwind/dist/preset.js': 30_000, // 30KB
   'packages/adapters/tailwind/dist/colors.js': 20_000, // 20KB
   'packages/css/dist/index.js': 35_000, // 35KB (increased: component CSS vars now emitted for all themes)

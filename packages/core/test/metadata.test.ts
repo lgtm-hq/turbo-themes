@@ -17,8 +17,8 @@ import {
 describe('metadata', () => {
   describe('VALID_THEMES', () => {
     // Exact count is a regression guard — update when themes are added/removed
-    it('contains 27 themes', () => {
-      expect(VALID_THEMES).toHaveLength(27);
+    it('contains 31 themes', () => {
+      expect(VALID_THEMES).toHaveLength(31);
     });
 
     it('is non-empty', () => {

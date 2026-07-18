@@ -161,6 +161,34 @@ const themeExplorerMetaJson = JSON.stringify(themeExplorerMeta);
       <div class="theme-family">
         <button class="family-header" aria-expanded="true" data-testid="theme-family-solarized">
           <span class="family-label">
+            <img class="family-icon" src={`${baseUrl}/assets/img/radix-slate-dark.png`} alt="" width="24" height="24" />
+            <span class="family-name">Radix Colors</span>
+          </span>
+          <span class="family-count">4</span>
+        </button>
+        <div class="family-themes">
+          <button class="theme-option" data-theme="radix-slate-dark">
+            <span class="theme-dot" style="background: #111113"></span>
+            Slate Dark
+          </button>
+          <button class="theme-option" data-theme="radix-slate-light">
+            <span class="theme-dot" style="background: #fcfcfd"></span>
+            Slate Light
+          </button>
+          <button class="theme-option" data-theme="radix-mauve-dark">
+            <span class="theme-dot" style="background: #121113"></span>
+            Mauve Dark
+          </button>
+          <button class="theme-option" data-theme="radix-mauve-light">
+            <span class="theme-dot" style="background: #fdfcfd"></span>
+            Mauve Light
+          </button>
+        </div>
+      </div>
+
+      <div class="theme-family">
+        <button class="family-header" aria-expanded="true">
+          <span class="family-label">
             <img class="family-icon" src={`${baseUrl}/assets/img/solarized-dark.png`} alt="" width="24" height="24" />
             <span class="family-name">Solarized</span>
           </span>

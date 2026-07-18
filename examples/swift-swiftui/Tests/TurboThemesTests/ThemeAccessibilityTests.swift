@@ -179,6 +179,10 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .rosePineDawn: return "#faf4ed"
         case .oneDark: return "#282c34"
         case .oneLight: return "#fafafa"
+        case .radixSlateDark: return "#111113"
+        case .radixSlateLight: return "#fcfcfd"
+        case .radixMauveDark: return "#121113"
+        case .radixMauveLight: return "#fdfcfd"
         }
     }
 
@@ -202,6 +206,10 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .rosePineDawn: return "#575279"
         case .oneDark: return "#abb2bf"
         case .oneLight: return "#383a42"
+        case .radixSlateDark: return "#edeef0"
+        case .radixSlateLight: return "#1c2024"
+        case .radixMauveDark: return "#eeeef0"
+        case .radixMauveLight: return "#211f26"
         }
     }
 
@@ -224,6 +232,10 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .rosePineDawn: return "#797593"
         case .oneDark: return "#828997"
         case .oneLight: return "#696c77"
+        case .radixSlateDark: return "#b0b4ba"
+        case .radixSlateLight: return "#60646c"
+        case .radixMauveDark: return "#b5b2bc"
+        case .radixMauveLight: return "#65636d"
         }
     }
 
@@ -246,6 +258,10 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .rosePineDawn: return "#575279"
         case .oneDark: return "#61afef"
         case .oneLight: return "#4078f2"
+        case .radixSlateDark: return "#3dd68c"
+        case .radixSlateLight: return "#218358"
+        case .radixMauveDark: return "#3dd68c"
+        case .radixMauveLight: return "#218358"
         }
     }
 
@@ -287,6 +303,10 @@ final class ThemeAccessibilityTests: XCTestCase {
             return ["#98c379", "#e06c75", "#e5c07b", "#56b6c2"]
         case .oneLight:
             return ["#50a14f", "#e45649", "#c18401", "#0184bc"]
+        case .radixSlateDark, .radixMauveDark:
+            return ["#30a46c", "#e5484d", "#ffc53d", "#00a2c7"]
+        case .radixSlateLight, .radixMauveLight:
+            return ["#30a46c", "#e5484d", "#ffc53d", "#00a2c7"]
         }
     }
 

@@ -9,6 +9,7 @@ import { gruvboxThemes } from './packs/gruvbox.js';
 import { githubSynced } from './packs/github.synced.js';
 import { nordThemes } from './packs/nord.js';
 import { oneDarkThemes } from './packs/one-dark.js';
+import { radixSynced } from './packs/radix.synced.js';
 import { rosePineSynced } from './packs/rose-pine.synced.js';
 import { solarizedThemes } from './packs/solarized.js';
 import { terminalThemes } from './packs/terminal.js';
@@ -23,6 +24,7 @@ const allFlavors: ThemeFlavor[] = [
   ...githubSynced.flavors,
   ...nordThemes.flavors,
   ...oneDarkThemes.flavors,
+  ...radixSynced.flavors,
   ...rosePineSynced.flavors,
   ...solarizedThemes.flavors,
   ...terminalThemes.flavors,

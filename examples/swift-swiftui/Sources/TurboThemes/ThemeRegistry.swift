@@ -412,6 +412,72 @@ public enum ThemeRegistry {
                 stateInfo: Color(hex: "#0184bc")
             )
         ),
+
+        .radixSlateDark: ThemeDefinition(
+            id: .radixSlateDark,
+            label: "Radix Colors Slate Dark",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#111113"),
+                backgroundSurface: Color(hex: "#18191b"),
+                heading: Color(hex: "#3dd68c"),
+                bodyPrimary: Color(hex: "#edeef0"),
+                bodySecondary: Color(hex: "#b0b4ba"),
+                brandPrimary: Color(hex: "#0090ff"),
+                stateSuccess: Color(hex: "#30a46c"),
+                stateDanger: Color(hex: "#e5484d"),
+                stateWarning: Color(hex: "#ffc53d"),
+                stateInfo: Color(hex: "#00a2c7")
+            )
+        ),
+        .radixSlateLight: ThemeDefinition(
+            id: .radixSlateLight,
+            label: "Radix Colors Slate Light",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#fcfcfd"),
+                backgroundSurface: Color(hex: "#f9f9fb"),
+                heading: Color(hex: "#218358"),
+                bodyPrimary: Color(hex: "#1c2024"),
+                bodySecondary: Color(hex: "#60646c"),
+                brandPrimary: Color(hex: "#0090ff"),
+                stateSuccess: Color(hex: "#30a46c"),
+                stateDanger: Color(hex: "#e5484d"),
+                stateWarning: Color(hex: "#ffc53d"),
+                stateInfo: Color(hex: "#00a2c7")
+            )
+        ),
+        .radixMauveDark: ThemeDefinition(
+            id: .radixMauveDark,
+            label: "Radix Colors Mauve Dark",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#121113"),
+                backgroundSurface: Color(hex: "#1a191b"),
+                heading: Color(hex: "#3dd68c"),
+                bodyPrimary: Color(hex: "#eeeef0"),
+                bodySecondary: Color(hex: "#b5b2bc"),
+                brandPrimary: Color(hex: "#0090ff"),
+                stateSuccess: Color(hex: "#30a46c"),
+                stateDanger: Color(hex: "#e5484d"),
+                stateWarning: Color(hex: "#ffc53d"),
+                stateInfo: Color(hex: "#00a2c7")
+            )
+        ),
+        .radixMauveLight: ThemeDefinition(
+            id: .radixMauveLight,
+            label: "Radix Colors Mauve Light",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#fdfcfd"),
+                backgroundSurface: Color(hex: "#faf9fb"),
+                heading: Color(hex: "#218358"),
+                bodyPrimary: Color(hex: "#211f26"),
+                bodySecondary: Color(hex: "#65636d"),
+                brandPrimary: Color(hex: "#0090ff"),
+                stateSuccess: Color(hex: "#30a46c"),
+                stateDanger: Color(hex: "#e5484d"),
+                stateWarning: Color(hex: "#ffc53d"),
+                stateInfo: Color(hex: "#00a2c7")
+            )
+        ),
+
     ]
 
     /// Get a theme by its ID.
