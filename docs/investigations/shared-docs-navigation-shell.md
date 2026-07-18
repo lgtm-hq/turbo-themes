@@ -1,8 +1,11 @@
 # Investigation: Shared Docs Navigation Shell
 
-**Issue:** [#505](https://github.com/lgtm-hq/turbo-themes/issues/505) **Date:**
-2026-07-18 **Status:** Complete (recommendation ready for review) **Scope:** Inventory +
-recommendation only — no extraction in this spike
+| Field      | Value                                                         |
+| ---------- | ------------------------------------------------------------- |
+| **Issue**  | [#505](https://github.com/lgtm-hq/turbo-themes/issues/505)    |
+| **Date**   | 2026-07-18                                                    |
+| **Status** | Complete (recommendation ready for review)                    |
+| **Scope**  | Inventory + recommendation only — no extraction in this spike |
 
 ## Summary
 
@@ -166,11 +169,11 @@ turbo-components.css
 ├── .sidebar              ← keep: app-style sidebar (demo, dashboards)
 └── .turbo-docs-nav       ← add: flat doc link list
     ├── (root)            ← former .docs-sidebar surface/border/scroll
-    ├──__section
-    ├──__section-title
-    ├──__link
-    ├──__link:hover / .active (or [aria-current="page"])
-    └──__group            ← optional: style <details> groups only
+    ├── __section
+    ├── __section-title
+    ├── __link
+    ├── __link:hover / .active (or [aria-current="page"])
+    └── __group           ← optional: style <details> groups only
 ```
 
 **Minimal class list (BEM under one root):**
@@ -309,7 +312,7 @@ separate from sidebar CSS.
 | Multiple layout variants in turbo npm? | **NO**                                   |
 | Minimal API if docs-kit                | Sketch in Phase 2                        |
 | Follow-up implementation issue         | Documented (Follow-up 1); open manually  |
-| Cross-link from #504 Astro guide       | Added in same change set                 |
+| Cross-link from Astro guide to #505    | Added in same change set                 |
 
 [astro-guide]: ../../apps/site/src/content/docs/integrations/astro-github-pages.md
 [sidebar-css]: ../../packages/css/src/components/sidebar.css
