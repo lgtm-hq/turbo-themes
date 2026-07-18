@@ -4,8 +4,8 @@ var TurboThemeSelector = (function(exports) {
 	var tokens = {
 		$schema: "https://design-tokens.org/schema.json",
 		$description: "Turbo Themes - Flat tokens for 27 themes",
-		$version: "0.28.6",
-		$generated: "6ce4b2609963cfde94614f2ec239f08f463cbdb6a2bcf88c44c26ff3147a9546",
+		$version: "0.28.7",
+		$generated: "2876da76eee982a5b5ec8ea32d4b8556345e78c02a728eb9d0163f3f1e56f874",
 		meta: {
 			"themeIds": [
 				"bulma-dark",
@@ -217,7 +217,7 @@ var TurboThemeSelector = (function(exports) {
 	var KNOWN_THEME_IDS = new Set(themeIds);
 	function warnInvalidIds(source, ids) {
 		if (ids.length === 0) return;
-		if (process.env.NODE_ENV === "production") return;
+		if (typeof process !== "undefined" && process.env.NODE_ENV === "production") return;
 		console.warn(`[catalog] createThemeCatalog: ignoring unknown ${source} theme ID(s): ${ids.join(", ")}. Valid IDs come from the exported \`themeIds\`.`);
 	}
 	function createThemeCatalog(options = {}) {
