@@ -25,7 +25,7 @@ describe('generate-metadata.mjs', () => {
     const beforeCore = readFileSync(CORE_META, 'utf-8');
     const beforeSelector = readFileSync(SELECTOR_MAPS, 'utf-8');
 
-    const result = spawnSync('node', [GENERATOR], {
+    const result = spawnSync('bun', [GENERATOR], {
       cwd: REPO_ROOT,
       encoding: 'utf-8',
     });
@@ -45,7 +45,7 @@ describe('generate-metadata.mjs', () => {
       writeFileSync(CORE_META, `${original}\n// manual edit should be overwritten\n`);
       expect(readFileSync(CORE_META, 'utf-8')).not.toBe(original);
 
-      const result = spawnSync('node', [GENERATOR], {
+      const result = spawnSync('bun', [GENERATOR], {
         cwd: REPO_ROOT,
         encoding: 'utf-8',
       });

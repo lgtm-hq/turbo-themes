@@ -95,6 +95,29 @@ function vendorIconFilenames(icon) {
 }
 
 /**
+ * Fail if `ids` contains duplicates (Object.fromEntries would silently keep the last).
+ * @param {string[]} ids
+ * @param {'theme' | 'vendor'} kind
+ */
+function assertUniqueIds(ids, kind) {
+  const seen = new Set();
+  const duplicates = new Set();
+  for (const id of ids) {
+    if (seen.has(id)) {
+      duplicates.add(id);
+    } else {
+      seen.add(id);
+    }
+  }
+  if (duplicates.size > 0) {
+    throw new Error(
+      `[generate-metadata] Duplicate ${kind} ID(s): ${[...duplicates].sort().join(', ')}. ` +
+        'Each theme/vendor id must be unique before generating metadata maps.',
+    );
+  }
+}
+
+/**
  * Load and validate theme + vendor metadata from the schema directory.
  * @returns {{ themes: object[], vendors: object[] }}
  */
@@ -111,6 +134,11 @@ function loadSources() {
   if (!Array.isArray(vendors) || vendors.length === 0) {
     throw new Error('[generate-metadata] _vendors.json must contain a non-empty vendors array');
   }
+
+  assertUniqueIds(
+    vendors.map((v) => v.id),
+    'vendor',
+  );
 
   const themeFiles = readdirSync(THEMES_DIR)
     .filter((f) => f.endsWith('.tokens.json'))
@@ -130,6 +158,11 @@ function loadSources() {
     assertIconExists(data.icon, data.id);
     return data;
   });
+
+  assertUniqueIds(
+    themes.map((t) => t.id),
+    'theme',
+  );
 
   const vendorIds = new Set(vendors.map((v) => v.id));
   const themeVendors = new Set(themes.map((t) => t.vendor));
