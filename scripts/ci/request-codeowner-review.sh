@@ -14,7 +14,7 @@ if [ -z "${PR_NUMBER:-}" ]; then
   exit 1
 fi
 
-reviewer=$(grep -m1 '^[*][[:space:]]' .github/CODEOWNERS | awk '{print $2}' | tr -d '@')
+reviewer=$(grep -m1 '^[*][[:space:]]' .github/CODEOWNERS 2>/dev/null | awk '{print $2}' | tr -d '@' || true)
 if [ -n "$reviewer" ]; then
   gh pr edit "$PR_NUMBER" --add-reviewer "$reviewer" --add-assignee "$reviewer"
 fi
