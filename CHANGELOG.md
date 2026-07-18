@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.8] - 2026-07-18
+
+### 🔧 Changed
+
+- extract inline shell from publish-npm and quality-examples (#550)
+
 ## [0.23.7] - 2026-07-18
 
 ### 🔧 Changed
