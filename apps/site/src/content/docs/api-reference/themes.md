@@ -506,7 +506,8 @@ A darker variant for late-night sessions.
 - **Dark, warm:** Catppuccin Mocha, Gruvbox Dark, Rosé Pine, Kanagawa Wave
 - **Dark, vibrant:** Dracula, Tokyo Night Dark
 - **Dark, minimal:** GitHub Dark, Nord, Kanagawa Dragon
-- **Light:** Catppuccin Latte, GitHub Light, Rosé Pine Dawn, Solarized Light, Kanagawa Lotus
+- **Light:** Catppuccin Latte, GitHub Light, Rosé Pine Dawn, Solarized Light, Kanagawa
+  Lotus
 
 ### By appearance
 
