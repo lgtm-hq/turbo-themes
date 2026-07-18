@@ -1,23 +1,19 @@
 // SPDX-License-Identifier: MIT
-// Auto-generated from dist/tokens.json
-// Do not edit manually - regenerate with: bun run generate:swift
 
 import Foundation
 
 /// Loads and provides access to theme definitions from bundled JSON.
 public enum ThemeLoader {
-    /// All available theme IDs.
-    public static let themeIds: [String] = [
-        "bulma-dark",
-        "bulma-light",
-        "catppuccin-frappe",
-        "catppuccin-latte",
-        "catppuccin-macchiato",
-        "catppuccin-mocha",
-        "dracula",
-        "github-dark",
-        "github-light"
-    ]
+    /// All available theme IDs, derived from the bundled tokens.json
+    /// (`meta.themeIds`, falling back to the theme dictionary keys).
+    /// Returns an empty array only if the bundled resource cannot be loaded.
+    public static var themeIds: [String] {
+        guard let themes = try? loadThemes() else { return [] }
+        if let ids = themes.meta?.themeIds, !ids.isEmpty {
+            return ids
+        }
+        return themes.themes.keys.sorted()
+    }
 
     /// Thread synchronization lock for cache access.
     private static let lock = NSLock()
