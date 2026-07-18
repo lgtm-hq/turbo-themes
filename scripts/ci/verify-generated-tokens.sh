@@ -28,6 +28,13 @@ TOKEN_PATHS=(
   # These are checked to ensure consistency when tokens.json changes
   'python/src/turbo_themes/themes.py'
   'swift/Sources/TurboThemes/ThemeLoader.swift'
+  # Generated TypeScript sources (bun run generate:types:ts)
+  'packages/core/src/themes/theme-ids.ts'
+  'packages/core/src/themes/generated-types.ts'
+  # Committed IIFE selector bundles (bun run build:js:dev / build:js:prod)
+  'assets/js/theme-selector.js'
+  'assets/js/theme-selector.js.map'
+  'assets/js/theme-selector.min.js'
 )
 
 main() {
