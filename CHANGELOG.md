@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.23.7] - 2026-07-18
+
+### 🔧 Changed
+
+- audit and document coverage exclusions (#549)
+
 ## [0.23.6] - 2026-07-18
 
 ### 🐛 Fixed
