@@ -209,7 +209,7 @@ Bootstrap the development environment.
 
 ### `build.sh`
 
-Full build process including cleanup, dependencies, tests, and Jekyll site.
+Full build process including cleanup, dependencies, tests, and Astro docs site.
 
 **Usage:**
 
@@ -223,8 +223,8 @@ Full build process including cleanup, dependencies, tests, and Jekyll site.
 - Installs dependencies
 - Runs tests with coverage
 - Builds TypeScript
-- Builds Jekyll site
-- Optional: Serves site locally
+- Builds Astro docs site
+- Optional: Serves Astro docs site locally
 
 ### `clean.sh`
 
@@ -238,7 +238,7 @@ Clean all build artifacts and temporary files.
 
 **Features:**
 
-- Removes build directories (\_site, dist, coverage)
+- Removes build directories (dist, coverage)
 - Cleans cache directories
 - Removes node_modules
 - Optional: Remove lockfiles
@@ -279,7 +279,7 @@ Run tests with coverage.
 
 ### `serve.sh`
 
-Quick serve script for the Jekyll site.
+Quick serve script for the Astro docs site.
 
 **Usage:**
 
@@ -289,8 +289,7 @@ Quick serve script for the Jekyll site.
 
 **Features:**
 
-- Serves existing Jekyll site
-- Auto-builds if \_site missing
+- Serves existing Astro docs site
 - Live reload enabled
 - Optional: TypeScript watch mode
 

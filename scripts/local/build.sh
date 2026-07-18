@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
-# Build script for turbo-themes Jekyll site
+# Build script for turbo-themes
 # This script handles both local development and CI workflows
 # Usage: ./scripts/local/build.sh [--quick|--full|--serve|--no-serve|--skip-tests|--skip-lint|--skip-lh]
 #
 # Environment Variables:
 #   PORT_RELEASE_CHECK_INTERVAL - Time between port checks in seconds (default: 0.5)
 #   PORT_RELEASE_TIMEOUT - Maximum time to wait for port release in seconds (default: 5)
-#   PORT_TO_CHECK - Port number to check for availability (default: 4000)
 #   PORT_RELEASE_STRICT - Exit with error if port not released within timeout (default: false)
 
 set -e # Exit on any error
@@ -104,17 +103,6 @@ else
   print_status "$BLUE" "🚀 Starting local build process..."
 fi
 
-# Determine environment
-if [ "$DEV_MODE" = true ]; then
-  print_status "$BLUE" "📍 Environment: Development (baseurl: empty)"
-  JEKYLL_CONFIG="_config.yml"
-elif [ "$PROD_MODE" = true ]; then
-  print_status "$BLUE" "📍 Environment: Production (baseurl: /turbo-themes)"
-  JEKYLL_CONFIG="_config.yml,_config.prod.yml"
-else
-  JEKYLL_CONFIG="_config.yml"
-fi
-
 # Change to project root
 cd "$(git rev-parse --show-toplevel 2>/dev/null || echo ".")"
 
@@ -153,9 +141,6 @@ fi
 
 # Check required commands
 required_cmds=("git")
-if [ "$QUICK_MODE" = false ]; then
-  required_cmds+=("bundle")
-fi
 
 for cmd in "${required_cmds[@]}"; do
   if ! command_exists "$cmd"; then
@@ -176,14 +161,6 @@ if [ -f "package.json" ]; then
   fi
 else
   print_status "$YELLOW" "⚠️  Skipping Node.js steps (no package.json found)."
-fi
-
-# Install Ruby dependencies (skip in quick mode)
-if [ "$QUICK_MODE" = false ]; then
-  print_status "$YELLOW" "  Installing Ruby dependencies..."
-  bundle install
-else
-  print_status "$YELLOW" "  Skipping Ruby dependencies (quick mode)..."
 fi
 
 # Step 2: Linting and formatting (lintro handles all tools: biome, prettier, ruff, etc.)
@@ -339,19 +316,10 @@ if [ -f "package.json" ] && grep -q '"build:js"' package.json >/dev/null 2>&1; t
   print_status "$GREEN" "  ✅ JavaScript minified successfully"
 fi
 
-# Step 7: Jekyll build (legacy — root Jekyll site removed; skips unless _config.yml exists)
-print_status "$BLUE" "🏗️  Step 7: Jekyll build..."
-if command_exists "bundle" && [ -f "_config.yml" ]; then
-  print_status "$YELLOW" "  Building Jekyll site..."
-  bundle exec jekyll build --config "$JEKYLL_CONFIG" --trace --strict_front_matter
-else
-  print_status "$YELLOW" "  ⏭️  Skipping Jekyll build (no root Jekyll site)..."
-fi
-
-# Step 8: E2E tests with Playwright (skip in quick mode or if --skip-tests flag is set)
+# Step 7: E2E tests with Playwright (skip in quick mode or if --skip-tests flag is set)
 if [ "$QUICK_MODE" = false ] && [ "$SKIP_TESTS" = false ]; then
   if [ -d "node_modules/@playwright/test" ]; then
-    print_status "$BLUE" "🎭 Step 8: E2E tests with Playwright..."
+    print_status "$BLUE" "🎭 Step 7: E2E tests with Playwright..."
     # Ensure Playwright browsers are installed before E2E
     print_status "$YELLOW" "  Ensuring Playwright browsers are installed..."
     $PKG_EXEC playwright install chromium >/dev/null 2>&1 || true
@@ -369,31 +337,13 @@ elif [ "$SKIP_TESTS" = true ]; then
   print_status "$YELLOW" "⏭️  Skipping E2E tests (--skip-tests flag set)..."
 fi
 
-# Step 9: HTMLProofer
-print_status "$BLUE" "🔍 Step 9: HTMLProofer validation..."
-if ! command_exists "bundle" || [ ! -f "_config.yml" ] || [ ! -d "_site" ]; then
-  print_status "$YELLOW" "  ⏭️  Skipping HTMLProofer (no Jekyll site to validate)..."
-elif [ "$PROD_MODE" = true ]; then
-  # Production builds: Skip validation (baseurl prefix makes local paths invalid)
-  print_status "$YELLOW" "  ⏭️  Skipping HTMLProofer for production build (validation happens on GitHub Pages)..."
-else
-  # Quick/local/CI builds: Validate internal links only (external checked separately)
-  print_status "$YELLOW" "  Validating internal links only..."
-  run_htmlproofer ./_site
-fi
-
-# Step 10: Lighthouse performance analysis (dev/prod/full unless skipped)
+# Step 8: Lighthouse performance analysis (dev/prod/full unless skipped)
 LIGHTHOUSE_RAN=false
 LIGHTHOUSE_PASSED=false
 if [ "$QUICK_MODE" = false ] && [ "$SKIP_LH" = false ] && { [ "$DEV_MODE" = true ] || [ "$PROD_MODE" = true ] || [ "$FULL_MODE" = true ]; }; then
-  print_status "$BLUE" "📊 Step 10: Lighthouse performance analysis..."
+  print_status "$BLUE" "📊 Step 8: Lighthouse performance analysis..."
   # Check if Lighthouse config exists
   if [ -f "lighthouserc.json" ]; then
-    print_status "$YELLOW" "  Cleaning up any existing Jekyll processes..."
-    ./scripts/ci/cleanup-jekyll-processes.sh
-
-    wait_for_port_release || exit 1
-
     print_status "$YELLOW" "  Running Lighthouse CI (latest)..."
     if $PKG_EXEC @lhci/cli@latest autorun --config=./lighthouserc.json --collect.numberOfRuns=1; then
       print_status "$GREEN" "  ✅ Lighthouse CI completed successfully"
@@ -419,9 +369,9 @@ if [ "$QUICK_MODE" = false ] && [ "$SKIP_LH" = false ] && { [ "$DEV_MODE" = true
   fi
 fi
 
-# Step 11: Security checks (full mode only)
+# Step 9: Security checks (full mode only)
 if [ "$FULL_MODE" = true ]; then
-  print_status "$BLUE" "🔒 Step 11: Security checks..."
+  print_status "$BLUE" "🔒 Step 9: Security checks..."
   if [ "$PKG_MGR" = "npm" ]; then
     print_status "$YELLOW" "  Running npm audit..."
     npm audit --audit-level=moderate || print_status "$YELLOW" "⚠️  npm audit found issues"
@@ -429,20 +379,6 @@ if [ "$FULL_MODE" = true ]; then
     print_status "$YELLOW" "  Listing dependencies..."
     bun pm ls 2>/dev/null || print_status "$YELLOW" "⚠️  Could not list dependencies"
   fi
-fi
-
-# Step 12: Final Jekyll build to include all reports (legacy — skips unless _config.yml exists)
-print_status "$BLUE" "🏗️  Step 12: Final Jekyll build (including all reports)..."
-if command_exists "bundle" && [ -f "_config.yml" ]; then
-  print_status "$YELLOW" "  Rebuilding Jekyll to include all test reports..."
-  print_status "$YELLOW" "  The Jekyll plugin simplify_urls.rb will automatically create simplified paths (/coverage/, /playwright/, /lighthouse/)"
-  if ! bundle exec jekyll build --config "$JEKYLL_CONFIG" --trace --strict_front_matter; then
-    print_status "$RED" "  ❌ Failed to rebuild Jekyll with reports"
-    exit 1
-  fi
-  print_status "$GREEN" "  ✅ All reports included in site (available at /coverage/, /playwright/, /lighthouse/)"
-else
-  print_status "$YELLOW" "  ⏭️  Skipping final Jekyll build (bundle not available)..."
 fi
 
 # Summary
@@ -464,17 +400,15 @@ else
   fi
 fi
 print_status "$GREEN" "  ✅ CSS budget check passed"
-print_status "$GREEN" "  ✅ Jekyll build passed"
 if [ "$QUICK_MODE" = false ] && [ "$SKIP_TESTS" = false ] && [ -d "node_modules/@playwright/test" ]; then
   print_status "$GREEN" "  ✅ E2E tests passed"
 fi
-print_status "$GREEN" "  ✅ HTMLProofer validation passed"
 if [ "$LIGHTHOUSE_RAN" = true ] && [ "$LIGHTHOUSE_PASSED" = true ]; then
   print_status "$GREEN" "  ✅ Lighthouse performance analysis passed"
   print_status "$GREEN" "  ✅ Security checks passed"
 fi
 
-# Check if we should serve the site (local mode only)
+# Check if we should serve the Astro docs site (local mode only)
 if [ "$QUICK_MODE" = false ] && [ "$FULL_MODE" = false ]; then
   print_status "$BLUE" "🚀 Ready for CI! You can now push with confidence."
 
@@ -485,12 +419,8 @@ if [ "$QUICK_MODE" = false ] && [ "$FULL_MODE" = false ]; then
   fi
 
   # Allow non-interactive flag: --serve or --no-serve
-  # Serving requires the legacy root Jekyll site; skip when it is absent.
   response_prompted=false
-  if [ ! -f "_config.yml" ]; then
-    response="n"
-    response_prompted=true
-  elif [ "$SERVE_MODE" = true ]; then
+  if [ "$SERVE_MODE" = true ]; then
     response="y"
     response_prompted=true
     if [ "$CI_ENV" = true ]; then
@@ -505,34 +435,23 @@ if [ "$QUICK_MODE" = false ] && [ "$FULL_MODE" = false ]; then
   fi
 
   if [ "$response_prompted" = false ]; then
-    print_status "$YELLOW" "🌐 Would you like to serve the site locally? (y/n)"
+    print_status "$YELLOW" "🌐 Would you like to serve the Astro docs site locally? (y/n)"
     read -r response
   fi
 
   if [[ "$response" =~ ^[Yy]$ ]]; then
-    # Find an available port
-    local_port=4000
-    while ! port_available "$local_port"; do
-      local_port=$((local_port + 1))
-      if [ "$local_port" -gt 4010 ]; then
-        print_status "$RED" "❌ No available ports found between 4000-4010"
-        exit 1
-      fi
-    done
-
-    print_status "$GREEN" "🚀 Starting Jekyll server on port ${local_port}..."
-    print_status "$BLUE" "📱 Site will be available at: http://localhost:${local_port}"
+    print_status "$GREEN" "🚀 Starting Astro dev server..."
+    print_status "$BLUE" "📱 Site will be available at: http://localhost:4321"
     print_status "$YELLOW" "💡 Press Ctrl+C to stop the server"
     echo ""
 
-    # Start Jekyll server with live reload
-    bundle exec jekyll serve --port "$local_port" --livereload --incremental
+    cd apps/site && $PKG_RUN dev
   else
     print_status "$BLUE" "📋 Build completed successfully!"
-    print_status "$YELLOW" "To serve the site later, run:"
-    echo "   bundle exec jekyll serve --livereload --incremental"
+    print_status "$YELLOW" "To serve the Astro docs site, run:"
+    echo "   cd apps/site && $PKG_RUN dev"
     echo ""
-    print_status "$GREEN" "✨ Your site is ready in the _site/ directory!"
+    print_status "$GREEN" "✨ Your build artifacts are ready in dist/!"
   fi
 else
   print_status "$BLUE" "🚀 Ready for CI! You can now push with confidence."
