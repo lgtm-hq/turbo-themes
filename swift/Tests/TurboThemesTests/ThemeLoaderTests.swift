@@ -14,6 +14,18 @@ final class ThemeLoaderTests: XCTestCase {
         XCTAssertTrue(ThemeLoader.themeIds.contains("catppuccin-mocha"))
         XCTAssertTrue(ThemeLoader.themeIds.contains("dracula"))
         XCTAssertTrue(ThemeLoader.themeIds.contains("github-dark"))
+        XCTAssertTrue(ThemeLoader.themeIds.contains("one-dark"))
+        XCTAssertTrue(ThemeLoader.themeIds.contains("terminal"))
+    }
+
+    func testThemeIdsMatchesBundledCatalog() throws {
+        let themes = try ThemeLoader.loadThemes()
+        // Pin the primary source so the set-equality below cannot silently
+        // degrade into comparing the fallback against itself.
+        let metaIds = try XCTUnwrap(themes.meta?.themeIds)
+        XCTAssertFalse(metaIds.isEmpty)
+        XCTAssertEqual(Set(ThemeLoader.themeIds), Set(metaIds))
+        XCTAssertEqual(Set(ThemeLoader.themeIds), Set(themes.themes.keys))
     }
 
     // MARK: - Load Themes
