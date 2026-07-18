@@ -13,7 +13,12 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  # write: download cross-workflow artifacts + prune stale same-run Pages artifacts
+  # actions: write is required by lgtm-ci Model B (no prune-toggle input as of
+  # v0.59.0). Bundle download only needs read; write is solely so
+  # delete-run-pages-artifacts.sh can remove a stale same-run `github-pages`
+  # artifact before upload (lgtm-ci #415). Without write, `gh run rerun --failed`
+  # hard-fails with "Artifact count is 2". Scope is the job-scoped GITHUB_TOKEN
+  # only — see TRIGGERS.md "Caller permissions".
   actions: write
 
 jobs:
@@ -34,6 +39,10 @@ jobs:
       node-version: '22'
       build-command: bash scripts/ci/build-pages-site.sh
       bundle-manifest: .github/pages-bundle-manifest.json
+      # Fail the bundle step if any manifest entry cannot be resolved (matches
+      # pages-bundle-manifest.json "strict": true). Orthogonal to per-entry
+      # require_success — see TRIGGERS.md.
+      strict-bundle: true
       commit-sha: ${{ github.event.workflow_run.head_sha || github.sha }}
       # Explicit opt-in: path-triggered workflows (Examples, Multi-Language Coverage)
       # may not run for every main commit; fall back to latest artifacts on main.

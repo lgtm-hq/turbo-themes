@@ -125,6 +125,29 @@ when no run exists for the deploy SHA, lgtm-ci resolves the latest matching
 artifacts from `main` (same behavior as the former
 `download-test-artifacts.sh`).
 
+**Bundle `strict` vs `require_success` (orthogonal):**
+
+| Flag | Controls |
+| --- | --- |
+| `require_success` (per bundle) | Which workflow-run conclusions are eligible when looking up an artifact (`true` = success only; `false` = also failure/cancelled/timed_out for `if: always()` uploads) |
+| `strict` (manifest / `strict-bundle`) | Whether an unresolved bundle fails the bundle step |
+
+They do not interact: a `require_success: true` entry still only fails the deploy when
+`strict: true` and no eligible run/artifact is found (after `fallback-ref`). This
+repo sets `"strict": true` so missing critical report destinations fail the deploy
+instead of shipping an incomplete Pages site. Multi-language entries keep
+`require_success: false` so failed coverage jobs that still uploaded HTML remain
+eligible.
+
+**Caller permissions (`actions: write`):** lgtm-ci Model B has no input to disable
+same-run Pages artifact pruning (checked at v0.59.0). Bundle download needs only
+`actions: read`; `actions: write` is required solely so
+`delete-run-pages-artifacts.sh` can delete a stale same-run `github-pages`
+artifact before upload (lgtm-ci #415 — without it, reruns hard-fail with
+"Artifact count is 2"). The token is the job-scoped `GITHUB_TOKEN` for this
+workflow only; least privilege beyond that would need an upstream prune-toggle
+in lgtm-ci.
+
 **workflow_dispatch:** Deploys the ref the workflow is run from (`github.sha`).
 There is no branch input — select the branch/ref in the Actions UI when
 dispatching.

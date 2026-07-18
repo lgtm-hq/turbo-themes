@@ -201,7 +201,8 @@ jobs:
 4. Upload pages artifact and deploy with `actions/deploy-pages`
 
 **Environment:** `github-pages`  
-**Details:** [TRIGGERS.md](./TRIGGERS.md) (fallback + dispatch policy),
+**Details:** [TRIGGERS.md](./TRIGGERS.md) (fallback, `strict` vs `require_success`,
+`actions: write` rationale, dispatch policy),
 [EGRESS-POLICIES.md](./EGRESS-POLICIES.md) (allowlists)
 
 ### npm Publishing (`publish-on-tag.yml`)

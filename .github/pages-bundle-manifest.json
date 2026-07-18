@@ -1,5 +1,5 @@
 {
-  "strict": false,
+  "strict": true,
   "bundles": [
     {
       "id": "vitest-coverage",

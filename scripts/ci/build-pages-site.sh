@@ -7,7 +7,11 @@
 
 set -euo pipefail
 
-cd "$(git rev-parse --show-toplevel 2>/dev/null || echo ".")"
+repo_root="$(git rev-parse --show-toplevel)" || {
+  echo "error: not inside a git repository (git rev-parse --show-toplevel failed)" >&2
+  exit 1
+}
+cd "${repo_root}"
 
 echo "Building TypeScript packages..."
 bun run build
