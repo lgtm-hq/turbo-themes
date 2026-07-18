@@ -443,8 +443,14 @@ cp -r node_modules/@lgtm-hq/turbo-themes/assets/img public/assets/
 
 ### Option 3 — CDN / URL override
 
-Pass a custom `baseUrl` via `data-turbo-base-url` on the `<script>` tag or configure the
-selector `baseUrl` option to point at any URL serving the icons.
+Set `data-baseurl` on the `<html>` element to point asset resolution at any same-origin
+path prefix serving the icons (protocol-relative and cross-origin URLs are rejected):
+
+```html
+<html data-baseurl="/my-app">
+  <!-- icons resolve to: /my-app/assets/img/<icon> -->
+</html>
+```
 
 ## Next Steps
 
