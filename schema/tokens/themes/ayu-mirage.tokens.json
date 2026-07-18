@@ -15,7 +15,7 @@
         "$type": "color"
       },
       "overlay": {
-        "$value": "#171b24",
+        "$value": "#293040",
         "$type": "color"
       }
     },
@@ -158,7 +158,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#171b24",
+          "$value": "#293040",
           "$type": "color"
         }
       },
@@ -168,7 +168,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#171b24",
+          "$value": "#293040",
           "$type": "color"
         }
       },
@@ -182,7 +182,7 @@
           "$type": "color"
         },
         "theadBg": {
-          "$value": "#171b24",
+          "$value": "#293040",
           "$type": "color"
         }
       }

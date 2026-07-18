@@ -199,7 +199,7 @@ export const ayuSynced: ThemePackage = {
         background: {
           base: "#1f2430",
           surface: "#282e3b",
-          overlay: "#171b24",
+          overlay: "#293040",
         },
         text: {
           primary: "#cccac2",
@@ -258,16 +258,16 @@ export const ayuSynced: ThemePackage = {
           },
           codeInline: {
             fg: "#cccac2",
-            bg: "#171b24",
+            bg: "#293040",
           },
           codeBlock: {
             fg: "#cccac2",
-            bg: "#171b24",
+            bg: "#293040",
           },
           table: {
             border: "#171b24",
             stripe: "#282e3b",
-            theadBg: "#171b24",
+            theadBg: "#293040",
           },
         },
       },

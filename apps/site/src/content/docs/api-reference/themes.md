@@ -504,7 +504,7 @@ A softer, medium-contrast dark variant.
 | ------------------ | --------- |
 | Background Base    | `#1f2430` |
 | Background Surface | `#282e3b` |
-| Background Overlay | `#171b24` |
+| Background Overlay | `#293040` |
 | Text Primary       | `#cccac2` |
 | Brand Primary      | `#ffcc66` |
 

@@ -10,6 +10,7 @@ import { dark, light, mirage } from 'ayu';
 import {
   contrastRatio,
   escapeString,
+  getLuminance,
   isValidIdentifier,
   stateTextOverrides,
 } from './format-utils.mjs';
@@ -77,7 +78,16 @@ function buildTokens(variant) {
   // - state.warning/success/accent.link ← syntax.keyword/string/func
   const bgBase = ayuHex(variant.ui.bg, '#111111');
   const bgSurface = ayuHex(variant.ui.panel.bg, bgBase);
-  const bgOverlay = ayuHex(variant.ui.line, bgSurface);
+  // Prefer ui.line for overlay when it elevates above base. Mirage's ui.line is
+  // darker than base (same token as border), which would invert elevation — fall
+  // back to selection.active (lighter panel/surface tone) in that case.
+  const lineCandidate = ayuHex(variant.ui.line, bgSurface);
+  const elevatedCandidate = ayuHex(variant.ui.selection?.active, bgSurface);
+  const isDarkBase = getLuminance(bgBase) < 0.5;
+  const bgOverlay =
+    isDarkBase && getLuminance(lineCandidate) < getLuminance(bgBase)
+      ? elevatedCandidate
+      : lineCandidate;
   const textPrimary = ayuHex(variant.editor.fg, '#ffffff');
   const textSecondary = ensureReadable(
     ayuHex(variant.ui.fg, textPrimary),
