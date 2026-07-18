@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.25.2] - 2026-07-18
+
+### 🐛 Fixed
+
+- add consistent data-testid attributes to interactive elements (#578)
+
 ## [0.25.1] - 2026-07-18
 
 ### 🐛 Fixed
