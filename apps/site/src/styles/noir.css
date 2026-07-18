@@ -173,16 +173,14 @@ html:root .text-gradient {
   text-decoration: none;
 }
 
-.btn-editorial.ghost,
-.btn-editorial--ghost {
+.btn-editorial-ghost {
   background: transparent;
   color: var(--noir-text-secondary);
   border-color: var(--noir-border-ghost);
   box-shadow: none;
 }
 
-.btn-editorial.ghost:hover,
-.btn-editorial--ghost:hover {
+.btn-editorial-ghost:hover {
   background: transparent;
   color: var(--noir-text-primary);
   border-color: var(--noir-text-primary);
