@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.24.5] - 2026-07-18
+
+### 🐛 Fixed
+
+- address greptile P2 findings from PR #526 (#574)
+
 ## [0.24.4] - 2026-07-18
 
 ### 🔧 Changed
