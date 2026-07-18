@@ -81,11 +81,18 @@ function main() {
     return toCatalogEntry(theme);
   });
 
-  // Compact JSON keeps the published catalog under the <5KB bundle budget.
-  const payload = JSON.stringify(catalog);
-  const hash = createHash('sha256').update(payload).digest('hex').slice(0, 12);
+  // Compact published export stays under the <5KB bundle budget; committed source
+  // is prettier-formatted so `lintro chk` / prettier CI stay green.
+  const compactPayload = JSON.stringify(catalog);
+  const prettyPayload = `${JSON.stringify(catalog, null, 2)}\n`;
+  const hash = createHash('sha256').update(compactPayload).digest('hex').slice(0, 12);
 
-  for (const outputPath of [coreCatalogPath, distCatalogPath]) {
+  const outputs = [
+    { path: coreCatalogPath, payload: prettyPayload },
+    { path: distCatalogPath, payload: compactPayload },
+  ];
+
+  for (const { path: outputPath, payload } of outputs) {
     mkdirSync(dirname(outputPath), { recursive: true });
     writeFileSync(outputPath, payload);
     console.log(
