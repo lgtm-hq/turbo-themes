@@ -78,7 +78,7 @@ const features: Array<{
 
 const installMethods = [
   { label: 'npm', code: 'npm install turbo-themes' },
-  { label: 'CDN', code: 'unpkg.com/turbo-themes/css/turbo-core.css' },
+  { label: 'CDN', code: 'https://unpkg.com/turbo-themes/css/turbo-core.css' },
   { label: 'Python', code: 'pip install turbo-themes' },
   { label: 'Ruby', code: 'gem "turbo-themes"' },
 ] as const;
@@ -106,17 +106,17 @@ const installMethods = [
     </div>
 
     <div class="home-hero-panel">
-      <div class="home-swatch-grid" role="list" aria-label="Theme previews">
+      <div class="home-swatch-grid" role="group" aria-label="Theme previews">
         {
           heroSwatches.map((swatch) => (
             <button
               type="button"
               class="home-swatch"
-              role="listitem"
               data-theme-preview={swatch.id}
               data-name={swatch.name}
               title={swatch.name}
               aria-label={`Preview ${swatch.name} theme`}
+              aria-pressed="false"
               style={`--swatch-a: ${swatch.color}; --swatch-b: ${swatch.colorEnd};`}
             ></button>
           ))
@@ -182,6 +182,7 @@ const installMethods = [
           ))
         }
       </ul>
+      <p id="home-copy-status" class="visually-hidden" role="status" aria-live="polite"></p>
     </div>
   </section>
 
@@ -208,7 +209,15 @@ const installMethods = [
 
   <script is:inline define:vars={{ themeNames, themeIcons }}>
     (function () {
-      function applyTheme(theme, activeEl) {
+      function syncSwatchActive(theme) {
+        document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (b) {
+          var isActive = b.getAttribute('data-theme-preview') === theme;
+          b.classList.toggle('active', isActive);
+          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+      }
+
+      function applyTheme(theme) {
         var themeLink = document.getElementById('turbo-theme-css');
         var baseUrl = document.documentElement.getAttribute('data-baseurl') || '';
 
@@ -229,9 +238,7 @@ const installMethods = [
             baseUrl + '/assets/img/' + (themeIcons[theme] || 'catppuccin-logo-macchiato.png');
         }
 
-        document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (b) {
-          b.classList.toggle('active', b === activeEl);
-        });
+        syncSwatchActive(theme);
 
         document.querySelectorAll('.theme-menu .theme-option').forEach(function (opt) {
           opt.classList.toggle('active', opt.getAttribute('data-theme') === theme);
@@ -241,23 +248,35 @@ const installMethods = [
       document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (btn) {
         btn.addEventListener('click', function () {
           var theme = btn.getAttribute('data-theme-preview');
-          if (theme) applyTheme(theme, btn);
+          if (theme) applyTheme(theme);
         });
-
-        var currentTheme = document.documentElement.getAttribute('data-theme');
-        if (btn.getAttribute('data-theme-preview') === currentTheme) {
-          btn.classList.add('active');
-        }
       });
 
+      // Keep swatch pressed state in sync when the header theme menu changes
+      document.querySelectorAll('.theme-menu .theme-option').forEach(function (opt) {
+        opt.addEventListener('click', function () {
+          var theme = opt.getAttribute('data-theme');
+          if (theme) syncSwatchActive(theme);
+        });
+      });
+
+      syncSwatchActive(document.documentElement.getAttribute('data-theme') || 'catppuccin-mocha');
+
+      var copyStatus = document.getElementById('home-copy-status');
       document.querySelectorAll('.home-install-code[data-copy]').forEach(function (el) {
         el.addEventListener('click', function () {
           var text = el.getAttribute('data-copy') || '';
           if (!text || !navigator.clipboard) return;
           navigator.clipboard.writeText(text).then(function () {
             el.classList.add('copied');
+            if (copyStatus) {
+              copyStatus.textContent = 'Copied to clipboard';
+            }
             setTimeout(function () {
               el.classList.remove('copied');
+              if (copyStatus) {
+                copyStatus.textContent = '';
+              }
             }, 1500);
           }).catch(function () {
             console.warn('Failed to copy to clipboard');
