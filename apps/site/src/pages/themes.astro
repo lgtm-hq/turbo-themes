@@ -242,9 +242,21 @@ const themeExplorerMetaJson = JSON.stringify(themeExplorerMeta);
           <button class="theme-option" data-theme="one-light">
             <span class="theme-dot" style="background: #fafafa"></span>
             Light
+          </button>
+        </div>
+      </div>
+
+      <div class="theme-family">
+        <button class="family-header" aria-expanded="true">
+          <span class="family-label">
             <img class="family-icon" src={`${baseUrl}/assets/img/terminal.png`} alt="" width="24" height="24" />
             <span class="family-name">Terminal</span>
-          <button class="theme-option" data-theme="terminal">
+          </span>
+          <span class="family-count">1</span>
+        </button>
+        <div class="family-themes">
+          <button class="theme-option" data-theme="terminal" data-testid="theme-option-terminal">
+            <span class="theme-dot" style="background: #0d0d0d"></span>
             Terminal
           </button>
         </div>
