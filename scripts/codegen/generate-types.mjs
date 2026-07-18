@@ -25,6 +25,11 @@ const GENERATORS = {
     script: join(__dirname, 'generate-ts-types.mjs'),
     output: 'packages/core/src/themes/generated-types.ts',
   },
+  themeIds: {
+    name: 'ThemeId union',
+    script: join(__dirname, 'generate-theme-ids.mjs'),
+    output: 'packages/core/src/themes/theme-ids.ts',
+  },
   python: {
     name: 'Python',
     script: join(__dirname, 'generate-python-types.mjs'),
@@ -93,7 +98,7 @@ async function main() {
   const flags = parseArgs();
   const generators = [];
 
-  if (flags.ts) generators.push(GENERATORS.ts);
+  if (flags.ts) generators.push(GENERATORS.ts, GENERATORS.themeIds);
   if (flags.python) generators.push(GENERATORS.python);
   if (flags.swift) generators.push(GENERATORS.swift);
 
