@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.28.9] - 2026-07-18
+
+### 🐛 Fixed
+
+- assign CODEOWNER on release version PRs (#627)
+
 ## [0.28.8] - 2026-07-18
 
 ### 🐛 Fixed
