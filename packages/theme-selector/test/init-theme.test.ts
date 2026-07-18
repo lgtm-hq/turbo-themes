@@ -2,7 +2,6 @@
  * Tests for initTheme function.
  * Tests theme initialization, localStorage integration, and CSS loading.
  */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { initTheme } from '../src/index';
 import {
@@ -10,6 +9,13 @@ import {
   mockThemeLoading,
   setupThemeLinkAutoLoad,
 } from '../../../test/helpers/mocks.js';
+
+/** Typed mock for the trigger-icon element used in applyTheme tests. */
+interface MockTriggerIconEl {
+  firstChild: ChildNode | null;
+  removeChild: ReturnType<typeof vi.fn>;
+  appendChild: ReturnType<typeof vi.fn>;
+}
 
 describe('initTheme', () => {
   let mocks: ReturnType<typeof setupDocumentMocks>;
@@ -105,7 +111,7 @@ describe('initTheme', () => {
   });
 
   it('falls back to text icon when theme has no icon', async () => {
-    const triggerIconEl: any = {
+    const triggerIconEl: MockTriggerIconEl = {
       firstChild: null,
       removeChild: vi.fn(),
       appendChild: vi.fn(),
@@ -141,13 +147,16 @@ describe('initTheme', () => {
   });
 
   it('handles URL constructor error (cssFile) without throwing', async () => {
-    const OriginalURL = globalThis.URL as any;
-    (globalThis as any).URL = vi.fn((input: any, base?: any) => {
-      if (typeof input === 'string' && input.includes('assets/css/themes')) {
-        throw new Error('bad url');
-      }
-      return new OriginalURL(input, base);
-    }) as any;
+    const OriginalURL = URL;
+    vi.stubGlobal(
+      'URL',
+      vi.fn((input: string, base?: string) => {
+        if (typeof input === 'string' && input.includes('assets/css/themes')) {
+          throw new Error('bad url');
+        }
+        return new OriginalURL(input, base);
+      })
+    );
 
     Object.defineProperty(document, 'getElementById', {
       value: vi.fn((id) => {
@@ -161,11 +170,11 @@ describe('initTheme', () => {
     mockThemeLoading();
     await expect(initTheme(document, window)).resolves.not.toThrow();
 
-    (globalThis as any).URL = OriginalURL;
+    vi.unstubAllGlobals();
   });
 
   it('handles icon URL constructor error in applyTheme', async () => {
-    const triggerIconEl: any = {
+    const triggerIconEl: MockTriggerIconEl = {
       firstChild: null,
       removeChild: vi.fn(),
       appendChild: vi.fn(),
@@ -179,24 +188,27 @@ describe('initTheme', () => {
       writable: true,
     });
 
-    const OriginalURL = globalThis.URL as any;
-    (globalThis as any).URL = vi.fn((input: any, base?: any) => {
-      if (typeof input === 'string' && input.includes('assets/img')) {
-        throw new Error('bad url');
-      }
-      return new OriginalURL(input, base);
-    }) as any;
+    const OriginalURL = URL;
+    vi.stubGlobal(
+      'URL',
+      vi.fn((input: string, base?: string) => {
+        if (typeof input === 'string' && input.includes('assets/img')) {
+          throw new Error('bad url');
+        }
+        return new OriginalURL(input, base);
+      })
+    );
 
     mocks.mockLocalStorage.getItem.mockReturnValue('catppuccin-frappe');
-    await expect(initTheme(document as any, window as any)).resolves.not.toThrow();
+    await expect(initTheme(document, window)).resolves.not.toThrow();
 
-    (globalThis as any).URL = OriginalURL;
+    vi.unstubAllGlobals();
   });
 
   it('uses text fallback for themes without icons', async () => {
     mocks.mockLocalStorage.getItem.mockReturnValue('catppuccin-latte');
     setupThemeLinkAutoLoad();
-    await initTheme(document as any, window as any);
+    await initTheme(document, window);
 
     expect(document.documentElement.classList.add).toHaveBeenCalledWith('theme-catppuccin-latte');
   });
