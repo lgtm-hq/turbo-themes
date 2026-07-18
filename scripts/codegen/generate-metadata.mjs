@@ -14,8 +14,15 @@
  * Run via: bun run generate:metadata (also wired into build:tokens)
  */
 
-import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
+import { dirname, isAbsolute, join, normalize, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -35,7 +42,7 @@ const SELECTOR_OUTPUT = join(
 );
 
 const IMG_PREFIX = 'assets/img/';
-const ASSETS_IMG_DIR = join(ROOT_DIR, 'assets', 'img');
+const ASSETS_IMG_DIR = resolve(ROOT_DIR, 'assets', 'img');
 
 /**
  * Serialize a JSON-compatible value as a TypeScript expression.
@@ -56,17 +63,72 @@ function withImgPrefix(filename) {
 }
 
 /**
- * Ensure an icon filename exists under assets/img/.
- * @param {string} filename - Bare filename or assets/img/-prefixed path
+ * Ensure an icon path is a non-empty relative file under assets/img/.
+ * Rejects empty values, path traversal, absolute paths, and directories.
+ * @param {unknown} filename - Bare filename or assets/img/-prefixed path
  * @param {string} context - Theme/vendor id for error messages
  */
 function assertIconExists(filename, context) {
-  const bare = filename.startsWith(IMG_PREFIX) ? filename.slice(IMG_PREFIX.length) : filename;
-  const absPath = join(ASSETS_IMG_DIR, bare);
-  if (!existsSync(absPath)) {
+  if (typeof filename !== 'string' || filename.trim().length === 0) {
+    throw new Error(
+      `[generate-metadata] Icon for "${context}" must be a non-empty string filename under assets/img/.`,
+    );
+  }
+
+  const trimmed = filename.trim();
+  if (isAbsolute(trimmed) || trimmed.includes('\0')) {
+    throw new Error(
+      `[generate-metadata] Icon "${trimmed}" for "${context}" must be a relative path under assets/img/.`,
+    );
+  }
+
+  const bare = trimmed.startsWith(IMG_PREFIX) ? trimmed.slice(IMG_PREFIX.length) : trimmed;
+  if (bare.trim().length === 0) {
+    throw new Error(
+      `[generate-metadata] Icon for "${context}" resolved to an empty path under assets/img/.`,
+    );
+  }
+
+  // Normalize and reject any segment that escapes the assets directory
+  // (e.g. "../", "..\\", or nested traversal after join).
+  const normalizedBare = normalize(bare);
+  if (
+    normalizedBare === '..' ||
+    normalizedBare.startsWith(`..${sep}`) ||
+    normalizedBare.includes(`${sep}..${sep}`) ||
+    normalizedBare.endsWith(`${sep}..`)
+  ) {
+    throw new Error(
+      `[generate-metadata] Icon "${trimmed}" for "${context}" must not contain path traversal.`,
+    );
+  }
+
+  const absPath = resolve(ASSETS_IMG_DIR, normalizedBare);
+  const relToAssets = relative(ASSETS_IMG_DIR, absPath);
+  if (
+    relToAssets === '' ||
+    relToAssets.startsWith(`..${sep}`) ||
+    relToAssets === '..' ||
+    isAbsolute(relToAssets)
+  ) {
+    throw new Error(
+      `[generate-metadata] Icon "${trimmed}" for "${context}" resolves outside assets/img/ ` +
+        `(${absPath}). Use a filename under assets/img/ only.`,
+    );
+  }
+
+  let stat;
+  try {
+    stat = statSync(absPath);
+  } catch {
     throw new Error(
       `[generate-metadata] Icon "${bare}" for "${context}" not found at ${absPath}. ` +
         'Place the image under assets/img/ or fix the icon field in the token schema.',
+    );
+  }
+  if (!stat.isFile()) {
+    throw new Error(
+      `[generate-metadata] Icon "${bare}" for "${context}" at ${absPath} must be a file, not a directory.`,
     );
   }
 }
@@ -86,12 +148,32 @@ function mapVendorIcon(icon, mapFilename) {
 
 /**
  * Collect bare icon filenames from a vendor icon config.
- * @param {string | { light: string, dark: string }} icon
+ * Validates string vs {light,dark} shape before returning paths.
+ * @param {unknown} icon
+ * @param {string} vendorId
  * @returns {string[]}
  */
-function vendorIconFilenames(icon) {
-  if (typeof icon === 'string') return [icon];
-  return [icon.light, icon.dark];
+function vendorIconFilenames(icon, vendorId) {
+  if (typeof icon === 'string') {
+    return [icon];
+  }
+  if (
+    icon !== null &&
+    typeof icon === 'object' &&
+    'light' in icon &&
+    'dark' in icon &&
+    typeof /** @type {{ light: unknown }} */ (icon).light === 'string' &&
+    typeof /** @type {{ dark: unknown }} */ (icon).dark === 'string'
+  ) {
+    return [
+      /** @type {{ light: string, dark: string }} */ (icon).light,
+      /** @type {{ light: string, dark: string }} */ (icon).dark,
+    ];
+  }
+  throw new Error(
+    `[generate-metadata] Vendor "${vendorId}" icon must be a filename string or ` +
+      '{ "light": string, "dark": string }.',
+  );
 }
 
 /**
@@ -183,7 +265,7 @@ function loadSources() {
     if (vendor.icon === undefined || vendor.icon === null) {
       throw new Error(`[generate-metadata] Vendor "${vendor.id}" is missing required icon`);
     }
-    for (const filename of vendorIconFilenames(vendor.icon)) {
+    for (const filename of vendorIconFilenames(vendor.icon, vendor.id)) {
       assertIconExists(filename, `vendor:${vendor.id}`);
     }
   }
