@@ -15,6 +15,7 @@ import { rosePineSynced } from './packs/rose-pine.synced.js';
 import { solarizedThemes } from './packs/solarized.js';
 import { terminalThemes } from './packs/terminal.js';
 import { tokyoNightThemes } from './packs/tokyo-night.js';
+import { kanagawaThemes } from './packs/kanagawa.js';
 
 // Collect all flavors from all theme packages
 const allFlavors: ThemeFlavor[] = [
@@ -31,6 +32,7 @@ const allFlavors: ThemeFlavor[] = [
   ...solarizedThemes.flavors,
   ...terminalThemes.flavors,
   ...tokyoNightThemes.flavors,
+  ...kanagawaThemes.flavors,
 ];
 
 // Export flavors array for use in CSS generation

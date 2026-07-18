@@ -1,6 +1,7 @@
 ---
 title: Theme Definitions
 description: Complete reference for all 30 Turbo Themes color schemes.
+description: Complete reference for all 27 Turbo Themes color schemes.
 category: api-reference
 order: 4
 prev: api-reference/tokens
@@ -10,11 +11,13 @@ next: api-reference/javascript-api
 # Theme Definitions
 
 Turbo Themes includes 30 color schemes across 10 vendor families. The canonical list is
+Turbo Themes includes 27 color schemes across 10 vendor families. The canonical list is
 always available at runtime:
 
 ```typescript
 import { themeIds } from '@lgtm-hq/turbo-themes';
 // → readonly string[] of all 30 theme IDs, sorted by vendor then variant
+// → readonly string[] of all 27 theme IDs, sorted by vendor then variant
 ```
 
 ## Theme Overview
@@ -51,6 +54,35 @@ import { themeIds } from '@lgtm-hq/turbo-themes';
 | Tokyo Night Dark      | Tokyo Night | Dark       | `tokyo-night-dark`      |
 | Tokyo Night Storm     | Tokyo Night | Dark       | `tokyo-night-storm`     |
 | Tokyo Night Light     | Tokyo Night | Light      | `tokyo-night-light`     |
+| Theme                | Vendor      | Appearance | ID                     |
+| -------------------- | ----------- | ---------- | ---------------------- |
+| Catppuccin Mocha     | Catppuccin  | Dark       | `catppuccin-mocha`     |
+| Catppuccin Macchiato | Catppuccin  | Dark       | `catppuccin-macchiato` |
+| Catppuccin Frappé    | Catppuccin  | Dark       | `catppuccin-frappe`    |
+| Catppuccin Latte     | Catppuccin  | Light      | `catppuccin-latte`     |
+| Dracula              | Dracula     | Dark       | `dracula`              |
+| Gruvbox Dark Hard    | Gruvbox     | Dark       | `gruvbox-dark-hard`    |
+| Gruvbox Dark         | Gruvbox     | Dark       | `gruvbox-dark`         |
+| Gruvbox Dark Soft    | Gruvbox     | Dark       | `gruvbox-dark-soft`    |
+| Gruvbox Light Hard   | Gruvbox     | Light      | `gruvbox-light-hard`   |
+| Gruvbox Light        | Gruvbox     | Light      | `gruvbox-light`        |
+| Gruvbox Light Soft   | Gruvbox     | Light      | `gruvbox-light-soft`   |
+| GitHub Dark          | GitHub      | Dark       | `github-dark`          |
+| GitHub Light         | GitHub      | Light      | `github-light`         |
+| Bulma Dark           | Bulma       | Dark       | `bulma-dark`           |
+| Bulma Light          | Bulma       | Light      | `bulma-light`          |
+| Nord                 | Nord        | Dark       | `nord`                 |
+| Rosé Pine            | Rosé Pine   | Dark       | `rose-pine`            |
+| Rosé Pine Moon       | Rosé Pine   | Dark       | `rose-pine-moon`       |
+| Rosé Pine Dawn       | Rosé Pine   | Light      | `rose-pine-dawn`       |
+| Solarized Dark       | Solarized   | Dark       | `solarized-dark`       |
+| Solarized Light      | Solarized   | Light      | `solarized-light`      |
+| Tokyo Night Dark     | Tokyo Night | Dark       | `tokyo-night-dark`     |
+| Tokyo Night Storm    | Tokyo Night | Dark       | `tokyo-night-storm`    |
+| Tokyo Night Light    | Tokyo Night | Light      | `tokyo-night-light`    |
+| Kanagawa Wave        | Kanagawa    | Dark       | `kanagawa-wave`        |
+| Kanagawa Dragon      | Kanagawa    | Dark       | `kanagawa-dragon`      |
+| Kanagawa Lotus       | Kanagawa    | Light      | `kanagawa-lotus`       |
 
 ## Curating a theme subset
 
@@ -65,6 +97,7 @@ import {
 } from '@lgtm-hq/turbo-themes';
 
 // All 30 themes
+// All 27 themes
 const all = themeIds;
 
 // Vendor opt-in
@@ -427,22 +460,61 @@ A slightly lighter dark variant.
 | Text Primary       | `#343b58` |
 | Brand Primary      | `#34548a` |
 
+## Kanagawa Themes
+
+[Kanagawa](https://github.com/rebelot/kanagawa.nvim) is inspired by Katsushika Hokusai's
+painting "The Great Wave off Kanagawa."
+
+### Kanagawa Wave
+
+| Token              | Value     |
+| ------------------ | --------- |
+| Background Base    | `#1F1F28` |
+| Background Surface | `#2A2A37` |
+| Background Overlay | `#363646` |
+| Text Primary       | `#DCD7BA` |
+| Brand Primary      | `#7E9CD8` |
+| State Success      | `#98BB6C` |
+| State Danger       | `#E82424` |
+
+### Kanagawa Dragon
+
+A darker variant for late-night sessions.
+
+| Token              | Value     |
+| ------------------ | --------- |
+| Background Base    | `#181616` |
+| Background Surface | `#282727` |
+| Background Overlay | `#393836` |
+| Text Primary       | `#c5c9c5` |
+| Brand Primary      | `#8ba4b0` |
+
+### Kanagawa Lotus
+
+| Token              | Value     |
+| ------------------ | --------- |
+| Background Base    | `#f2ecbc` |
+| Background Surface | `#e7dba0` |
+| Background Overlay | `#e4d794` |
+| Text Primary       | `#545464` |
+| Brand Primary      | `#4d699b` |
+
 ## Choosing a Theme
 
 ### Starter recommendations
 
-- **Dark, warm:** Catppuccin Mocha, Gruvbox Dark, Rosé Pine
+- **Dark, warm:** Catppuccin Mocha, Gruvbox Dark, Rosé Pine, Kanagawa Wave
 - **Dark, vibrant:** Dracula, Tokyo Night Dark
-- **Dark, minimal:** GitHub Dark, Nord
-- **Light:** Catppuccin Latte, GitHub Light, Rosé Pine Dawn, Solarized Light
+- **Dark, minimal:** GitHub Dark, Nord, Kanagawa Dragon
+- **Light:** Catppuccin Latte, GitHub Light, Rosé Pine Dawn, Solarized Light, Kanagawa Lotus
 
 ### By appearance
 
 ```typescript
 import { getThemesByAppearance } from '@lgtm-hq/turbo-themes';
 
-const darkThemes = getThemesByAppearance('dark').map((f) => f.id); // 15 themes
-const lightThemes = getThemesByAppearance('light').map((f) => f.id); // 9 themes
+const darkThemes = getThemesByAppearance('dark').map((f) => f.id); // 17 themes
+const lightThemes = getThemesByAppearance('light').map((f) => f.id); // 10 themes
 ```
 
 ## Loading Themes

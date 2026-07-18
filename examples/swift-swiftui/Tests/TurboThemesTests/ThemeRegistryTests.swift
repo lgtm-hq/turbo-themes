@@ -23,6 +23,9 @@ final class ThemeRegistryTests: XCTestCase {
         // We expect 27 themes based on the ThemeId enum
         XCTAssertEqual(ThemeId.allCases.count, 33)
         XCTAssertEqual(ThemeRegistry.allThemes.count, 33)
+        // We expect 24 themes based on the ThemeId enum
+        XCTAssertEqual(ThemeId.allCases.count, 24)
+        XCTAssertEqual(ThemeRegistry.allThemes.count, 24)
     }
 
     // MARK: - Theme Lookup Tests
@@ -85,6 +88,9 @@ final class ThemeRegistryTests: XCTestCase {
             .radixSlateLight: "Radix Colors Slate Light",
             .radixMauveDark: "Radix Colors Mauve Dark",
             .radixMauveLight: "Radix Colors Mauve Light",
+            .kanagawaWave: "Kanagawa Wave",
+            .kanagawaDragon: "Kanagawa Dragon",
+            .kanagawaLotus: "Kanagawa Lotus",
         ]
 
         for (themeId, expectedLabel) in expectedLabels {
@@ -127,6 +133,9 @@ final class ThemeRegistryTests: XCTestCase {
         XCTAssertEqual(ThemeId.radixSlateLight.rawValue, "radix-slate-light")
         XCTAssertEqual(ThemeId.radixMauveDark.rawValue, "radix-mauve-dark")
         XCTAssertEqual(ThemeId.radixMauveLight.rawValue, "radix-mauve-light")
+        XCTAssertEqual(ThemeId.kanagawaWave.rawValue, "kanagawa-wave")
+        XCTAssertEqual(ThemeId.kanagawaDragon.rawValue, "kanagawa-dragon")
+        XCTAssertEqual(ThemeId.kanagawaLotus.rawValue, "kanagawa-lotus")
     }
 
     // MARK: - Default Palette Tests

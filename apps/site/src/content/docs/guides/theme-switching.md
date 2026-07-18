@@ -14,6 +14,7 @@ Learn how to implement theme switching that persists across page loads.
 ## Choosing your theme catalog
 
 Turbo Themes ships with 30 themes across 10 vendor families. A "catalog" is simply the
+Turbo Themes ships with 27 themes across 10 vendor families. A "catalog" is simply the
 subset of themes you expose to users in your app. The right approach depends on your
 build tooling.
 
@@ -194,6 +195,9 @@ For plain HTML files, write the script directly using your hardcoded catalog:
         'tokyo-night-dark',
         'tokyo-night-light',
         'tokyo-night-storm',
+        'kanagawa-wave',
+        'kanagawa-dragon',
+        'kanagawa-lotus',
       ];
 
       var saved = localStorage.getItem('turbo-theme');
