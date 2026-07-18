@@ -25,13 +25,14 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
         href="https://github.com/lgtm-hq/turbo-themes"
         target="_blank"
         rel="noopener"
+        data-testid="footer-link-github"
       >
         GitHub
       </a>
       <span class="footer-separator">·</span>
-      <a href={`${baseUrl}/docs/`}>Documentation</a>
+      <a href={`${baseUrl}/docs/`} data-testid="footer-link-docs">Documentation</a>
       <span class="footer-separator">·</span>
-      <a href={`${baseUrl}/themes/`}>Themes</a>
+      <a href={`${baseUrl}/themes/`} data-testid="footer-link-themes">Themes</a>
     </div>
     <p class="footer-copyright">Made with care. MIT License.</p>
   </div>

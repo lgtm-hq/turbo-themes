@@ -39,10 +39,10 @@ const previewCode = `const theme = {
         A design token system with {themeCount} curated color themes. Switch themes instantly with CSS custom properties.
       </p>
       <div class="hero-actions">
-        <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg">
+        <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="hero-cta-get-started">
           Get Started
         </a>
-        <a href={`${baseUrl}/themes/`} class="btn btn-outline btn-lg">
+        <a href={`${baseUrl}/themes/`} class="btn btn-outline btn-lg" data-testid="hero-cta-explore-themes">
           Explore Themes
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"></path>
@@ -53,38 +53,38 @@ const previewCode = `const theme = {
       <div class="hero-theme-strip">
         <span class="hero-theme-label">Try a theme:</span>
         <div class="hero-theme-options">
-          <button class="hero-theme-btn" data-theme-preview="catppuccin-mocha" title="Catppuccin Mocha">
+          <button class="hero-theme-btn" data-theme-preview="catppuccin-mocha" data-testid="hero-theme-preview-catppuccin-mocha" title="Catppuccin Mocha">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/catppuccin-logo-macchiato.png`} alt="Catppuccin Mocha" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="dracula" title="Dracula">
+          <button class="hero-theme-btn" data-theme-preview="dracula" data-testid="hero-theme-preview-dracula" title="Dracula">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/dracula-logo.png`} alt="Dracula" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="gruvbox-dark" title="Gruvbox Dark">
+          <button class="hero-theme-btn" data-theme-preview="gruvbox-dark" data-testid="hero-theme-preview-gruvbox-dark" title="Gruvbox Dark">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/gruvbox-dark.png`} alt="Gruvbox Dark" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="github-dark" title="GitHub Dark">
+          <button class="hero-theme-btn" data-theme-preview="github-dark" data-testid="hero-theme-preview-github-dark" title="GitHub Dark">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/github-logo-dark.png`} alt="GitHub Dark" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="bulma-dark" title="Bulma Dark">
+          <button class="hero-theme-btn" data-theme-preview="bulma-dark" data-testid="hero-theme-preview-bulma-dark" title="Bulma Dark">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/turbo-themes-logo-dark.png`} alt="Bulma Dark" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="nord" title="Nord">
+          <button class="hero-theme-btn" data-theme-preview="nord" data-testid="hero-theme-preview-nord" title="Nord">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/nord.png`} alt="Nord" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="solarized-dark" title="Solarized Dark">
+          <button class="hero-theme-btn" data-theme-preview="solarized-dark" data-testid="hero-theme-preview-solarized-dark" title="Solarized Dark">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/solarized-dark.png`} alt="Solarized Dark" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="tokyo-night-dark" title="Tokyo Night">
+          <button class="hero-theme-btn" data-theme-preview="tokyo-night-dark" data-testid="hero-theme-preview-tokyo-night-dark" title="Tokyo Night">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/tokyo-night.png`} alt="Tokyo Night" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="rose-pine" title="Rosé Pine">
+          <button class="hero-theme-btn" data-theme-preview="rose-pine" data-testid="hero-theme-preview-rose-pine" title="Rosé Pine">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/rose-pine.png`} alt="Rosé Pine" width="28" height="28" />
           </button>
-          <button class="hero-theme-btn" data-theme-preview="catppuccin-latte" title="Catppuccin Latte">
+          <button class="hero-theme-btn" data-theme-preview="catppuccin-latte" data-testid="hero-theme-preview-catppuccin-latte" title="Catppuccin Latte">
             <img class="hero-theme-icon" src={`${baseUrl}/assets/img/catppuccin-logo-latte.png`} alt="Catppuccin Latte" width="28" height="28" />
           </button>
         </div>
-        <a href={`${baseUrl}/themes/`} class="hero-theme-more">View all</a>
+        <a href={`${baseUrl}/themes/`} class="hero-theme-more" data-testid="hero-link-view-all-themes">View all</a>
       </div>
     </div>
   </section>
@@ -188,7 +188,7 @@ const previewCode = `const theme = {
       </div>
 
       <div class="install-cta">
-        <a href={`${baseUrl}/docs/installation/`} class="btn btn-ghost">
+        <a href={`${baseUrl}/docs/installation/`} class="btn btn-ghost" data-testid="installation-cta-guide">
           View full installation guide
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"></path>
@@ -265,7 +265,7 @@ const previewCode = `const theme = {
       </div>
 
       <div class="section-footer">
-        <a href={`${baseUrl}/components/`} class="btn btn-ghost">
+        <a href={`${baseUrl}/components/`} class="btn btn-ghost" data-testid="components-link-view-all">
           View all components
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M5 12h14M12 5l7 7-7 7"></path>
@@ -328,10 +328,10 @@ const previewCode = `const theme = {
         <h2 class="cta-title">Ready to get started?</h2>
         <p class="cta-subtitle">Install Turbo Themes and start building beautiful, themeable interfaces.</p>
         <div class="cta-actions">
-          <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg">
+          <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="ready-cta-docs">
             Read the Docs
           </a>
-          <a href="https://github.com/lgtm-hq/turbo-themes" class="btn btn-outline btn-lg" target="_blank" rel="noopener">
+          <a href="https://github.com/lgtm-hq/turbo-themes" class="btn btn-outline btn-lg" target="_blank" rel="noopener" data-testid="ready-cta-github">
             View on GitHub
           </a>
         </div>

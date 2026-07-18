@@ -22,7 +22,7 @@ const nextDoc = next ? allDocs.find(d => d.id === next) : null;
   <nav class="prev-next" aria-label="Previous and next pages">
     <div class="prev-next-inner">
       {prevDoc ? (
-        <a href={`${baseUrl}/docs/${prevDoc.id}/`} class="prev-next-link prev">
+        <a href={`${baseUrl}/docs/${prevDoc.id}/`} class="prev-next-link prev" data-testid="docs-prev-link">
           <span class="prev-next-direction">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -34,7 +34,7 @@ const nextDoc = next ? allDocs.find(d => d.id === next) : null;
       ) : <div />}
 
       {nextDoc ? (
-        <a href={`${baseUrl}/docs/${nextDoc.id}/`} class="prev-next-link next">
+        <a href={`${baseUrl}/docs/${nextDoc.id}/`} class="prev-next-link next" data-testid="docs-next-link">
           <span class="prev-next-direction">
             Next
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
