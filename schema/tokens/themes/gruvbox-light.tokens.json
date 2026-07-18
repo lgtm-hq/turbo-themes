@@ -4,6 +4,8 @@
   "label": "Gruvbox Light",
   "vendor": "gruvbox",
   "appearance": "light",
+  "description": "Classic Gruvbox light palette with warm paper tones.",
+  "icon": "gruvbox-light.png",
   "tokens": {
     "background": {
       "base": {

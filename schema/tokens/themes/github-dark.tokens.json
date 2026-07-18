@@ -4,6 +4,8 @@
   "label": "GitHub Dark",
   "vendor": "github",
   "appearance": "dark",
+  "description": "GitHub dark theme optimized for code-heavy views.",
+  "icon": "github-logo-dark.png",
   "tokens": {
     "background": {
       "base": {

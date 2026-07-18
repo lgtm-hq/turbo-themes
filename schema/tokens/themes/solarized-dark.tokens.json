@@ -4,6 +4,8 @@
   "label": "Solarized Dark",
   "vendor": "solarized",
   "appearance": "dark",
+  "description": "Solarized Dark with a balanced, low-contrast palette.",
+  "icon": "solarized-dark.png",
   "tokens": {
     "background": {
       "base": {

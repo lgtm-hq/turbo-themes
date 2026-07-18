@@ -1,9 +1,11 @@
 {
   "$schema": "../../turbo-themes.schema.json#/$defs/ThemeFile",
   "id": "rose-pine-dawn",
-  "label": "Ros\u00e9 Pine Dawn",
+  "label": "Rosé Pine Dawn",
   "vendor": "rose-pine",
   "appearance": "light",
+  "description": "Light Rosé Pine variant for daytime use.",
+  "icon": "rose-pine-dawn.png",
   "tokens": {
     "background": {
       "base": {

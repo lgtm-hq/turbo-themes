@@ -4,6 +4,8 @@
   "label": "Dracula",
   "vendor": "dracula",
   "appearance": "dark",
+  "description": "Iconic Dracula dark theme with vibrant accents.",
+  "icon": "dracula-logo.png",
   "tokens": {
     "background": {
       "base": {

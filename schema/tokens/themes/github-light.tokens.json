@@ -4,6 +4,8 @@
   "label": "GitHub Light",
   "vendor": "github",
   "appearance": "light",
+  "description": "GitHub-inspired light theme suited for documentation and UI heavy pages.",
+  "icon": "github-logo-light.png",
   "tokens": {
     "background": {
       "base": {

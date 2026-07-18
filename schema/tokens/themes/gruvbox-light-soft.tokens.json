@@ -4,6 +4,8 @@
   "label": "Gruvbox Light Soft",
   "vendor": "gruvbox",
   "appearance": "light",
+  "description": "Soft, low-contrast Gruvbox light palette for long sessions.",
+  "icon": "gruvbox-light-soft.png",
   "tokens": {
     "background": {
       "base": {

@@ -4,6 +4,8 @@
   "label": "Solarized Light",
   "vendor": "solarized",
   "appearance": "light",
+  "description": "Solarized Light tuned for bright, daylight-friendly UIs.",
+  "icon": "solarized-light.png",
   "tokens": {
     "background": {
       "base": {

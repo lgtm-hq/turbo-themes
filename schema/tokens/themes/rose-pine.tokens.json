@@ -4,6 +4,8 @@
   "label": "Rosé Pine",
   "vendor": "rose-pine",
   "appearance": "dark",
+  "description": "Elegant dark theme with natural pine and soho vibes.",
+  "icon": "rose-pine.png",
   "tokens": {
     "background": {
       "base": {

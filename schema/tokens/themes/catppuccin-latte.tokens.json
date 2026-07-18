@@ -4,6 +4,8 @@
   "label": "Catppuccin Latte",
   "vendor": "catppuccin",
   "appearance": "light",
+  "description": "Light, soft Catppuccin palette for daytime use.",
+  "icon": "catppuccin-logo-latte.png",
   "tokens": {
     "background": {
       "base": {
