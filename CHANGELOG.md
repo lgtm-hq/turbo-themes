@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.24.2] - 2026-07-18
+
+### 🐛 Fixed
+
+- remove dangerous workflow_run.head_sha checkout pattern (#566)
+
 ## [0.24.1] - 2026-07-18
 
 ### 🐛 Fixed
