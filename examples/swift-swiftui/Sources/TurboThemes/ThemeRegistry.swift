@@ -380,6 +380,38 @@ public enum ThemeRegistry {
                 stateInfo: Color(hex: "#d7827e")
             )
         ),
+        .oneDark: ThemeDefinition(
+            id: .oneDark,
+            label: "One Dark",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#282c34"),
+                backgroundSurface: Color(hex: "#2c313a"),
+                heading: Color(hex: "#61afef"),
+                bodyPrimary: Color(hex: "#abb2bf"),
+                bodySecondary: Color(hex: "#828997"),
+                brandPrimary: Color(hex: "#61afef"),
+                stateSuccess: Color(hex: "#98c379"),
+                stateDanger: Color(hex: "#e06c75"),
+                stateWarning: Color(hex: "#e5c07b"),
+                stateInfo: Color(hex: "#56b6c2")
+            )
+        ),
+        .oneLight: ThemeDefinition(
+            id: .oneLight,
+            label: "One Light",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#fafafa"),
+                backgroundSurface: Color(hex: "#f0f0f0"),
+                heading: Color(hex: "#4078f2"),
+                bodyPrimary: Color(hex: "#383a42"),
+                bodySecondary: Color(hex: "#696c77"),
+                brandPrimary: Color(hex: "#4078f2"),
+                stateSuccess: Color(hex: "#50a14f"),
+                stateDanger: Color(hex: "#e45649"),
+                stateWarning: Color(hex: "#c18401"),
+                stateInfo: Color(hex: "#0184bc")
+            )
+        ),
     ]
 
     /// Get a theme by its ID.

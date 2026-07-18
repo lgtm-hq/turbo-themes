@@ -23,6 +23,8 @@ const THEMES = [
   { id: "rose-pine", name: "Rosé Pine" },
   { id: "rose-pine-moon", name: "Rosé Pine Moon" },
   { id: "rose-pine-dawn", name: "Rosé Pine Dawn" },
+  { id: "one-dark", name: "One Dark" },
+  { id: "one-light", name: "One Light" },
 ] as const;
 
 const VALID_THEME_IDS = THEMES.map((t) => t.id);

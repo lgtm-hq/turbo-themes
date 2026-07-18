@@ -20,6 +20,8 @@ const THEMES = [
   { id: 'rose-pine-dawn', isLight: true },
   { id: 'solarized-dark', isLight: false },
   { id: 'solarized-light', isLight: true },
+  { id: 'one-dark', isLight: false },
+  { id: 'one-light', isLight: true },
 ];
 const VALID_THEMES = THEMES.map((t) => t.id);
 const LIGHT_THEMES = THEMES.filter((t) => t.isLight).map((t) => t.id);

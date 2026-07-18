@@ -79,6 +79,7 @@ const vendorMeta = {
   gruvbox: { name: "Gruvbox", homepage: "https://github.com/morhetz/gruvbox" },
   github: { name: "GitHub (synced)", homepage: "https://primer.style/" },
   nord: { name: "Nord", homepage: "https://www.nordtheme.com/" },
+  "one-dark": { name: "One", homepage: "https://github.com/Binaryify/OneDark-Pro" },
   "rose-pine": { name: "Rosé Pine (synced)", homepage: "https://rosepinetheme.com/" },
   solarized: { name: "Solarized", homepage: "https://ethanschoonover.com/solarized/" },
   "tokyo-night": {

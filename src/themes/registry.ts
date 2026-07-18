@@ -8,6 +8,7 @@ import { draculaThemes } from './packs/dracula.js';
 import { gruvboxThemes } from './packs/gruvbox.js';
 import { githubSynced } from './packs/github.synced.js';
 import { nordThemes } from './packs/nord.js';
+import { oneDarkThemes } from './packs/one-dark.js';
 import { rosePineSynced } from './packs/rose-pine.synced.js';
 import { solarizedThemes } from './packs/solarized.js';
 import { tokyoNightThemes } from './packs/tokyo-night.js';
@@ -20,6 +21,7 @@ const allFlavors: ThemeFlavor[] = [
   ...gruvboxThemes.flavors,
   ...githubSynced.flavors,
   ...nordThemes.flavors,
+  ...oneDarkThemes.flavors,
   ...rosePineSynced.flavors,
   ...solarizedThemes.flavors,
   ...tokyoNightThemes.flavors,

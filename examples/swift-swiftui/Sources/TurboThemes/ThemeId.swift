@@ -23,4 +23,6 @@ public enum ThemeId: String, CaseIterable, Sendable {
     case rosePine = "rose-pine"
     case rosePineMoon = "rose-pine-moon"
     case rosePineDawn = "rose-pine-dawn"
+    case oneDark = "one-dark"
+    case oneLight = "one-light"
 }

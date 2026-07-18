@@ -1,0 +1,207 @@
+{
+  "$schema": "../../turbo-themes.schema.json#/$defs/ThemeFile",
+  "id": "one-light",
+  "label": "One Light",
+  "vendor": "one-dark",
+  "appearance": "light",
+  "tokens": {
+    "background": {
+      "base": {
+        "$value": "#fafafa",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#f0f0f0",
+        "$type": "color"
+      },
+      "overlay": {
+        "$value": "#e5e5e6",
+        "$type": "color"
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "#383a42",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#696c77",
+        "$type": "color"
+      },
+      "inverse": {
+        "$value": "#fafafa",
+        "$type": "color"
+      }
+    },
+    "brand": {
+      "primary": {
+        "$value": "#4078f2",
+        "$type": "color"
+      }
+    },
+    "state": {
+      "info": {
+        "$value": "#0184bc",
+        "$type": "color"
+      },
+      "success": {
+        "$value": "#50a14f",
+        "$type": "color"
+      },
+      "warning": {
+        "$value": "#c18401",
+        "$type": "color"
+      },
+      "danger": {
+        "$value": "#e45649",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "successText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "warningText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#000000",
+        "$type": "color"
+      }
+    },
+    "border": {
+      "default": {
+        "$value": "#d0d0d1",
+        "$type": "color"
+      }
+    },
+    "accent": {
+      "link": {
+        "$value": "#4078f2",
+        "$type": "color"
+      }
+    },
+    "typography": {
+      "fonts": {
+        "sans": {
+          "$value": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
+          "$type": "fontFamily"
+        },
+        "mono": {
+          "$value": "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+          "$type": "fontFamily"
+        }
+      },
+      "webFonts": [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap",
+        "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap"
+      ]
+    },
+    "content": {
+      "heading": {
+        "h1": {
+          "$value": "#4078f2",
+          "$type": "color"
+        },
+        "h2": {
+          "$value": "#a626a4",
+          "$type": "color"
+        },
+        "h3": {
+          "$value": "#50a14f",
+          "$type": "color"
+        },
+        "h4": {
+          "$value": "#c18401",
+          "$type": "color"
+        },
+        "h5": {
+          "$value": "#986801",
+          "$type": "color"
+        },
+        "h6": {
+          "$value": "#0184bc",
+          "$type": "color"
+        }
+      },
+      "body": {
+        "primary": {
+          "$value": "#383a42",
+          "$type": "color"
+        },
+        "secondary": {
+          "$value": "#696c77",
+          "$type": "color"
+        }
+      },
+      "link": {
+        "default": {
+          "$value": "#4078f2",
+          "$type": "color"
+        }
+      },
+      "selection": {
+        "fg": {
+          "$value": "#383a42",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#dfe1e5",
+          "$type": "color"
+        }
+      },
+      "blockquote": {
+        "border": {
+          "$value": "#d0d0d1",
+          "$type": "color"
+        },
+        "fg": {
+          "$value": "#696c77",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#f0f0f0",
+          "$type": "color"
+        }
+      },
+      "codeInline": {
+        "fg": {
+          "$value": "#a626a4",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#e5e5e6",
+          "$type": "color"
+        }
+      },
+      "codeBlock": {
+        "fg": {
+          "$value": "#383a42",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#e5e5e6",
+          "$type": "color"
+        }
+      },
+      "table": {
+        "border": {
+          "$value": "#d0d0d1",
+          "$type": "color"
+        },
+        "stripe": {
+          "$value": "#f0f0f0",
+          "$type": "color"
+        },
+        "theadBg": {
+          "$value": "#e5e5e6",
+          "$type": "color"
+        }
+      }
+    }
+  }
+}

@@ -12,6 +12,7 @@ export type ThemeFamily =
   | 'dracula'
   | 'gruvbox'
   | 'nord'
+  | 'one-dark'
   | 'rose-pine'
   | 'solarized'
   | 'tokyo-night';
