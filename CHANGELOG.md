@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.27.0] - 2026-07-18
+
+### ✨ Added
+
+- add Terminal theme pack (#567)
+
 ## [0.26.0] - 2026-07-18
 
 ### ✨ Added
