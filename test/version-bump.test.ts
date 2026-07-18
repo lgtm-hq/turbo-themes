@@ -1,17 +1,21 @@
 /**
  * Tests for generateChangelogEntry() bucketing logic in scripts/ci/version-bump.mjs.
  *
- * Regression coverage for GitHub issue #546: docs/style/refactor/perf/test/chore
- * commits were incorrectly bucketed under "🐛 Fixed" instead of "🔧 Changed".
+ * Regression coverage for:
+ * - GitHub issue #546: docs/style/refactor/perf/test/chore under Changed (not Fixed)
+ * - GitHub issue #581: scope-aware filtering (ci/build) + human-readable descriptions
  */
 import { describe, expect, it } from 'vitest';
 
 // version-bump.mjs is a plain Node ESM script; Vitest runs in Node so the
 // import is straightforward. The module only calls main() when import.meta.url
 // matches process.argv[1], so importing it here has no side-effects.
-const { generateChangelogEntry, determineBumpType } = await import(
-  '../scripts/ci/version-bump.mjs'
-);
+const {
+  generateChangelogEntry,
+  determineBumpType,
+  formatChangelogDescription,
+  isChangelogIgnoredScope,
+} = await import('../scripts/ci/version-bump.mjs');
 
 /**
  * Simulate a git-log --oneline line the way getCommitsSinceLastTag() produces it.
@@ -29,7 +33,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
         const commits = [fakeCommit(type, 'resolve null pointer')];
         const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
         expect(entry).toContain('### 🐛 Fixed');
-        expect(entry).toContain('- resolve null pointer');
+        expect(entry).toContain('- Resolve null pointer');
         expect(entry).not.toContain('### 🔧 Changed');
       },
     );
@@ -42,7 +46,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
         const commits = [fakeCommit(type, `update ${type} thing`)];
         const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
         expect(entry).toContain('### 🔧 Changed');
-        expect(entry).toContain(`- update ${type} thing`);
+        expect(entry).toContain(`- Update ${type} thing`);
         expect(entry).not.toContain('### 🐛 Fixed');
       },
     );
@@ -58,7 +62,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       expect(entry).not.toContain('### 🐛 Fixed');
       expect(entry).toContain('### 🔧 Changed');
       expect(entry).toContain(
-        '- add AGENTS.md with Cursor Cloud dev environment instructions (#542)',
+        '- Add AGENTS.md with Cursor Cloud dev environment instructions (#542)',
       );
     });
   });
@@ -68,7 +72,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       const commits = [fakeCommit(type, 'add dark mode toggle')];
       const entry = generateChangelogEntry(commits, '1.1.0', 'minor');
       expect(entry).toContain('### ✨ Added');
-      expect(entry).toContain('- add dark mode toggle');
+      expect(entry).toContain('- Add dark mode toggle');
       expect(entry).not.toContain('### 🐛 Fixed');
       expect(entry).not.toContain('### 🔧 Changed');
     });
@@ -84,8 +88,98 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
         ];
         const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
         expect(entry).not.toContain('update workflow');
+        expect(entry).not.toContain('Update workflow');
       },
     );
+  });
+
+  describe('issue #581: changelog-ignored scopes (ci/build) omitted from consumer sections', () => {
+    it.each(['ci', 'build'] as const)(
+      'fix(%s) does not appear under Fixed',
+      (scope) => {
+        const commits = [
+          fakeCommit('fix', 'address greptile findings', scope),
+          fakeCommit('fix', 'resolve token lookup', 'core'),
+        ];
+        const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
+
+        expect(entry).toContain('### 🐛 Fixed');
+        expect(entry).toContain('- Resolve token lookup');
+        expect(entry).not.toContain('address greptile findings');
+        expect(entry).not.toContain('Address greptile findings');
+      },
+    );
+
+    it.each(['ci', 'build'] as const)(
+      'feat(%s) does not appear under Added',
+      (scope) => {
+        const commits = [
+          fakeCommit('feat', 'wire release workflow', scope),
+          fakeCommit('feat', 'add theme export'),
+        ];
+        const entry = generateChangelogEntry(commits, '1.1.0', 'minor');
+
+        expect(entry).toContain('### ✨ Added');
+        expect(entry).toContain('- Add theme export');
+        expect(entry).not.toContain('wire release workflow');
+        expect(entry).not.toContain('Wire release workflow');
+      },
+    );
+
+    it.each(['ci', 'build'] as const)(
+      'chore(%s) does not appear under Changed',
+      (scope) => {
+        const commits = [
+          fakeCommit('chore', 'tweak pipeline cache', scope),
+          fakeCommit('docs', 'update README'),
+        ];
+        const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
+
+        expect(entry).toContain('### 🔧 Changed');
+        expect(entry).toContain('- Update README');
+        expect(entry).not.toContain('tweak pipeline cache');
+        expect(entry).not.toContain('Tweak pipeline cache');
+      },
+    );
+
+    it('scope matching is case-insensitive', () => {
+      const commits = [
+        fakeCommit('fix', 'uppercase scope noise', 'CI'),
+        fakeCommit('fix', 'real consumer fix'),
+      ];
+      const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
+      expect(entry).toContain('- Real consumer fix');
+      expect(entry).not.toContain('uppercase scope noise');
+      expect(entry).not.toContain('Uppercase scope noise');
+    });
+
+    it('non-ignored scopes still appear in the correct section', () => {
+      const commits = [fakeCommit('fix', 'resolve token lookup', 'core')];
+      const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
+      expect(entry).toContain('### 🐛 Fixed');
+      expect(entry).toContain('- Resolve token lookup');
+    });
+  });
+
+  describe('issue #581: human-readable changelog descriptions', () => {
+    it('capitalizes the first character of each entry', () => {
+      const commits = [fakeCommit('fix', 'bucket docs under Changed (#570)')];
+      const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
+      expect(entry).toContain('- Bucket docs under Changed (#570)');
+      expect(entry).not.toContain('- bucket docs under Changed (#570)');
+    });
+
+    it('preserves trailing PR refs from the commit message', () => {
+      const commits = [fakeCommit('feat', 'add dark mode toggle (#580)')];
+      const entry = generateChangelogEntry(commits, '1.1.0', 'minor');
+      expect(entry).toContain('- Add dark mode toggle (#580)');
+    });
+
+    it('leaves already-capitalized descriptions unchanged aside from first char', () => {
+      expect(formatChangelogDescription('Resolve null pointer')).toBe('Resolve null pointer');
+      expect(formatChangelogDescription('add theme')).toBe('Add theme');
+      expect(formatChangelogDescription('')).toBe('');
+    });
   });
 
   describe('mixed release with multiple types', () => {
@@ -96,22 +190,25 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
         fakeCommit('docs', 'update README'),
         fakeCommit('chore', 'bump deps'),
         fakeCommit('refactor', 'simplify renderer'),
-        fakeCommit('ci', 'add lint job'), // should be ignored
+        fakeCommit('ci', 'add lint job'), // ignored type
+        fakeCommit('fix', 'address greptile P2 findings', 'ci'), // ignored scope
       ];
       const entry = generateChangelogEntry(commits, '1.1.1', 'minor');
 
       expect(entry).toContain('### ✨ Added');
-      expect(entry).toContain('- add theme export');
+      expect(entry).toContain('- Add theme export');
 
       expect(entry).toContain('### 🐛 Fixed');
-      expect(entry).toContain('- fix token import');
+      expect(entry).toContain('- Fix token import');
 
       expect(entry).toContain('### 🔧 Changed');
-      expect(entry).toContain('- update README');
-      expect(entry).toContain('- bump deps');
-      expect(entry).toContain('- simplify renderer');
+      expect(entry).toContain('- Update README');
+      expect(entry).toContain('- Bump deps');
+      expect(entry).toContain('- Simplify renderer');
 
       expect(entry).not.toContain('add lint job');
+      expect(entry).not.toContain('address greptile P2 findings');
+      expect(entry).not.toContain('Address greptile P2 findings');
     });
   });
 
@@ -129,6 +226,21 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       expect(entry).toContain('### 🐛 Fixed');
       expect(entry).not.toContain('### 🔧 Changed');
     });
+  });
+});
+
+describe('isChangelogIgnoredScope', () => {
+  it.each(['ci', 'build', 'CI', 'Build'] as const)('"%s" is ignored', (scope) => {
+    expect(isChangelogIgnoredScope(scope)).toBe(true);
+  });
+
+  it.each(['core', 'site', 'deps'] as const)('"%s" is not ignored', (scope) => {
+    expect(isChangelogIgnoredScope(scope)).toBe(false);
+  });
+
+  it('null/undefined scopes are not ignored', () => {
+    expect(isChangelogIgnoredScope(null)).toBe(false);
+    expect(isChangelogIgnoredScope(undefined)).toBe(false);
   });
 });
 
@@ -150,4 +262,21 @@ describe('determineBumpType – patchTypes still trigger patch bump', () => {
       expect(bumpType).toBe('patch');
     },
   );
+
+  describe('issue #581: scoped ci/build commits still trigger release bumps', () => {
+    it('fix(ci) still triggers a patch bump', () => {
+      const commits = [fakeCommit('fix', 'address greptile findings', 'ci')];
+      expect(determineBumpType(commits)).toBe('patch');
+    });
+
+    it('feat(build) still triggers a minor bump', () => {
+      const commits = [fakeCommit('feat', 'add build cache', 'build')];
+      expect(determineBumpType(commits)).toBe('minor');
+    });
+
+    it('type ci (not scope) still does not trigger a bump', () => {
+      const commits = [fakeCommit('ci', 'update workflow')];
+      expect(determineBumpType(commits)).toBeNull();
+    });
+  });
 });

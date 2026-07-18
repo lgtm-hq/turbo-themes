@@ -28,6 +28,9 @@ const CONFIG = {
   // All other patchTypes (docs, style, refactor, perf, test, chore) go to "🔧 Changed".
   fixTypes: ['fix', 'bugfix', 'patch'],
   ignoreTypes: ['ci', 'build', 'release'],
+  // Scopes omitted from consumer-facing changelog sections (Fixed/Added/Changed).
+  // These commits still participate in version bump decisions via their type.
+  changelogIgnoreScopes: ['ci', 'build'],
   ignorePatterns: ['chore(release):'], // Full prefix patterns to skip entirely
   changelogFile: join(projectRoot, 'CHANGELOG.md'),
   packageFile: join(projectRoot, 'package.json'),
@@ -57,6 +60,24 @@ function parseCommit(commit) {
     description: description.trim(),
     breaking: description.includes('BREAKING CHANGE') || description.includes('BREAKING CHANGES'),
   };
+}
+
+/**
+ * Whether a commit's scope should be omitted from consumer-facing changelog sections.
+ * Version bump logic is unaffected — only changelog rendering consults this.
+ */
+function isChangelogIgnoredScope(scope) {
+  if (!scope) return false;
+  return CONFIG.changelogIgnoreScopes.includes(scope.toLowerCase());
+}
+
+/**
+ * Post-process a conventional-commit description for changelog readability.
+ * Capitalizes the first character; leaves the rest (including trailing PR refs) intact.
+ */
+function formatChangelogDescription(description) {
+  if (!description) return description;
+  return description.charAt(0).toUpperCase() + description.slice(1);
 }
 
 /**
@@ -196,7 +217,13 @@ function generateChangelogEntry(commits, version, bumpType) {
       continue;
     }
 
-    const entry = `- ${parsed.description}`;
+    // Omit non-consumer scopes (e.g. fix(ci): …) from user-facing sections.
+    // Bump decisions still use these commits via determineBumpType().
+    if (isChangelogIgnoredScope(parsed.scope)) {
+      continue;
+    }
+
+    const entry = `- ${formatChangelogDescription(parsed.description)}`;
 
     if (
       parsed.breaking ||
@@ -335,4 +362,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-export { determineBumpType, calculateNextVersion, generateChangelogEntry };
+export {
+  determineBumpType,
+  calculateNextVersion,
+  generateChangelogEntry,
+  formatChangelogDescription,
+  isChangelogIgnoredScope,
+};
