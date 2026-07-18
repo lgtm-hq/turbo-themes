@@ -1,415 +1,269 @@
 ---
+/**
+ * Home — Noir Editorial (Design #2).
+ * Source: landing-designs.html .d2 panel via issue #513.
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { Code } from 'astro:components';
 import { flavors } from '../../../../src/themes/registry.js';
-import { themeNames, themeIcons } from '../data/theme-meta';
-
+import {
+  themeNames,
+  themeIcons,
+  themeGroups,
+  themeAppearances,
+} from '../data/theme-meta';
 const themeCount = flavors.length;
-
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
-const installNpm = `npm install turbo-themes`;
 
-const installCdn = `<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css" />`;
+/** Prefer iconic dark variants when a vendor has several flavors. */
+const HERO_SWATCH_PREFERENCE: Record<string, string> = {
+  catppuccin: 'catppuccin-mocha',
+  dracula: 'dracula',
+  gruvbox: 'gruvbox-dark',
+  github: 'github-dark',
+  bulma: 'bulma-dark',
+  nord: 'nord',
+  solarized: 'solarized-dark',
+  'rose-pine': 'rose-pine',
+  'tokyo-night': 'tokyo-night-dark',
+};
 
-const installPython = `# Using uv (recommended)
-uv pip install turbo-themes
+const flavorById = Object.fromEntries(flavors.map((f) => [f.id, f]));
 
-# Or using pip
-pip install turbo-themes`;
+const heroSwatches = themeGroups.map((group) => {
+  const preferred = HERO_SWATCH_PREFERENCE[group.id];
+  const id =
+    (preferred && group.flavors.includes(preferred) ? preferred : undefined) ??
+    group.flavors.find((fid) => themeAppearances[fid] === 'dark') ??
+    group.flavors[0];
+  const flavor = flavorById[id];
+  const short = themeNames[id] || flavor?.label || id;
+  const name =
+    short === group.displayName || group.displayName.includes(short)
+      ? group.displayName
+      : `${group.displayName} ${short}`;
+  const color = flavor?.tokens.brand.primary ?? '#cba6f7';
+  const colorEnd =
+    flavor?.tokens.state.info ?? flavor?.tokens.background.surface ?? color;
+  return { id, name, color, colorEnd };
+});
 
-const installRuby = `gem "turbo-themes"`;
+const features: Array<{
+  num: string;
+  title: string;
+  body: string;
+  code?: string;
+}> = [
+  {
+    num: '01',
+    title: 'Pure CSS Variables',
+    body: 'No runtime. No JavaScript. No build step required. Just CSS custom properties that work everywhere — reference any token with',
+    code: 'var(--turbo-*)',
+  },
+  {
+    num: '02',
+    title: 'Platform Agnostic',
+    body: 'npm, Python, Ruby, Swift. One token system, every platform. Ship consistent design across your entire stack.',
+  },
+  {
+    num: '03',
+    title: 'Framework Adapters',
+    body: 'First-class adapters for Tailwind, Bulma, and Bootstrap. Drop in and your existing classes inherit theme colors instantly.',
+  },
+  {
+    num: '04',
+    title: 'WCAG Accessible',
+    body: 'Every theme is tested for contrast compliance. Keyboard and screen reader support baked into the component layer.',
+  },
+];
 
-const previewCode = `const theme = {
-  name: 'catppuccin-mocha',
-  type: 'dark',
-};`;
+const installMethods = [
+  { label: 'npm', code: 'npm install turbo-themes' },
+  { label: 'CDN', code: 'unpkg.com/turbo-themes/css/turbo-core.css' },
+  { label: 'Python', code: 'pip install turbo-themes' },
+  { label: 'Ruby', code: 'gem "turbo-themes"' },
+] as const;
 ---
 
 <BaseLayout title="Home" isHome={true}>
-  <section class="hero">
-    <div class="hero-background"></div>
-    <div class="container hero-content">
-      <span class="hero-badge">Open Source</span>
-      <h1 class="hero-title">
-        <span class="gradient-text">Beautiful themes</span>
-        <br />for any project
-      </h1>
-      <p class="hero-subtitle">
-        A design token system with {themeCount} curated color themes. Switch themes instantly with CSS custom properties.
+  <link rel="stylesheet" href={`${baseUrl}/assets/css/home.css`} />
+  <section class="home-hero" aria-label="Hero">
+    <div class="home-hero-copy">
+      <p class="eyebrow">Design Tokens</p>
+      <h1 class="home-hero-title">Themes that <em>speak</em></h1>
+      <p class="home-hero-desc">
+        {themeCount} curated color systems, meticulously crafted as platform-agnostic
+        design tokens. Pure CSS. Zero dependencies. One import away.
       </p>
-      <div class="hero-actions">
-        <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="hero-cta-get-started">
+      <div class="home-hero-actions">
+        <a href={`${baseUrl}/docs/`} class="btn-editorial">
           Get Started
+          <span class="btn-arrow" aria-hidden="true">→</span>
         </a>
-        <a href={`${baseUrl}/themes/`} class="btn btn-outline btn-lg" data-testid="hero-cta-explore-themes">
-          Explore Themes
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
-        </a>
-      </div>
-
-      <div class="hero-theme-strip">
-        <span class="hero-theme-label">Try a theme:</span>
-        <div class="hero-theme-options">
-          <button class="hero-theme-btn" data-theme-preview="catppuccin-mocha" data-testid="hero-theme-preview-catppuccin-mocha" title="Catppuccin Mocha">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/catppuccin-logo-macchiato.png`} alt="Catppuccin Mocha" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="dracula" data-testid="hero-theme-preview-dracula" title="Dracula">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/dracula-logo.png`} alt="Dracula" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="gruvbox-dark" data-testid="hero-theme-preview-gruvbox-dark" title="Gruvbox Dark">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/gruvbox-dark.png`} alt="Gruvbox Dark" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="github-dark" data-testid="hero-theme-preview-github-dark" title="GitHub Dark">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/github-logo-dark.png`} alt="GitHub Dark" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="bulma-dark" data-testid="hero-theme-preview-bulma-dark" title="Bulma Dark">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/turbo-themes-logo-dark.png`} alt="Bulma Dark" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="nord" data-testid="hero-theme-preview-nord" title="Nord">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/nord.png`} alt="Nord" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="solarized-dark" data-testid="hero-theme-preview-solarized-dark" title="Solarized Dark">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/solarized-dark.png`} alt="Solarized Dark" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="tokyo-night-dark" data-testid="hero-theme-preview-tokyo-night-dark" title="Tokyo Night">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/tokyo-night.png`} alt="Tokyo Night" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="rose-pine" data-testid="hero-theme-preview-rose-pine" title="Rosé Pine">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/rose-pine.png`} alt="Rosé Pine" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="one-dark" data-testid="hero-theme-preview-one-dark" title="One Dark">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/one-dark.png`} alt="One Dark" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="terminal" data-testid="hero-theme-preview-terminal" title="Terminal">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/terminal.png`} alt="Terminal" width="28" height="28" />
-          </button>
-          <button class="hero-theme-btn" data-theme-preview="catppuccin-latte" data-testid="hero-theme-preview-catppuccin-latte" title="Catppuccin Latte">
-            <img class="hero-theme-icon" src={`${baseUrl}/assets/img/catppuccin-logo-latte.png`} alt="Catppuccin Latte" width="28" height="28" />
-          </button>
-        </div>
-        <a href={`${baseUrl}/themes/`} class="hero-theme-more" data-testid="hero-link-view-all-themes">View all</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="section features-section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Why Turbo Themes?</h2>
-        <p class="section-subtitle">Everything you need for beautiful, consistent theming</p>
-      </div>
-
-      <div class="grid grid-2">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 6v6l4 2"></path>
-              </svg>
-            </div>
-            <h3 class="card-title">{themeCount} Beautiful Themes</h3>
-            <p>Catppuccin, Gruvbox, Dracula, GitHub, Solarized, Tokyo Night, Nord, Rosé Pine and more - carefully crafted dark and light modes.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body">
-            <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-                <path d="M3 9h18M9 21V9"></path>
-              </svg>
-            </div>
-            <h3 class="card-title">Pure CSS</h3>
-            <p>Zero dependencies. Just CSS custom properties you reference with <code>var(--turbo-*)</code>.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body">
-            <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
-              </svg>
-            </div>
-            <h3 class="card-title">Multi-Platform</h3>
-            <p>Available as npm package, Ruby gem, Python library, and Swift package.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body">
-            <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <path d="M12 16v-4M12 8h.01"></path>
-              </svg>
-            </div>
-            <h3 class="card-title">Accessible</h3>
-            <p>WCAG compliant contrast ratios. Keyboard navigation and screen reader support built-in.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-alt quick-install-section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Quick Install</h2>
-        <p class="section-subtitle">Get started in seconds with your preferred package manager</p>
-      </div>
-
-      <div class="install-tabs-container">
-        <div class="tabs tabs-boxed" role="tablist">
-          <button class="tab active" role="tab" aria-selected="true" data-tab="npm">npm</button>
-          <button class="tab" role="tab" aria-selected="false" data-tab="cdn">CDN</button>
-          <button class="tab" role="tab" aria-selected="false" data-tab="python">Python</button>
-          <button class="tab" role="tab" aria-selected="false" data-tab="ruby">Ruby</button>
-        </div>
-
-        <div class="tab-panels">
-          <div class="tab-content active" data-panel="npm">
-            <Code code={installNpm} lang="bash" theme="css-variables" />
-            <p class="install-hint">Then import the CSS in your project</p>
-          </div>
-          <div class="tab-content" data-panel="cdn">
-            <Code code={installCdn} lang="html" theme="css-variables" />
-            <p class="install-hint">No build step required</p>
-          </div>
-          <div class="tab-content" data-panel="python">
-            <Code code={installPython} lang="bash" theme="css-variables" />
-            <p class="install-hint">Use ThemeManager to access tokens in Python</p>
-          </div>
-          <div class="tab-content" data-panel="ruby">
-            <Code code={installRuby} lang="ruby" theme="css-variables" />
-            <p class="install-hint">Add to your Gemfile for Jekyll sites</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="install-cta">
-        <a href={`${baseUrl}/docs/installation/`} class="btn btn-ghost" data-testid="installation-cta-guide">
-          View full installation guide
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
+        <a href={`${baseUrl}/themes/`} class="btn-editorial btn-editorial-ghost">
+          Browse Themes
         </a>
       </div>
     </div>
-  </section>
 
-  <section class="section section-alt">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">See It In Action</h2>
-        <p class="section-subtitle">Components adapt seamlessly to your chosen theme</p>
+    <div class="home-hero-panel">
+      <div class="home-swatch-grid" role="list" aria-label="Theme previews">
+        {
+          heroSwatches.map((swatch) => (
+            <button
+              type="button"
+              class="home-swatch"
+              role="listitem"
+              data-theme-preview={swatch.id}
+              data-name={swatch.name}
+              title={swatch.name}
+              aria-label={`Preview ${swatch.name} theme`}
+              style={`--swatch-a: ${swatch.color}; --swatch-b: ${swatch.colorEnd};`}
+            ></button>
+          ))
+        }
       </div>
-
-      <div class="preview-panel">
-        <div class="preview-content">
-          <div class="preview-row">
-            <h4>Buttons</h4>
-            <div class="btn-group">
-              <button class="btn btn-primary">Primary</button>
-              <button class="btn btn-secondary">Secondary</button>
-              <button class="btn btn-outline">Outline</button>
-              <button class="btn btn-ghost">Ghost</button>
-            </div>
-          </div>
-
-          <div class="preview-row">
-            <h4>State Buttons</h4>
-            <div class="btn-group">
-              <button class="btn btn-success">Success</button>
-              <button class="btn btn-warning">Warning</button>
-              <button class="btn btn-danger">Danger</button>
-              <button class="btn btn-info">Info</button>
-            </div>
-          </div>
-
-          <div class="preview-row">
-            <h4>Form Elements</h4>
-            <div class="form-preview">
-              <input type="text" placeholder="Text input" class="form-input" aria-label="Text input example" />
-              <select class="form-select" aria-label="Example select">
-                <option>Select option</option>
-                <option>Option 2</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="preview-row">
-            <h4>Tags</h4>
-            <div class="tag-group">
-              <span class="tag">Default</span>
-              <span class="tag tag-primary">Primary</span>
-              <span class="tag tag-success">Success</span>
-              <span class="tag tag-warning">Warning</span>
-              <span class="tag tag-danger">Danger</span>
-              <span class="tag tag-info">Info</span>
-            </div>
-          </div>
-
-          <div class="preview-row">
-            <h4>Notifications</h4>
-            <div class="notification notification-info">
-              An info notification with theme colors.
-            </div>
-          </div>
-
-          <div class="preview-row">
-            <h4>Code Block</h4>
-            <Code code={previewCode} lang="js" theme="css-variables" />
-          </div>
-        </div>
-      </div>
-
-      <div class="section-footer">
-        <a href={`${baseUrl}/components/`} class="btn btn-ghost" data-testid="components-link-view-all">
-          View all components
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"></path>
-          </svg>
-        </a>
-      </div>
+      <p class="home-theme-count" aria-label={`${themeCount} themes`}>
+        <span class="home-theme-count-num">{themeCount}</span>
+        <sup class="home-theme-count-label">Themes</sup>
+      </p>
     </div>
   </section>
 
-  <section class="section">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Integrations Available</h2>
-        <p class="section-subtitle">Adapters for popular CSS frameworks if you need them</p>
-      </div>
-
-      <div class="grid grid-3">
-        <div class="card">
-          <div class="card-body">
-            <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-              </svg>
-            </div>
-            <h3 class="card-title">Bulma</h3>
-            <p>Adapter maps Turbo variables to Bulma's internal CSS variables.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body">
-            <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-              </svg>
-            </div>
-            <h3 class="card-title">Tailwind</h3>
-            <p>Preset adds Turbo colors as utility classes like <code>bg-turbo-primary</code>.</p>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-body">
-            <div class="card-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-              </svg>
-            </div>
-            <h3 class="card-title">Bootstrap</h3>
-            <p>SCSS variables and utilities that integrate with Bootstrap 5.</p>
-          </div>
-        </div>
-      </div>
+  <section class="home-split" aria-labelledby="why-turbo-heading">
+    <div class="home-split-label">
+      <h2 id="why-turbo-heading" class="home-split-heading">Why Turbo?</h2>
+    </div>
+    <div class="home-split-body">
+      <ul class="home-feature-list">
+        {
+          features.map((feature) => (
+            <li class="home-feature-row">
+              <span class="home-feature-num" aria-hidden="true">
+                {feature.num}
+              </span>
+              <div class="home-feature-content">
+                <h3 class="home-feature-title">{feature.title}</h3>
+                <p class="home-feature-body">
+                  {feature.body}
+                  {feature.code ? (
+                    <>
+                      {' '}
+                      <code>{feature.code}</code>.
+                    </>
+                  ) : null}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </section>
 
-  <section class="section section-cta">
-    <div class="container">
-      <div class="cta-content">
-        <h2 class="cta-title">Ready to get started?</h2>
-        <p class="cta-subtitle">Install Turbo Themes and start building beautiful, themeable interfaces.</p>
-        <div class="cta-actions">
-          <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="ready-cta-docs">
-            Read the Docs
-          </a>
-          <a href="https://github.com/lgtm-hq/turbo-themes" class="btn btn-outline btn-lg" target="_blank" rel="noopener" data-testid="ready-cta-github">
-            View on GitHub
-          </a>
-        </div>
-      </div>
+  <section class="home-split" aria-labelledby="install-heading">
+    <div class="home-split-label">
+      <h2 id="install-heading" class="home-split-heading">Install</h2>
+    </div>
+    <div class="home-split-body">
+      <ul class="home-install-list">
+        {
+          installMethods.map((method) => (
+            <li class="home-install-row">
+              <span class="home-install-label">{method.label}</span>
+              <button
+                type="button"
+                class="home-install-code"
+                data-copy={method.code}
+                title="Click to copy"
+              >
+                <code>{method.code}</code>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="home-cta" aria-labelledby="cta-heading">
+    <h2 id="cta-heading" class="home-cta-title">
+      Start building with <em>intention</em>
+    </h2>
+    <p class="home-cta-desc">Beautiful, accessible themes — ready in seconds.</p>
+    <div class="home-cta-actions">
+      <a href={`${baseUrl}/docs/`} class="btn-editorial">
+        Read Documentation
+        <span class="btn-arrow" aria-hidden="true">→</span>
+      </a>
+      <a
+        href="https://github.com/lgtm-hq/turbo-themes"
+        class="btn-editorial btn-editorial-ghost"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View on GitHub
+      </a>
     </div>
   </section>
 
   <script is:inline define:vars={{ themeNames, themeIcons }}>
-    // Hero theme button click handler
-    document.querySelectorAll('.hero-theme-btn[data-theme-preview]').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var theme = this.getAttribute('data-theme-preview');
+    (function () {
+      function applyTheme(theme, activeEl) {
         var themeLink = document.getElementById('turbo-theme-css');
         var baseUrl = document.documentElement.getAttribute('data-baseurl') || '';
 
-        // Update theme
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('turbo-theme', theme);
 
-        // Update CSS link
         if (themeLink) {
           themeLink.href = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
         }
 
-        // Update header dropdown label and icon if present
         var themeLabel = document.getElementById('theme-label');
         var themeTriggerIcon = document.getElementById('theme-trigger-icon');
         if (themeLabel) {
           themeLabel.textContent = themeNames[theme] || theme;
         }
         if (themeTriggerIcon) {
-          themeTriggerIcon.src = baseUrl + '/assets/img/' + (themeIcons[theme] || 'catppuccin-logo-macchiato.png');
+          themeTriggerIcon.src =
+            baseUrl + '/assets/img/' + (themeIcons[theme] || 'catppuccin-logo-macchiato.png');
         }
 
-        // Update active state on hero buttons
-        document.querySelectorAll('.hero-theme-btn').forEach(function(b) {
-          b.classList.remove('active');
+        document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (b) {
+          b.classList.toggle('active', b === activeEl);
         });
-        this.classList.add('active');
 
-        // Sync header dropdown active state
-        document.querySelectorAll('.theme-menu .theme-option').forEach(function(opt) {
+        document.querySelectorAll('.theme-menu .theme-option').forEach(function (opt) {
           opt.classList.toggle('active', opt.getAttribute('data-theme') === theme);
         });
-      });
-
-      // Set initial active state
-      var currentTheme = document.documentElement.getAttribute('data-theme');
-      if (btn.getAttribute('data-theme-preview') === currentTheme) {
-        btn.classList.add('active');
       }
-    });
 
-    // Install tabs
-    document.querySelectorAll('.install-tabs-container .tab').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var tab = this.getAttribute('data-tab');
-
-        // Update active button
-        document.querySelectorAll('.install-tabs-container .tab').forEach(function(b) {
-          b.classList.remove('active');
-          b.setAttribute('aria-selected', 'false');
+      document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var theme = btn.getAttribute('data-theme-preview');
+          if (theme) applyTheme(theme, btn);
         });
-        this.classList.add('active');
-        this.setAttribute('aria-selected', 'true');
 
-        // Update active panel
-        document.querySelectorAll('.install-tabs-container .tab-content').forEach(function(p) {
-          p.classList.remove('active');
-        });
-        document.querySelector('.install-tabs-container .tab-content[data-panel="' + tab + '"]').classList.add('active');
+        var currentTheme = document.documentElement.getAttribute('data-theme');
+        if (btn.getAttribute('data-theme-preview') === currentTheme) {
+          btn.classList.add('active');
+        }
       });
-    });
+
+      document.querySelectorAll('.home-install-code[data-copy]').forEach(function (el) {
+        el.addEventListener('click', function () {
+          var text = el.getAttribute('data-copy') || '';
+          if (!text || !navigator.clipboard) return;
+          navigator.clipboard.writeText(text).then(function () {
+            el.classList.add('copied');
+            setTimeout(function () {
+              el.classList.remove('copied');
+            }, 1500);
+          }).catch(function () {
+            console.warn('Failed to copy to clipboard');
+          });
+        });
+      });
+    })();
   </script>
 </BaseLayout>

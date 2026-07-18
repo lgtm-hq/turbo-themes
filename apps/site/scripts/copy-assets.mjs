@@ -30,6 +30,7 @@ const assetsToCopy = [
   // Site CSS
   ['assets/css/site.css', 'assets/css/site.css'],
   ['assets/css/custom.css', 'assets/css/custom.css'],
+  ['assets/css/home.css', 'assets/css/home.css'],
 
   // Adapters
   ['packages/adapters/bulma/dist/bulma-adapter.css', 'assets/css/adapters/bulma.css'],
