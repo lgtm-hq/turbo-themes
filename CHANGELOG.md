@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.24.4] - 2026-07-18
+
+### 🔧 Changed
+
+- strip legacy root-Jekyll steps from local build.sh (#572)
+
 ## [0.24.3] - 2026-07-18
 
 ### 🔧 Changed
