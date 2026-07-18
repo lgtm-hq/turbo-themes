@@ -1,0 +1,137 @@
+/* ==========================================================================
+   Turbo Themes - Smart Link / Doc Link Pills
+
+   Optional pill-link classes for documentation cross-reference chips.
+   Token-only colors — works across all theme flavors.
+
+   Usage:
+     @import '@lgtm-hq/turbo-themes-css/components/doc-links.css';
+     (or included automatically via turbo-components.css)
+
+   HTML:
+     <a class="turbo-smart-link" href="/path">
+       <img class="turbo-smart-link-icon" src="favicon.png" alt="" />
+       Page Title
+     </a>
+     <a class="turbo-doc-link" href="/api">
+       <span class="turbo-smart-link-icon-glyph" aria-hidden="true">↗</span>
+       API Reference
+     </a>
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Base pill — shared by both smart-link and doc-link
+   -------------------------------------------------------------------------- */
+
+.turbo-smart-link,
+.turbo-doc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.15rem 0.5rem 0.15rem 0.35rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--turbo-text-primary);
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 12%,
+    var(--turbo-bg-surface)
+  );
+  border: 1px solid
+    color-mix(in srgb, var(--turbo-brand-primary) 40%, var(--turbo-border-default));
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+/* --------------------------------------------------------------------------
+   Hover / focus
+   -------------------------------------------------------------------------- */
+
+.turbo-smart-link:hover,
+.turbo-doc-link:hover {
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 22%,
+    var(--turbo-bg-surface)
+  );
+  border-color: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 70%,
+    var(--turbo-border-default)
+  );
+  color: var(--turbo-text-primary);
+  text-decoration: none;
+}
+
+.turbo-smart-link:focus-visible,
+.turbo-doc-link:focus-visible {
+  outline: 2px solid var(--turbo-brand-primary);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Icon slot — 16 × 16 favicon or small glyph image
+   -------------------------------------------------------------------------- */
+
+.turbo-smart-link-icon {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Glyph badge — optional ↗ or similar inline text mark
+   -------------------------------------------------------------------------- */
+
+.turbo-smart-link-icon-glyph {
+  font-size: 0.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+  opacity: 0.75;
+  transition: opacity var(--transition-fast);
+}
+
+.turbo-smart-link:hover .turbo-smart-link-icon-glyph,
+.turbo-doc-link:hover .turbo-smart-link-icon-glyph {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   Doc-link variant — slightly stronger brand tint to distinguish from
+   generic smart-links (internal cross-references vs. external doc chips)
+   -------------------------------------------------------------------------- */
+
+.turbo-doc-link {
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 16%,
+    var(--turbo-bg-surface)
+  );
+}
+
+.turbo-doc-link:hover {
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 28%,
+    var(--turbo-bg-surface)
+  );
+}
+
+/* --------------------------------------------------------------------------
+   Pill group helper — mirrors .tag-group spacing
+   -------------------------------------------------------------------------- */
+
+.turbo-doc-link-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}

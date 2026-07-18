@@ -43,6 +43,7 @@ const COMPONENT_FILES = [
   'notifications.css',
   'navigation.css',
   'sidebar.css',
+  'doc-links.css',
 ];
 
 function ensureDir(dir) {
@@ -69,6 +70,7 @@ function buildComponents() {
 `;
 
   let totalSize = 0;
+  let docLinksContent = '';
   console.log('  components/');
 
   for (const file of COMPONENT_FILES) {
@@ -87,6 +89,10 @@ function buildComponents() {
     totalSize += Buffer.byteLength(content, 'utf8');
     console.log(`    ${file} (${sizeKb} KB)`);
 
+    if (file === 'doc-links.css') {
+      docLinksContent = content;
+    }
+
     // Add to bundle (strip the import statements from index.css style)
     bundleContent += content + '\n\n';
   }
@@ -94,6 +100,11 @@ function buildComponents() {
   // Write the combined bundle
   const bundlePath = path.join(distDir, 'turbo-components.css');
   writeFile(bundlePath, bundleContent);
+
+  // Write the standalone doc-links file for consumers who only need pill styles
+  if (docLinksContent) {
+    writeFile(path.join(distDir, 'turbo-doc-links.css'), docLinksContent);
+  }
 
   return { totalSize, bundleSize: Buffer.byteLength(bundleContent, 'utf8') };
 }
