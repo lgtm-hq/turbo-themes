@@ -19,38 +19,38 @@ import { themeIds } from '@lgtm-hq/turbo-themes';
 
 ## Theme Overview
 
-| Theme                  | Vendor      | Appearance | ID                       |
-| ---------------------- | ----------- | ---------- | ------------------------ |
-| Catppuccin Mocha       | Catppuccin  | Dark       | `catppuccin-mocha`       |
-| Catppuccin Macchiato   | Catppuccin  | Dark       | `catppuccin-macchiato`   |
-| Catppuccin Frappé      | Catppuccin  | Dark       | `catppuccin-frappe`      |
-| Catppuccin Latte       | Catppuccin  | Light      | `catppuccin-latte`       |
-| Dracula                | Dracula     | Dark       | `dracula`                |
-| Everforest Dark Hard   | Everforest  | Dark       | `everforest-dark-hard`   |
-| Everforest Dark        | Everforest  | Dark       | `everforest-dark`        |
-| Everforest Dark Soft   | Everforest  | Dark       | `everforest-dark-soft`   |
-| Everforest Light Hard  | Everforest  | Light      | `everforest-light-hard`  |
-| Everforest Light       | Everforest  | Light      | `everforest-light`       |
-| Everforest Light Soft  | Everforest  | Light      | `everforest-light-soft`  |
-| Gruvbox Dark Hard      | Gruvbox     | Dark       | `gruvbox-dark-hard`      |
-| Gruvbox Dark           | Gruvbox     | Dark       | `gruvbox-dark`           |
-| Gruvbox Dark Soft      | Gruvbox     | Dark       | `gruvbox-dark-soft`      |
-| Gruvbox Light Hard     | Gruvbox     | Light      | `gruvbox-light-hard`     |
-| Gruvbox Light          | Gruvbox     | Light      | `gruvbox-light`          |
-| Gruvbox Light Soft     | Gruvbox     | Light      | `gruvbox-light-soft`     |
-| GitHub Dark            | GitHub      | Dark       | `github-dark`            |
-| GitHub Light           | GitHub      | Light      | `github-light`           |
-| Bulma Dark             | Bulma       | Dark       | `bulma-dark`             |
-| Bulma Light            | Bulma       | Light      | `bulma-light`            |
-| Nord                   | Nord        | Dark       | `nord`                   |
-| Rosé Pine              | Rosé Pine   | Dark       | `rose-pine`              |
-| Rosé Pine Moon         | Rosé Pine   | Dark       | `rose-pine-moon`         |
-| Rosé Pine Dawn         | Rosé Pine   | Light      | `rose-pine-dawn`         |
-| Solarized Dark         | Solarized   | Dark       | `solarized-dark`         |
-| Solarized Light        | Solarized   | Light      | `solarized-light`        |
-| Tokyo Night Dark       | Tokyo Night | Dark       | `tokyo-night-dark`       |
-| Tokyo Night Storm      | Tokyo Night | Dark       | `tokyo-night-storm`      |
-| Tokyo Night Light      | Tokyo Night | Light      | `tokyo-night-light`      |
+| Theme                 | Vendor      | Appearance | ID                      |
+| --------------------- | ----------- | ---------- | ----------------------- |
+| Catppuccin Mocha      | Catppuccin  | Dark       | `catppuccin-mocha`      |
+| Catppuccin Macchiato  | Catppuccin  | Dark       | `catppuccin-macchiato`  |
+| Catppuccin Frappé     | Catppuccin  | Dark       | `catppuccin-frappe`     |
+| Catppuccin Latte      | Catppuccin  | Light      | `catppuccin-latte`      |
+| Dracula               | Dracula     | Dark       | `dracula`               |
+| Everforest Dark Hard  | Everforest  | Dark       | `everforest-dark-hard`  |
+| Everforest Dark       | Everforest  | Dark       | `everforest-dark`       |
+| Everforest Dark Soft  | Everforest  | Dark       | `everforest-dark-soft`  |
+| Everforest Light Hard | Everforest  | Light      | `everforest-light-hard` |
+| Everforest Light      | Everforest  | Light      | `everforest-light`      |
+| Everforest Light Soft | Everforest  | Light      | `everforest-light-soft` |
+| Gruvbox Dark Hard     | Gruvbox     | Dark       | `gruvbox-dark-hard`     |
+| Gruvbox Dark          | Gruvbox     | Dark       | `gruvbox-dark`          |
+| Gruvbox Dark Soft     | Gruvbox     | Dark       | `gruvbox-dark-soft`     |
+| Gruvbox Light Hard    | Gruvbox     | Light      | `gruvbox-light-hard`    |
+| Gruvbox Light         | Gruvbox     | Light      | `gruvbox-light`         |
+| Gruvbox Light Soft    | Gruvbox     | Light      | `gruvbox-light-soft`    |
+| GitHub Dark           | GitHub      | Dark       | `github-dark`           |
+| GitHub Light          | GitHub      | Light      | `github-light`          |
+| Bulma Dark            | Bulma       | Dark       | `bulma-dark`            |
+| Bulma Light           | Bulma       | Light      | `bulma-light`           |
+| Nord                  | Nord        | Dark       | `nord`                  |
+| Rosé Pine             | Rosé Pine   | Dark       | `rose-pine`             |
+| Rosé Pine Moon        | Rosé Pine   | Dark       | `rose-pine-moon`        |
+| Rosé Pine Dawn        | Rosé Pine   | Light      | `rose-pine-dawn`        |
+| Solarized Dark        | Solarized   | Dark       | `solarized-dark`        |
+| Solarized Light       | Solarized   | Light      | `solarized-light`       |
+| Tokyo Night Dark      | Tokyo Night | Dark       | `tokyo-night-dark`      |
+| Tokyo Night Storm     | Tokyo Night | Dark       | `tokyo-night-storm`     |
+| Tokyo Night Light     | Tokyo Night | Light      | `tokyo-night-light`     |
 
 ## Curating a theme subset
 
