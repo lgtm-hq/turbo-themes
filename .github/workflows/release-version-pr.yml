@@ -118,7 +118,7 @@ jobs:
         run: |
           reviewer=$(grep -m1 '^[*][[:space:]]' .github/CODEOWNERS | awk '{print $2}' | tr -d '@')
           if [ -n "$reviewer" ]; then
-            gh pr edit "$PR_NUMBER" --add-reviewer "$reviewer"
+            gh pr edit "$PR_NUMBER" --add-reviewer "$reviewer" --add-assignee "$reviewer"
           fi
 
       - name: Enable auto-merge
