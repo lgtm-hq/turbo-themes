@@ -1,0 +1,31 @@
+---
+/**
+ * "On this page" table of contents for documentation pages.
+ * Renders heading anchors (depth 2–3) when showToc is enabled.
+ */
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  headings: MarkdownHeading[];
+  showToc: boolean;
+}
+
+const { headings, showToc } = Astro.props;
+
+const tocHeadings = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+{showToc && tocHeadings.length > 0 && (
+  <nav class="docs-toc" aria-label="On this page" data-testid="docs-toc">
+    <h2 class="docs-toc-title" aria-hidden="true">On this page</h2>
+    <ul class="docs-toc-list">
+      {tocHeadings.map(heading => (
+        <li class={`docs-toc-item docs-toc-depth-${heading.depth}`}>
+          <a href={`#${heading.slug}`} class="docs-toc-link">
+            {heading.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

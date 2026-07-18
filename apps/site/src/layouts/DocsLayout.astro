@@ -4,9 +4,11 @@
  * Left: Sidebar navigation (collapsible)
  * Right: Main content
  */
+import type { MarkdownHeading } from 'astro';
 import BaseLayout from './BaseLayout.astro';
 import DocsSidebar from '../components/docs/DocsSidebar.astro';
 import Breadcrumbs from '../components/docs/Breadcrumbs.astro';
+import DocsToc from '../components/docs/DocsToc.astro';
 import PrevNext from '../components/docs/PrevNext.astro';
 
 interface Props {
@@ -15,6 +17,8 @@ interface Props {
   category: string;
   categoryLabel: string;
   slug: string;
+  headings?: MarkdownHeading[];
+  showToc?: boolean;
   prev?: string;
   next?: string;
   lastUpdated?: Date;
@@ -26,6 +30,8 @@ const {
   category,
   categoryLabel,
   slug,
+  headings = [],
+  showToc = true,
   prev,
   next,
   lastUpdated
@@ -56,35 +62,39 @@ const {
     <DocsSidebar currentSlug={slug} />
 
     <main class="docs-main">
-      <article class="docs-content" data-pagefind-body>
-        <Breadcrumbs
-          category={category}
-          categoryLabel={categoryLabel}
-          title={title}
-        />
+      <div class="docs-main-inner">
+        <article class="docs-content" data-pagefind-body>
+          <Breadcrumbs
+            category={category}
+            categoryLabel={categoryLabel}
+            title={title}
+          />
 
-        <header class="docs-header">
-          <h1 class="docs-title">{title}</h1>
-          {description && (
-            <p class="docs-description">{description}</p>
-          )}
-          {lastUpdated && (
-            <p class="docs-meta">
-              Last updated: {lastUpdated.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
-            </p>
-          )}
-        </header>
+          <header class="docs-header">
+            <h1 class="docs-title">{title}</h1>
+            {description && (
+              <p class="docs-description">{description}</p>
+            )}
+            {lastUpdated && (
+              <p class="docs-meta">
+                Last updated: {lastUpdated.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </p>
+            )}
+          </header>
 
-        <div class="docs-body prose">
-          <slot />
-        </div>
+          <div class="docs-body prose">
+            <slot />
+          </div>
 
-        <PrevNext prev={prev} next={next} />
-      </article>
+          <PrevNext prev={prev} next={next} />
+        </article>
+
+        <DocsToc headings={headings} showToc={showToc} />
+      </div>
     </main>
   </div>
 </BaseLayout>

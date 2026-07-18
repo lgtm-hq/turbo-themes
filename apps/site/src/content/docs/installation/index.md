@@ -5,6 +5,7 @@ description:
   packages.
 category: installation
 order: 1
+toc: false
 prev: getting-started/concepts
 next: installation/npm
 ---
