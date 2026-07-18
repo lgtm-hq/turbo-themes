@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.24.1] - 2026-07-18
+
+### 🐛 Fixed
+
+- use GitHub App token for softprops/action-gh-release (#562)
+
 ## [0.24.0] - 2026-07-18
 
 ### ✨ Added
