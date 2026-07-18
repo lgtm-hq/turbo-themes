@@ -61,6 +61,12 @@ export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
   }
 };
 
+/**
+ * Fallback family when a vendor is missing from {@link VENDOR_FAMILY_MAP}.
+ * First entry in schema/tokens/_vendors.json (display order).
+ */
+export const DEFAULT_FAMILY: ThemeFamily = 'catppuccin';
+
 /** Vendor to family mapping. */
 export const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
   "catppuccin": "catppuccin",

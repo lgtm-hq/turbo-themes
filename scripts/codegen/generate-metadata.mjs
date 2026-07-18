@@ -35,6 +35,7 @@ const SELECTOR_OUTPUT = join(
 );
 
 const IMG_PREFIX = 'assets/img/';
+const ASSETS_IMG_DIR = join(ROOT_DIR, 'assets', 'img');
 
 /**
  * Serialize a JSON-compatible value as a TypeScript expression.
@@ -55,6 +56,22 @@ function withImgPrefix(filename) {
 }
 
 /**
+ * Ensure an icon filename exists under assets/img/.
+ * @param {string} filename - Bare filename or assets/img/-prefixed path
+ * @param {string} context - Theme/vendor id for error messages
+ */
+function assertIconExists(filename, context) {
+  const bare = filename.startsWith(IMG_PREFIX) ? filename.slice(IMG_PREFIX.length) : filename;
+  const absPath = join(ASSETS_IMG_DIR, bare);
+  if (!existsSync(absPath)) {
+    throw new Error(
+      `[generate-metadata] Icon "${bare}" for "${context}" not found at ${absPath}. ` +
+        'Place the image under assets/img/ or fix the icon field in the token schema.',
+    );
+  }
+}
+
+/**
  * @param {string | { light: string, dark: string }} icon
  * @param {(name: string) => string} mapFilename
  * @returns {string | { light: string, dark: string }}
@@ -65,6 +82,16 @@ function mapVendorIcon(icon, mapFilename) {
     light: mapFilename(icon.light),
     dark: mapFilename(icon.dark),
   };
+}
+
+/**
+ * Collect bare icon filenames from a vendor icon config.
+ * @param {string | { light: string, dark: string }} icon
+ * @returns {string[]}
+ */
+function vendorIconFilenames(icon) {
+  if (typeof icon === 'string') return [icon];
+  return [icon.light, icon.dark];
 }
 
 /**
@@ -100,6 +127,7 @@ function loadSources() {
     if (typeof data.icon !== 'string' || data.icon.length === 0) {
       throw new Error(`[generate-metadata] Theme "${data.id}" is missing required icon`);
     }
+    assertIconExists(data.icon, data.id);
     return data;
   });
 
@@ -118,6 +146,12 @@ function loadSources() {
       throw new Error(
         `[generate-metadata] Vendor "${vendor.id}" in _vendors.json has no theme files`,
       );
+    }
+    if (vendor.icon === undefined || vendor.icon === null) {
+      throw new Error(`[generate-metadata] Vendor "${vendor.id}" is missing required icon`);
+    }
+    for (const filename of vendorIconFilenames(vendor.icon)) {
+      assertIconExists(filename, `vendor:${vendor.id}`);
     }
   }
 
@@ -227,6 +261,12 @@ export interface ThemeFamilyMeta {
 export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = ${serializeTsValue(
     themeFamilies,
   )};
+
+/**
+ * Fallback family when a vendor is missing from {@link VENDOR_FAMILY_MAP}.
+ * First entry in schema/tokens/_vendors.json (display order).
+ */
+export const DEFAULT_FAMILY: ThemeFamily = '${vendorOrder[0]}';
 
 /** Vendor to family mapping. */
 export const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = ${serializeTsValue(vendorFamilyMap)};

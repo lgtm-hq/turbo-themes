@@ -23,10 +23,12 @@ describe('generated metadata', () => {
     expect([...THEME_IDS]).toEqual([...themeIds]);
   });
 
-  it('covers all 24 theme token files', () => {
+  it('covers every theme token file', () => {
     const files = readdirSync(THEMES_DIR).filter((f) => f.endsWith('.tokens.json'));
-    expect(THEME_IDS).toHaveLength(24);
+    const expectedCount = Object.keys(THEME_DESCRIPTIONS).length;
     expect(THEME_IDS).toHaveLength(files.length);
+    expect(THEME_IDS).toHaveLength(expectedCount);
+    expect(THEME_IDS).toHaveLength(themeIds.length);
   });
 
   it('every theme has a description and icon', () => {

@@ -564,9 +564,8 @@ var TurboThemeSelector = (function(exports) {
 	function setTabindexBatch(items, value) {
 		for (const item of items) item.setAttribute("tabindex", value);
 	}
-	var DEFAULT_FAMILY = "bulma";
 	function getFamily(vendor) {
-		return VENDOR_FAMILY_MAP[vendor] ?? DEFAULT_FAMILY;
+		return VENDOR_FAMILY_MAP[vendor] ?? "catppuccin";
 	}
 	function getIconForVendor(vendor, appearance) {
 		const iconConfig = VENDOR_ICON_MAP[vendor];

@@ -4,6 +4,7 @@
  */
 import { describe, expect, it } from 'vitest';
 import { mapFlavorToUI } from '../src/theme-mapper.js';
+import { DEFAULT_FAMILY } from '../src/generated/theme-maps.js';
 import type { ThemeFlavor as CanonicalThemeFlavor } from '@lgtm-hq/turbo-themes-core';
 
 describe('theme-mapper', () => {
@@ -109,7 +110,7 @@ describe('theme-mapper', () => {
       expect(mapFlavorToUI(createMockFlavor({ vendor: 'github' })).family).toBe('github');
       expect(mapFlavorToUI(createMockFlavor({ vendor: 'dracula' })).family).toBe('dracula');
       expect(mapFlavorToUI(createMockFlavor({ vendor: 'tokyo-night' })).family).toBe('tokyo-night');
-      expect(mapFlavorToUI(createMockFlavor({ vendor: 'unknown' })).family).toBe('bulma'); // fallback
+      expect(mapFlavorToUI(createMockFlavor({ vendor: 'unknown' })).family).toBe(DEFAULT_FAMILY);
     });
 
     it('generates description from id', () => {

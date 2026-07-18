@@ -6,6 +6,7 @@
 import type { ThemeFlavor as CanonicalThemeFlavor } from '@lgtm-hq/turbo-themes-core';
 import type { ThemeFamily } from './types.js';
 import {
+  DEFAULT_FAMILY,
   VENDOR_FAMILY_MAP,
   VENDOR_ICON_MAP,
   FLAVOR_DESCRIPTIONS,
@@ -31,8 +32,6 @@ export interface ThemeFlavor extends Pick<CanonicalThemeFlavor, 'id' | 'appearan
   family: ThemeFamily;
   colors: ThemeColors;
 }
-
-const DEFAULT_FAMILY: ThemeFamily = 'bulma';
 
 // ============================================================================
 // Helper Functions
