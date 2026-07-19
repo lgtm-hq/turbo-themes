@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.32.0] - 2026-07-19
+
+### ✨ Added
+
+- Add Home Assistant theme adapter (#665)
+
 ## [0.31.1] - 2026-07-19
 
 ### 🤖 Internal
