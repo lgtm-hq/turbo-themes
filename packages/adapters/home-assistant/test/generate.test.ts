@@ -3,6 +3,7 @@ import yaml from 'js-yaml';
 import { flavors } from '@lgtm-hq/turbo-themes-core';
 import { generateHomeAssistantThemes } from '../src/emitter.js';
 import { REQUIRED_KEYS } from '../src/mapping.js';
+import { AUTO_THEME_PAIRINGS } from '../src/pairings.js';
 
 const output = generateHomeAssistantThemes();
 const parsed = yaml.load(output) as Record<string, Record<string, unknown>>;
@@ -44,5 +45,30 @@ describe('generateHomeAssistantThemes', () => {
 
   it('emits concrete values with no CSS var() references', () => {
     expect(output).not.toContain('var(');
+  });
+
+  it('emits exactly 35 top-level themes (27 flat + 8 auto)', () => {
+    expect(Object.keys(parsed)).toHaveLength(35);
+    expect(flavors).toHaveLength(27);
+    expect(AUTO_THEME_PAIRINGS).toHaveLength(8);
+  });
+
+  it('gives each auto theme dark and light modes with full mappings', () => {
+    for (const pairing of AUTO_THEME_PAIRINGS) {
+      const theme = parsed[pairing.name] as Record<string, unknown>;
+      expect(theme, pairing.name).toBeDefined();
+
+      // Top-level keys mirror the dark mapping.
+      for (const required of REQUIRED_KEYS) {
+        expect(theme, `${pairing.name} → ${required}`).toHaveProperty(required);
+      }
+
+      const modes = theme.modes as { dark?: Record<string, unknown>; light?: Record<string, unknown> };
+      expect(modes, `${pairing.name} modes`).toBeDefined();
+      expect(Object.keys(modes.dark ?? {}), `${pairing.name} modes.dark`).toEqual([...REQUIRED_KEYS]);
+      expect(Object.keys(modes.light ?? {}), `${pairing.name} modes.light`).toEqual([
+        ...REQUIRED_KEYS,
+      ]);
+    }
   });
 });

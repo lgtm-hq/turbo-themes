@@ -9,6 +9,7 @@
 
 import { flavors } from '@lgtm-hq/turbo-themes-core';
 import { mapTokensToHomeAssistant } from './mapping.js';
+import { AUTO_THEME_PAIRINGS, assertPairingsValid, resolveAutoTheme } from './pairings.js';
 import { renderKey, renderValue } from './yaml.js';
 
 const HEADER = [
@@ -37,18 +38,53 @@ function emitFlatTheme(name: string, mapping: Record<string, string>): string {
 }
 
 /**
+ * Emit an auto theme block: the dark mapping at the top level, plus a `modes:`
+ * block carrying the full dark and light mappings.
+ */
+function emitAutoTheme(
+  name: string,
+  darkMapping: Record<string, string>,
+  lightMapping: Record<string, string>,
+): string {
+  return [
+    `${renderKey(name)}:`,
+    ...renderMapping(darkMapping, '  '),
+    '  modes:',
+    '    dark:',
+    ...renderMapping(darkMapping, '      '),
+    '    light:',
+    ...renderMapping(lightMapping, '      '),
+  ].join('\n');
+}
+
+/**
  * Generate the Home Assistant themes YAML document.
  *
  * Flat themes are emitted first, sorted alphabetically by theme id for
- * determinism.
+ * determinism, followed by the auto (dark/light paired) themes in
+ * {@link AUTO_THEME_PAIRINGS} order.
  *
  * @returns The full YAML document as a string.
+ * @throws If any auto-theme pairing is invalid (see {@link assertPairingsValid}).
  */
 export function generateHomeAssistantThemes(): string {
+  assertPairingsValid();
+
   const sorted = [...flavors].sort((a, b) => a.id.localeCompare(b.id, 'en'));
   const blocks = sorted.map((flavor) =>
     emitFlatTheme(flavor.label, mapTokensToHomeAssistant(flavor.tokens)),
   );
+
+  for (const pairing of AUTO_THEME_PAIRINGS) {
+    const { name, darkTokens, lightTokens } = resolveAutoTheme(pairing);
+    blocks.push(
+      emitAutoTheme(
+        name,
+        mapTokensToHomeAssistant(darkTokens),
+        mapTokensToHomeAssistant(lightTokens),
+      ),
+    );
+  }
 
   return `${HEADER}\n${blocks.join('\n')}\n`;
 }

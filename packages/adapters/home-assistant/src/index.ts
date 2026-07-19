@@ -11,4 +11,11 @@
 
 export { hexToRgb, hexToRgbTriplet } from './color.js';
 export { CARD_MOD_THEME, mapTokensToHomeAssistant, REQUIRED_KEYS } from './mapping.js';
+export {
+  AUTO_THEME_PAIRINGS,
+  assertPairingsValid,
+  resolveAutoTheme,
+  type AutoThemePairing,
+  type ResolvedAutoTheme,
+} from './pairings.js';
 export { generateHomeAssistantThemes } from './emitter.js';
