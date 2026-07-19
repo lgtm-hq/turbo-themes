@@ -7,12 +7,13 @@
 # produce no diff; any drift here is a real non-determinism bug in the
 # generators.
 #
-# Note: this script intentionally does NOT run `theme:sync`. Upstream
-# package freshness is a separate concern and is handled by the Renovate
-# companion workflow (.github/workflows/maintenance-renovate-theme-sync.yml),
-# which regenerates the *.synced.ts files when Renovate bumps the source
-# packages. Mixing the two checks made this job fail on every upstream
-# release regardless of PR content.
+# Note: `bun run build` includes `theme:sync`, so the *.synced.ts files are
+# part of the determinism surface: regenerating from the lockfile-pinned
+# upstream packages must reproduce the committed files byte-for-byte (issue
+# #651 was formatting drift here). Upstream package freshness is a separate
+# concern handled by the Renovate companion workflow
+# (.github/workflows/maintenance-renovate-theme-sync.yml), which regenerates
+# the *.synced.ts files when Renovate bumps the source packages.
 #
 # Usage: theme-sync-determinism-check.sh
 

@@ -184,17 +184,14 @@ const rawContent = `import type { ThemePackage } from '../types.js';
 export const rosePineSynced: ThemePackage = ${formatObject(pkg)} as const;
 `;
 
-// Write file first, then format with lintro
+// Write file first, then format with the repo-pinned oxfmt devDependency.
+// Must be an environment-independent formatter that fails loudly: silently
+// skipping formatting commits differently-quoted output and breaks the
+// theme-sync determinism check (issue #651).
 fs.writeFileSync(outPath, rawContent, 'utf8');
-
-// Format with lintro using repository configuration
-try {
-  execSync(`uv run lintro fmt "${outPath}"`, {
-    cwd: projectRoot,
-    stdio: 'inherit',
-  });
-} catch {
-  console.warn(`Warning: lintro fmt failed for ${outPath}, file written but may not be formatted`);
-}
+execSync(`bunx oxfmt --ignore-path=.gitignore "${outPath}"`, {
+  cwd: projectRoot,
+  stdio: 'inherit',
+});
 
 console.log(`Wrote ${outPath}`);
