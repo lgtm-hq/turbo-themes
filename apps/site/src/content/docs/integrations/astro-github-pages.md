@@ -446,3 +446,6 @@ These production sites use this stack and are kept up to date:
 - [npm/Bun Installation](/docs/installation/npm/) — installing turbo-themes packages
 - [CSS Package README](https://github.com/lgtm-hq/turbo-themes/blob/main/packages/css/README.md)
   — programmatic CSS generation
+- [Shared docs navigation shell](https://github.com/lgtm-hq/turbo-themes/blob/main/docs/investigations/shared-docs-navigation-shell.md)
+  — inventory and recommendation for flat `.turbo-docs-nav` vs docs-kit layout (#505);
+  pairs with Resources / docs-kit notes (#504)
