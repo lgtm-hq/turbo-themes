@@ -3,17 +3,12 @@
  * Home Assistant theme adapter for Turbo Themes.
  *
  * Emits a single Home Assistant `themes.yaml`-compatible YAML string that maps
- * Turbo theme tokens onto Home Assistant frontend theme variables.
+ * Turbo theme tokens onto Home Assistant frontend theme variables. Every value is
+ * a concrete hex color or `R, G, B` triplet, so the artifact is self-contained.
  *
  * @packageDocumentation
  */
 
-/**
- * Generate the Home Assistant themes YAML document.
- *
- * @returns YAML string containing every Turbo theme as a Home Assistant theme.
- */
-export function generateHomeAssistantThemes(): string {
-  // Implemented in a later commit (#662/#663).
-  return '';
-}
+export { hexToRgb, hexToRgbTriplet } from './color.js';
+export { CARD_MOD_THEME, mapTokensToHomeAssistant, REQUIRED_KEYS } from './mapping.js';
+export { generateHomeAssistantThemes } from './emitter.js';
