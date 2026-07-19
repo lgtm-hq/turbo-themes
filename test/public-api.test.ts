@@ -255,6 +255,26 @@ describe('public API', () => {
     expect(document.documentElement.classList.add).toHaveBeenCalledWith('theme-catppuccin-mocha');
   });
 
+  it('initTheme falls back to defaultTheme when persisted theme is outside the subset', async () => {
+    // 'dracula' is a valid theme but not within the catppuccin subset.
+    mockLocalStorage.getItem.mockReturnValue('dracula');
+    mockThemeLoading();
+    await initTheme(document, window, {
+      vendors: ['catppuccin'],
+      defaultTheme: 'catppuccin-latte',
+    });
+    expect(document.documentElement.classList.add).toHaveBeenCalledWith('theme-catppuccin-latte');
+    // Restore shared getItem default so later tests are not affected.
+    mockLocalStorage.getItem.mockReturnValue(null);
+  });
+
+  it('wireFlavorSelector accepts subset options without throwing', async () => {
+    const result = await wireFlavorSelector(document, window, { vendors: ['catppuccin'] });
+    expect(result).toBeDefined();
+    expect(typeof result.cleanup).toBe('function');
+    mockLocalStorage.getItem.mockReturnValue(null);
+  });
+
   it('wireFlavorSelector returns early when elements are missing', async () => {
     const originalAbortController = global.AbortController;
     const mockAbortController = {
