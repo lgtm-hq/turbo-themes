@@ -102,8 +102,8 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
     );
   });
 
-  describe('issue #581: ci/build scopes → ### 🤖 Internal (not consumer sections)', () => {
-    it.each(['ci', 'build'] as const)(
+  describe('issue #581/#648: ci/build/test scopes → ### 🤖 Internal (not consumer sections)', () => {
+    it.each(['ci', 'build', 'test'] as const)(
       'fix(%s) appears under Internal, not Fixed',
       (scope) => {
         const commits = [
@@ -122,7 +122,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       },
     );
 
-    it.each(['ci', 'build'] as const)(
+    it.each(['ci', 'build', 'test'] as const)(
       'feat(%s) appears under Internal, not Added',
       (scope) => {
         const commits = [
@@ -140,7 +140,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       },
     );
 
-    it.each(['ci', 'build'] as const)(
+    it.each(['ci', 'build', 'test'] as const)(
       'chore(%s) appears under Internal, not Changed',
       (scope) => {
         const commits = [
