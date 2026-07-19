@@ -31,7 +31,7 @@ const CONFIG = {
   // Scopes routed to the non-consumer "Internal" changelog section (not Fixed/Added/Changed).
   // These commits still participate in version bump decisions via their type.
   // Breaking changes always stay in BREAKING CHANGES regardless of scope.
-  changelogInternalScopes: ['ci', 'build'],
+  changelogInternalScopes: ['ci', 'build', 'test'],
   ignorePatterns: ['chore(release):'], // Full prefix patterns to skip entirely
   changelogFile: join(projectRoot, 'CHANGELOG.md'),
   packageFile: join(projectRoot, 'package.json'),
