@@ -4,6 +4,8 @@
   "label": "Gruvbox Dark",
   "vendor": "gruvbox",
   "appearance": "dark",
+  "description": "Classic Gruvbox dark palette with warm, muted tones.",
+  "icon": "gruvbox-dark.png",
   "tokens": {
     "background": {
       "base": {

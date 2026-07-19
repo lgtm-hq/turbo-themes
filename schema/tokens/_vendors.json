@@ -1,0 +1,104 @@
+{
+  "$schema": "../turbo-themes.schema.json#/$defs/VendorsFile",
+  "$description": "Vendor display order, family metadata, and default icons for theme pickers",
+  "vendors": [
+    {
+      "id": "catppuccin",
+      "name": "Catppuccin",
+      "description": "Soothing pastel themes",
+      "homepage": "https://catppuccin.com/palette/",
+      "icon": {
+        "light": "catppuccin-logo-latte.png",
+        "dark": "catppuccin-logo-macchiato.png"
+      },
+      "synced": true
+    },
+    {
+      "id": "dracula",
+      "name": "Dracula",
+      "description": "Dark vampire aesthetic",
+      "homepage": "https://draculatheme.com/",
+      "icon": "dracula-logo.png"
+    },
+    {
+      "id": "gruvbox",
+      "name": "Gruvbox",
+      "description": "Retro groove palette with warm, earthy tones",
+      "homepage": "https://github.com/morhetz/gruvbox",
+      "icon": {
+        "light": "gruvbox-light.png",
+        "dark": "gruvbox-dark.png"
+      }
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "description": "GitHub-inspired themes",
+      "homepage": "https://primer.style/",
+      "icon": {
+        "light": "github-logo-light.png",
+        "dark": "github-logo-dark.png"
+      },
+      "synced": true
+    },
+    {
+      "id": "bulma",
+      "name": "Bulma",
+      "description": "Classic Bulma themes",
+      "homepage": "https://bulma.io/",
+      "icon": "turbo-themes-logo.png"
+    },
+    {
+      "id": "nord",
+      "name": "Nord",
+      "description": "Arctic, north-bluish color palette",
+      "homepage": "https://www.nordtheme.com/",
+      "icon": "nord.png"
+    },
+    {
+      "id": "solarized",
+      "name": "Solarized",
+      "description": "Precision-balanced light and dark modes",
+      "homepage": "https://ethanschoonover.com/solarized/",
+      "icon": {
+        "light": "solarized-light.png",
+        "dark": "solarized-dark.png"
+      }
+    },
+    {
+      "id": "rose-pine",
+      "name": "Rosé Pine",
+      "description": "All natural pine, faux fur and a bit of soho vibes",
+      "homepage": "https://rosepinetheme.com/",
+      "icon": {
+        "light": "rose-pine-dawn.png",
+        "dark": "rose-pine.png"
+      },
+      "synced": true
+    },
+    {
+      "id": "tokyo-night",
+      "name": "Tokyo Night",
+      "description": "Neon-infused nightscape with crisp contrast",
+      "homepage": "https://github.com/enkia/tokyo-night-vscode-theme",
+      "icon": "tokyo-night.png"
+    },
+    {
+      "id": "one-dark",
+      "name": "One",
+      "description": "The iconic Atom editor palette in dark and light",
+      "homepage": "https://github.com/Binaryify/OneDark-Pro",
+      "icon": {
+        "light": "one-light.png",
+        "dark": "one-dark.png"
+      }
+    },
+    {
+      "id": "turbo",
+      "name": "Terminal",
+      "description": "CRT phosphor green on void",
+      "homepage": "https://github.com/lgtm-hq/turbo-themes",
+      "icon": "terminal.png"
+    }
+  ]
+}

@@ -4,6 +4,8 @@
   "label": "Terminal",
   "vendor": "turbo",
   "appearance": "dark",
+  "description": "CRT phosphor green on void with IBM Plex Mono.",
+  "icon": "terminal.png",
   "tokens": {
     "background": {
       "base": {

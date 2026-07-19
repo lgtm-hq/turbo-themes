@@ -4,6 +4,8 @@
   "label": "One Light",
   "vendor": "one-dark",
   "appearance": "light",
+  "description": "Companion One Light palette for bright, daytime editing.",
+  "icon": "one-light.png",
   "tokens": {
     "background": {
       "base": {

@@ -4,6 +4,8 @@
   "label": "Bulma Dark",
   "vendor": "bulma",
   "appearance": "dark",
+  "description": "Dark Bulma theme tuned for low-light reading.",
+  "icon": "turbo-themes-logo.png",
   "tokens": {
     "background": {
       "base": {

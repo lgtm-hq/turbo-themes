@@ -622,33 +622,15 @@ describe('wireFlavorSelector events', () => {
 
     Object.defineProperty(document, 'createElement', {
       value: vi.fn((tag) => {
-        if (tag === 'button') {
+                if (tag === 'button') {
+          const attrs: Record<string, string> = {};
           const item = {
             ...mockElement,
             type: 'button',
-            getAttribute: vi.fn((attr) => {
-              // Return theme ID for data-theme-id attribute
-              if (attr === 'data-theme-id') {
-                // Return different theme IDs, but we'll find the catppuccin-latte one
-                const index = mockMenuItems.length;
-                const themes = [
-                  'bulma-dark',
-                  'bulma-light',
-                  'catppuccin-frappe',
-                  'catppuccin-latte',
-                  'catppuccin-macchiato',
-                  'catppuccin-mocha',
-                  'github-dark',
-                  'github-light',
-                  'dracula',
-                  'rose-pine-dawn',
-                  'rose-pine-moon',
-                  'rose-pine',
-                ];
-                return themes[index] || 'catppuccin-latte';
-              }
-              return null;
+            setAttribute: vi.fn((name: string, value: string) => {
+              attrs[name] = value;
             }),
+            getAttribute: vi.fn((attr: string) => attrs[attr] ?? null),
             addEventListener: vi.fn(),
           };
           mockMenuItems.push(item);
@@ -742,32 +724,15 @@ describe('wireFlavorSelector events', () => {
 
     Object.defineProperty(document, 'createElement', {
       value: vi.fn((tag) => {
-        if (tag === 'button') {
-          // Capture index at creation time (before push)
-          const capturedIndex = mockMenuItems.length;
-          const themes = [
-            'bulma-dark',
-            'bulma-light',
-            'catppuccin-frappe',
-            'catppuccin-latte',
-            'catppuccin-macchiato',
-            'catppuccin-mocha',
-            'github-dark',
-            'github-light',
-            'dracula',
-            'rose-pine-dawn',
-            'rose-pine-moon',
-            'rose-pine',
-          ];
+                if (tag === 'button') {
+          const attrs: Record<string, string> = {};
           const item = {
             ...mockElement,
             type: 'button',
-            getAttribute: vi.fn((attr) => {
-              if (attr === 'data-theme-id') {
-                return themes[capturedIndex] || 'catppuccin-latte';
-              }
-              return null;
+            setAttribute: vi.fn((name: string, value: string) => {
+              attrs[name] = value;
             }),
+            getAttribute: vi.fn((attr: string) => attrs[attr] ?? null),
             addEventListener: vi.fn(),
             classList: {
               ...mockElement.classList,

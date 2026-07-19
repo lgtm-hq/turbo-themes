@@ -16,6 +16,7 @@ const projectRoot = join(__dirname, '../..');
 const schemaPath = join(projectRoot, 'schema', 'turbo-themes.schema.json');
 const themesDir = join(projectRoot, 'schema', 'tokens', 'themes');
 const sharedTokensPath = join(projectRoot, 'schema', 'tokens', '_shared.tokens.json');
+const vendorsPath = join(projectRoot, 'schema', 'tokens', '_vendors.json');
 
 // Load schema
 const schema = JSON.parse(readFileSync(schemaPath, 'utf-8'));
@@ -34,10 +35,14 @@ const themeFileSchema = {
 const sharedTokensSchema = {
   $ref: 'turbo-themes.schema.json#/$defs/SharedTokensFile',
 };
+const vendorsSchema = {
+  $ref: 'turbo-themes.schema.json#/$defs/VendorsFile',
+};
 
 // Compile validators
 const validateThemeFile = ajv.compile(themeFileSchema);
 const validateSharedTokensFile = ajv.compile(sharedTokensSchema);
+const validateVendorsFile = ajv.compile(vendorsSchema);
 
 let hasErrors = false;
 
@@ -75,9 +80,15 @@ if (!validateFile(sharedTokensPath, validateSharedTokensFile, 'SharedTokensFile'
   hasErrors = true;
 }
 
+// Validate vendor metadata
+console.log('\nVendor metadata:');
+if (!validateFile(vendorsPath, validateVendorsFile, 'VendorsFile')) {
+  hasErrors = true;
+}
+
 // Validate theme files
 console.log('\nTheme files:');
-const themeFiles = readdirSync(themesDir).filter(f => f.endsWith('.tokens.json'));
+const themeFiles = readdirSync(themesDir).filter((f) => f.endsWith('.tokens.json'));
 
 for (const file of themeFiles) {
   const filePath = join(themesDir, file);
@@ -92,5 +103,5 @@ if (hasErrors) {
   console.log('❌ Validation failed with errors');
   process.exit(1);
 } else {
-  console.log(`✅ All ${themeFiles.length + 1} files validated successfully`);
+  console.log(`✅ All ${themeFiles.length + 2} files validated successfully`);
 }

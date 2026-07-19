@@ -4,6 +4,8 @@
   "label": "Catppuccin Macchiato",
   "vendor": "catppuccin",
   "appearance": "dark",
+  "description": "Deep, atmospheric Catppuccin variant with rich contrast.",
+  "icon": "catppuccin-logo-macchiato.png",
   "tokens": {
     "background": {
       "base": {

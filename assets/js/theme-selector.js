@@ -162,11 +162,7 @@ var TurboThemeSelector = (function(exports) {
 	}]));
 	var themeIds = flavors.map((f) => f.id);
 	[...new Set(flavors.map((f) => f.vendor))];
-	var DEFAULT_THEME$1 = "catppuccin-mocha";
-	var VALID_THEMES = themeIds;
-	flavors.map((f) => [f.id, f.label]);
-	var THEME_APPEARANCES = Object.fromEntries(flavors.map((f) => [f.id, f.appearance]));
-	var VENDOR_ORDER = [
+	var VENDOR_ORDER$1 = [
 		"catppuccin",
 		"dracula",
 		"gruvbox",
@@ -179,8 +175,13 @@ var TurboThemeSelector = (function(exports) {
 		"one-dark",
 		"turbo"
 	];
+	var DEFAULT_THEME$1 = "catppuccin-mocha";
+	var VALID_THEMES = themeIds;
+	flavors.map((f) => [f.id, f.label]);
+	var THEME_APPEARANCES = Object.fromEntries(flavors.map((f) => [f.id, f.appearance]));
+	var VENDOR_ORDER = VENDOR_ORDER$1;
 	var _missingFromOrder = Object.keys(packages).filter((id) => !VENDOR_ORDER.includes(id));
-	if (_missingFromOrder.length > 0) console.warn(`[metadata] VENDOR_ORDER is missing vendor IDs present in packages: ${_missingFromOrder.join(", ")}. Append them to VENDOR_ORDER so their themes are included in VENDOR_GROUPS.`);
+	if (_missingFromOrder.length > 0) console.warn(`[metadata] VENDOR_ORDER is missing vendor IDs present in packages: ${_missingFromOrder.join(", ")}. Append them to schema/tokens/_vendors.json and regenerate metadata.`);
 	var VENDOR_GROUPS = VENDOR_ORDER.filter((id) => id in packages).map((id) => {
 		const pkg = packages[id];
 		return {
@@ -256,6 +257,125 @@ var TurboThemeSelector = (function(exports) {
 		vendors: [],
 		include: MINIMAL_THEME_IDS
 	}), createThemeCatalog({ appearances: ["dark"] }), createThemeCatalog({ appearances: ["light"] });
+	var THEME_FAMILIES$1 = {
+		"catppuccin": {
+			"name": "Catppuccin",
+			"description": "Soothing pastel themes"
+		},
+		"dracula": {
+			"name": "Dracula",
+			"description": "Dark vampire aesthetic"
+		},
+		"gruvbox": {
+			"name": "Gruvbox",
+			"description": "Retro groove palette with warm, earthy tones"
+		},
+		"github": {
+			"name": "GitHub",
+			"description": "GitHub-inspired themes"
+		},
+		"bulma": {
+			"name": "Bulma",
+			"description": "Classic Bulma themes"
+		},
+		"nord": {
+			"name": "Nord",
+			"description": "Arctic, north-bluish color palette"
+		},
+		"solarized": {
+			"name": "Solarized",
+			"description": "Precision-balanced light and dark modes"
+		},
+		"rose-pine": {
+			"name": "Rosé Pine",
+			"description": "All natural pine, faux fur and a bit of soho vibes"
+		},
+		"tokyo-night": {
+			"name": "Tokyo Night",
+			"description": "Neon-infused nightscape with crisp contrast"
+		},
+		"one-dark": {
+			"name": "One",
+			"description": "The iconic Atom editor palette in dark and light"
+		},
+		"turbo": {
+			"name": "Terminal",
+			"description": "CRT phosphor green on void"
+		}
+	};
+	var VENDOR_FAMILY_MAP = {
+		"catppuccin": "catppuccin",
+		"dracula": "dracula",
+		"gruvbox": "gruvbox",
+		"github": "github",
+		"bulma": "bulma",
+		"nord": "nord",
+		"solarized": "solarized",
+		"rose-pine": "rose-pine",
+		"tokyo-night": "tokyo-night",
+		"one-dark": "one-dark",
+		"turbo": "turbo"
+	};
+	var VENDOR_ICON_MAP = {
+		"catppuccin": {
+			"light": "assets/img/catppuccin-logo-latte.png",
+			"dark": "assets/img/catppuccin-logo-macchiato.png"
+		},
+		"dracula": "assets/img/dracula-logo.png",
+		"gruvbox": {
+			"light": "assets/img/gruvbox-light.png",
+			"dark": "assets/img/gruvbox-dark.png"
+		},
+		"github": {
+			"light": "assets/img/github-logo-light.png",
+			"dark": "assets/img/github-logo-dark.png"
+		},
+		"bulma": "assets/img/turbo-themes-logo.png",
+		"nord": "assets/img/nord.png",
+		"solarized": {
+			"light": "assets/img/solarized-light.png",
+			"dark": "assets/img/solarized-dark.png"
+		},
+		"rose-pine": {
+			"light": "assets/img/rose-pine-dawn.png",
+			"dark": "assets/img/rose-pine.png"
+		},
+		"tokyo-night": "assets/img/tokyo-night.png",
+		"one-dark": {
+			"light": "assets/img/one-light.png",
+			"dark": "assets/img/one-dark.png"
+		},
+		"turbo": "assets/img/terminal.png"
+	};
+	var FLAVOR_DESCRIPTIONS = {
+		"bulma-dark": "Dark Bulma theme tuned for low-light reading.",
+		"bulma-light": "Classic Bulma look with a bright, neutral palette.",
+		"catppuccin-frappe": "Balanced dark Catppuccin theme for focused work.",
+		"catppuccin-latte": "Light, soft Catppuccin palette for daytime use.",
+		"catppuccin-macchiato": "Deep, atmospheric Catppuccin variant with rich contrast.",
+		"catppuccin-mocha": "Cozy, high-contrast Catppuccin theme for late-night sessions.",
+		"dracula": "Iconic Dracula dark theme with vibrant accents.",
+		"github-dark": "GitHub dark theme optimized for code-heavy views.",
+		"github-light": "GitHub-inspired light theme suited for documentation and UI heavy pages.",
+		"gruvbox-dark-hard": "Highest contrast dark Gruvbox palette with deep shadows.",
+		"gruvbox-dark-soft": "Softer dark Gruvbox palette with reduced contrast.",
+		"gruvbox-dark": "Classic Gruvbox dark palette with warm, muted tones.",
+		"gruvbox-light-hard": "Bright, crisp Gruvbox light palette with extra contrast.",
+		"gruvbox-light-soft": "Soft, low-contrast Gruvbox light palette for long sessions.",
+		"gruvbox-light": "Classic Gruvbox light palette with warm paper tones.",
+		"nord": "Arctic, north-bluish color palette inspired by the polar night.",
+		"one-dark": "The classic Atom One Dark palette with vivid syntax accents.",
+		"one-light": "Companion One Light palette for bright, daytime editing.",
+		"rose-pine-dawn": "Light Rosé Pine variant for daytime use.",
+		"rose-pine-moon": "Deeper variant of Rosé Pine with enhanced contrast.",
+		"rose-pine": "Elegant dark theme with natural pine and soho vibes.",
+		"solarized-dark": "Solarized Dark with a balanced, low-contrast palette.",
+		"solarized-light": "Solarized Light tuned for bright, daylight-friendly UIs.",
+		"terminal": "CRT phosphor green on void with IBM Plex Mono.",
+		"tokyo-night-dark": "Deep midnight blues with neon accents.",
+		"tokyo-night-light": "Clean daylight palette inspired by Tokyo mornings.",
+		"tokyo-night-storm": "Stormy variant with richer contrast and depth."
+	};
 	var STORAGE_KEY = "turbo-theme";
 	var LEGACY_STORAGE_KEYS = ["bulma-theme-flavor"];
 	var DEFAULT_THEME = DEFAULT_THEME$1;
@@ -275,52 +395,7 @@ var TurboThemeSelector = (function(exports) {
 		HIGHLIGHT_PRE: ".highlight > pre",
 		THEME_CSS_LINKS: "link[id^=\"theme-\"][id$=\"-css\"]"
 	};
-	var THEME_FAMILIES = {
-		bulma: {
-			name: "Bulma",
-			description: "Classic Bulma themes"
-		},
-		catppuccin: {
-			name: "Catppuccin",
-			description: "Soothing pastel themes"
-		},
-		dracula: {
-			name: "Dracula",
-			description: "Dark vampire aesthetic"
-		},
-		gruvbox: {
-			name: "Gruvbox",
-			description: "Retro groove palette with warm, earthy tones"
-		},
-		github: {
-			name: "GitHub",
-			description: "GitHub-inspired themes"
-		},
-		nord: {
-			name: "Nord",
-			description: "Arctic, north-bluish color palette"
-		},
-		"one-dark": {
-			name: "One",
-			description: "The iconic Atom editor palette in dark and light"
-		},
-		"rose-pine": {
-			name: "Rosé Pine",
-			description: "All natural pine, faux fur and a bit of soho vibes"
-		},
-		solarized: {
-			name: "Solarized",
-			description: "Precision-balanced light and dark modes"
-		},
-		terminal: {
-			name: "Terminal",
-			description: "CRT phosphor green on void"
-		},
-		"tokyo-night": {
-			name: "Tokyo Night",
-			description: "Neon-infused nightscape with crisp contrast"
-		}
-	};
+	var THEME_FAMILIES = THEME_FAMILIES$1;
 	var LOG_PREFIX = "[turbo-themes]";
 	var ErrorLevel = {
 		WARN: "warn",
@@ -571,82 +646,8 @@ var TurboThemeSelector = (function(exports) {
 	function setTabindexBatch(items, value) {
 		for (const item of items) item.setAttribute("tabindex", value);
 	}
-	var VENDOR_FAMILY_MAP = {
-		bulma: "bulma",
-		catppuccin: "catppuccin",
-		dracula: "dracula",
-		gruvbox: "gruvbox",
-		github: "github",
-		nord: "nord",
-		"one-dark": "one-dark",
-		"rose-pine": "rose-pine",
-		solarized: "solarized",
-		turbo: "terminal",
-		"tokyo-night": "tokyo-night"
-	};
-	var DEFAULT_FAMILY = "bulma";
-	var VENDOR_ICON_MAP = {
-		bulma: "assets/img/turbo-themes-logo.png",
-		catppuccin: {
-			light: "assets/img/catppuccin-logo-latte.png",
-			dark: "assets/img/catppuccin-logo-macchiato.png"
-		},
-		dracula: "assets/img/dracula-logo.png",
-		gruvbox: {
-			light: "assets/img/gruvbox-light.png",
-			dark: "assets/img/gruvbox-dark.png"
-		},
-		github: {
-			light: "assets/img/github-logo-light.png",
-			dark: "assets/img/github-logo-dark.png"
-		},
-		nord: "assets/img/nord.png",
-		"one-dark": {
-			light: "assets/img/one-light.png",
-			dark: "assets/img/one-dark.png"
-		},
-		"rose-pine": {
-			light: "assets/img/rose-pine-dawn.png",
-			dark: "assets/img/rose-pine.png"
-		},
-		solarized: {
-			light: "assets/img/solarized-light.png",
-			dark: "assets/img/solarized-dark.png"
-		},
-		turbo: "assets/img/terminal.png",
-		"tokyo-night": "assets/img/tokyo-night.png"
-	};
-	var FLAVOR_DESCRIPTIONS = {
-		"bulma-light": "Classic Bulma look with a bright, neutral palette.",
-		"bulma-dark": "Dark Bulma theme tuned for low-light reading.",
-		"catppuccin-latte": "Light, soft Catppuccin palette for daytime use.",
-		"catppuccin-frappe": "Balanced dark Catppuccin theme for focused work.",
-		"catppuccin-macchiato": "Deep, atmospheric Catppuccin variant with rich contrast.",
-		"catppuccin-mocha": "Cozy, high-contrast Catppuccin theme for late-night sessions.",
-		dracula: "Iconic Dracula dark theme with vibrant accents.",
-		"gruvbox-dark-hard": "Highest contrast dark Gruvbox palette with deep shadows.",
-		"gruvbox-dark": "Classic Gruvbox dark palette with warm, muted tones.",
-		"gruvbox-dark-soft": "Softer dark Gruvbox palette with reduced contrast.",
-		"gruvbox-light-hard": "Bright, crisp Gruvbox light palette with extra contrast.",
-		"gruvbox-light": "Classic Gruvbox light palette with warm paper tones.",
-		"gruvbox-light-soft": "Soft, low-contrast Gruvbox light palette for long sessions.",
-		"github-light": "GitHub-inspired light theme suited for documentation and UI heavy pages.",
-		"github-dark": "GitHub dark theme optimized for code-heavy views.",
-		nord: "Arctic, north-bluish color palette inspired by the polar night.",
-		"one-dark": "The classic Atom One Dark palette with vivid syntax accents.",
-		"one-light": "Companion One Light palette for bright, daytime editing.",
-		"rose-pine": "Elegant dark theme with natural pine and soho vibes.",
-		"rose-pine-moon": "Deeper variant of Rosé Pine with enhanced contrast.",
-		"rose-pine-dawn": "Light Rosé Pine variant for daytime use.",
-		"solarized-dark": "Solarized Dark with a balanced, low-contrast palette.",
-		"solarized-light": "Solarized Light tuned for bright, daylight-friendly UIs.",
-		"tokyo-night-dark": "Deep midnight blues with neon accents.",
-		"tokyo-night-storm": "Stormy variant with richer contrast and depth.",
-		"tokyo-night-light": "Clean daylight palette inspired by Tokyo mornings.",
-		terminal: "CRT phosphor green on void with IBM Plex Mono."
-	};
 	function getFamily(vendor) {
-		return VENDOR_FAMILY_MAP[vendor] ?? DEFAULT_FAMILY;
+		return VENDOR_FAMILY_MAP[vendor] ?? "catppuccin";
 	}
 	function getIconForVendor(vendor, appearance) {
 		const iconConfig = VENDOR_ICON_MAP[vendor];

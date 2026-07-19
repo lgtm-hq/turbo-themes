@@ -4,6 +4,8 @@
   "label": "Gruvbox Dark Hard",
   "vendor": "gruvbox",
   "appearance": "dark",
+  "description": "Highest contrast dark Gruvbox palette with deep shadows.",
+  "icon": "gruvbox-dark-hard.png",
   "tokens": {
     "background": {
       "base": {

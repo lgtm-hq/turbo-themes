@@ -4,6 +4,8 @@
   "label": "Gruvbox Dark Soft",
   "vendor": "gruvbox",
   "appearance": "dark",
+  "description": "Softer dark Gruvbox palette with reduced contrast.",
+  "icon": "gruvbox-dark-soft.png",
   "tokens": {
     "background": {
       "base": {

@@ -4,6 +4,8 @@
   "label": "Catppuccin Mocha",
   "vendor": "catppuccin",
   "appearance": "dark",
+  "description": "Cozy, high-contrast Catppuccin theme for late-night sessions.",
+  "icon": "catppuccin-logo-macchiato.png",
   "tokens": {
     "background": {
       "base": {

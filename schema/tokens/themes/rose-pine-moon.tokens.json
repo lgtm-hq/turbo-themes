@@ -4,6 +4,8 @@
   "label": "Rosé Pine Moon",
   "vendor": "rose-pine",
   "appearance": "dark",
+  "description": "Deeper variant of Rosé Pine with enhanced contrast.",
+  "icon": "rose-pine-moon.png",
   "tokens": {
     "background": {
       "base": {

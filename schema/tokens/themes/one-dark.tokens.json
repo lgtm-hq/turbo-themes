@@ -4,6 +4,8 @@
   "label": "One Dark",
   "vendor": "one-dark",
   "appearance": "dark",
+  "description": "The classic Atom One Dark palette with vivid syntax accents.",
+  "icon": "one-dark.png",
   "tokens": {
     "background": {
       "base": {

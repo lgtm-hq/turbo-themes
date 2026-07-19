@@ -4,6 +4,8 @@
   "label": "Gruvbox Light Hard",
   "vendor": "gruvbox",
   "appearance": "light",
+  "description": "Bright, crisp Gruvbox light palette with extra contrast.",
+  "icon": "gruvbox-light-hard.png",
   "tokens": {
     "background": {
       "base": {

@@ -430,6 +430,14 @@
         "label": { "type": "string" },
         "vendor": { "type": "string" },
         "appearance": { "enum": ["light", "dark"] },
+        "description": {
+          "type": "string",
+          "description": "Human-readable flavor description for UI pickers"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Icon filename under assets/img/ (e.g. dracula-logo.png)"
+        },
         "iconUrl": { "type": "string" },
         "tokens": { "$ref": "#/$defs/ThemeTokens" }
       },
@@ -444,10 +452,64 @@
         "label": { "type": "string" },
         "vendor": { "type": "string" },
         "appearance": { "enum": ["light", "dark"] },
+        "description": {
+          "type": "string",
+          "description": "Human-readable flavor description for UI pickers"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Icon filename under assets/img/ (e.g. dracula-logo.png)"
+        },
         "iconUrl": { "type": "string" },
         "tokens": { "$ref": "#/$defs/ThemeTokens" }
       },
       "required": ["id", "label", "vendor", "appearance", "tokens"]
+    },
+    "VendorIcon": {
+      "description": "Vendor icon as a single filename or appearance-specific pair",
+      "oneOf": [
+        { "type": "string" },
+        {
+          "type": "object",
+          "properties": {
+            "light": { "type": "string" },
+            "dark": { "type": "string" }
+          },
+          "required": ["light", "dark"],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "VendorEntry": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "homepage": { "type": "string" },
+        "icon": { "$ref": "#/$defs/VendorIcon" },
+        "synced": {
+          "type": "boolean",
+          "description": "When true, tokens.json byVendor name gets a (synced) suffix"
+        }
+      },
+      "required": ["id", "name", "description", "homepage", "icon"],
+      "additionalProperties": false
+    },
+    "VendorsFile": {
+      "description": "Schema for vendor metadata in schema/tokens/_vendors.json",
+      "type": "object",
+      "properties": {
+        "$schema": { "type": "string" },
+        "$description": { "type": "string" },
+        "vendors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/VendorEntry" },
+          "minItems": 1
+        }
+      },
+      "required": ["vendors"],
+      "additionalProperties": false
     },
     "SharedTokensFile": {
       "description": "Schema for shared tokens file (spacing, elevation, animation, opacity)",

@@ -4,6 +4,8 @@
   "label": "Nord",
   "vendor": "nord",
   "appearance": "dark",
+  "description": "Arctic, north-bluish color palette inspired by the polar night.",
+  "icon": "nord.png",
   "tokens": {
     "background": {
       "base": {

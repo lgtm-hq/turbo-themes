@@ -3,11 +3,12 @@
  * Constants for theme selector component
  */
 
-import type { ThemeFamily } from './types.js';
 import { DEFAULT_THEME as CORE_DEFAULT_THEME } from '@lgtm-hq/turbo-themes-core';
+import { THEME_FAMILIES as GENERATED_THEME_FAMILIES } from './generated/theme-maps.js';
 
 // Re-export ThemeFamily for convenience
 export type { ThemeFamily } from './types.js';
+export type { ThemeFamilyMeta } from './generated/theme-maps.js';
 
 export const STORAGE_KEY = 'turbo-theme';
 export const LEGACY_STORAGE_KEYS = ['bulma-theme-flavor'];
@@ -34,21 +35,5 @@ export const DOM_SELECTORS = {
   THEME_CSS_LINKS: 'link[id^="theme-"][id$="-css"]',
 } as const;
 
-export interface ThemeFamilyMeta {
-  name: string;
-  description: string;
-}
-
-export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
-  bulma: { name: 'Bulma', description: 'Classic Bulma themes' },
-  catppuccin: { name: 'Catppuccin', description: 'Soothing pastel themes' },
-  dracula: { name: 'Dracula', description: 'Dark vampire aesthetic' },
-  gruvbox: { name: 'Gruvbox', description: 'Retro groove palette with warm, earthy tones' },
-  github: { name: 'GitHub', description: 'GitHub-inspired themes' },
-  nord: { name: 'Nord', description: 'Arctic, north-bluish color palette' },
-  'one-dark': { name: 'One', description: 'The iconic Atom editor palette in dark and light' },
-  'rose-pine': { name: 'Rosé Pine', description: 'All natural pine, faux fur and a bit of soho vibes' },
-  solarized: { name: 'Solarized', description: 'Precision-balanced light and dark modes' },
-  terminal: { name: 'Terminal', description: 'CRT phosphor green on void' },
-  'tokyo-night': { name: 'Tokyo Night', description: 'Neon-infused nightscape with crisp contrast' },
-};
+/** Family display metadata — generated from schema/tokens/_vendors.json. */
+export const THEME_FAMILIES = GENERATED_THEME_FAMILIES;

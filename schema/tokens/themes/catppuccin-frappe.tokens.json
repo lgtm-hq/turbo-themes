@@ -4,6 +4,8 @@
   "label": "Catppuccin Frappé",
   "vendor": "catppuccin",
   "appearance": "dark",
+  "description": "Balanced dark Catppuccin theme for focused work.",
+  "icon": "catppuccin-logo-macchiato.png",
   "tokens": {
     "background": {
       "base": {
