@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.31.0] - 2026-07-19
+
+### ✨ Added
+
+- Add lightweight /catalog export for theme metadata (#604)
+
 ## [0.30.2] - 2026-07-19
 
 ### 🔧 Changed
