@@ -10,6 +10,9 @@ const SIZE_BUDGETS: Record<string, number> = {
   'packages/adapters/tailwind/dist/colors.js': 20_000, // 20KB
   'packages/css/dist/index.js': 35_000, // 35KB (increased: component CSS vars now emitted for all themes)
   'packages/adapters/bulma/dist/index.js': 20_000, // 20KB
+  // HA adapter inlines all theme token data (27 flavors) for a self-contained
+  // YAML generator; 80KB leaves generous headroom as theme packs grow.
+  'packages/adapters/home-assistant/dist/index.js': 81_920, // 80KB
   // Slim picker metadata for 24 themes (~200 bytes/theme); keep under 5KB.
   'dist/catalog.json': 5_120,
 };

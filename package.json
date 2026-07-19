@@ -92,6 +92,10 @@
     "./adapters/bulma.css": {
       "types": "./packages/adapters/bulma/dist/bulma-adapter.css.d.ts",
       "default": "./packages/adapters/bulma/dist/bulma-adapter.css"
+    },
+    "./adapters/home-assistant": {
+      "types": "./packages/adapters/home-assistant/dist/index.d.ts",
+      "import": "./packages/adapters/home-assistant/dist/index.js"
     }
   },
   "types": "./dist/index.d.ts",
@@ -117,7 +121,7 @@
     "build:core": "cd packages/core && bun run build",
     "build:selector": "cd packages/theme-selector && bun run build",
     "build:css-pkg": "cd packages/css && bun run build",
-    "build:adapters": "cd packages/adapters/tailwind && bun run build && cd ../bulma && bun run build",
+    "build:adapters": "cd packages/adapters/tailwind && bun run build && cd ../bulma && bun run build && cd ../home-assistant && bun run build",
     "build:root": "tsc -p tsconfig.json",
     "generate:all": "bun run build:tokens && bun run generate:types",
     "generate:css": "cd packages/css && bun run build:css && cd ../.. && bun run generate:css-dts",

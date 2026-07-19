@@ -53,5 +53,8 @@ describe('package files', () => {
 
     // Tailwind adapter
     expect(output).toContain('packages/adapters/tailwind/dist/');
+
+    // Home Assistant adapter
+    expect(output).toContain('packages/adapters/home-assistant/dist/');
   });
 });

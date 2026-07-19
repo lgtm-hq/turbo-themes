@@ -123,6 +123,16 @@
         "bulma",
       ],
     },
+    "packages/adapters/home-assistant": {
+      "name": "@lgtm-hq/turbo-themes-adapter-home-assistant",
+      "version": "0.11.0",
+      "dependencies": {
+        "@lgtm-hq/turbo-themes-core": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "^5.9.3",
+      },
+    },
     "packages/adapters/tailwind": {
       "name": "@lgtm-hq/turbo-themes-adapter-tailwind",
       "version": "0.11.0",
@@ -418,6 +428,8 @@
     "@lgtm-hq/turbo-themes-adapter-bootstrap": ["@lgtm-hq/turbo-themes-adapter-bootstrap@workspace:packages/adapters/bootstrap"],
 
     "@lgtm-hq/turbo-themes-adapter-bulma": ["@lgtm-hq/turbo-themes-adapter-bulma@workspace:packages/adapters/bulma"],
+
+    "@lgtm-hq/turbo-themes-adapter-home-assistant": ["@lgtm-hq/turbo-themes-adapter-home-assistant@workspace:packages/adapters/home-assistant"],
 
     "@lgtm-hq/turbo-themes-adapter-tailwind": ["@lgtm-hq/turbo-themes-adapter-tailwind@workspace:packages/adapters/tailwind"],
 
