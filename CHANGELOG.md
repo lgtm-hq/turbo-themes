@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.30.0] - 2026-07-19
+
+### 🤖 Internal
+
+- Route test-scoped commits to the Internal changelog section (#649)
+
 ## [0.29.3] - 2026-07-18
 
 ### 🔧 Changed
