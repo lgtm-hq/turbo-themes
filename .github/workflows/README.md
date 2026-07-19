@@ -80,7 +80,7 @@ Following py-lintro standards:
 
 | Workflow    | Purpose                                                   | Trigger     |
 | ----------- | --------------------------------------------------------- | ----------- |
-| `pages.yml` | **Deploy - GitHub Pages**<br/>Deploy site to GitHub Pages | Push (main) |
+| `deploy-pages.yml` | **Deploy - GitHub Pages**<br/>Astro site + bundled reports (lgtm-ci Model B) | workflow_run (CI Pipeline on main), Manual |
 
 ### 📦 Publish Workflows
 
@@ -189,15 +189,21 @@ jobs:
 
 **Schedule:** Daily at 22:00 UTC
 
-### Pages Deployment (`pages.yml`)
+### Pages Deployment (`deploy-pages.yml`)
 
-**Process:**
+**Process (lgtm-ci Model B):**
 
-1. Build Jekyll site
-2. Upload artifact
-3. Deploy to GitHub Pages
+1. After `Quality Check - CI Pipeline` succeeds on `main` (or manual dispatch),
+   call `reusable-deploy-site-with-reports`
+2. Build Astro site via `scripts/ci/build-pages-site.sh`
+3. Bundle report HTML from sibling workflows using
+   `.github/pages-bundle-manifest.json` (`fallback-ref: main`)
+4. Upload pages artifact and deploy with `actions/deploy-pages`
 
-**Environment:** `github-pages`
+**Environment:** `github-pages`  
+**Details:** [TRIGGERS.md](./TRIGGERS.md) (fallback, `strict` vs `require_success`,
+`actions: write` rationale, dispatch policy),
+[EGRESS-POLICIES.md](./EGRESS-POLICIES.md) (allowlists)
 
 ### npm Publishing (`publish-on-tag.yml`)
 

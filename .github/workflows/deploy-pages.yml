@@ -8,109 +8,79 @@ on:
       - completed
     branches: [main]
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to deploy (default: main)'
-        required: false
-        default: 'main'
 
 permissions:
   contents: read
   pages: write
   id-token: write
-  actions: read
-
-concurrency:
-  group: 'pages'
-  cancel-in-progress: true
+  # actions: write is required by lgtm-ci Model B (no prune-toggle input as of
+  # v0.59.0). Bundle download only needs read; write is solely so
+  # delete-run-pages-artifacts.sh can remove a stale same-run `github-pages`
+  # artifact before upload (lgtm-ci #415). Without write, `gh run rerun --failed`
+  # hard-fails with "Artifact count is 2". Scope is the job-scoped GITHUB_TOKEN
+  # only — see TRIGGERS.md "Caller permissions".
+  actions: write
 
 jobs:
-  build:
-    name: 🏗️ Build Site
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    if:
-      ${{ (github.event_name == 'workflow_run' &&
+  pages:
+    name: Deploy site with reports
+    if: >-
+      (github.event_name == 'workflow_run' &&
       github.event.workflow_run.conclusion == 'success' &&
       github.event.workflow_run.head_branch == 'main' &&
       github.event.workflow_run.head_repository.full_name == github.repository) ||
-      github.event_name == 'workflow_dispatch' }}
-    steps:
-      - name: Harden Runner
-        if: ${{ !env.ACT }}
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
-        with:
-          egress-policy: block
-          allowed-endpoints: >
-            api.github.com:443
-            api.rubygems.org:443
-            bun.sh:443
-            bundler.rubygems.org:443
-            cache.ruby-lang.org:443
-            codeload.github.com:443
-            files.pythonhosted.org:443
-            github-releases.githubusercontent.com:443
-            github.com:443
-            index.rubygems.org:443
-            npmjs.org:443
-            objects.githubusercontent.com:443
-            pkg-containers.githubusercontent.com:443
-            pypi.org:443
-            raw.githubusercontent.com:443
-            releases.astral.sh:443
-            registry.npmjs.org:443
-            release-assets.githubusercontent.com:443
-            rubygems-downloads.global.ssl.fastly.net:443
-            rubygems.global.ssl.fastly.net:443
-            rubygems.org:443
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          ref: ${{ github.event.inputs.branch || github.ref }}
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
-        with:
-          node-version: '22'
-      - name: Build TypeScript
-        run: bun run build
-      - name: Build JavaScript
-        run: bun run build:js
-      - name: Build CSS Themes
-        run: bun run build:themes
-      - name: Generate API reference
-        run: bun run docs:api
-      - name: Build Astro site
-        run: bun run build:ci:site
-        env:
-          ASTRO_BASE: /turbo-themes/
-          ASTRO_TELEMETRY_DISABLED: '1'
-      - name: Download test artifacts
-        if: github.event_name == 'workflow_run'
-        env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          ./scripts/ci/download-test-artifacts.sh "${{ github.event.workflow_run.head_sha }}"
-      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
-        with:
-          path: apps/site/dist
-
-  deploy:
-    name: 🚀 Deploy to GitHub Pages
-    needs: build
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Harden Runner
-        if: ${{ !env.ACT }}
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
-        with:
-          egress-policy: block
-          allowed-endpoints: >
-            api.github.com:443
-            github.com:443
-            uploads.github.com:443
-      - id: deployment
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+      github.event_name == 'workflow_dispatch'
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-deploy-site-with-reports.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    with:
+      tooling-ref: 443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+      site-root: apps/site/dist
+      working-directory: .
+      package-manager: bun
+      node-version: '22'
+      build-command: bash scripts/ci/build-pages-site.sh
+      bundle-manifest: .github/pages-bundle-manifest.json
+      # Fail the bundle step if any manifest entry cannot be resolved (matches
+      # pages-bundle-manifest.json "strict": true). Orthogonal to per-entry
+      # require_success — see TRIGGERS.md.
+      strict-bundle: true
+      commit-sha: ${{ github.event.workflow_run.head_sha || github.sha }}
+      # Explicit opt-in: path-triggered workflows (Examples, Multi-Language Coverage)
+      # may not run for every main commit; fall back to latest artifacts on main.
+      fallback-ref: main
+      egress-policy: block
+      timeout-minutes: 15
+      # Full build allowlist: lgtm-ci bun/npm defaults + monorepo Ruby/Python/Astral
+      # endpoints (setup-env legacy). Passed as a complete list because a non-empty
+      # allowed-endpoints-build replaces the reusable's first harden-runner allowlist.
+      allowed-endpoints-build: >
+        actions.githubusercontent.com:443
+        api.github.com:443
+        api.rubygems.org:443
+        bun.sh:443
+        bundler.rubygems.org:443
+        cache.ruby-lang.org:443
+        codeload.github.com:443
+        files.pythonhosted.org:443
+        github-releases.githubusercontent.com:443
+        github.com:443
+        index.rubygems.org:443
+        npmjs.org:443
+        objects.githubusercontent.com:443
+        pkg-containers.githubusercontent.com:443
+        pipelines.actions.githubusercontent.com:443
+        pypi.org:443
+        raw.githubusercontent.com:443
+        release-assets.githubusercontent.com:443
+        releases.astral.sh:443
+        registry.npmjs.org:443
+        rubygems-downloads.global.ssl.fastly.net:443
+        rubygems.global.ssl.fastly.net:443
+        rubygems.org:443
+      allowed-endpoints-deploy: >
+        actions.githubusercontent.com:443
+        api.github.com:443
+        github.com:443
+        objects.githubusercontent.com:443
+        pipelines.actions.githubusercontent.com:443
+        release-assets.githubusercontent.com:443
+        uploads.github.com:443
