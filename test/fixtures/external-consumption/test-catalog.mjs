@@ -7,5 +7,6 @@ console.log(
     catalogById: Object.keys(catalogById).length,
     catalogJson: Array.isArray(catalogJson) ? catalogJson.length : 0,
     hasPreview: Boolean(catalog[0]?.preview?.bg),
+    catalogJsonHasPreview: Boolean(catalogJson[0]?.preview?.bg),
   }),
 );

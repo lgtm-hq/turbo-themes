@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { catalog, catalogById, type ThemeCatalogEntry } from '../src/catalog/index.js';
+import { catalog, catalogById } from '../src/catalog/index.js';
 import { flavors, themeIds } from '../src/tokens/index.js';
 
 /** Mirror of theme-selector extractPreviewColors for cross-check. */
@@ -62,7 +62,7 @@ describe('catalog', () => {
   it('shares filterable fields with ThemeFlavor for createThemeCatalog compatibility', () => {
     // Slim entries carry the same id/vendor/appearance keys that createThemeCatalog
     // (#495) filters on, so UI-only consumers can apply the same selection rules.
-    const filterable: Array<keyof ThemeCatalogEntry> = ['id', 'vendor', 'appearance'];
+    const filterable = ['id', 'vendor', 'appearance'] as const;
     catalog.forEach((entry, index) => {
       const flavor = flavors[index]!;
       for (const key of filterable) {

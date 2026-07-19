@@ -77,5 +77,6 @@ describe('External package consumption', () => {
     expect(result.catalogById).toBe(result.catalog);
     expect(result.catalogJson).toBe(result.catalog);
     expect(result.hasPreview).toBe(true);
+    expect(result.catalogJsonHasPreview).toBe(true);
   });
 });
