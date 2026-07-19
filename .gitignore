@@ -111,8 +111,11 @@ src/scss/_themes.scss
 src/scss/theme-*.scss
 
 # -------------------- Auto-generated source files --------------------
-# Synced theme packs (generated from external palettes)
+# Synced theme packs (generated from external palettes). The root copies are
+# committed and drift-gated, so they must not be ignored — oxfmt skips
+# gitignored files, which broke sync-script formatting (issue #651).
 *.synced.ts
+!src/themes/packs/*.synced.ts
 # Generated Python tokens (from dist/tokens.json)
 python/src/turbo_themes/tokens.py
 
