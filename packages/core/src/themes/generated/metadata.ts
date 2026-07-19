@@ -25,11 +25,14 @@ export const THEME_IDS = [
   'gruvbox-light-soft',
   'gruvbox-light',
   'nord',
+  'one-dark',
+  'one-light',
   'rose-pine-dawn',
   'rose-pine-moon',
   'rose-pine',
   'solarized-dark',
   'solarized-light',
+  'terminal',
   'tokyo-night-dark',
   'tokyo-night-light',
   'tokyo-night-storm',
@@ -52,6 +55,8 @@ export const VENDOR_ORDER = [
   'solarized',
   'rose-pine',
   'tokyo-night',
+  'one-dark',
+  'turbo',
 ] as const;
 
 /** Union of every vendor identifier. */
@@ -75,11 +80,14 @@ export const THEME_DESCRIPTIONS = {
   "gruvbox-light-soft": "Soft, low-contrast Gruvbox light palette for long sessions.",
   "gruvbox-light": "Classic Gruvbox light palette with warm paper tones.",
   "nord": "Arctic, north-bluish color palette inspired by the polar night.",
+  "one-dark": "The classic Atom One Dark palette with vivid syntax accents.",
+  "one-light": "Companion One Light palette for bright, daytime editing.",
   "rose-pine-dawn": "Light Rosé Pine variant for daytime use.",
   "rose-pine-moon": "Deeper variant of Rosé Pine with enhanced contrast.",
   "rose-pine": "Elegant dark theme with natural pine and soho vibes.",
   "solarized-dark": "Solarized Dark with a balanced, low-contrast palette.",
   "solarized-light": "Solarized Light tuned for bright, daylight-friendly UIs.",
+  "terminal": "CRT phosphor green on void with IBM Plex Mono.",
   "tokyo-night-dark": "Deep midnight blues with neon accents.",
   "tokyo-night-light": "Clean daylight palette inspired by Tokyo mornings.",
   "tokyo-night-storm": "Stormy variant with richer contrast and depth."
@@ -106,11 +114,14 @@ export const THEME_ICONS = {
   "gruvbox-light-soft": "gruvbox-light-soft.png",
   "gruvbox-light": "gruvbox-light.png",
   "nord": "nord.png",
+  "one-dark": "one-dark.png",
+  "one-light": "one-light.png",
   "rose-pine-dawn": "rose-pine-dawn.png",
   "rose-pine-moon": "rose-pine-moon.png",
   "rose-pine": "rose-pine.png",
   "solarized-dark": "solarized-dark.png",
   "solarized-light": "solarized-light.png",
+  "terminal": "terminal.png",
   "tokyo-night-dark": "tokyo-night.png",
   "tokyo-night-light": "tokyo-night.png",
   "tokyo-night-storm": "tokyo-night.png"
@@ -141,7 +152,12 @@ export const VENDOR_ICONS = {
     "light": "rose-pine-dawn.png",
     "dark": "rose-pine.png"
   },
-  "tokyo-night": "tokyo-night.png"
+  "tokyo-night": "tokyo-night.png",
+  "one-dark": {
+    "light": "one-light.png",
+    "dark": "one-dark.png"
+  },
+  "turbo": "terminal.png"
 } as const;
 
 /** Per-vendor family display metadata. */
@@ -181,6 +197,14 @@ export const VENDOR_FAMILY_META = {
   "tokyo-night": {
     "name": "Tokyo Night",
     "description": "Neon-infused nightscape with crisp contrast"
+  },
+  "one-dark": {
+    "name": "One",
+    "description": "The iconic Atom editor palette in dark and light"
+  },
+  "turbo": {
+    "name": "Terminal",
+    "description": "CRT phosphor green on void"
   }
 } as const satisfies Record<
   VendorId,

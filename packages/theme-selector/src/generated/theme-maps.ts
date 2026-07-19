@@ -14,7 +14,9 @@ export type ThemeFamily =
   | 'nord'
   | 'solarized'
   | 'rose-pine'
-  | 'tokyo-night';
+  | 'tokyo-night'
+  | 'one-dark'
+  | 'turbo';
 
 export interface ThemeFamilyMeta {
   name: string;
@@ -58,6 +60,14 @@ export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
   "tokyo-night": {
     "name": "Tokyo Night",
     "description": "Neon-infused nightscape with crisp contrast"
+  },
+  "one-dark": {
+    "name": "One",
+    "description": "The iconic Atom editor palette in dark and light"
+  },
+  "turbo": {
+    "name": "Terminal",
+    "description": "CRT phosphor green on void"
   }
 };
 
@@ -77,7 +87,9 @@ export const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
   "nord": "nord",
   "solarized": "solarized",
   "rose-pine": "rose-pine",
-  "tokyo-night": "tokyo-night"
+  "tokyo-night": "tokyo-night",
+  "one-dark": "one-dark",
+  "turbo": "turbo"
 };
 
 /** Icon configuration - string for single icon, object for appearance-specific. */
@@ -111,7 +123,12 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
     "light": "assets/img/rose-pine-dawn.png",
     "dark": "assets/img/rose-pine.png"
   },
-  "tokyo-night": "assets/img/tokyo-night.png"
+  "tokyo-night": "assets/img/tokyo-night.png",
+  "one-dark": {
+    "light": "assets/img/one-light.png",
+    "dark": "assets/img/one-dark.png"
+  },
+  "turbo": "assets/img/terminal.png"
 };
 
 /** Predefined flavor descriptions keyed by theme id. */
@@ -132,11 +149,14 @@ export const FLAVOR_DESCRIPTIONS: Record<string, string> = {
   "gruvbox-light-soft": "Soft, low-contrast Gruvbox light palette for long sessions.",
   "gruvbox-light": "Classic Gruvbox light palette with warm paper tones.",
   "nord": "Arctic, north-bluish color palette inspired by the polar night.",
+  "one-dark": "The classic Atom One Dark palette with vivid syntax accents.",
+  "one-light": "Companion One Light palette for bright, daytime editing.",
   "rose-pine-dawn": "Light Rosé Pine variant for daytime use.",
   "rose-pine-moon": "Deeper variant of Rosé Pine with enhanced contrast.",
   "rose-pine": "Elegant dark theme with natural pine and soho vibes.",
   "solarized-dark": "Solarized Dark with a balanced, low-contrast palette.",
   "solarized-light": "Solarized Light tuned for bright, daylight-friendly UIs.",
+  "terminal": "CRT phosphor green on void with IBM Plex Mono.",
   "tokyo-night-dark": "Deep midnight blues with neon accents.",
   "tokyo-night-light": "Clean daylight palette inspired by Tokyo mornings.",
   "tokyo-night-storm": "Stormy variant with richer contrast and depth."
