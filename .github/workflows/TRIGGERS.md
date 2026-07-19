@@ -91,11 +91,6 @@ dependencies for known vulnerabilities (OSV audit)
 **Triggers:** Push to main, Weekly schedule, Manual  
 **Purpose:** OpenSSF Scorecard security analysis (lgtm-ci reusable)
 
-#### reusable-sbom.yml
-
-**Triggers:** Called by other workflows  
-**Purpose:** Reusable SBOM generation with signing
-
 ### Deployment
 
 #### deploy-pages.yml
