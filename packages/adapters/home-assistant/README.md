@@ -1,8 +1,8 @@
 # @lgtm-hq/turbo-themes-adapter-home-assistant
 
 Home Assistant theme adapter for Turbo Themes. Emits a single, self-contained
-`themes.yaml`-compatible YAML string that maps Turbo theme tokens onto Home
-Assistant frontend theme variables.
+`themes.yaml`-compatible YAML string that maps Turbo theme tokens onto Home Assistant
+frontend theme variables.
 
 ## Overview
 
@@ -27,8 +27,8 @@ const yaml = generateHomeAssistantThemes();
 //     themes: !include_dir_merge_named themes
 ```
 
-Then pick a theme from the Home Assistant profile page, or set it per-user via a
-service call.
+Then pick a theme from the Home Assistant profile page, or set it per-user via a service
+call.
 
 ## API
 
