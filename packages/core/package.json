@@ -20,6 +20,11 @@
       "types": "./dist/tokens/index.d.ts",
       "import": "./dist/tokens/index.js"
     },
+    "./catalog": {
+      "types": "./dist/catalog/index.d.ts",
+      "import": "./dist/catalog/index.js"
+    },
+    "./catalog.json": "./dist/catalog/catalog.json",
     "./themes": {
       "types": "./dist/themes/registry.d.ts",
       "import": "./dist/themes/registry.js"

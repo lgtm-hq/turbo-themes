@@ -24,6 +24,8 @@ TOKEN_PATHS=(
   'packages/core/src/themes/tokens.json'
   'python/src/turbo_themes/tokens.json'
   'swift/Sources/TurboThemes/Resources/tokens.json'
+  # Lightweight theme catalog (picker metadata only)
+  'packages/core/src/catalog/catalog.json'
   # Theme registry files (manually maintained but derived from tokens.json)
   # These are checked to ensure consistency when tokens.json changes
   'python/src/turbo_themes/themes.py'

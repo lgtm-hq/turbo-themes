@@ -10,6 +10,8 @@ const SIZE_BUDGETS: Record<string, number> = {
   'packages/adapters/tailwind/dist/colors.js': 20_000, // 20KB
   'packages/css/dist/index.js': 35_000, // 35KB (increased: component CSS vars now emitted for all themes)
   'packages/adapters/bulma/dist/index.js': 20_000, // 20KB
+  // Slim picker metadata for 24 themes (~200 bytes/theme); keep under 5KB.
+  'dist/catalog.json': 5_120,
 };
 
 // CSS output size budgets

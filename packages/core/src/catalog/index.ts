@@ -1,121 +1,18 @@
 // SPDX-License-Identifier: MIT
 /**
- * Consumer theme curation API.
+ * `@lgtm-hq/turbo-themes/catalog` — theme curation and picker metadata.
  *
- * `createThemeCatalog()` provides a single, composable surface for selecting a
- * subset of themes. It composes with the existing `flavors` (tokens) and
- * `VENDOR_GROUPS` (metadata) so consumers no longer need to hand-slice arrays.
- *
- * Filter precedence:
- *   all themes -> vendors/appearances -> include -> exclude
- *
- * Invalid IDs supplied to `include`/`exclude` warn in development (never
- * throw), so a typo cannot silently drop or duplicate a theme.
+ * Barrel for the `./catalog` subpath: the `createThemeCatalog` curation API
+ * (#495/#563, in `create.ts`) and the slim precomputed picker metadata
+ * (#497, in `entries.ts`). The root package barrel re-exports only
+ * `create.js` so the embedded catalog data stays out of bundles that don't
+ * import the `./catalog` subpath.
  */
 
-import type { ThemeFlavor } from '../themes/types.js';
-import type { ThemeId } from '../themes/theme-ids.js';
-import { flavors, themeIds as allThemeIds } from '../tokens/index.js';
-import { VENDOR_GROUPS, type VendorGroup } from '../themes/metadata.js';
-
-// Bundlers (esbuild, Vite, webpack) replace `process.env.NODE_ENV` with a
-// string literal at build time; this declaration lets tsc compile without
-// @types/node while preserving dead-code elimination in production bundles.
-declare const process: { readonly env: { readonly NODE_ENV?: string } } | undefined;
-
-/** Options controlling which themes a {@link ThemeCatalog} contains. */
-export interface ThemeCatalogOptions {
-  /**
-   * Restrict to these vendors (e.g. `['catppuccin', 'dracula']`). When
-   * omitted, all vendors are eligible; an explicit empty array selects none,
-   * which is useful for building an include-only catalog.
-   */
-  vendors?: readonly string[];
-  /**
-   * Restrict to these appearances. When omitted, both appearances are
-   * eligible; an explicit empty array selects none.
-   */
-  appearances?: readonly ('light' | 'dark')[];
-  /** Theme IDs to add after vendor/appearance filtering. */
-  include?: readonly string[];
-  /** Theme IDs to remove after `include` has been applied. */
-  exclude?: readonly string[];
-}
-
-/** A curated view over the theme catalog. */
-export interface ThemeCatalog {
-  /** Selected theme IDs, in canonical catalog order. */
-  readonly themeIds: readonly ThemeId[];
-  /** Full flavor objects for the selected themes, in canonical order. */
-  readonly flavors: readonly ThemeFlavor[];
-  /** Vendor groups (for dropdown UIs) restricted to the selected themes. */
-  readonly vendorGroups: readonly VendorGroup[];
-}
-
-const KNOWN_THEME_IDS: ReadonlySet<string> = new Set(allThemeIds);
-
-/**
- * Emit a dev-time warning for unknown IDs. The `typeof` guard is safe even
- * when `process` is an undeclared identifier (browsers/workers without a
- * shim), and keeps the contiguous `process.env.NODE_ENV` token sequence so
- * bundler define-replacement and dead-code elimination still apply.
- */
-function warnInvalidIds(source: 'include' | 'exclude', ids: readonly string[]): void {
-  if (ids.length === 0) return;
-  if (typeof process !== 'undefined' && process.env.NODE_ENV === 'production') return;
-  console.warn(
-    `[catalog] createThemeCatalog: ignoring unknown ${source} theme ID(s): ${ids.join(', ')}. ` +
-      'Valid IDs come from the exported `themeIds`.',
-  );
-}
-
-/**
- * Build a curated {@link ThemeCatalog} from the full theme set.
- *
- * @param options - Vendor/appearance filters plus explicit include/exclude IDs.
- * @returns A catalog exposing `themeIds`, `flavors`, and `vendorGroups`.
- */
-export function createThemeCatalog(options: ThemeCatalogOptions = {}): ThemeCatalog {
-  const { vendors, appearances, include = [], exclude = [] } = options;
-
-  const selected = new Set<string>();
-  for (const flavor of flavors) {
-    if (vendors !== undefined && !vendors.includes(flavor.vendor)) continue;
-    if (appearances !== undefined && !appearances.includes(flavor.appearance)) continue;
-    selected.add(flavor.id);
-  }
-
-  const invalidInclude: string[] = [];
-  for (const id of include) {
-    if (KNOWN_THEME_IDS.has(id)) {
-      selected.add(id);
-    } else {
-      invalidInclude.push(id);
-    }
-  }
-  warnInvalidIds('include', invalidInclude);
-
-  const invalidExclude: string[] = [];
-  for (const id of exclude) {
-    if (KNOWN_THEME_IDS.has(id)) {
-      selected.delete(id);
-    } else {
-      invalidExclude.push(id);
-    }
-  }
-  warnInvalidIds('exclude', invalidExclude);
-
-  const selectedFlavors = flavors.filter((flavor) => selected.has(flavor.id));
-  const selectedThemeIds = selectedFlavors.map((flavor) => flavor.id as ThemeId);
-
-  const vendorGroups = VENDOR_GROUPS.map((group) => ({
-    ...group,
-    themeIds: group.themeIds.filter((id) => selected.has(id)),
-  })).filter((group) => group.themeIds.length > 0);
-
-  return {
-    themeIds: selectedThemeIds,
-    flavors: selectedFlavors,
-    vendorGroups,
-  };
-}
+export * from './create.js';
+export {
+  catalog,
+  catalogById,
+  type ThemeCatalogEntry,
+  type ThemeCatalogPreview,
+} from './entries.js';
