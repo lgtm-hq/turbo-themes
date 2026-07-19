@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.31.1] - 2026-07-19
+
+### 🤖 Internal
+
+- Generate theme metadata maps from tokens (#610)
+
 ## [0.31.0] - 2026-07-19
 
 ### ✨ Added
