@@ -10,7 +10,7 @@
 
 import { packages } from '../tokens/index.js';
 import type { ThemeId } from '../themes/theme-ids.js';
-import { createThemeCatalog, type ThemeCatalog } from './index.js';
+import { createThemeCatalog, type ThemeCatalog } from './create.js';
 
 /**
  * The curated "minimal" starter set: one light + one dark theme from the two
