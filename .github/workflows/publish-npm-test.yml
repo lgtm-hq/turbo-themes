@@ -18,13 +18,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Uses trust-and-skip pattern: manual test workflow, keeps SBOM for publish
+  # testing. Report mode generates a CycloneDX SBOM plus a signed provenance
+  # attestation via the org lgtm-ci reusable (replaces the former local
+  # reusable-sbom.yml).
   sbom:
-    name: 📋 Generate & Sign SBOM
-    # Uses trust-and-skip pattern: manual test workflow, keeps SBOM for publish testing
-    uses: ./.github/workflows/reusable-sbom.yml
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-sbom.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    with:
+      job-name: '📋 Generate & Sign SBOM'
+      target: .
+      target-type: dir
+      scan-vulnerabilities: false
+      create-attestation: true
+      tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c' # v0.59.0
+      egress-policy: block
+      egress-preset: sbom
     permissions:
       contents: read
+      security-events: write
       id-token: write
+      attestations: write
 
   publish:
     name: 📦 Publish to npm (Test)

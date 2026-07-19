@@ -21,13 +21,28 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Uses trust-and-skip pattern: tag already validated in PR workflow.
+  # Report mode generates a CycloneDX SBOM plus a signed provenance
+  # attestation via the org lgtm-ci reusable (replaces the former local
+  # reusable-sbom.yml). Multi-format signed release-asset SBOMs are produced
+  # separately by release-publish-pr.yml (reusable-sbom release-assets mode).
   sbom:
-    name: 📋 Generate & Sign SBOM
-    # Uses trust-and-skip pattern: tag already validated in PR workflow
-    uses: ./.github/workflows/reusable-sbom.yml
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-sbom.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    with:
+      job-name: '📋 Generate & Sign SBOM'
+      target: .
+      target-type: dir
+      scan-vulnerabilities: false
+      create-attestation: true
+      tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c' # v0.59.0
+      egress-policy: block
+      egress-preset: sbom
     permissions:
       contents: read
+      security-events: write
       id-token: write
+      attestations: write
 
   build:
     name: 🔨 Build npm Package
