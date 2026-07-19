@@ -8,7 +8,13 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { generateBlockingScript } from '../src/blocking-script.js';
-import { DEFAULT_THEME, THEME_APPEARANCES, VALID_THEMES } from '@lgtm-hq/turbo-themes-core';
+import {
+  DEFAULT_THEME,
+  THEME_APPEARANCES,
+  VALID_THEMES,
+  createThemeCatalog,
+  themeSets,
+} from '@lgtm-hq/turbo-themes-core';
 import { CSS_LINK_ID, STORAGE_KEY, LEGACY_STORAGE_KEYS } from '../src/constants.js';
 
 describe('generateBlockingScript', () => {
@@ -82,6 +88,28 @@ describe('generateBlockingScript', () => {
     it('respects custom legacyKeys option', () => {
       const script = generateBlockingScript({ legacyKeys: ['old-key'] });
       expect(script).toContain('["old-key"]');
+    });
+
+    it('derives the allowlist from a catalog', () => {
+      const script = generateBlockingScript({ catalog: themeSets.minimal });
+      expect(script).toContain(JSON.stringify([...themeSets.minimal.themeIds]));
+      expect(script).not.toContain(JSON.stringify(VALID_THEMES));
+    });
+
+    it('derives the allowlist from vendors', () => {
+      const script = generateBlockingScript({ vendors: ['catppuccin'] });
+      const expected = createThemeCatalog({ vendors: ['catppuccin'] }).themeIds;
+      expect(script).toContain(JSON.stringify([...expected]));
+    });
+
+    it('prefers explicit validThemes over catalog and vendors', () => {
+      const script = generateBlockingScript({
+        validThemes: ['a', 'b'],
+        catalog: themeSets.minimal,
+        vendors: ['catppuccin'],
+      });
+      expect(script).toContain('["a","b"]');
+      expect(script).not.toContain(JSON.stringify([...themeSets.minimal.themeIds]));
     });
   });
 
