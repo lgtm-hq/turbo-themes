@@ -11,13 +11,42 @@
 // spaces, and punctuation that carries no meaning in YAML plain scalars.
 const SAFE_PLAIN_KEY = /^[\p{L}\p{N}][\p{L}\p{N} ()./-]*$/u;
 
+// Plain scalars that YAML 1.1 loaders (e.g. pyyaml, which Home Assistant uses)
+// resolve to booleans or null even in mapping-key position. These must always be
+// double-quoted to survive as string keys.
+const YAML11_RESERVED = new Set(["true", "false", "yes", "no", "on", "off", "null", "y", "n", "~"]);
+
+// C0 control characters and DEL, which are not representable literally inside a
+// YAML double-quoted scalar.
+// eslint-disable-next-line no-control-regex
+const CONTROL_CHARS = /[\x00-\x1f\x7f]/g;
+
+const CONTROL_SHORTHAND: Record<string, string> = {
+  "\t": "\\t",
+  "\n": "\\n",
+  "\r": "\\r",
+  "\0": "\\0",
+};
+
 /** Escape a string for use inside a YAML double-quoted scalar. */
 export function escapeDoubleQuoted(value: string): string {
-  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  return value
+    .replace(/\\/g, "\\\\")
+    .replace(/"/g, '\\"')
+    .replace(CONTROL_CHARS, (char) => {
+      const shorthand = CONTROL_SHORTHAND[char];
+      if (shorthand) {
+        return shorthand;
+      }
+      return `\\x${char.charCodeAt(0).toString(16).padStart(2, "0")}`;
+    });
 }
 
 /** Whether a mapping key can be emitted as an unquoted YAML plain scalar. */
 export function isSafePlainKey(name: string): boolean {
+  if (YAML11_RESERVED.has(name.toLowerCase())) {
+    return false;
+  }
   return SAFE_PLAIN_KEY.test(name);
 }
 
