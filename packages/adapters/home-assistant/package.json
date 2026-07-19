@@ -1,0 +1,25 @@
+{
+  "name": "@lgtm-hq/turbo-themes-adapter-home-assistant",
+  "version": "0.11.0",
+  "description": "Home Assistant theme adapter for Turbo Themes",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@lgtm-hq/turbo-themes-core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  }
+}

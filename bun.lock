@@ -22,6 +22,7 @@
         "@primer/primitives": "11.7.1",
         "@rose-pine/palette": "4.0.1",
         "@testing-library/react": "16.3.2",
+        "@types/js-yaml": "4.0.9",
         "@types/react": "19.2.14",
         "@types/react-dom": "19.2.3",
         "@vitest/coverage-v8": "4.1.5",
@@ -33,6 +34,7 @@
         "happy-dom": "20.9.0",
         "http-server": "14.1.1",
         "husky": "9.1.7",
+        "js-yaml": "4.2.0",
         "lightningcss": "1.32.0",
         "lint-staged": "16.4.0",
         "oxfmt": "0.48.0",
@@ -122,6 +124,16 @@
       "optionalPeers": [
         "bulma",
       ],
+    },
+    "packages/adapters/home-assistant": {
+      "name": "@lgtm-hq/turbo-themes-adapter-home-assistant",
+      "version": "0.11.0",
+      "dependencies": {
+        "@lgtm-hq/turbo-themes-core": "workspace:*",
+      },
+      "devDependencies": {
+        "typescript": "^5.9.3",
+      },
     },
     "packages/adapters/tailwind": {
       "name": "@lgtm-hq/turbo-themes-adapter-tailwind",
@@ -419,6 +431,8 @@
 
     "@lgtm-hq/turbo-themes-adapter-bulma": ["@lgtm-hq/turbo-themes-adapter-bulma@workspace:packages/adapters/bulma"],
 
+    "@lgtm-hq/turbo-themes-adapter-home-assistant": ["@lgtm-hq/turbo-themes-adapter-home-assistant@workspace:packages/adapters/home-assistant"],
+
     "@lgtm-hq/turbo-themes-adapter-tailwind": ["@lgtm-hq/turbo-themes-adapter-tailwind@workspace:packages/adapters/tailwind"],
 
     "@lgtm-hq/turbo-themes-core": ["@lgtm-hq/turbo-themes-core@workspace:packages/core"],
@@ -714,6 +728,8 @@
     "@types/estree": ["@types/estree@1.0.8", "", {}, "sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w=="],
 
     "@types/hast": ["@types/hast@3.0.4", "", { "dependencies": { "@types/unist": "*" } }, "sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ=="],
+
+    "@types/js-yaml": ["@types/js-yaml@4.0.9", "", {}, "sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg=="],
 
     "@types/mdast": ["@types/mdast@4.0.4", "", { "dependencies": { "@types/unist": "*" } }, "sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA=="],
 

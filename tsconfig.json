@@ -21,6 +21,7 @@
     { "path": "./packages/core" },
     { "path": "./packages/theme-selector" },
     { "path": "./packages/adapters/tailwind" },
-    { "path": "./packages/adapters/bulma" }
+    { "path": "./packages/adapters/bulma" },
+    { "path": "./packages/adapters/home-assistant" }
   ]
 }

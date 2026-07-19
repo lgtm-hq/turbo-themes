@@ -6,6 +6,7 @@ const DIST_DIRS = [
   'packages/theme-selector/dist',
   'packages/adapters/tailwind/dist',
   'packages/adapters/bulma/dist',
+  'packages/adapters/home-assistant/dist',
   'packages/css/dist',
 ];
 
@@ -94,6 +95,11 @@ describe('Public API exports are available', () => {
     expect(typeof mod.getTheme).toBe('function');
     expect(mod.themeIds).toBeDefined();
     expect(Array.isArray(mod.themeIds)).toBe(true);
+  });
+
+  it('home-assistant adapter exports generateHomeAssistantThemes', async () => {
+    const mod = await import('../../packages/adapters/home-assistant/dist/index.js');
+    expect(typeof mod.generateHomeAssistantThemes).toBe('function');
   });
 
   it('css package exports generateThemeCss', async () => {
