@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.30.2] - 2026-07-19
+
+### 🔧 Changed
+
+- Inventory shared docs navigation shell (#601)
+
 ## [0.30.1] - 2026-07-19
 
 ### 🤖 Internal
