@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.30.1] - 2026-07-19
+
+### 🤖 Internal
+
+- Make theme-sync formatting deterministic across CI environments (#652)
+
 ## [0.30.0] - 2026-07-19
 
 ### 🤖 Internal
