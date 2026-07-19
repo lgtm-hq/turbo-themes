@@ -71,4 +71,8 @@ describe('generateHomeAssistantThemes', () => {
       ]);
     }
   });
+
+  it('matches the committed full-document snapshot', () => {
+    expect(output).toMatchSnapshot();
+  });
 });
