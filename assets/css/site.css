@@ -3316,11 +3316,6 @@ html:root .footer-links a:hover {
   .showcase-feature {
     border-right: none;
   }
-
-  .site-feature:last-child,
-  .showcase-feature:last-child {
-    border-bottom: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
