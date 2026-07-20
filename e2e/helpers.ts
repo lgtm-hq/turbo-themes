@@ -330,6 +330,125 @@ export async function removeThemeCSSInterception(page: Page): Promise<void> {
   await page.unroute('**/*.css');
 }
 
+/** Route pattern matching every theme stylesheet served by the site. */
+export const THEME_CSS_ROUTE = '**/assets/css/themes/**/*.css';
+
+/**
+ * Serves theme stylesheets with external Google-Fonts @imports stripped.
+ *
+ * Theme stylesheets start with Google Fonts @imports. CI blocks external
+ * font hosts (harden-runner egress policy), which makes the stylesheet
+ * <link> fire `error` and the selector roll the lazy load back (#698/#699).
+ * Stripping the external imports makes theme application deterministic
+ * across local and CI environments. Unroute with
+ * `page.unroute(THEME_CSS_ROUTE)` or `page.unrouteAll(...)` when done.
+ *
+ * @param page - The Playwright page object
+ */
+export async function serveThemeCssWithoutExternalImports(page: Page): Promise<void> {
+  await page.route(THEME_CSS_ROUTE, async (route) => {
+    const response = await route.fetch();
+    const body = (await response.text()).replace(/@import url\((?:'|")https?:[^)]*\);/g, '');
+    await route.fulfill({ response, body });
+  });
+}
+
+/**
+ * Computes the WCAG contrast ratio between an element's text color and its
+ * effective background color.
+ *
+ * The effective background is resolved by walking up the ancestor chain and
+ * alpha-compositing translucent background colors (e.g. color-mix results)
+ * until an opaque layer is found. Background images/gradients are ignored,
+ * matching axe-core's flat-color approximation.
+ *
+ * @param target - Locator for the element whose text contrast is measured
+ * @returns The contrast ratio (1..21)
+ */
+export async function getContrastRatio(target: Locator): Promise<number> {
+  return target.evaluate((el) => {
+    /** Parse a computed CSS color into rgba components (0..255, alpha 0..1). */
+    const parseColor = (value: string): { r: number; g: number; b: number; a: number } | null => {
+      const legacy = value.match(
+        /^rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*,\s*([\d.]+))?\s*\)$/
+      );
+      if (legacy) {
+        return {
+          r: Number(legacy[1]),
+          g: Number(legacy[2]),
+          b: Number(legacy[3]),
+          a: legacy[4] === undefined ? 1 : Number(legacy[4]),
+        };
+      }
+      const modern = value.match(
+        /^color\(srgb\s+([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+))?\)$/
+      );
+      if (modern) {
+        return {
+          r: Number(modern[1]) * 255,
+          g: Number(modern[2]) * 255,
+          b: Number(modern[3]) * 255,
+          a: modern[4] === undefined ? 1 : Number(modern[4]),
+        };
+      }
+      return null;
+    };
+
+    type Rgba = { r: number; g: number; b: number; a: number };
+
+    /** Composite a translucent foreground layer over an opaque background. */
+    const over = (fg: Rgba, bg: Rgba): Rgba => ({
+      r: fg.r * fg.a + bg.r * (1 - fg.a),
+      g: fg.g * fg.a + bg.g * (1 - fg.a),
+      b: fg.b * fg.a + bg.b * (1 - fg.a),
+      a: 1,
+    });
+
+    // Collect background layers from the element upward until opaque.
+    const layers: Rgba[] = [];
+    let node: Element | null = el;
+    let foundOpaque = false;
+    while (node) {
+      const parsed = parseColor(getComputedStyle(node).backgroundColor);
+      if (parsed && parsed.a > 0) {
+        layers.push(parsed);
+        if (parsed.a >= 1) {
+          foundOpaque = true;
+          break;
+        }
+      }
+      node = node.parentElement;
+    }
+    if (!foundOpaque) {
+      layers.push({ r: 255, g: 255, b: 255, a: 1 });
+    }
+
+    let background = layers[layers.length - 1] as Rgba;
+    for (let i = layers.length - 2; i >= 0; i--) {
+      background = over(layers[i] as Rgba, background);
+    }
+
+    const textColor = parseColor(getComputedStyle(el).color);
+    if (!textColor) {
+      throw new Error(`Unparseable text color: ${getComputedStyle(el).color}`);
+    }
+    const text = textColor.a < 1 ? over(textColor, background) : textColor;
+
+    /** WCAG relative luminance of an opaque sRGB color. */
+    const luminance = (c: Rgba): number => {
+      const channel = (v: number): number => {
+        const s = v / 255;
+        return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+      };
+      return 0.2126 * channel(c.r) + 0.7152 * channel(c.g) + 0.0722 * channel(c.b);
+    };
+
+    const l1 = luminance(text);
+    const l2 = luminance(background);
+    return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+  });
+}
+
 /**
  * Waits for a theme to be fully applied by checking CSS custom properties.
  * More reliable than waitForTimeout as it confirms actual CSS application.
