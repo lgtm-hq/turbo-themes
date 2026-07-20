@@ -99,6 +99,17 @@ test.describe('Homepage Theme Switching @smoke', () => {
     });
 
     test('should apply a theme from a marquee card', async ({ homePage }) => {
+      // Theme stylesheets start with Google Fonts @imports. CI blocks
+      // external font hosts, which makes the <link> fire `error` and the
+      // selector roll the lazy load back (#698/#699). Serve the stylesheet
+      // with external imports stripped so the pipeline outcome is
+      // deterministic across environments.
+      await homePage.page.route('**/assets/css/themes/turbo/bulma-dark.css', async (route) => {
+        const response = await route.fetch();
+        const body = (await response.text()).replace(/@import url\((?:'|")https?:[^)]*\);/g, '');
+        await route.fulfill({ response, body });
+      });
+
       const card = homePage.getMarqueeThemeCard('bulma-dark');
 
       await test.step('Click the marquee theme card', async () => {
@@ -119,6 +130,9 @@ test.describe('Homepage Theme Switching @smoke', () => {
         const themeCss = homePage.page.locator('link#theme-bulma-dark-css');
         await expect(themeCss).toHaveAttribute('href', /bulma-dark\.css/);
       });
+
+      // Ignore route callbacks still in flight (e.g. the hover prefetch)
+      await homePage.page.unrouteAll({ behavior: 'ignoreErrors' });
     });
 
     test('should prefetch theme CSS when hovering a marquee card', async ({ homePage }) => {

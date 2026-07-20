@@ -222,7 +222,6 @@ describe('applyTabSelection', () => {
 describe('resolveThemeDisplay', () => {
   const meta: ShowcaseMeta = {
     baseUrl: 'https://example.test/base',
-    themeNames: { 'catppuccin-mocha': 'Mocha' },
     themeFullNames: { 'catppuccin-mocha': 'Catppuccin Mocha' },
     themeIcons: { 'catppuccin-mocha': 'catppuccin-logo-mocha.png' },
   };
@@ -232,11 +231,6 @@ describe('resolveThemeDisplay', () => {
       name: 'Catppuccin Mocha',
       iconSrc: 'https://example.test/base/assets/img/catppuccin-logo-mocha.png',
     });
-  });
-
-  it('falls back to the short name when no full name exists', () => {
-    const partial: ShowcaseMeta = { ...meta, themeFullNames: {} };
-    expect(resolveThemeDisplay('catppuccin-mocha', partial).name).toBe('Mocha');
   });
 
   it('falls back to the theme id and default icon for unknown themes', () => {
@@ -265,7 +259,6 @@ describe('readShowcaseMeta', () => {
 
     expect(readShowcaseMeta(document)).toEqual({
       baseUrl: '/base',
-      themeNames: {},
       themeFullNames: { 'catppuccin-mocha': 'Catppuccin Mocha', nord: 'Nord' },
       themeIcons: { 'catppuccin-mocha': 'catppuccin-logo-mocha.png' },
     });
@@ -274,7 +267,6 @@ describe('readShowcaseMeta', () => {
   it('returns empty metadata for a page without marked elements', () => {
     expect(readShowcaseMeta(document)).toEqual({
       baseUrl: '',
-      themeNames: {},
       themeFullNames: {},
       themeIcons: {},
     });
@@ -469,6 +461,21 @@ describe('initShowcase', () => {
     expect(document.getElementById('showcase-preview-theme-name')!.textContent).toBe('Nord Dark');
     const card = document.querySelector('[data-theme-preview="nord-dark"]')!;
     expect(card.getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('warns when a marquee click cannot fully apply the theme', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    initShowcase();
+
+    const badCard = document.createElement('button');
+    badCard.setAttribute('data-theme-preview', 'not-a-real-theme');
+    document.body.appendChild(badCard);
+    badCard.click();
+
+    await vi.waitFor(() => {
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('not-a-real-theme'));
+    });
   });
 
   it('follows data-theme attribute changes made outside the integration API', async () => {

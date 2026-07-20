@@ -46,7 +46,6 @@ export interface MediaQuerySource {
 /** Theme metadata read from server-rendered data attributes on the page. */
 export interface ShowcaseMeta {
   baseUrl: string;
-  themeNames: Partial<Record<string, string>>;
   themeFullNames: Partial<Record<string, string>>;
   themeIcons: Partial<Record<string, string>>;
 }
@@ -232,7 +231,6 @@ export function applyTabSelection(
 export function readShowcaseMeta(documentObj: Document): ShowcaseMeta {
   const meta: ShowcaseMeta = {
     baseUrl: documentObj.documentElement.getAttribute('data-baseurl') ?? '',
-    themeNames: {},
     themeFullNames: {},
     themeIcons: {},
   };
@@ -269,7 +267,7 @@ export function syncThemeTriggers(triggers: readonly Element[], themeId: string)
  * @returns Display name and fully-qualified icon source.
  */
 export function resolveThemeDisplay(theme: string, meta: ShowcaseMeta): ThemeDisplay {
-  const name = meta.themeFullNames[theme] ?? meta.themeNames[theme] ?? theme;
+  const name = meta.themeFullNames[theme] ?? theme;
   const icon = meta.themeIcons[theme] ?? DEFAULT_THEME_ICON;
   return {
     name,
@@ -595,6 +593,11 @@ function wireThemeObserver(onTheme: (themeId: string) => void): void {
  * Clicks on `[data-theme-preview]` elements apply the named theme through
  * `applyTheme` (which lazily loads its CSS); hovering or focusing a card
  * prefetches the theme's stylesheet via the lazy-CSS helpers.
+ *
+ * Partial applications are surfaced: when the stylesheet fails to load
+ * the selector keeps the previous theme's CSS in effect and suppresses
+ * the theme-change event, so the page logs the failure instead of
+ * pretending the switch happened.
  */
 function initThemeControls(): void {
   document.addEventListener('click', (event: Event) => {
@@ -602,7 +605,15 @@ function initThemeControls(): void {
     if (!(target instanceof Element)) return;
     const trigger = target.closest(`[${THEME_TRIGGER_ATTRIBUTE}]`);
     const themeId = trigger?.getAttribute(THEME_TRIGGER_ATTRIBUTE);
-    if (themeId) void applyTheme(themeId);
+    if (!themeId) return;
+    void applyTheme(themeId).then((result) => {
+      if (!result.applied || !result.cssLoaded) {
+        console.warn(
+          `Theme "${themeId}" was not fully applied: ` +
+            'its stylesheet failed to load, keeping the previous theme CSS.',
+        );
+      }
+    });
   });
 
   wireHoverPrefetch(document);

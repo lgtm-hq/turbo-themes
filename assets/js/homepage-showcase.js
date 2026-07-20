@@ -724,6 +724,18 @@ var TurboHomepageShowcase = (function(exports) {
 		}
 	}
 	/**
+	* Builds the element ID of a theme's stylesheet link.
+	*
+	* Single source of truth for the `theme-<id>-css` convention shared by
+	* the loader and the lazy-CSS helpers.
+	*
+	* @param themeId - Theme whose stylesheet link ID to build
+	* @returns The stylesheet link element ID
+	*/
+	function themeLinkId(themeId) {
+		return `theme-${themeId}-css`;
+	}
+	/**
 	* Extracts the theme ID from a theme link element's ID.
 	* Strips a leading "theme-" prefix and trailing "-css" suffix.
 	*/
@@ -777,55 +789,92 @@ var TurboHomepageShowcase = (function(exports) {
 		doc.documentElement.setAttribute("data-appearance", resolveThemeAppearance(themeId));
 	}
 	/**
-	* Loads theme CSS file if not already loaded
+	* Removes stale theme stylesheet links, keeping the given theme's link
+	* and the shared base stylesheet.
+	*/
+	function removeStaleThemeLinks(doc, keepThemeId) {
+		doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS).forEach((link) => {
+			const linkThemeId = extractThemeIdFromLinkId(link.id);
+			if (linkThemeId !== keepThemeId && linkThemeId !== "base") link.remove();
+		});
+	}
+	/**
+	* Adopts the blocking script's link element for a theme (prevents
+	* duplicate CSS loads).
+	*
+	* The repoint stays synchronous to preserve the blocking script's
+	* FOUC-avoidance behaviour; this only makes its outcome observable by
+	* awaiting the repointed link's load/error settlement. On load failure
+	* the link is rolled back to its previous identity and href so the
+	* document keeps the stylesheet that was already working.
+	*
+	* @returns true when the theme's CSS is confirmed loaded
+	*/
+	async function adoptBlockingLink(doc, blockingLink, theme, baseUrl) {
+		let resolvedHref;
+		try {
+			resolvedHref = resolveAssetPath(theme.cssFile, baseUrl);
+		} catch {
+			logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
+			return false;
+		}
+		const previousHref = blockingLink.getAttribute("href");
+		blockingLink.id = themeLinkId(theme.id);
+		blockingLink.setAttribute("data-theme-id", theme.id);
+		if (previousHref === resolvedHref) {
+			removeStaleThemeLinks(doc, theme.id);
+			return true;
+		}
+		blockingLink.href = resolvedHref;
+		try {
+			await loadCSSWithTimeout(blockingLink, theme.id);
+		} catch (error) {
+			blockingLink.id = CSS_LINK_ID;
+			blockingLink.removeAttribute("data-theme-id");
+			if (previousHref !== null) blockingLink.href = previousHref;
+			else blockingLink.removeAttribute("href");
+			logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
+			return false;
+		}
+		removeStaleThemeLinks(doc, theme.id);
+		return true;
+	}
+	/**
+	* Loads theme CSS file if not already loaded.
+	*
+	* @returns true when the theme's stylesheet is present and confirmed
+	*   loaded (or was already linked), false when path resolution or the
+	*   network fetch failed
 	*/
 	async function loadThemeCSS(doc, theme, baseUrl) {
-		const themeLinkId = `theme-${theme.id}-css`;
-		let themeLink = doc.getElementById(themeLinkId);
-		if (!themeLink) {
-			const blockingLink = doc.getElementById(CSS_LINK_ID);
-			if (blockingLink) {
-				let resolvedHref;
-				try {
-					resolvedHref = resolveAssetPath(theme.cssFile, baseUrl);
-				} catch {
-					logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
-					return;
-				}
-				blockingLink.href = resolvedHref;
-				blockingLink.id = themeLinkId;
-				blockingLink.setAttribute("data-theme-id", theme.id);
-				themeLink = blockingLink;
-			}
+		const linkId = themeLinkId(theme.id);
+		if (doc.getElementById(linkId)) {
+			removeStaleThemeLinks(doc, theme.id);
+			return true;
 		}
-		if (!themeLink) {
-			const existingLinks = doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS);
-			themeLink = doc.createElement("link");
-			themeLink.id = themeLinkId;
-			themeLink.rel = "stylesheet";
-			themeLink.type = "text/css";
-			themeLink.setAttribute("data-theme-id", theme.id);
-			try {
-				themeLink.href = resolveAssetPath(theme.cssFile, baseUrl);
-			} catch {
-				logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
-				return;
-			}
-			doc.head.appendChild(themeLink);
-			try {
-				await loadCSSWithTimeout(themeLink, theme.id);
-				existingLinks.forEach((link) => {
-					const linkThemeId = extractThemeIdFromLinkId(link.id);
-					if (linkThemeId !== theme.id && linkThemeId !== "base") link.remove();
-				});
-			} catch (error) {
-				themeLink.remove();
-				logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
-			}
-		} else doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS).forEach((link) => {
-			const linkThemeId = extractThemeIdFromLinkId(link.id);
-			if (linkThemeId !== theme.id && linkThemeId !== "base") link.remove();
-		});
+		const blockingLink = doc.getElementById(CSS_LINK_ID);
+		if (blockingLink) return adoptBlockingLink(doc, blockingLink, theme, baseUrl);
+		const themeLink = doc.createElement("link");
+		themeLink.id = linkId;
+		themeLink.rel = "stylesheet";
+		themeLink.type = "text/css";
+		themeLink.setAttribute("data-theme-id", theme.id);
+		try {
+			themeLink.href = resolveAssetPath(theme.cssFile, baseUrl);
+		} catch {
+			logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
+			return false;
+		}
+		doc.head.appendChild(themeLink);
+		try {
+			await loadCSSWithTimeout(themeLink, theme.id);
+		} catch (error) {
+			themeLink.remove();
+			logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
+			return false;
+		}
+		removeStaleThemeLinks(doc, theme.id);
+		return true;
 	}
 	//#endregion
 	//#region packages/theme-selector/src/dropdown/helpers.ts
@@ -948,20 +997,24 @@ var TurboHomepageShowcase = (function(exports) {
 	* Theme application logic
 	*/
 	/**
-	* Applies a theme to the document
+	* Applies a theme to the document.
+	*
+	* @returns true when the theme's CSS is confirmed loaded, false when the
+	*   theme could not be resolved or its stylesheet failed to load (the
+	*   root attributes/class are still applied in the latter case)
 	*/
 	async function applyTheme$1(doc, themeId) {
 		const theme = resolveTheme(themeId);
 		if (!theme) {
 			logThemeError(ThemeErrors.NO_THEMES_AVAILABLE());
-			return;
+			return false;
 		}
 		const baseUrl = getBaseUrl(doc);
 		const trigger = doc.getElementById(DOM_IDS.THEME_FLAVOR_TRIGGER);
 		if (trigger) trigger.classList.add("is-loading");
 		try {
 			applyThemeClass(doc, theme.id);
-			await loadThemeCSS(doc, theme, baseUrl);
+			const cssLoaded = await loadThemeCSS(doc, theme, baseUrl);
 			const triggerIcon = doc.getElementById(DOM_IDS.THEME_FLAVOR_TRIGGER_ICON);
 			if (triggerIcon && theme.icon) try {
 				triggerIcon.src = resolveAssetPath(theme.icon, baseUrl);
@@ -976,6 +1029,7 @@ var TurboHomepageShowcase = (function(exports) {
 			doc.querySelectorAll(DOM_SELECTORS.DROPDOWN_ITEMS).forEach((item) => {
 				setItemActiveState(item, item.getAttribute("data-theme-id") === theme.id);
 			});
+			return cssLoaded;
 		} finally {
 			if (trigger) trigger.classList.remove("is-loading");
 		}
@@ -1054,24 +1108,45 @@ var TurboHomepageShowcase = (function(exports) {
 	* attributes and theme CSS, syncs dropdown state, and notifies
 	* subscribers via the theme-change event.
 	*
-	* Unknown or malformed theme IDs are rejected: nothing is applied, no
-	* event is dispatched, and `false` is returned.
+	* Each stage is reported independently in the returned
+	* {@link ApplyThemeResult} so consumers can distinguish full success
+	* from partial application:
+	*
+	* - Unknown or malformed theme IDs are rejected: nothing is applied, no
+	*   event is dispatched, and all result fields are false.
+	* - `persisted` is false when localStorage is unavailable or over
+	*   quota; the theme is still applied visually.
+	* - `cssLoaded` is false when the stylesheet fetch fails; the root
+	*   attributes have changed but the previous theme's CSS remains in
+	*   effect, so the theme-change event is NOT dispatched.
+	*
+	* The theme-change event fires only when the theme is visually applied
+	* (`applied && cssLoaded`); persistence failure alone does not suppress
+	* it.
 	*
 	* @param themeId - ID of the theme to apply (e.g. `catppuccin-mocha`)
 	* @param documentObj - Document to apply the theme to (defaults to global)
 	* @param windowObj - Window used for persistence (defaults to global)
-	* @returns true if the theme was applied, false for invalid theme IDs
+	* @returns Per-stage outcome of the application
 	*/
 	async function applyTheme(themeId, documentObj = document, windowObj = window) {
 		const validIds = getValidThemeIds();
 		if (!isValidThemeId(themeId) || !validIds.has(themeId)) {
 			logThemeError(ThemeErrors.INVALID_THEME_ID(themeId));
-			return false;
+			return {
+				applied: false,
+				cssLoaded: false,
+				persisted: false
+			};
 		}
-		saveTheme(windowObj, themeId, validIds);
-		await applyTheme$1(documentObj, themeId);
-		emitThemeChange(documentObj, themeId);
-		return true;
+		const persisted = saveTheme(windowObj, themeId, validIds);
+		const cssLoaded = await applyTheme$1(documentObj, themeId);
+		if (cssLoaded) emitThemeChange(documentObj, themeId);
+		return {
+			applied: true,
+			cssLoaded,
+			persisted
+		};
 	}
 	/**
 	* Gets the ID of the currently active theme.
@@ -1122,15 +1197,6 @@ var TurboHomepageShowcase = (function(exports) {
 	/** Attribute whose value names the theme to prefetch on hover/focus. */
 	var PREFETCH_TRIGGER_ATTRIBUTE = "data-theme-preview";
 	/**
-	* Builds the element ID of a theme's stylesheet link.
-	*
-	* @param themeId - Theme whose stylesheet link ID to build
-	* @returns The stylesheet link element ID
-	*/
-	function themeCSSLinkId(themeId) {
-		return `theme-${themeId}-css`;
-	}
-	/**
 	* Builds the element ID of a theme's prefetch link.
 	*
 	* @param themeId - Theme whose prefetch link ID to build
@@ -1159,7 +1225,7 @@ var TurboHomepageShowcase = (function(exports) {
 	* @returns True when the theme's CSS is already linked
 	*/
 	function isThemeCSSLoaded(documentObj, themeId) {
-		if (documentObj.getElementById(themeCSSLinkId(themeId))) return true;
+		if (documentObj.getElementById(themeLinkId(themeId))) return true;
 		const blockingLink = documentObj.getElementById(CSS_LINK_ID);
 		if (!blockingLink) return false;
 		if (blockingLink.getAttribute("data-theme-id") === themeId) return true;
@@ -1378,7 +1444,6 @@ var TurboHomepageShowcase = (function(exports) {
 	function readShowcaseMeta(documentObj) {
 		const meta = {
 			baseUrl: documentObj.documentElement.getAttribute("data-baseurl") ?? "",
-			themeNames: {},
 			themeFullNames: {},
 			themeIcons: {}
 		};
@@ -1413,7 +1478,7 @@ var TurboHomepageShowcase = (function(exports) {
 	* @returns Display name and fully-qualified icon source.
 	*/
 	function resolveThemeDisplay(theme, meta) {
-		const name = meta.themeFullNames[theme] ?? meta.themeNames[theme] ?? theme;
+		const name = meta.themeFullNames[theme] ?? theme;
 		const icon = meta.themeIcons[theme] ?? "catppuccin-logo-macchiato.png";
 		return {
 			name,
@@ -1667,13 +1732,21 @@ var TurboHomepageShowcase = (function(exports) {
 	* Clicks on `[data-theme-preview]` elements apply the named theme through
 	* `applyTheme` (which lazily loads its CSS); hovering or focusing a card
 	* prefetches the theme's stylesheet via the lazy-CSS helpers.
+	*
+	* Partial applications are surfaced: when the stylesheet fails to load
+	* the selector keeps the previous theme's CSS in effect and suppresses
+	* the theme-change event, so the page logs the failure instead of
+	* pretending the switch happened.
 	*/
 	function initThemeControls() {
 		document.addEventListener("click", (event) => {
 			const target = event.target;
 			if (!(target instanceof Element)) return;
 			const themeId = target.closest(`[${THEME_TRIGGER_ATTRIBUTE}]`)?.getAttribute(THEME_TRIGGER_ATTRIBUTE);
-			if (themeId) applyTheme(themeId);
+			if (!themeId) return;
+			applyTheme(themeId).then((result) => {
+				if (!result.applied || !result.cssLoaded) console.warn(`Theme "${themeId}" was not fully applied: its stylesheet failed to load, keeping the previous theme CSS.`);
+			});
 		});
 		wireHoverPrefetch(document);
 	}
