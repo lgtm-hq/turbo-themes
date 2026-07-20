@@ -410,7 +410,7 @@ node_modules/@lgtm-hq/turbo-themes/assets/img/
   gruvbox-light.png / gruvbox-dark.png
   github-logo-light.png / github-logo-dark.png
   nord.png
-  rose-pine-dawn.png / rose-pine.png
+  rose-pine.png
   solarized-light.png / solarized-dark.png
   tokyo-night.png
   … (plus .webp variants for every PNG)

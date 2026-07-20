@@ -28,7 +28,7 @@ export const rosePineSynced: ThemePackage = {
       label: "Rosé Pine Dawn",
       vendor: "rose-pine",
       appearance: "light",
-      iconUrl: "/assets/img/rose-pine-dawn.png",
+      iconUrl: "/assets/img/rose-pine.png",
       tokens: {
         background: {
           base: "#faf4ed",
@@ -195,7 +195,7 @@ export const rosePineSynced: ThemePackage = {
       label: "Rosé Pine Moon",
       vendor: "rose-pine",
       appearance: "dark",
-      iconUrl: "/assets/img/rose-pine-moon.png",
+      iconUrl: "/assets/img/rose-pine.png",
       tokens: {
         background: {
           base: "#232136",

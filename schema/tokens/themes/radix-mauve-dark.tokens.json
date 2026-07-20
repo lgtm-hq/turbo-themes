@@ -5,7 +5,7 @@
   "vendor": "radix",
   "appearance": "dark",
   "description": "Neutral purple-gray Radix dark theme for accessible UIs.",
-  "icon": "radix-mauve-dark.png",
+  "icon": "radix-slate-dark.png",
   "tokens": {
     "background": {
       "base": {

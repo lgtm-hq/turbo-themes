@@ -28,7 +28,7 @@ export const catppuccinSynced: ThemePackage = {
       label: "Catppuccin Latte",
       vendor: "catppuccin",
       appearance: "light",
-      iconUrl: "/assets/img/catppuccin-latte.png",
+      iconUrl: "/assets/img/catppuccin-logo-latte.png",
       tokens: {
         background: {
           base: "#eff1f5",
@@ -114,7 +114,7 @@ export const catppuccinSynced: ThemePackage = {
       label: "Catppuccin Frappé",
       vendor: "catppuccin",
       appearance: "dark",
-      iconUrl: "/assets/img/catppuccin-mocha.png",
+      iconUrl: "/assets/img/catppuccin-logo-macchiato.png",
       tokens: {
         background: {
           base: "#303446",
@@ -197,7 +197,7 @@ export const catppuccinSynced: ThemePackage = {
       label: "Catppuccin Macchiato",
       vendor: "catppuccin",
       appearance: "dark",
-      iconUrl: "/assets/img/catppuccin-mocha.png",
+      iconUrl: "/assets/img/catppuccin-logo-macchiato.png",
       tokens: {
         background: {
           base: "#24273a",
@@ -280,7 +280,7 @@ export const catppuccinSynced: ThemePackage = {
       label: "Catppuccin Mocha",
       vendor: "catppuccin",
       appearance: "dark",
-      iconUrl: "/assets/img/catppuccin-mocha.png",
+      iconUrl: "/assets/img/catppuccin-logo-macchiato.png",
       tokens: {
         background: {
           base: "#1e1e2e",

@@ -5,7 +5,7 @@
   "vendor": "rose-pine",
   "appearance": "light",
   "description": "Light Rosé Pine variant for daytime use.",
-  "icon": "rose-pine-dawn.png",
+  "icon": "rose-pine.png",
   "tokens": {
     "background": {
       "base": {
