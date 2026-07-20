@@ -63,4 +63,25 @@ export class HomePage extends BasePage {
     const menu = this.page.locator('#theme-menu');
     await expect(menu).not.toBeVisible();
   }
+
+  /**
+   * Get a showcase marquee theme card by theme ID.
+   */
+  getMarqueeThemeCard(themeId: string): Locator {
+    return this.page.getByTestId(`home-marquee-theme-${themeId}`);
+  }
+
+  /**
+   * Get a showcase preview tab by its tab ID (overview | components | themes).
+   */
+  getPreviewTab(tabId: string): Locator {
+    return this.page.getByTestId(`home-preview-tab-${tabId}`);
+  }
+
+  /**
+   * Get a showcase preview panel by its tab ID.
+   */
+  getPreviewPanel(tabId: string): Locator {
+    return this.page.locator(`#showcase-panel-${tabId}`);
+  }
 }

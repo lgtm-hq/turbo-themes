@@ -90,6 +90,90 @@ test.describe('Homepage Theme Switching @smoke', () => {
     }
   });
 
+  // Showcase-specific interactions (marquee theme cards, preview tabs)
+  test.describe('Showcase Interactions', () => {
+    test.beforeEach(async ({ homePage }) => {
+      // Freeze the marquee animation so cards are stable click targets
+      await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
+      await homePage.goto();
+    });
+
+    test('should apply a theme from a marquee card', async ({ homePage }) => {
+      const card = homePage.getMarqueeThemeCard('bulma-dark');
+
+      await test.step('Click the marquee theme card', async () => {
+        await expect(card).toBeVisible();
+        await card.click();
+      });
+
+      await test.step('Verify the theme is applied through the selector pipeline', async () => {
+        await expect(homePage.page.locator('html')).toHaveAttribute('data-theme', 'bulma-dark');
+        await expect(card).toHaveAttribute('aria-pressed', 'true');
+
+        const storedTheme = await homePage.page.evaluate(() =>
+          localStorage.getItem('turbo-theme')
+        );
+        expect(storedTheme).toBe('bulma-dark');
+
+        // The integration API loads theme CSS lazily via the selector loader
+        const themeCss = homePage.page.locator('link#theme-bulma-dark-css');
+        await expect(themeCss).toHaveAttribute('href', /bulma-dark\.css/);
+      });
+    });
+
+    test('should prefetch theme CSS when hovering a marquee card', async ({ homePage }) => {
+      const card = homePage.getMarqueeThemeCard('catppuccin-frappe');
+
+      await test.step('Hover the marquee theme card', async () => {
+        await expect(card).toBeVisible();
+        await card.hover();
+      });
+
+      await test.step('Verify a prefetch link was injected', async () => {
+        const prefetch = homePage.page.locator('link#theme-catppuccin-frappe-prefetch');
+        await expect(prefetch).toHaveAttribute('href', /catppuccin-frappe\.css/);
+        await expect(prefetch).toHaveAttribute('rel', 'prefetch');
+      });
+    });
+
+    test('should switch preview panels via the preview tabs', async ({ homePage }) => {
+      await test.step('Switch to the components panel', async () => {
+        const componentsTab = homePage.getPreviewTab('components');
+        await componentsTab.click();
+
+        await expect(componentsTab).toHaveAttribute('aria-selected', 'true');
+        await expect(homePage.getPreviewPanel('components')).toBeVisible();
+        await expect(homePage.getPreviewPanel('overview')).toBeHidden();
+      });
+
+      await test.step('Switch to the themes panel and verify the active theme', async () => {
+        await homePage.getPreviewTab('themes').click();
+
+        await expect(homePage.getPreviewPanel('themes')).toBeVisible();
+        await expect(
+          homePage.page.locator('#showcase-preview-theme-name')
+        ).toHaveText('Catppuccin Mocha');
+      });
+    });
+
+    test('should sync the marquee active card with the header dropdown', async ({ homePage }) => {
+      await test.step('Switch theme via the header dropdown', async () => {
+        await homePage.switchToTheme('catppuccin-latte');
+      });
+
+      await test.step('Verify the matching marquee card is marked active', async () => {
+        await expect(homePage.getMarqueeThemeCard('catppuccin-latte')).toHaveAttribute(
+          'aria-pressed',
+          'true'
+        );
+        await expect(homePage.getMarqueeThemeCard('catppuccin-mocha')).toHaveAttribute(
+          'aria-pressed',
+          'false'
+        );
+      });
+    });
+  });
+
   // Visual snapshot tests organized separately
   test.describe('Visual Snapshots @visual', () => {
     const themes = ['catppuccin-mocha', 'catppuccin-latte'];
