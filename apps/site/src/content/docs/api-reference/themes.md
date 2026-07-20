@@ -1,7 +1,6 @@
 ---
 title: Theme Definitions
-description: Complete reference for all 30 Turbo Themes color schemes.
-description: Complete reference for all 27 Turbo Themes color schemes.
+description: Complete reference for all 40 Turbo Themes color schemes.
 category: api-reference
 order: 4
 prev: api-reference/tokens
@@ -10,14 +9,12 @@ next: api-reference/javascript-api
 
 # Theme Definitions
 
-Turbo Themes includes 30 color schemes across 10 vendor families. The canonical list is
-Turbo Themes includes 27 color schemes across 10 vendor families. The canonical list is
+Turbo Themes includes 40 color schemes across 14 vendor families. The canonical list is
 always available at runtime:
 
 ```typescript
 import { themeIds } from '@lgtm-hq/turbo-themes';
-// → readonly string[] of all 30 theme IDs, sorted by vendor then variant
-// → readonly string[] of all 27 theme IDs, sorted by vendor then variant
+// → readonly string[] of all 40 theme IDs, sorted by vendor then variant
 ```
 
 ## Theme Overview
@@ -46,43 +43,24 @@ import { themeIds } from '@lgtm-hq/turbo-themes';
 | Bulma Dark            | Bulma       | Dark       | `bulma-dark`            |
 | Bulma Light           | Bulma       | Light      | `bulma-light`           |
 | Nord                  | Nord        | Dark       | `nord`                  |
+| Radix Slate Dark      | Radix       | Dark       | `radix-slate-dark`      |
+| Radix Slate Light     | Radix       | Light      | `radix-slate-light`     |
+| Radix Mauve Dark      | Radix       | Dark       | `radix-mauve-dark`      |
+| Radix Mauve Light     | Radix       | Light      | `radix-mauve-light`     |
+| Solarized Dark        | Solarized   | Dark       | `solarized-dark`        |
+| Solarized Light       | Solarized   | Light      | `solarized-light`       |
 | Rosé Pine             | Rosé Pine   | Dark       | `rose-pine`             |
 | Rosé Pine Moon        | Rosé Pine   | Dark       | `rose-pine-moon`        |
 | Rosé Pine Dawn        | Rosé Pine   | Light      | `rose-pine-dawn`        |
-| Solarized Dark        | Solarized   | Dark       | `solarized-dark`        |
-| Solarized Light       | Solarized   | Light      | `solarized-light`       |
-| Tokyo Night Dark      | Tokyo Night | Dark       | `tokyo-night-dark`      |
-| Tokyo Night Storm     | Tokyo Night | Dark       | `tokyo-night-storm`     |
-| Tokyo Night Light     | Tokyo Night | Light      | `tokyo-night-light`     |
-| Theme                 | Vendor      | Appearance | ID                      |
-| --------------------  | ----------- | ---------- | ----------------------  |
-| Catppuccin Mocha      | Catppuccin  | Dark       | `catppuccin-mocha`      |
-| Catppuccin Macchiato  | Catppuccin  | Dark       | `catppuccin-macchiato`  |
-| Catppuccin Frappé     | Catppuccin  | Dark       | `catppuccin-frappe`     |
-| Catppuccin Latte      | Catppuccin  | Light      | `catppuccin-latte`      |
-| Dracula               | Dracula     | Dark       | `dracula`               |
-| Gruvbox Dark Hard     | Gruvbox     | Dark       | `gruvbox-dark-hard`     |
-| Gruvbox Dark          | Gruvbox     | Dark       | `gruvbox-dark`          |
-| Gruvbox Dark Soft     | Gruvbox     | Dark       | `gruvbox-dark-soft`     |
-| Gruvbox Light Hard    | Gruvbox     | Light      | `gruvbox-light-hard`    |
-| Gruvbox Light         | Gruvbox     | Light      | `gruvbox-light`         |
-| Gruvbox Light Soft    | Gruvbox     | Light      | `gruvbox-light-soft`    |
-| GitHub Dark           | GitHub      | Dark       | `github-dark`           |
-| GitHub Light          | GitHub      | Light      | `github-light`          |
-| Bulma Dark            | Bulma       | Dark       | `bulma-dark`            |
-| Bulma Light           | Bulma       | Light      | `bulma-light`           |
-| Nord                  | Nord        | Dark       | `nord`                  |
-| Rosé Pine             | Rosé Pine   | Dark       | `rose-pine`             |
-| Rosé Pine Moon        | Rosé Pine   | Dark       | `rose-pine-moon`        |
-| Rosé Pine Dawn        | Rosé Pine   | Light      | `rose-pine-dawn`        |
-| Solarized Dark        | Solarized   | Dark       | `solarized-dark`        |
-| Solarized Light       | Solarized   | Light      | `solarized-light`       |
 | Tokyo Night Dark      | Tokyo Night | Dark       | `tokyo-night-dark`      |
 | Tokyo Night Storm     | Tokyo Night | Dark       | `tokyo-night-storm`     |
 | Tokyo Night Light     | Tokyo Night | Light      | `tokyo-night-light`     |
 | Kanagawa Wave         | Kanagawa    | Dark       | `kanagawa-wave`         |
 | Kanagawa Dragon       | Kanagawa    | Dark       | `kanagawa-dragon`       |
 | Kanagawa Lotus        | Kanagawa    | Light      | `kanagawa-lotus`        |
+| One Dark              | One Dark    | Dark       | `one-dark`              |
+| One Light             | One Dark    | Light      | `one-light`             |
+| Terminal              | Terminal    | Dark       | `terminal`              |
 
 ## Curating a theme subset
 
@@ -96,8 +74,7 @@ import {
   getThemesByAppearance,
 } from '@lgtm-hq/turbo-themes';
 
-// All 30 themes
-// All 27 themes
+// All 40 themes
 const all = themeIds;
 
 // Vendor opt-in
