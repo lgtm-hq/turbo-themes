@@ -98,10 +98,12 @@ final class ThemeAccessibilityTests: XCTestCase {
     // MARK: - Light vs Dark Theme Tests
 
     func testLightThemesHaveLighterBackgrounds() {
-        let lightThemes: [ThemeId] = [.catppuccinLatte, .githubLight, .bulmaLight, .oneLight]
-        let darkThemes: [ThemeId] = [.catppuccinMocha, .dracula, .githubDark, .bulmaDark, .oneDark]
-        let lightThemes: [ThemeId] = [.catppuccinLatte, .githubLight, .bulmaLight, .everforestLight]
-        let darkThemes: [ThemeId] = [.catppuccinMocha, .dracula, .githubDark, .bulmaDark, .everforestDark]
+        let lightThemes: [ThemeId] = [
+            .catppuccinLatte, .githubLight, .bulmaLight, .oneLight, .everforestLight,
+        ]
+        let darkThemes: [ThemeId] = [
+            .catppuccinMocha, .dracula, .githubDark, .bulmaDark, .oneDark, .everforestDark,
+        ]
 
         for lightId in lightThemes {
             let lightBg = getBackgroundHex(for: lightId)

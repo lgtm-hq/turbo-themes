@@ -21,8 +21,8 @@ final class ThemeRegistryTests: XCTestCase {
 
     func testExpectedThemeCount() {
         // We expect 27 themes based on the ThemeId enum
-        XCTAssertEqual(ThemeId.allCases.count, 27)
-        XCTAssertEqual(ThemeRegistry.allThemes.count, 27)
+        XCTAssertEqual(ThemeId.allCases.count, 33)
+        XCTAssertEqual(ThemeRegistry.allThemes.count, 33)
     }
 
     // MARK: - Theme Lookup Tests
