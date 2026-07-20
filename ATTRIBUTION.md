@@ -2,7 +2,9 @@
 
 Provenance for the theme-pack icon artwork shipped under `assets/img/`. Icons are
 referenced by the `icon` fields in `schema/tokens/themes/*.tokens.json` and
-`schema/tokens/_vendors.json`; `.webp` siblings are derived from the PNGs.
+`schema/tokens/_vendors.json`. Each `.webp` file is derived from the `.png` of the same
+name and inherits that row's source and license below; the tables list only the `.png`
+filenames.
 
 All vendor logos remain the property of their respective projects and are used here
 solely to identify the corresponding theme packs.
