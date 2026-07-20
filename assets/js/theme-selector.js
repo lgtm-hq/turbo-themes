@@ -615,6 +615,9 @@ var TurboThemeSelector = (function(exports) {
 			return "";
 		}
 	}
+	function themeLinkId(themeId) {
+		return `theme-${themeId}-css`;
+	}
 	function extractThemeIdFromLinkId(linkId) {
 		return linkId.replace(/^theme-/, "").replace(/-css$/, "");
 	}
@@ -652,53 +655,69 @@ var TurboThemeSelector = (function(exports) {
 		doc.documentElement.setAttribute("data-theme", themeId);
 		doc.documentElement.setAttribute("data-appearance", resolveThemeAppearance(themeId));
 	}
-	async function loadThemeCSS(doc, theme, baseUrl) {
-		const themeLinkId = `theme-${theme.id}-css`;
-		let themeLink = doc.getElementById(themeLinkId);
-		if (!themeLink) {
-			const blockingLink = doc.getElementById(CSS_LINK_ID);
-			if (blockingLink) {
-				let resolvedHref;
-				try {
-					resolvedHref = resolveAssetPath(theme.cssFile, baseUrl);
-				} catch {
-					logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
-					return;
-				}
-				blockingLink.href = resolvedHref;
-				blockingLink.id = themeLinkId;
-				blockingLink.setAttribute("data-theme-id", theme.id);
-				themeLink = blockingLink;
-			}
-		}
-		if (!themeLink) {
-			const existingLinks = doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS);
-			themeLink = doc.createElement("link");
-			themeLink.id = themeLinkId;
-			themeLink.rel = "stylesheet";
-			themeLink.type = "text/css";
-			themeLink.setAttribute("data-theme-id", theme.id);
-			try {
-				themeLink.href = resolveAssetPath(theme.cssFile, baseUrl);
-			} catch {
-				logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
-				return;
-			}
-			doc.head.appendChild(themeLink);
-			try {
-				await loadCSSWithTimeout(themeLink, theme.id);
-				existingLinks.forEach((link) => {
-					const linkThemeId = extractThemeIdFromLinkId(link.id);
-					if (linkThemeId !== theme.id && linkThemeId !== "base") link.remove();
-				});
-			} catch (error) {
-				themeLink.remove();
-				logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
-			}
-		} else doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS).forEach((link) => {
+	function removeStaleThemeLinks(doc, keepThemeId) {
+		doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS).forEach((link) => {
 			const linkThemeId = extractThemeIdFromLinkId(link.id);
-			if (linkThemeId !== theme.id && linkThemeId !== "base") link.remove();
+			if (linkThemeId !== keepThemeId && linkThemeId !== "base") link.remove();
 		});
+	}
+	async function adoptBlockingLink(doc, blockingLink, theme, baseUrl) {
+		let resolvedHref;
+		try {
+			resolvedHref = resolveAssetPath(theme.cssFile, baseUrl);
+		} catch {
+			logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
+			return false;
+		}
+		const previousHref = blockingLink.getAttribute("href");
+		blockingLink.id = themeLinkId(theme.id);
+		blockingLink.setAttribute("data-theme-id", theme.id);
+		if (previousHref === resolvedHref) {
+			removeStaleThemeLinks(doc, theme.id);
+			return true;
+		}
+		blockingLink.href = resolvedHref;
+		try {
+			await loadCSSWithTimeout(blockingLink, theme.id);
+		} catch (error) {
+			blockingLink.id = CSS_LINK_ID;
+			blockingLink.removeAttribute("data-theme-id");
+			if (previousHref !== null) blockingLink.href = previousHref;
+			logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
+			return false;
+		}
+		removeStaleThemeLinks(doc, theme.id);
+		return true;
+	}
+	async function loadThemeCSS(doc, theme, baseUrl) {
+		const linkId = themeLinkId(theme.id);
+		if (doc.getElementById(linkId)) {
+			removeStaleThemeLinks(doc, theme.id);
+			return true;
+		}
+		const blockingLink = doc.getElementById(CSS_LINK_ID);
+		if (blockingLink) return adoptBlockingLink(doc, blockingLink, theme, baseUrl);
+		const themeLink = doc.createElement("link");
+		themeLink.id = linkId;
+		themeLink.rel = "stylesheet";
+		themeLink.type = "text/css";
+		themeLink.setAttribute("data-theme-id", theme.id);
+		try {
+			themeLink.href = resolveAssetPath(theme.cssFile, baseUrl);
+		} catch {
+			logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
+			return false;
+		}
+		doc.head.appendChild(themeLink);
+		try {
+			await loadCSSWithTimeout(themeLink, theme.id);
+		} catch (error) {
+			themeLink.remove();
+			logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
+			return false;
+		}
+		removeStaleThemeLinks(doc, theme.id);
+		return true;
 	}
 	function setItemActiveState(item, isActive) {
 		if (isActive) item.classList.add("is-active");
@@ -766,14 +785,14 @@ var TurboThemeSelector = (function(exports) {
 		const theme = resolveTheme(themeId);
 		if (!theme) {
 			logThemeError(ThemeErrors.NO_THEMES_AVAILABLE());
-			return;
+			return false;
 		}
 		const baseUrl = getBaseUrl(doc);
 		const trigger = doc.getElementById(DOM_IDS.THEME_FLAVOR_TRIGGER);
 		if (trigger) trigger.classList.add("is-loading");
 		try {
 			applyThemeClass(doc, theme.id);
-			await loadThemeCSS(doc, theme, baseUrl);
+			const cssLoaded = await loadThemeCSS(doc, theme, baseUrl);
 			const triggerIcon = doc.getElementById(DOM_IDS.THEME_FLAVOR_TRIGGER_ICON);
 			if (triggerIcon && theme.icon) try {
 				triggerIcon.src = resolveAssetPath(theme.icon, baseUrl);
@@ -788,6 +807,7 @@ var TurboThemeSelector = (function(exports) {
 			doc.querySelectorAll(DOM_SELECTORS.DROPDOWN_ITEMS).forEach((item) => {
 				setItemActiveState(item, item.getAttribute("data-theme-id") === theme.id);
 			});
+			return cssLoaded;
 		} finally {
 			if (trigger) trigger.classList.remove("is-loading");
 		}
@@ -807,12 +827,20 @@ var TurboThemeSelector = (function(exports) {
 		const validIds = getValidThemeIds();
 		if (!isValidThemeId(themeId) || !validIds.has(themeId)) {
 			logThemeError(ThemeErrors.INVALID_THEME_ID(themeId));
-			return false;
+			return {
+				applied: false,
+				cssLoaded: false,
+				persisted: false
+			};
 		}
-		saveTheme(windowObj, themeId, validIds);
-		await applyTheme$1(documentObj, themeId);
-		emitThemeChange(documentObj, themeId);
-		return true;
+		const persisted = saveTheme(windowObj, themeId, validIds);
+		const cssLoaded = await applyTheme$1(documentObj, themeId);
+		if (cssLoaded) emitThemeChange(documentObj, themeId);
+		return {
+			applied: true,
+			cssLoaded,
+			persisted
+		};
 	}
 	function getCurrentTheme(documentObj = document) {
 		const fromAttribute = documentObj.documentElement.getAttribute("data-theme");
@@ -1134,9 +1162,6 @@ var TurboThemeSelector = (function(exports) {
 		});
 	}
 	var PREFETCH_TRIGGER_ATTRIBUTE = "data-theme-preview";
-	function themeCSSLinkId(themeId) {
-		return `theme-${themeId}-css`;
-	}
 	function themePrefetchLinkId(themeId) {
 		return `theme-${themeId}-prefetch`;
 	}
@@ -1144,7 +1169,7 @@ var TurboThemeSelector = (function(exports) {
 		return isValidThemeId(themeId) && getValidThemeIds().has(themeId);
 	}
 	function isThemeCSSLoaded(documentObj, themeId) {
-		if (documentObj.getElementById(themeCSSLinkId(themeId))) return true;
+		if (documentObj.getElementById(themeLinkId(themeId))) return true;
 		const blockingLink = documentObj.getElementById(CSS_LINK_ID);
 		if (!blockingLink) return false;
 		if (blockingLink.getAttribute("data-theme-id") === themeId) return true;
@@ -1161,8 +1186,7 @@ var TurboThemeSelector = (function(exports) {
 		if (isThemeCSSLoaded(documentObj, themeId)) return true;
 		const theme = resolveTheme(themeId);
 		if (!theme) return false;
-		await loadThemeCSS(documentObj, theme, getBaseUrl(documentObj));
-		return isThemeCSSLoaded(documentObj, themeId);
+		return loadThemeCSS(documentObj, theme, getBaseUrl(documentObj));
 	}
 	function prefetchThemeCSS(documentObj, themeId) {
 		if (!isKnownThemeId(themeId)) return false;
