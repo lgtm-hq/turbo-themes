@@ -3,9 +3,13 @@
  * Theme selector package - main entry point
  */
 
-import { migrateLegacyStorage, getSavedTheme, saveTheme, DEFAULT_THEME } from './storage.js';
+import { migrateLegacyStorage, getSavedTheme, DEFAULT_THEME } from './storage.js';
 import { getBaseUrl, getCurrentThemeFromClasses } from './theme-loader.js';
-import { applyTheme, getCurrentTheme } from './apply-theme.js';
+import {
+  applyTheme as applyThemeToDocument,
+  getCurrentTheme as getCurrentThemeFromDocument,
+} from './apply-theme.js';
+import { applyTheme as applyThemeById } from './integration.js';
 import { THEME_FAMILIES } from './constants.js';
 import { getThemes, getValidThemeIds } from './theme-resolver.js';
 import { createDropdownStateManager, type DropdownState } from './dropdown/state.js';
@@ -38,13 +42,13 @@ export async function initTheme(documentObj: Document, windowObj: Window): Promi
   if (initialTheme && initialTheme === savedTheme) {
     if (getCurrentThemeFromClasses(documentObj.documentElement) === savedTheme) {
       // Always call applyTheme so the trigger label/icon stay in sync with the active theme
-      await applyTheme(documentObj, savedTheme);
+      await applyThemeToDocument(documentObj, savedTheme);
       return;
     }
   }
 
   // Otherwise, apply theme normally
-  await applyTheme(documentObj, savedTheme);
+  await applyThemeToDocument(documentObj, savedTheme);
 }
 
 /**
@@ -76,7 +80,7 @@ export async function wireFlavorSelector(
   // Get current theme (validated against available themes)
   const currentThemeId =
     getSavedTheme(windowObj, getValidThemeIds()) ||
-    getCurrentTheme(documentObj, DEFAULT_THEME);
+    getCurrentThemeFromDocument(documentObj, DEFAULT_THEME);
 
   // Create state manager (needs elements and state)
   const stateManager = createDropdownStateManager(elements, state);
@@ -91,8 +95,7 @@ export async function wireFlavorSelector(
     menuItems: state.menuItems,
     closeDropdown: stateManager.closeDropdown,
     onThemeSelect: async (themeId: string) => {
-      saveTheme(windowObj, themeId, getValidThemeIds());
-      await applyTheme(documentObj, themeId);
+      await applyThemeById(themeId, documentObj, windowObj);
     },
   };
 
@@ -113,6 +116,17 @@ export async function wireFlavorSelector(
 
   return { cleanup: () => abortController.abort() };
 }
+
+// Re-export public integration API for driving theming from site pages
+export {
+  applyTheme,
+  getCurrentTheme,
+  subscribeToThemeChanges,
+  THEME_CHANGE_EVENT,
+  type ThemeChangeDetail,
+  type ThemeChangeListener,
+  type Unsubscribe,
+} from './integration.js';
 
 // Re-export navbar, accessibility, and blocking script functions
 export { initNavbar, enhanceAccessibility };
