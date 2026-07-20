@@ -8,6 +8,7 @@
 import {
   VENDOR_GROUPS,
   THEME_SHORT_LABELS,
+  THEME_NAMES,
   THEME_APPEARANCES as coreAppearances,
   THEME_ICONS,
   VALID_THEMES,
@@ -32,6 +33,9 @@ export const validThemeIds: string[] = [...VALID_THEMES];
 
 /** Human-readable short label shown in the theme dropdown trigger. */
 export const themeNames: Record<string, string> = { ...THEME_SHORT_LABELS };
+
+/** Full theme label (e.g. "GitHub Dark") for cards and headings. */
+export const themeFullNames: Record<string, string> = { ...THEME_NAMES };
 
 /** Appearance (light/dark) for each theme. */
 export const themeAppearances: Record<string, 'light' | 'dark'> = { ...coreAppearances };
