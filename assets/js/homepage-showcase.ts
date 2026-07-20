@@ -6,7 +6,22 @@
  * pause, and the interactive preview card. Pure state transitions are exported
  * for unit testing; DOM wiring stays thin and is initialized on
  * DOMContentLoaded.
+ *
+ * Theming goes exclusively through the theme-selector integration API
+ * (ADR-0007): marquee clicks call `applyTheme`, hover prefetch comes from
+ * the lazy-CSS helpers, and UI state follows `turbo-theme-change` events
+ * plus a `data-theme` attribute observer (covering the header dropdown).
+ * Theme metadata is server-rendered as data attributes on the marquee
+ * cards (`data-theme-preview`/`data-theme-name`/`data-theme-icon`) instead
+ * of an injected global.
  */
+
+import {
+  applyTheme,
+  getCurrentTheme,
+  subscribeToThemeChanges,
+} from '../../packages/theme-selector/src/integration.js';
+import { wireHoverPrefetch } from '../../packages/theme-selector/src/lazy-css.js';
 
 /** Fallback icon used when a theme has no dedicated icon entry. */
 export const DEFAULT_THEME_ICON = 'catppuccin-logo-macchiato.png';
@@ -28,7 +43,7 @@ export interface MediaQuerySource {
   matchMedia(query: string): { matches: boolean };
 }
 
-/** Theme metadata injected by the page for preview-card updates. */
+/** Theme metadata read from server-rendered data attributes on the page. */
 export interface ShowcaseMeta {
   baseUrl: string;
   themeNames: Partial<Record<string, string>>;
@@ -75,11 +90,14 @@ export const RESTING_TILT_TARGETS: TiltTargets = {
 /** CSS animation-play-state values used by the marquee rows. */
 export type MarqueePlayState = 'paused' | 'running';
 
-declare global {
-  interface Window {
-    __showcaseMeta?: ShowcaseMeta;
-  }
-}
+/** Attribute naming the theme a showcase element previews/applies. */
+export const THEME_TRIGGER_ATTRIBUTE = 'data-theme-preview';
+
+/** Attribute carrying a theme's full display name on a marquee card. */
+export const THEME_NAME_ATTRIBUTE = 'data-theme-name';
+
+/** Attribute carrying a theme's icon filename on a marquee card. */
+export const THEME_ICON_ATTRIBUTE = 'data-theme-icon';
 
 /**
  * Check whether the user prefers reduced motion.
@@ -202,10 +220,52 @@ export function applyTabSelection(
 }
 
 /**
+ * Read showcase theme metadata from server-rendered data attributes.
+ *
+ * The page renders one marquee card per theme carrying
+ * `data-theme-preview`, `data-theme-name`, and `data-theme-icon`; the
+ * base URL comes from the root element's `data-baseurl` attribute.
+ *
+ * @param documentObj - Document to read the metadata from.
+ * @returns Metadata for preview-card and marquee updates.
+ */
+export function readShowcaseMeta(documentObj: Document): ShowcaseMeta {
+  const meta: ShowcaseMeta = {
+    baseUrl: documentObj.documentElement.getAttribute('data-baseurl') ?? '',
+    themeNames: {},
+    themeFullNames: {},
+    themeIcons: {},
+  };
+  for (const el of documentObj.querySelectorAll(`[${THEME_TRIGGER_ATTRIBUTE}]`)) {
+    const themeId = el.getAttribute(THEME_TRIGGER_ATTRIBUTE);
+    if (!themeId) continue;
+    const fullName = el.getAttribute(THEME_NAME_ATTRIBUTE);
+    const icon = el.getAttribute(THEME_ICON_ATTRIBUTE);
+    if (fullName) meta.themeFullNames[themeId] = fullName;
+    if (icon) meta.themeIcons[themeId] = icon;
+  }
+  return meta;
+}
+
+/**
+ * Mark the trigger matching a theme active and deactivate the rest.
+ *
+ * @param triggers - Elements carrying the data-theme-preview attribute.
+ * @param themeId - The active theme's identifier.
+ */
+export function syncThemeTriggers(triggers: readonly Element[], themeId: string): void {
+  for (const trigger of triggers) {
+    const isActive = trigger.getAttribute(THEME_TRIGGER_ATTRIBUTE) === themeId;
+    trigger.classList.toggle('active', isActive);
+    trigger.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  }
+}
+
+/**
  * Resolve the display name and icon URL for a theme from page metadata.
  *
  * @param theme - Theme identifier (e.g. 'catppuccin-mocha').
- * @param meta - Theme metadata injected by the page.
+ * @param meta - Theme metadata read from the page.
  * @returns Display name and fully-qualified icon source.
  */
 export function resolveThemeDisplay(theme: string, meta: ShowcaseMeta): ThemeDisplay {
@@ -406,8 +466,10 @@ function initMarqueePause(): void {
  * theme-change updates.
  *
  * @param reducedMotion - Whether the user prefers reduced motion.
+ * @param meta - Theme metadata read from the page.
+ * @returns Handler that re-renders the card for a newly active theme.
  */
-function initPreviewCard(reducedMotion: boolean): void {
+function initPreviewCard(reducedMotion: boolean, meta: ShowcaseMeta): (themeId: string) => void {
   const tabs = Array.from(document.querySelectorAll<HTMLElement>('.showcase-preview-tab'));
   const panels = Array.from(document.querySelectorAll<HTMLElement>('.showcase-preview-panel'));
   const toast = document.getElementById('showcase-preview-toast');
@@ -478,12 +540,7 @@ function initPreviewCard(reducedMotion: boolean): void {
     });
   }
 
-  document.addEventListener('showcase-theme-change', (event: Event) => {
-    const detail = (event as CustomEvent<{ theme?: string }>).detail;
-    const theme = detail?.theme;
-    const meta = window.__showcaseMeta;
-    if (!theme || !meta) return;
-
+  const renderTheme = (theme: string): void => {
     const display = resolveThemeDisplay(theme, meta);
     const nameEl = document.getElementById('showcase-preview-theme-name');
     const iconEl = document.getElementById('showcase-preview-theme-icon');
@@ -494,24 +551,84 @@ function initPreviewCard(reducedMotion: boolean): void {
     if (overviewPanel?.classList.contains('is-active')) {
       runProgress();
     }
+  };
+
+  runProgress();
+  return renderTheme;
+}
+
+/**
+ * Invoke a callback on every theme change, whatever the channel.
+ *
+ * Covers changes driven through the integration API (marquee clicks)
+ * via `turbo-theme-change` events, and changes applied outside it (the
+ * header dropdown) via a `data-theme` attribute observer. Consecutive
+ * duplicate notifications are collapsed.
+ *
+ * @param onTheme - Callback invoked with each newly active theme ID.
+ */
+function wireThemeObserver(onTheme: (themeId: string) => void): void {
+  let lastTheme: string | null = null;
+
+  const notify = (themeId: string | null): void => {
+    if (!themeId || themeId === lastTheme) return;
+    lastTheme = themeId;
+    onTheme(themeId);
+  };
+
+  subscribeToThemeChanges((detail) => {
+    notify(detail.themeId);
+  }, document);
+
+  const observer = new MutationObserver(() => {
+    notify(document.documentElement.getAttribute('data-theme'));
+  });
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+}
+
+/**
+ * Wire the marquee theme cards to the theme-selector integration API.
+ *
+ * Clicks on `[data-theme-preview]` elements apply the named theme through
+ * `applyTheme` (which lazily loads its CSS); hovering or focusing a card
+ * prefetches the theme's stylesheet via the lazy-CSS helpers.
+ */
+function initThemeControls(): void {
+  document.addEventListener('click', (event: Event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const trigger = target.closest(`[${THEME_TRIGGER_ATTRIBUTE}]`);
+    const themeId = trigger?.getAttribute(THEME_TRIGGER_ATTRIBUTE);
+    if (themeId) void applyTheme(themeId);
   });
 
-  const currentTheme = document.documentElement.getAttribute('data-theme') ?? 'catppuccin-mocha';
-  document.dispatchEvent(
-    new CustomEvent('showcase-theme-change', { detail: { theme: currentTheme } }),
-  );
-  runProgress();
+  wireHoverPrefetch(document);
 }
 
 /** Initialize every showcase interaction on the current document. */
 export function initShowcase(): void {
   const reducedMotion = prefersReducedMotion(window);
+  const meta = readShowcaseMeta(document);
   initSpotlight(reducedMotion);
   initCometCard(reducedMotion);
   initTextMask(reducedMotion);
   initScrollReveal(reducedMotion);
   initMarqueePause();
-  initPreviewCard(reducedMotion);
+  initThemeControls();
+  const renderTheme = initPreviewCard(reducedMotion, meta);
+
+  const syncTheme = (themeId: string): void => {
+    syncThemeTriggers(
+      Array.from(document.querySelectorAll(`[${THEME_TRIGGER_ATTRIBUTE}]`)),
+      themeId,
+    );
+    renderTheme(themeId);
+  };
+  wireThemeObserver(syncTheme);
+  syncTheme(getCurrentTheme(document));
 }
 
 // Auto-initialize on DOMContentLoaded

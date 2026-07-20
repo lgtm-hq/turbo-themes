@@ -17,9 +17,11 @@ import {
   marqueePlayState,
   pointerPercent,
   prefersReducedMotion,
+  readShowcaseMeta,
   renderProgress,
   resolveThemeDisplay,
   stepSpotlight,
+  syncThemeTriggers,
   type MediaQuerySource,
   type PointerRect,
   type ProgressElements,
@@ -244,6 +246,61 @@ describe('resolveThemeDisplay', () => {
   });
 });
 
+describe('readShowcaseMeta', () => {
+  afterEach(() => {
+    document.body.innerHTML = '';
+    document.documentElement.removeAttribute('data-baseurl');
+  });
+
+  it('collects names and icons from marked elements plus the base URL', () => {
+    document.documentElement.setAttribute('data-baseurl', '/base');
+    document.body.innerHTML = `
+      <button
+        data-theme-preview="catppuccin-mocha"
+        data-theme-name="Catppuccin Mocha"
+        data-theme-icon="catppuccin-logo-mocha.png"
+      ></button>
+      <button data-theme-preview="nord" data-theme-name="Nord"></button>
+    `;
+
+    expect(readShowcaseMeta(document)).toEqual({
+      baseUrl: '/base',
+      themeNames: {},
+      themeFullNames: { 'catppuccin-mocha': 'Catppuccin Mocha', nord: 'Nord' },
+      themeIcons: { 'catppuccin-mocha': 'catppuccin-logo-mocha.png' },
+    });
+  });
+
+  it('returns empty metadata for a page without marked elements', () => {
+    expect(readShowcaseMeta(document)).toEqual({
+      baseUrl: '',
+      themeNames: {},
+      themeFullNames: {},
+      themeIcons: {},
+    });
+  });
+});
+
+describe('syncThemeTriggers', () => {
+  it('activates the matching trigger and deactivates the rest', () => {
+    const triggers = ['nord', 'dracula'].map((id) => {
+      const el = document.createElement('button');
+      el.setAttribute('data-theme-preview', id);
+      el.setAttribute('aria-pressed', 'false');
+      return el;
+    });
+    triggers[1]!.classList.add('active');
+    triggers[1]!.setAttribute('aria-pressed', 'true');
+
+    syncThemeTriggers(triggers, 'nord');
+
+    expect(triggers[0]!.classList.contains('active')).toBe(true);
+    expect(triggers[0]!.getAttribute('aria-pressed')).toBe('true');
+    expect(triggers[1]!.classList.contains('active')).toBe(false);
+    expect(triggers[1]!.getAttribute('aria-pressed')).toBe('false');
+  });
+});
+
 describe('renderProgress', () => {
   /**
    * Build progress-bar elements for testing.
@@ -325,22 +382,32 @@ describe('initShowcase', () => {
       <span id="showcase-progress-value"></span>
       <span id="showcase-preview-theme-name"></span>
       <img id="showcase-preview-theme-icon" alt="" />
-      <div class="showcase-marquee-row"></div>
+      <div class="showcase-marquee-row">
+        <button
+          class="showcase-marquee-card"
+          data-theme-preview="catppuccin-mocha"
+          data-theme-name="Catppuccin Mocha"
+          data-theme-icon="catppuccin-logo-mocha.png"
+          aria-pressed="false"
+        ></button>
+        <button
+          class="showcase-marquee-card"
+          data-theme-preview="nord-dark"
+          data-theme-name="Nord Dark"
+          data-theme-icon="nord-logo.png"
+          aria-pressed="false"
+        ></button>
+      </div>
     `;
     // Reduced motion keeps animation loops out of the test environment.
     vi.spyOn(window, 'matchMedia').mockReturnValue(reducedMotionQueryList());
-    window.__showcaseMeta = {
-      baseUrl: 'https://example.test',
-      themeNames: { 'catppuccin-mocha': 'Mocha' },
-      themeFullNames: { 'catppuccin-mocha': 'Catppuccin Mocha' },
-      themeIcons: { 'catppuccin-mocha': 'catppuccin-logo-mocha.png' },
-    };
+    document.documentElement.setAttribute('data-baseurl', 'https://example.test');
     document.documentElement.setAttribute('data-theme', 'catppuccin-mocha');
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    delete window.__showcaseMeta;
+    document.documentElement.removeAttribute('data-baseurl');
     document.body.innerHTML = '';
   });
 
@@ -369,7 +436,7 @@ describe('initShowcase', () => {
     expect(tokensPanel.classList.contains('is-active')).toBe(true);
   });
 
-  it('applies theme metadata from the initial theme-change event', () => {
+  it('renders the current theme from server-rendered metadata on init', () => {
     initShowcase();
 
     expect(document.getElementById('showcase-preview-theme-name')!.textContent).toBe(
@@ -379,16 +446,40 @@ describe('initShowcase', () => {
     expect(icon.src).toBe('https://example.test/assets/img/catppuccin-logo-mocha.png');
   });
 
-  it('updates the preview when a showcase-theme-change event arrives', () => {
-    window.__showcaseMeta!.themeFullNames['nord-dark'] = 'Nord Dark';
-    window.__showcaseMeta!.themeIcons['nord-dark'] = 'nord-logo.png';
+  it('marks the active marquee card for the current theme on init', () => {
+    initShowcase();
+
+    const active = document.querySelector('[data-theme-preview="catppuccin-mocha"]')!;
+    const inactive = document.querySelector('[data-theme-preview="nord-dark"]')!;
+    expect(active.classList.contains('active')).toBe(true);
+    expect(active.getAttribute('aria-pressed')).toBe('true');
+    expect(inactive.classList.contains('active')).toBe(false);
+    expect(inactive.getAttribute('aria-pressed')).toBe('false');
+  });
+
+  it('updates the preview when a turbo-theme-change event arrives', () => {
     initShowcase();
 
     document.dispatchEvent(
-      new CustomEvent('showcase-theme-change', { detail: { theme: 'nord-dark' } }),
+      new CustomEvent('turbo-theme-change', {
+        detail: { themeId: 'nord-dark', appearance: 'dark' },
+      }),
     );
 
     expect(document.getElementById('showcase-preview-theme-name')!.textContent).toBe('Nord Dark');
+    const card = document.querySelector('[data-theme-preview="nord-dark"]')!;
+    expect(card.getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('follows data-theme attribute changes made outside the integration API', async () => {
+    initShowcase();
+
+    document.documentElement.setAttribute('data-theme', 'nord-dark');
+    await vi.waitFor(() => {
+      expect(document.getElementById('showcase-preview-theme-name')!.textContent).toBe(
+        'Nord Dark',
+      );
+    });
   });
 
   it('pauses and resumes the marquee row on hover', () => {

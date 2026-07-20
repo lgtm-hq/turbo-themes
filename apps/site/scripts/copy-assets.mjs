@@ -31,8 +31,6 @@ const assetsToCopy = [
   ['assets/css/site.css', 'assets/css/site.css'],
   ['assets/css/custom.css', 'assets/css/custom.css'],
   ['assets/css/home.css', 'assets/css/home.css'],
-  // Staged showcase homepage styles; #683 renames this to home.css (see #682)
-  ['assets/css/home-showcase.css', 'assets/css/home-showcase.css'],
 
   // Adapters
   ['packages/adapters/bulma/dist/bulma-adapter.css', 'assets/css/adapters/bulma.css'],
