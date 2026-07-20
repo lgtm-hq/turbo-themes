@@ -1,294 +1,1175 @@
 ---
-/**
- * Home — Noir Editorial (Design #2).
- * Source: landing-designs.html .d2 panel via issue #513.
- */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { flavors } from '../../../../src/themes/registry.js';
-import {
-  themeNames,
-  themeIcons,
-  themeGroups,
-  themeAppearances,
-} from '../data/theme-meta';
-const themeCount = flavors.length;
+import { flavors } from '@lgtm-hq/turbo-themes-core/themes';
+import { themeNames, themeFullNames, themeIcons } from '../data/theme-meta';
+
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const themeCount = flavors.length;
+const allThemeIds = flavors.map((flavor) => flavor.id);
+const row1 = allThemeIds.slice(0, Math.ceil(allThemeIds.length / 2));
+const row2 = allThemeIds.slice(Math.ceil(allThemeIds.length / 2));
 
-/** Prefer iconic dark variants when a vendor has several flavors. */
-const HERO_SWATCH_PREFERENCE: Record<string, string> = {
-  catppuccin: 'catppuccin-mocha',
-  dracula: 'dracula',
-  gruvbox: 'gruvbox-dark',
-  github: 'github-dark',
-  bulma: 'bulma-dark',
-  nord: 'nord',
-  radix: 'radix-slate-dark',
-  solarized: 'solarized-dark',
-  'rose-pine': 'rose-pine',
-  'tokyo-night': 'tokyo-night-dark',
-};
-
-const flavorById = Object.fromEntries(flavors.map((f) => [f.id, f]));
-
-const heroSwatches = themeGroups.map((group) => {
-  const preferred = HERO_SWATCH_PREFERENCE[group.id];
-  const id =
-    (preferred && group.flavors.includes(preferred) ? preferred : undefined) ??
-    group.flavors.find((fid) => themeAppearances[fid] === 'dark') ??
-    group.flavors[0];
-  const flavor = flavorById[id];
-  const short = themeNames[id] || flavor?.label || id;
-  const name =
-    short === group.displayName || group.displayName.includes(short)
-      ? group.displayName
-      : `${group.displayName} ${short}`;
-  const color = flavor?.tokens.brand.primary ?? '#cba6f7';
-  const colorEnd =
-    flavor?.tokens.state.info ?? flavor?.tokens.background.surface ?? color;
-  return { id, name, color, colorEnd };
-});
-
-const features: Array<{
-  num: string;
-  title: string;
-  body: string;
-  code?: string;
-}> = [
-  {
-    num: '01',
-    title: 'Pure CSS Variables',
-    body: 'No runtime. No JavaScript. No build step required. Just CSS custom properties that work everywhere — reference any token with',
-    code: 'var(--turbo-*)',
-  },
-  {
-    num: '02',
-    title: 'Platform Agnostic',
-    body: 'npm, Python, Ruby, Swift. One token system, every platform. Ship consistent design across your entire stack.',
-  },
-  {
-    num: '03',
-    title: 'Framework Adapters',
-    body: 'First-class adapters for Tailwind, Bulma, and Bootstrap. Drop in and your existing classes inherit theme colors instantly.',
-  },
-  {
-    num: '04',
-    title: 'WCAG Accessible',
-    body: 'Every theme is tested for contrast compliance. Keyboard and screen reader support baked into the component layer.',
-  },
+const features = [
+  { title: 'Pure CSS tokens', desc: 'Zero runtime. Swap a stylesheet, re-token the UI.' },
+  { title: `${themeCount} curated themes`, desc: 'Dark and light palettes from the community.' },
+  { title: 'Multi-platform', desc: 'npm, Ruby gem, Python, Swift — same tokens everywhere.' },
+  { title: 'Accessible by default', desc: 'WCAG contrast baked into every theme file.' },
 ];
-
-// CDN needs BOTH the core stylesheet and a theme stylesheet — display a short
-// hint but copy the complete, usable two-<link> snippet.
-const installCdnSnippet = `<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css" />`;
-
-const installMethods = [
-  { label: 'npm', code: 'npm install turbo-themes' },
-  { label: 'CDN', code: 'unpkg.com/turbo-themes — core + theme <link> tags', copy: installCdnSnippet },
-  { label: 'Python', code: 'pip install turbo-themes' },
-  { label: 'Ruby', code: 'gem "turbo-themes"' },
-] as const;
 ---
 
-<BaseLayout title="Home" isHome={true}>
-  <link rel="stylesheet" href={`${baseUrl}/assets/css/home.css`} />
-  <section class="home-hero" aria-label="Hero">
-    <div class="home-hero-copy">
-      <p class="eyebrow">Design Tokens</p>
-      <h1 class="home-hero-title">Themes that <em>speak</em></h1>
-      <p class="home-hero-desc">
-        {themeCount} curated color systems, meticulously crafted as platform-agnostic
-        design tokens. Pure CSS. Zero dependencies. One import away.
-      </p>
-      <div class="home-hero-actions">
-        <a href={`${baseUrl}/docs/`} class="btn-editorial">
-          Get Started
-          <span class="btn-arrow" aria-hidden="true">→</span>
-        </a>
-        <a href={`${baseUrl}/themes/`} class="btn-editorial btn-editorial-ghost">
-          Browse Themes
-        </a>
-      </div>
+<BaseLayout title="Home" description="Platform-agnostic design tokens for any framework" isHome={true}>
+  {
+    allThemeIds.map((themeId) => (
+      <link rel="stylesheet" href={`${baseUrl}/assets/css/themes/turbo/${themeId}.css`} data-theme-preload={themeId} />
+    ))
+  }
+
+  <div class="showcase-page">
+    <div id="showcase-spotlight" class="showcase-spotlight" aria-hidden="true">
+      <div class="showcase-spotlight-left"></div>
+      <div class="showcase-spotlight-right"></div>
     </div>
 
-    <div class="home-hero-panel">
-      <div class="home-swatch-grid" role="group" aria-label="Theme previews">
-        {
-          heroSwatches.map((swatch) => (
-            <button
-              type="button"
-              class="home-swatch"
-              data-theme-preview={swatch.id}
-              data-name={swatch.name}
-              title={swatch.name}
-              aria-label={`Preview ${swatch.name} theme`}
-              aria-pressed="false"
-              style={`--swatch-a: ${swatch.color}; --swatch-b: ${swatch.colorEnd};`}
-            ></button>
-          ))
-        }
-      </div>
-      <p class="home-theme-count" aria-label={`${themeCount} themes`}>
-        <span class="home-theme-count-num">{themeCount}</span>
-        <sup class="home-theme-count-label">Themes</sup>
-      </p>
-    </div>
-  </section>
+    <section class="showcase-hero" aria-labelledby="showcase-headline">
+      <div class="showcase-hero-grid">
+        <div class="showcase-hero-copy">
+          <span class="showcase-badge showcase-reveal" style="--reveal-delay: 0.1s">Open Source</span>
 
-  <section class="home-split" aria-labelledby="why-turbo-heading">
-    <div class="home-split-label">
-      <h2 id="why-turbo-heading" class="home-split-heading">Why Turbo?</h2>
-    </div>
-    <div class="home-split-body">
-      <ul class="home-feature-list">
-        {
-          features.map((feature) => (
-            <li class="home-feature-row">
-              <span class="home-feature-num" aria-hidden="true">
-                {feature.num}
+          <div class="showcase-headline-wrap showcase-reveal" style="--reveal-delay: 0.25s">
+            <h1 id="showcase-headline" class="showcase-headline">
+              <span id="showcase-text-mask" class="showcase-text-mask">
+                <span class="showcase-text-mask-base">Beautiful themes</span>
+                <span class="showcase-text-mask-reveal" aria-hidden="true">Beautiful themes</span>
               </span>
-              <div class="home-feature-content">
-                <h3 class="home-feature-title">{feature.title}</h3>
-                <p class="home-feature-body">
-                  {feature.body}
-                  {feature.code ? (
-                    <>
-                      {' '}
-                      <code>{feature.code}</code>.
-                    </>
-                  ) : null}
-                </p>
-              </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+              <br />for any project
+            </h1>
+          </div>
 
-  <section class="home-split" aria-labelledby="install-heading">
-    <div class="home-split-label">
-      <h2 id="install-heading" class="home-split-heading">Install</h2>
-    </div>
-    <div class="home-split-body">
-      <ul class="home-install-list">
-        {
-          installMethods.map((method) => (
-            <li class="home-install-row">
-              <span class="home-install-label">{method.label}</span>
+          <p class="showcase-lede showcase-reveal" style="--reveal-delay: 0.4s">
+            A design token system with {themeCount} curated color themes. Switch themes instantly with CSS custom properties.
+          </p>
+
+          <div class="showcase-cta showcase-reveal" style="--reveal-delay: 0.55s">
+            <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg">Get Started</a>
+            <a href={`${baseUrl}/themes/`} class="btn btn-outline btn-lg">
+              Explore Themes
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+
+        </div>
+
+        <div class="showcase-hero-visual showcase-reveal" style="--reveal-delay: 0.35s">
+          <div class="showcase-comet-wrap">
+            <div id="showcase-comet-card" class="showcase-comet-card">
+              <div id="showcase-comet-glare" class="showcase-comet-glare" aria-hidden="true"></div>
+              <div class="showcase-preview">
+                <div class="showcase-preview-bar">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="showcase-preview-body">
+                  <div class="showcase-preview-nav" role="tablist" aria-label="Preview sections">
+                    <button type="button" class="showcase-preview-tab active" role="tab" aria-selected="true" data-preview-tab="overview">Overview</button>
+                    <button type="button" class="showcase-preview-tab" role="tab" aria-selected="false" data-preview-tab="components">Components</button>
+                    <button type="button" class="showcase-preview-tab" role="tab" aria-selected="false" data-preview-tab="themes">Themes</button>
+                  </div>
+
+                  <div class="showcase-preview-panels">
+                    <div class="showcase-preview-panel is-active" data-preview-panel="overview" role="tabpanel">
+                      <div class="showcase-preview-stats">
+                        <div class="showcase-preview-stat showcase-preview-stat-themes">
+                          <span class="showcase-stat-glow" aria-hidden="true"></span>
+                          <span class="label">Themes</span>
+                          <strong>{themeCount}</strong>
+                          <span class="showcase-stat-dots" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span>
+                          </span>
+                        </div>
+                        <div class="showcase-preview-stat showcase-preview-stat-platforms">
+                          <span class="showcase-stat-glow" aria-hidden="true"></span>
+                          <span class="label">Platforms</span>
+                          <strong>4</strong>
+                          <span class="showcase-stat-chips">
+                            <span>npm</span>
+                            <span>Ruby</span>
+                            <span>Python</span>
+                            <span>Swift</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="showcase-preview-specimens">
+                        <div class="showcase-specimen">
+                          <span class="showcase-specimen-label">Code</span>
+                          <button type="button" class="showcase-code-block" id="showcase-preview-code" aria-label="Copy CSS example">
+                            <code>
+                              <span class="tok-prop">background</span>: <span class="tok-fn">var</span>(<span class="tok-var">--turbo-bg-surface</span>);
+                              <br />
+                              <span class="tok-prop">color</span>: <span class="tok-fn">var</span>(<span class="tok-var">--turbo-text-primary</span>);
+                            </code>
+                          </button>
+                        </div>
+
+                        <div class="showcase-specimen">
+                          <span class="showcase-specimen-label">Typography</span>
+                          <div class="showcase-type-sample">
+                            <p class="showcase-type-h1">Heading One</p>
+                            <p class="showcase-type-h2">Heading Two</p>
+                            <p class="showcase-type-h3">Heading Three</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="showcase-preview-progress">
+                        <div class="showcase-preview-progress-head">
+                          <span>Design coverage</span>
+                          <strong id="showcase-progress-value">0%</strong>
+                        </div>
+                        <div class="showcase-preview-progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="showcase-progress-bar">
+                          <div id="showcase-progress-fill" class="showcase-preview-progress-fill"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="showcase-preview-panel" data-preview-panel="components" role="tabpanel" hidden>
+                      <label class="showcase-preview-field">
+                        <span>Email</span>
+                        <input type="email" class="showcase-preview-input" placeholder="you@example.com" />
+                      </label>
+                      <div class="showcase-preview-badges">
+                        <span class="showcase-badge-pill success">Success</span>
+                        <span class="showcase-badge-pill warning">Warning</span>
+                        <span class="showcase-badge-pill danger">Danger</span>
+                      </div>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-primary btn-sm" id="showcase-preview-primary">Primary</button>
+                        <button type="button" class="btn btn-outline btn-sm" id="showcase-preview-outline">Outline</button>
+                      </div>
+                    </div>
+
+                    <div class="showcase-preview-panel" data-preview-panel="themes" role="tabpanel" hidden>
+                      <div class="showcase-preview-theme">
+                        <img id="showcase-preview-theme-icon" src={`${baseUrl}/assets/img/${themeIcons['catppuccin-mocha']}`} alt="" width="40" height="40" />
+                        <div>
+                          <span class="label">Active theme</span>
+                          <strong id="showcase-preview-theme-name">{themeFullNames['catppuccin-mocha']}</strong>
+                        </div>
+                      </div>
+                      <p class="showcase-preview-hint">Pick a theme from the carousel below — the whole page updates instantly.</p>
+                      <div class="showcase-preview-palette">
+                        <span class="dot" style="background: var(--turbo-brand-primary)"></span>
+                        <span class="dot" style="background: var(--turbo-state-info)"></span>
+                        <span class="dot" style="background: var(--turbo-state-success)"></span>
+                        <span class="dot" style="background: var(--turbo-state-warning)"></span>
+                        <span class="dot" style="background: var(--turbo-state-danger)"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p id="showcase-preview-toast" class="showcase-preview-toast" aria-live="polite" hidden></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="showcase-marquees" aria-label="Theme carousel">
+      <div class="showcase-marquee-track">
+        <div class="showcase-marquee-row showcase-marquee-left">
+          {
+            row1.map((id) => (
               <button
                 type="button"
-                class="home-install-code"
-                data-copy={('copy' in method && method.copy) || method.code}
-                title="Click to copy"
+                class="showcase-marquee-card"
+                data-theme={id}
+                data-theme-preview={id}
+                title={themeFullNames[id] || id}
+                aria-label={`Apply ${themeFullNames[id] || id} theme`}
               >
-                <code>{method.code}</code>
+                <div class="showcase-marquee-swatch">
+                  <img class="showcase-marquee-icon" src={`${baseUrl}/assets/img/${themeIcons[id]}`} alt="" width="32" height="32" />
+                  <div class="showcase-marquee-dots">
+                    <span class="dot" style="background: var(--turbo-brand-primary)"></span>
+                    <span class="dot" style="background: var(--turbo-state-success)"></span>
+                    <span class="dot" style="background: var(--turbo-state-danger)"></span>
+                  </div>
+                </div>
+                <span class="showcase-marquee-name">{themeFullNames[id] || id}</span>
               </button>
-            </li>
+            ))
+          }
+        </div>
+        <div class="showcase-marquee-row showcase-marquee-right">
+          {
+            row2.map((id) => (
+              <button
+                type="button"
+                class="showcase-marquee-card"
+                data-theme={id}
+                data-theme-preview={id}
+                title={themeFullNames[id] || id}
+                aria-label={`Apply ${themeFullNames[id] || id} theme`}
+              >
+                <div class="showcase-marquee-swatch">
+                  <img class="showcase-marquee-icon" src={`${baseUrl}/assets/img/${themeIcons[id]}`} alt="" width="32" height="32" />
+                  <div class="showcase-marquee-dots">
+                    <span class="dot" style="background: var(--turbo-brand-primary)"></span>
+                    <span class="dot" style="background: var(--turbo-state-info)"></span>
+                    <span class="dot" style="background: var(--turbo-state-warning)"></span>
+                  </div>
+                </div>
+                <span class="showcase-marquee-name">{themeFullNames[id] || id}</span>
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <p class="showcase-marquee-footer">
+        <a href={`${baseUrl}/themes/`} class="showcase-theme-more">View all {themeCount} themes</a>
+      </p>
+    </section>
+
+    <section class="showcase-features" aria-labelledby="showcase-features-title">
+      <h2 id="showcase-features-title" class="visually-hidden">Features</h2>
+      <div class="showcase-features-grid">
+        {
+          features.map((f, i) => (
+            <article class="showcase-feature" data-showcase-reveal style={`--reveal-delay: ${i * 0.08}s`}>
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
+            </article>
           ))
         }
-      </ul>
-      <p id="home-copy-status" class="visually-hidden" role="status" aria-live="polite"></p>
-    </div>
-  </section>
+      </div>
+    </section>
 
-  <section class="home-cta" aria-labelledby="cta-heading">
-    <h2 id="cta-heading" class="home-cta-title">
-      Start building with <em>intention</em>
-    </h2>
-    <p class="home-cta-desc">Beautiful, accessible themes — ready in seconds.</p>
-    <div class="home-cta-actions">
-      <a href={`${baseUrl}/docs/`} class="btn-editorial">
-        Read Documentation
-        <span class="btn-arrow" aria-hidden="true">→</span>
-      </a>
-      <a
-        href="https://github.com/lgtm-hq/turbo-themes"
-        class="btn-editorial btn-editorial-ghost"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        View on GitHub
-      </a>
-    </div>
-  </section>
+    <section class="showcase-footer-cta" data-showcase-reveal>
+      <code>npm install turbo-themes</code>
+      <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg">Start building</a>
+    </section>
+  </div>
 
-  <script is:inline define:vars={{ themeNames, themeIcons }}>
+
+  <script is:inline define:vars={{ themeNames, themeFullNames, themeIcons, baseUrl }}>
     (function () {
-      function syncSwatchActive(theme) {
-        document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (b) {
-          var isActive = b.getAttribute('data-theme-preview') === theme;
-          b.classList.toggle('active', isActive);
-          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-        });
-      }
+      var STORAGE_KEY = 'turbo-theme';
+      var themeLink = document.getElementById('turbo-theme-css');
 
       function applyTheme(theme) {
-        var themeLink = document.getElementById('turbo-theme-css');
-        var baseUrl = document.documentElement.getAttribute('data-baseurl') || '';
-
         document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('turbo-theme', theme);
-
+        localStorage.setItem(STORAGE_KEY, theme);
         if (themeLink) {
           themeLink.href = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
         }
-
+        document.querySelectorAll('[data-theme-preview]').forEach(function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-theme-preview') === theme);
+        });
         var themeLabel = document.getElementById('theme-label');
         var themeTriggerIcon = document.getElementById('theme-trigger-icon');
-        if (themeLabel) {
-          themeLabel.textContent = themeNames[theme] || theme;
-        }
+        if (themeLabel) themeLabel.textContent = themeNames[theme] || theme;
         if (themeTriggerIcon) {
-          themeTriggerIcon.src =
-            baseUrl + '/assets/img/' + (themeIcons[theme] || 'catppuccin-logo-macchiato.png');
+          themeTriggerIcon.src = baseUrl + '/assets/img/' + (themeIcons[theme] || 'catppuccin-logo-macchiato.png');
         }
-
-        syncSwatchActive(theme);
-
-        document.querySelectorAll('.theme-menu .theme-option').forEach(function (opt) {
-          opt.classList.toggle('active', opt.getAttribute('data-theme') === theme);
-        });
+        document.dispatchEvent(new CustomEvent('showcase-theme-change', { detail: { theme: theme } }));
       }
 
-      document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (btn) {
+      document.querySelectorAll('[data-theme-preview]').forEach(function (btn) {
         btn.addEventListener('click', function () {
           var theme = btn.getAttribute('data-theme-preview');
           if (theme) applyTheme(theme);
         });
       });
 
-      // Keep swatch pressed state in sync when the header theme menu changes
-      document.querySelectorAll('.theme-menu .theme-option').forEach(function (opt) {
-        opt.addEventListener('click', function () {
-          var theme = opt.getAttribute('data-theme');
-          if (theme) syncSwatchActive(theme);
-        });
-      });
-
-      syncSwatchActive(document.documentElement.getAttribute('data-theme') || 'catppuccin-mocha');
-
-      var copyStatus = document.getElementById('home-copy-status');
-      document.querySelectorAll('.home-install-code[data-copy]').forEach(function (el) {
-        el.addEventListener('click', function () {
-          var text = el.getAttribute('data-copy') || '';
-          if (!text || !navigator.clipboard) return;
-          navigator.clipboard.writeText(text).then(function () {
-            el.classList.add('copied');
-            if (copyStatus) {
-              copyStatus.textContent = 'Copied to clipboard';
-            }
-            setTimeout(function () {
-              el.classList.remove('copied');
-              if (copyStatus) {
-                copyStatus.textContent = '';
-              }
-            }, 1500);
-          }).catch(function () {
-            console.warn('Failed to copy to clipboard');
-          });
-        });
-      });
+      applyTheme(document.documentElement.getAttribute('data-theme') || 'catppuccin-mocha');
+      window.__showcaseMeta = { themeNames: themeNames, themeFullNames: themeFullNames, themeIcons: themeIcons, baseUrl: baseUrl };
     })();
   </script>
+
+  <script is:inline src={`${baseUrl}/assets/js/homepage-showcase.js`}></script>
 </BaseLayout>
+
+<style is:global>
+  .showcase-page {
+    position: relative;
+    overflow: hidden;
+    background: var(--turbo-bg-base);
+    color: var(--turbo-text-primary);
+  }
+
+  .showcase-page .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .showcase-spotlight {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .showcase-spotlight-left,
+  .showcase-spotlight-right {
+    position: absolute;
+    top: -20%;
+    width: 55vw;
+    height: 120vh;
+    will-change: transform;
+  }
+
+  .showcase-spotlight-left {
+    left: -10%;
+    background: radial-gradient(
+      ellipse at 30% 30%,
+      color-mix(in srgb, var(--turbo-brand-primary) 14%, transparent),
+      transparent 70%
+    );
+  }
+
+  .showcase-spotlight-right {
+    right: -10%;
+    background: radial-gradient(
+      ellipse at 70% 40%,
+      color-mix(in srgb, var(--turbo-state-info) 10%, transparent),
+      transparent 72%
+    );
+  }
+
+  .showcase-hero {
+    position: relative;
+    z-index: 1;
+    padding: 2rem 1.5rem 2.5rem;
+  }
+
+  .showcase-hero-grid {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .showcase-badge {
+    display: inline-flex;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    border: 1px solid var(--turbo-border-default);
+    background: color-mix(in srgb, var(--turbo-bg-surface) 80%, transparent);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--turbo-text-secondary);
+  }
+
+  .showcase-headline {
+    margin: 0.75rem 0 0;
+    font-size: clamp(2.25rem, 6vw, 3.75rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .showcase-text-mask {
+    position: relative;
+    display: inline-block;
+    cursor: default;
+    --mx: 50%;
+    --my: 50%;
+  }
+
+  .showcase-text-mask-base {
+    background: linear-gradient(135deg, var(--turbo-brand-primary), var(--turbo-state-info));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .showcase-text-mask-reveal {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      var(--turbo-brand-primary),
+      var(--turbo-state-success),
+      var(--turbo-state-info)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    clip-path: circle(0 at var(--mx) var(--my));
+    transition: clip-path 0.15s ease;
+  }
+
+  .showcase-text-mask.is-hovering .showcase-text-mask-reveal {
+    clip-path: circle(120px at var(--mx) var(--my));
+  }
+
+  .showcase-lede {
+    margin: 0.75rem 0 0;
+    max-width: 36rem;
+    color: var(--turbo-text-secondary);
+    line-height: 1.6;
+    font-size: clamp(1rem, 2vw, 1.125rem);
+  }
+
+  .showcase-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+  }
+
+  .showcase-theme-more {
+    font-size: 0.875rem;
+    color: var(--turbo-brand-primary);
+    text-decoration: none;
+  }
+
+  .showcase-theme-more:hover {
+    text-decoration: underline;
+  }
+
+  .showcase-comet-wrap {
+    perspective: 900px;
+  }
+
+  .showcase-comet-card {
+    position: relative;
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: box-shadow 0.3s ease;
+  }
+
+  .showcase-comet-card:hover {
+    box-shadow: 0 32px 64px color-mix(in srgb, var(--turbo-bg-overlay) 55%, transparent);
+  }
+
+  .showcase-comet-glare {
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.5;
+    z-index: 2;
+  }
+
+  .showcase-preview {
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid var(--turbo-border-default);
+    background: var(--turbo-bg-surface);
+    transition: background 350ms ease, border-color 350ms ease;
+  }
+
+  .showcase-preview-bar {
+    display: flex;
+    gap: 0.375rem;
+    padding: 0.625rem 0.75rem;
+    background: var(--turbo-bg-overlay);
+    border-bottom: 1px solid var(--turbo-border-default);
+  }
+
+  .showcase-preview-bar span {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--turbo-border-default);
+  }
+
+  .showcase-preview-body {
+    padding: 1rem;
+  }
+
+  .showcase-preview-nav {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0.875rem;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    background: var(--turbo-bg-base);
+    border: 1px solid var(--turbo-border-default);
+  }
+
+  .showcase-preview-tab {
+    flex: 1;
+    padding: 0.375rem 0.5rem;
+    border: none;
+    border-radius: 0.375rem;
+    background: transparent;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--turbo-text-secondary);
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .showcase-preview-tab:hover {
+    color: var(--turbo-text-primary);
+  }
+
+  .showcase-preview-tab.active {
+    background: var(--turbo-bg-surface);
+    color: var(--turbo-brand-primary);
+    font-weight: 600;
+    box-shadow: 0 1px 2px color-mix(in srgb, var(--turbo-bg-overlay) 40%, transparent);
+  }
+
+  .showcase-preview-panels {
+    position: relative;
+    min-height: 11.5rem;
+  }
+
+  .showcase-preview-panel {
+    display: none;
+  }
+
+  .showcase-preview-panel.is-active {
+    display: block;
+    animation: showcase-panel-in 0.2s ease;
+  }
+
+  @keyframes showcase-panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .showcase-preview-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .showcase-preview-stat {
+    position: relative;
+    overflow: hidden;
+    padding: 0.75rem 0.625rem 0.625rem;
+    border-radius: 0.625rem;
+    border: 1px solid var(--turbo-border-default);
+    background: var(--turbo-bg-base);
+  }
+
+  .showcase-preview-stat-themes {
+    border-color: color-mix(in srgb, var(--turbo-brand-primary) 35%, var(--turbo-border-default));
+    background: linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--turbo-brand-primary) 14%, var(--turbo-bg-base)),
+      var(--turbo-bg-base) 55%
+    );
+  }
+
+  .showcase-preview-stat-platforms {
+    border-color: color-mix(in srgb, var(--turbo-state-info) 35%, var(--turbo-border-default));
+    background: linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--turbo-state-info) 12%, var(--turbo-bg-base)),
+      var(--turbo-bg-base) 55%
+    );
+  }
+
+  .showcase-stat-glow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    filter: blur(18px);
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .showcase-preview-stat-themes .showcase-stat-glow {
+    background: var(--turbo-brand-primary);
+  }
+
+  .showcase-preview-stat-platforms .showcase-stat-glow {
+    background: var(--turbo-state-info);
+  }
+
+  .showcase-preview-stat .label {
+    display: block;
+    position: relative;
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--turbo-text-secondary);
+  }
+
+  .showcase-preview-stat strong {
+    display: block;
+    position: relative;
+    margin-top: 0.125rem;
+    font-size: 1.625rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--turbo-brand-primary), var(--turbo-state-info));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .showcase-preview-stat-platforms strong {
+    background: linear-gradient(135deg, var(--turbo-state-info), var(--turbo-state-success));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .showcase-stat-dots {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 0.5rem;
+  }
+
+  .showcase-stat-dots span {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--turbo-text-primary) 12%, transparent);
+  }
+
+  .showcase-stat-dots span:nth-child(1) {
+    background: var(--turbo-brand-primary);
+  }
+
+  .showcase-stat-dots span:nth-child(2) {
+    background: var(--turbo-state-info);
+  }
+
+  .showcase-stat-dots span:nth-child(3) {
+    background: var(--turbo-state-success);
+  }
+
+  .showcase-stat-dots span:nth-child(4) {
+    background: var(--turbo-state-warning);
+  }
+
+  .showcase-stat-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin-top: 0.4375rem;
+  }
+
+  .showcase-stat-chips span {
+    padding: 0.1rem 0.35rem;
+    border-radius: 9999px;
+    font-size: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--turbo-text-primary);
+    background: color-mix(in srgb, var(--turbo-state-info) 16%, var(--turbo-bg-surface));
+    border: 1px solid color-mix(in srgb, var(--turbo-state-info) 28%, transparent);
+  }
+
+  .showcase-preview-specimens {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .showcase-specimen-label {
+    display: block;
+    margin-bottom: 0.3125rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--turbo-text-secondary);
+  }
+
+  .showcase-code-block {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    border: 1px solid var(--turbo-border-default);
+    border-radius: 0.5rem;
+    background: var(--turbo-bg-base);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s ease;
+  }
+
+  .showcase-code-block:hover {
+    border-color: var(--turbo-brand-primary);
+  }
+
+  .showcase-code-block code {
+    display: block;
+    font-family: var(--turbo-font-mono);
+    font-size: 0.625rem;
+    line-height: 1.55;
+    color: var(--turbo-text-primary);
+  }
+
+  .showcase-code-block .tok-prop {
+    color: var(--turbo-state-info);
+  }
+
+  .showcase-code-block .tok-fn {
+    color: var(--turbo-brand-primary);
+  }
+
+  .showcase-code-block .tok-var {
+    color: var(--turbo-state-success);
+  }
+
+  .showcase-type-sample {
+    padding: 0.5rem 0.625rem;
+    border: 1px solid var(--turbo-border-default);
+    border-radius: 0.5rem;
+    background: var(--turbo-bg-base);
+    display: grid;
+    gap: 0.1875rem;
+  }
+
+  .showcase-type-h1,
+  .showcase-type-h2,
+  .showcase-type-h3 {
+    margin: 0;
+    font-family: var(--turbo-font-sans);
+    line-height: 1.2;
+  }
+
+  .showcase-type-h1 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--turbo-heading-h1, var(--turbo-brand-primary));
+  }
+
+  .showcase-type-h2 {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--turbo-heading-h2, var(--turbo-state-info));
+  }
+
+  .showcase-type-h3 {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--turbo-heading-h3, var(--turbo-state-success));
+  }
+
+  .showcase-preview-progress-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.375rem;
+    font-size: 0.6875rem;
+    color: var(--turbo-text-secondary);
+  }
+
+  .showcase-preview-progress-head strong {
+    font-size: 0.75rem;
+    color: var(--turbo-brand-primary);
+  }
+
+  .showcase-preview-progress-track {
+    height: 0.375rem;
+    border-radius: 9999px;
+    background: var(--turbo-bg-base);
+    border: 1px solid var(--turbo-border-default);
+    overflow: hidden;
+  }
+
+  .showcase-preview-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--turbo-brand-primary), var(--turbo-state-info));
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .showcase-preview-field {
+    display: grid;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--turbo-text-secondary);
+  }
+
+  .showcase-preview-input {
+    width: 100%;
+    padding: 0.5rem 0.625rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--turbo-border-default);
+    background: var(--turbo-bg-base);
+    color: var(--turbo-text-primary);
+    font-size: 0.8125rem;
+  }
+
+  .showcase-preview-input:focus {
+    outline: none;
+    border-color: var(--turbo-brand-primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--turbo-brand-primary) 25%, transparent);
+  }
+
+  .showcase-preview-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .showcase-badge-pill {
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+
+  .showcase-badge-pill.success {
+    background: color-mix(in srgb, var(--turbo-state-success) 18%, transparent);
+    color: var(--turbo-state-success);
+  }
+
+  .showcase-badge-pill.warning {
+    background: color-mix(in srgb, var(--turbo-state-warning) 18%, transparent);
+    color: var(--turbo-state-warning);
+  }
+
+  .showcase-badge-pill.danger {
+    background: color-mix(in srgb, var(--turbo-state-danger) 18%, transparent);
+    color: var(--turbo-state-danger);
+  }
+
+  .showcase-preview-theme {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 0.625rem;
+    border: 1px solid var(--turbo-border-default);
+    background: var(--turbo-bg-base);
+  }
+
+  .showcase-preview-theme img {
+    border-radius: 0.5rem;
+    object-fit: contain;
+  }
+
+  .showcase-preview-theme .label {
+    display: block;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--turbo-text-secondary);
+  }
+
+  .showcase-preview-theme strong {
+    font-size: 1.125rem;
+    color: var(--turbo-text-primary);
+  }
+
+  .showcase-preview-hint {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: var(--turbo-text-secondary);
+  }
+
+  .showcase-preview-palette {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border-radius: 0.625rem;
+    border: 1px solid var(--turbo-border-default);
+    background: var(--turbo-bg-base);
+  }
+
+  .showcase-preview-palette .dot {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--turbo-text-primary) 10%, transparent);
+  }
+
+  .showcase-preview-toast {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--turbo-state-success);
+    background: color-mix(in srgb, var(--turbo-state-success) 15%, var(--turbo-bg-surface));
+    border: 1px solid color-mix(in srgb, var(--turbo-state-success) 35%, transparent);
+    white-space: nowrap;
+  }
+
+  #showcase-preview-primary.is-pressed {
+    transform: scale(0.96);
+  }
+
+  #showcase-preview-outline.is-active {
+    background: color-mix(in srgb, var(--turbo-brand-primary) 12%, transparent);
+    border-color: var(--turbo-brand-primary);
+    color: var(--turbo-brand-primary);
+  }
+
+  .showcase-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: showcase-fade-up 0.55s ease forwards;
+    animation-delay: var(--reveal-delay, 0s);
+  }
+
+  @keyframes showcase-fade-up {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  [data-showcase-reveal] {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  [data-showcase-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .showcase-marquees {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem 0 1.25rem;
+    border-top: 1px solid var(--turbo-border-default);
+  }
+
+  .showcase-marquee-footer {
+    margin: 1rem 0 0;
+    text-align: center;
+  }
+
+  .showcase-marquee-track {
+    display: grid;
+    gap: 1rem;
+    overflow: hidden;
+    padding: 0.5rem 0 0.625rem;
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  }
+
+  .showcase-marquee-row {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    will-change: transform;
+    align-items: center;
+  }
+
+  .showcase-marquee-left {
+    animation: showcase-marquee-left 55s linear infinite alternate;
+  }
+
+  .showcase-marquee-right {
+    animation: showcase-marquee-right 50s linear infinite alternate;
+  }
+
+  @keyframes showcase-marquee-left {
+    from {
+      transform: translateX(0);
+    }
+
+    to {
+      transform: translateX(calc(-100% + min(100vw, 100%) - 3rem));
+    }
+  }
+
+  @keyframes showcase-marquee-right {
+    from {
+      transform: translateX(calc(-100% + min(100vw, 100%) - 3rem));
+    }
+
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .showcase-marquee-card {
+    flex-shrink: 0;
+    width: 200px;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--turbo-border-default);
+    background: var(--turbo-bg-surface);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    position: relative;
+    transition: transform 0.25s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+  }
+
+  .showcase-marquee-card:hover {
+    transform: scale(1.05);
+    box-shadow: var(--turbo-elevation-md, 0 8px 20px rgba(0, 0, 0, 0.12));
+    z-index: 2;
+  }
+
+  .showcase-marquee-card.active {
+    border-color: var(--turbo-brand-primary);
+    box-shadow:
+      0 0 0 1px var(--turbo-brand-primary),
+      var(--turbo-elevation-md, 0 8px 20px rgba(0, 0, 0, 0.12));
+  }
+
+  .showcase-marquee-swatch {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.5rem;
+    background: var(--turbo-bg-base);
+    margin-bottom: 0.625rem;
+  }
+
+  .showcase-marquee-icon {
+    flex-shrink: 0;
+    border-radius: 0.375rem;
+    object-fit: contain;
+  }
+
+  .showcase-marquee-dots {
+    display: flex;
+    gap: 0.3rem;
+  }
+
+  .showcase-marquee-swatch .dot {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+  }
+
+  .showcase-marquee-name {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .showcase-features {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem 1.5rem 2rem;
+    border-top: 1px solid var(--turbo-border-default);
+  }
+
+  .showcase-features-grid {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border: 1px solid var(--turbo-border-default);
+  }
+
+  .showcase-feature {
+    padding: 1.125rem;
+    border-right: 1px solid var(--turbo-border-default);
+  }
+
+  .showcase-feature:last-child {
+    border-right: none;
+  }
+
+  .showcase-feature h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .showcase-feature p {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--turbo-text-secondary);
+    line-height: 1.55;
+  }
+
+  .showcase-footer-cta {
+    position: relative;
+    z-index: 1;
+    padding: 2rem 1.5rem 5.5rem;
+    text-align: center;
+    border-top: 1px solid var(--turbo-border-default);
+  }
+
+  .showcase-footer-cta code {
+    display: block;
+    margin-bottom: 1.25rem;
+    font-family: var(--turbo-font-mono);
+    font-size: 1.0625rem;
+    color: var(--turbo-brand-primary);
+  }
+
+  @media (max-width: 900px) {
+    .showcase-hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .showcase-features-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .showcase-feature:nth-child(2) {
+      border-right: none;
+    }
+
+    .showcase-feature {
+      border-bottom: 1px solid var(--turbo-border-default);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .showcase-features-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .showcase-feature {
+      border-right: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-marquee-left,
+    .showcase-marquee-right,
+    .showcase-reveal {
+      animation: none;
+    }
+
+    .showcase-reveal,
+    [data-showcase-reveal] {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
