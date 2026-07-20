@@ -76,7 +76,6 @@
 
 /* .showcase-badge / .showcase-headline → site.css (#685) */
 
-
 .showcase-text-mask {
   position: relative;
   display: inline-block;
@@ -118,7 +117,6 @@
 }
 
 /* .showcase-lede / .showcase-cta → site.css (#685) */
-
 
 /*
  * Scoped as .showcase-page descendants to out-rank the sitewide Noir chrome
@@ -553,7 +551,6 @@
 
 /* .showcase-badge-pill → site.css (#685) */
 
-
 .showcase-preview-theme {
   display: flex;
   align-items: center;
@@ -637,7 +634,6 @@
 }
 
 /* reveal primitives → site.css (#685) */
-
 
 .showcase-marquees {
   position: relative;

@@ -3095,7 +3095,6 @@ html:root .footer-links a:hover {
   flex-shrink: 0;
 }
 
-
 /* ==========================================================================
    Shared showcase primitives (#685)
    Extracted from home.css so themes/components/examples/docs can share the
@@ -3357,7 +3356,11 @@ html:root .footer-links a:hover {
 .theme-option.active {
   border: 1px solid var(--turbo-brand-primary);
   box-shadow: 0 0 0 1px var(--turbo-brand-primary);
-  background: color-mix(in srgb, var(--turbo-brand-primary) 10%, var(--turbo-bg-surface));
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 10%,
+    var(--turbo-bg-surface)
+  );
 }
 
 .theme-name {
@@ -3405,7 +3408,11 @@ html:root .footer-links a:hover {
 .component-tab.active {
   border-color: var(--turbo-brand-primary);
   box-shadow: 0 0 0 1px var(--turbo-brand-primary);
-  background: color-mix(in srgb, var(--turbo-brand-primary) 10%, var(--turbo-bg-surface));
+  background: color-mix(
+    in srgb,
+    var(--turbo-brand-primary) 10%,
+    var(--turbo-bg-surface)
+  );
 }
 
 .component-panel > h2 {
@@ -3695,7 +3702,6 @@ html:root .footer-links a:hover {
   color: color-mix(in srgb, var(--turbo-text-secondary) 60%, var(--turbo-text-primary));
 }
 
-
 /* Content page titles use showcase type, not Noir display serif */
 .main .page-title {
   font-family: var(--font-body, 'Instrument Sans', system-ui, sans-serif);
@@ -3724,7 +3730,6 @@ html:root .footer-links a:hover {
   margin-top: 1.25rem;
 }
 
-
 /* Beat Noir display-serif heading overrides on content surfaces (#685) */
 html[data-design='noir'] .site-headline,
 html[data-design='noir'] .site-feature h3,
@@ -3751,4 +3756,3 @@ html[data-design='noir'] .examples-hero h1 {
 .examples-cta.site-footer-cta {
   padding: 2rem 1.5rem 3rem;
 }
-
