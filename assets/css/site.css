@@ -2615,27 +2615,6 @@ html:root .footer-links a:hover {
   max-width: 550px;
 }
 
-.docs-landing-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-md) var(--space-xl);
-  background: var(--turbo-brand-primary);
-  color: var(--turbo-text-inverse);
-  font-size: 1rem;
-  font-weight: 500;
-  text-decoration: none;
-  border-radius: var(--radius-md);
-  transition: all var(--transition-fast);
-}
-
-.docs-landing-cta:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
-  color: var(--turbo-text-inverse);
-  text-decoration: none;
-}
-
 .docs-landing-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -3184,13 +3163,6 @@ html:root .footer-links a:hover {
   }
 }
 
-@keyframes showcase-fade-up {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 [data-site-reveal],
 [data-showcase-reveal] {
   opacity: 0;
@@ -3453,17 +3425,6 @@ html:root .footer-links a:hover {
   font-size: clamp(1rem, 2vw, 1.125rem);
   line-height: 1.6;
   max-width: 36rem;
-}
-
-.docs-landing-cta {
-  border-radius: 0.5rem;
-  box-shadow: none;
-}
-
-.docs-landing-cta:hover {
-  transform: none;
-  box-shadow: none;
-  text-decoration: underline;
 }
 
 .docs-landing-grid {
