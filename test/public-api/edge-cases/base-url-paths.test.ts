@@ -54,6 +54,7 @@ describe('baseUrl path construction', () => {
     Object.defineProperty(document, 'getElementById', {
       value: vi.fn((id) => {
         if (id === 'theme-flavor-trigger-icon') return triggerIconEl;
+        if (id === 'turbo-theme-css') return null; // blocking script link — not present in these tests
         if (id.startsWith('theme-') && id.endsWith('-css')) return null;
         return mocks.mockElement;
       }),
