@@ -109,55 +109,57 @@ test.describe('Accessibility Tests @a11y', () => {
         // (axe skips text while its reveal animation holds opacity at 0).
         await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
         await serveThemeCssWithoutExternalImports(homePage.page);
-        await homePage.goto();
+        try {
+          await homePage.goto();
 
-        await test.step(`Switch to ${theme} theme`, async () => {
-          await homePage.switchToTheme(theme);
-          await waitForStylesheetLoad(homePage.getThemeCss());
-          expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
-        });
+          await test.step(`Switch to ${theme} theme`, async () => {
+            await homePage.switchToTheme(theme);
+            await waitForStylesheetLoad(homePage.getThemeCss());
+            expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
+          });
 
-        await test.step('Run axe accessibility scan', async () => {
-          const accessibilityScanResults = await runAccessibilityScan(homePage.page);
-          expect(accessibilityScanResults.violations).toHaveLength(0);
-        });
+          await test.step('Run axe accessibility scan', async () => {
+            const accessibilityScanResults = await runAccessibilityScan(homePage.page);
+            expect(accessibilityScanResults.violations).toHaveLength(0);
+          });
 
-        await test.step('Run axe color-contrast scan on the showcase content', async () => {
-          const contrastScanResults = await new AxeBuilder({ page: homePage.page })
-            .include('.showcase-page')
-            .withRules(['color-contrast'])
-            .analyze();
+          await test.step('Run axe color-contrast scan on the showcase content', async () => {
+            const contrastScanResults = await new AxeBuilder({ page: homePage.page })
+              .include('.showcase-page')
+              .withRules(['color-contrast'])
+              .analyze();
 
-          if (contrastScanResults.violations.length > 0) {
-            console.error(
-              'Color-contrast violations found:',
-              JSON.stringify({ theme, violations: contrastScanResults.violations }, null, 2)
-            );
-          }
-          expect(contrastScanResults.violations).toHaveLength(0);
-        });
+            if (contrastScanResults.violations.length > 0) {
+              console.error(
+                'Color-contrast violations found:',
+                JSON.stringify({ theme, violations: contrastScanResults.violations }, null, 2)
+              );
+            }
+            expect(contrastScanResults.violations).toHaveLength(0);
+          });
 
-        await test.step('Verify contrast of decorative showcase text', async () => {
-          // Targeted checks for text axe skips or approximates: the marquee
-          // names live inside aria-labelled buttons, and the badge/feature
-          // copy sits on translucent color-mix backgrounds.
-          const decorativeText = {
-            badge: homePage.page.locator('.showcase-badge'),
-            'marquee theme name': homePage.page.locator('.showcase-marquee-name').first(),
-            'feature card title': homePage.page.locator('.showcase-feature h3').first(),
-            'feature card description': homePage.page.locator('.showcase-feature p').first(),
-          };
+          await test.step('Verify contrast of decorative showcase text', async () => {
+            // Targeted checks for text axe skips or approximates: the marquee
+            // names live inside aria-labelled buttons, and the badge/feature
+            // copy sits on translucent color-mix backgrounds.
+            const decorativeText = {
+              badge: homePage.page.locator('.showcase-badge'),
+              'marquee theme name': homePage.page.locator('.showcase-marquee-name').first(),
+              'feature card title': homePage.page.locator('.showcase-feature h3').first(),
+              'feature card description': homePage.page.locator('.showcase-feature p').first(),
+            };
 
-          for (const [label, locator] of Object.entries(decorativeText)) {
-            const ratio = await getContrastRatio(locator);
-            expect(
-              ratio,
-              `${label} contrast ratio under ${theme} (got ${ratio.toFixed(2)})`
-            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
-          }
-        });
-
-        await homePage.page.unrouteAll({ behavior: 'ignoreErrors' });
+            for (const [label, locator] of Object.entries(decorativeText)) {
+              const ratio = await getContrastRatio(locator);
+              expect(
+                ratio,
+                `${label} contrast ratio under ${theme} (got ${ratio.toFixed(2)})`
+              ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+            }
+          });
+        } finally {
+          await homePage.page.unrouteAll({ behavior: 'ignoreErrors' });
+        }
       });
     });
   });
@@ -189,10 +191,12 @@ test.describe('Accessibility Tests @a11y', () => {
         await page.keyboard.press('Tab');
         await expect(page.getByTestId('home-preview-code-copy')).toBeFocused();
 
+        // Capture the expected first marquee card before Tab so a new
+        // focusable in the overview panel cannot silently retarget :focus.
+        const firstMarqueeCard = page.locator('.showcase-marquee-card').first();
         await page.keyboard.press('Tab');
-        const focused = page.locator(':focus');
-        await expect(focused).toHaveClass(/showcase-marquee-card/);
-        await expect(focused).toHaveAttribute('data-theme-preview', /.+/);
+        await expect(firstMarqueeCard).toBeFocused();
+        await expect(firstMarqueeCard).toHaveAttribute('data-theme-preview', /.+/);
       });
     });
 
@@ -252,21 +256,22 @@ test.describe('Accessibility Tests @a11y', () => {
     test('should apply a marquee theme with the keyboard', async ({ homePage }) => {
       const page = homePage.page;
       await serveThemeCssWithoutExternalImports(page);
+      try {
+        const card = homePage.getMarqueeThemeCard('dracula');
 
-      const card = homePage.getMarqueeThemeCard('dracula');
+        await test.step('Focus the marquee card and press Enter', async () => {
+          await card.focus();
+          await expect(card).toBeFocused();
+          await page.keyboard.press('Enter');
+        });
 
-      await test.step('Focus the marquee card and press Enter', async () => {
-        await card.focus();
-        await expect(card).toBeFocused();
-        await page.keyboard.press('Enter');
-      });
-
-      await test.step('Verify the theme is applied through the selector pipeline', async () => {
-        await expect(page.locator('html')).toHaveAttribute('data-theme', 'dracula');
-        await expect(card).toHaveAttribute('aria-pressed', 'true');
-      });
-
-      await page.unrouteAll({ behavior: 'ignoreErrors' });
+        await test.step('Verify the theme is applied through the selector pipeline', async () => {
+          await expect(page.locator('html')).toHaveAttribute('data-theme', 'dracula');
+          await expect(card).toHaveAttribute('aria-pressed', 'true');
+        });
+      } finally {
+        await page.unrouteAll({ behavior: 'ignoreErrors' });
+      }
     });
 
     test('should disable marquee and reveal animation under reduced motion', async ({

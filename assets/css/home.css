@@ -921,6 +921,11 @@
   .showcase-feature {
     border-right: none;
   }
+
+  /* Drop the 900px-query border-bottom so it does not double the grid border. */
+  .showcase-feature:last-child {
+    border-bottom: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

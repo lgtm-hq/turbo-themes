@@ -19,10 +19,13 @@ and the constraints agreed for the replacement live only in conversation history
 design decisions were grilled and recorded on 2026-07-20 (see the epic #689 summary),
 and this ADR captures them so they are citable in review on every M1 pull request.
 
-### Requirements
+### Scope of this ADR
 
 - Explain why Noir Editorial (#609) is being replaced so soon after shipping
 - Record the binding constraints the showcase redesign must satisfy
+
+### Requirements
+
 - Keep every required CI check green throughout the migration (Lintro quality, build,
   e2e + smoke + a11y, examples, SBOM, CodeQL, security audit, action pinning, semantic
   title)

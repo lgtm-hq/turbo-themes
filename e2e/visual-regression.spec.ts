@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { waitForThemeApplied } from './helpers';
+import { waitForFontsReady, waitForThemeApplied } from './helpers';
 
 /**
  * Visual regression tests for main site pages.
@@ -46,6 +46,7 @@ test.describe('Homepage Visual Regression @visual', () => {
 
       // Wait for theme CSS to be applied (replaces arbitrary waitForTimeout)
       await waitForThemeApplied(page, theme.id);
+      await waitForFontsReady(page);
 
       // Verify theme applied
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme.id);
@@ -72,6 +73,7 @@ test.describe('Demo Page Visual Regression @visual', () => {
 
       // Wait for theme CSS to be applied
       await waitForThemeApplied(page, theme.id);
+      await waitForFontsReady(page);
 
       // Viewport screenshot (not fullPage to avoid height variations from font rendering)
       await expect(page).toHaveScreenshot(`demo-${theme.id}.png`);
@@ -83,6 +85,7 @@ test.describe('Component State Visual Regression @visual', () => {
   test('theme selector hover state', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    await waitForFontsReady(page);
 
     const trigger = page.locator('#theme-trigger');
     await trigger.hover();
@@ -95,6 +98,7 @@ test.describe('Component State Visual Regression @visual', () => {
   test('theme selector focused state', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    await waitForFontsReady(page);
 
     const trigger = page.locator('#theme-trigger');
     await trigger.focus();
@@ -107,6 +111,7 @@ test.describe('Component State Visual Regression @visual', () => {
   test('theme menu item hover state', async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    await waitForFontsReady(page);
 
     // Open dropdown
     const trigger = page.locator('#theme-trigger');
@@ -137,6 +142,7 @@ test.describe('Responsive Layout Visual Regression @visual', () => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.goto('/');
       await page.waitForLoadState('networkidle');
+      await waitForFontsReady(page);
 
       // Capture viewport only (not fullPage) to avoid height variations from font rendering
       await expect(page).toHaveScreenshot(`homepage-${viewport.name}.png`);
@@ -154,6 +160,7 @@ test.describe('Theme Transition Visual Regression @visual', () => {
       document.documentElement.dataset.theme = 'catppuccin-mocha';
     });
     await waitForThemeApplied(page, 'catppuccin-mocha');
+    await waitForFontsReady(page);
 
     // Capture before state
     await expect(page).toHaveScreenshot('transition-before.png', {
@@ -167,6 +174,7 @@ test.describe('Theme Transition Visual Regression @visual', () => {
 
     // Wait for theme to be applied
     await waitForThemeApplied(page, 'catppuccin-latte');
+    await waitForFontsReady(page);
 
     // Capture after state
     await expect(page).toHaveScreenshot('transition-after.png', {
