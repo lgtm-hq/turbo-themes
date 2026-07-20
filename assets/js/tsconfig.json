@@ -13,6 +13,6 @@
     "rootDir": ".",
     "lib": ["ES2020", "DOM", "DOM.Iterable"]
   },
-  "include": ["theme-selector.ts"],
+  "include": ["theme-selector.ts", "homepage-showcase.ts"],
   "exclude": ["node_modules"]
 }
