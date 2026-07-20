@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.36.0] - 2026-07-20
+
+### ✨ Added
+
+- Add Everforest theme pack (#603)
+
 ## [0.35.0] - 2026-07-20
 
 ### ✨ Added
