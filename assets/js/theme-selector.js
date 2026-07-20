@@ -756,7 +756,13 @@ var TurboThemeSelector = (function(exports) {
 		const themes = getThemes();
 		return themes.find((t) => t.id === themeId) || themes.find((t) => t.id === DEFAULT_THEME) || themes[0];
 	}
-	async function applyTheme(doc, themeId) {
+	function isValidThemeId(id) {
+		if (typeof id !== "string") return false;
+		if (id.length === 0) return false;
+		if (id.length > 100) return false;
+		return /^[a-zA-Z0-9_-]+$/.test(id);
+	}
+	async function applyTheme$1(doc, themeId) {
 		const theme = resolveTheme(themeId);
 		if (!theme) {
 			logThemeError(ThemeErrors.NO_THEMES_AVAILABLE());
@@ -786,8 +792,40 @@ var TurboThemeSelector = (function(exports) {
 			if (trigger) trigger.classList.remove("is-loading");
 		}
 	}
-	function getCurrentTheme(doc, defaultTheme) {
+	function getCurrentTheme$1(doc, defaultTheme) {
 		return getCurrentThemeFromClasses(doc.documentElement) || defaultTheme;
+	}
+	var THEME_CHANGE_EVENT = "turbo-theme-change";
+	function emitThemeChange(documentObj, themeId) {
+		const detail = {
+			themeId,
+			appearance: resolveThemeAppearance(themeId)
+		};
+		documentObj.dispatchEvent(new CustomEvent(THEME_CHANGE_EVENT, { detail }));
+	}
+	async function applyTheme(themeId, documentObj = document, windowObj = window) {
+		const validIds = getValidThemeIds();
+		if (!isValidThemeId(themeId) || !validIds.has(themeId)) {
+			logThemeError(ThemeErrors.INVALID_THEME_ID(themeId));
+			return false;
+		}
+		saveTheme(windowObj, themeId, validIds);
+		await applyTheme$1(documentObj, themeId);
+		emitThemeChange(documentObj, themeId);
+		return true;
+	}
+	function getCurrentTheme(documentObj = document) {
+		const fromAttribute = documentObj.documentElement.getAttribute("data-theme");
+		if (fromAttribute) return fromAttribute;
+		return getCurrentTheme$1(documentObj, DEFAULT_THEME);
+	}
+	function subscribeToThemeChanges(listener, documentObj = document) {
+		const handler = (event) => {
+			const detail = event.detail;
+			if (detail) listener(detail);
+		};
+		documentObj.addEventListener(THEME_CHANGE_EVENT, handler);
+		return () => documentObj.removeEventListener(THEME_CHANGE_EVENT, handler);
 	}
 	function createDropdownStateManager(elements, state) {
 		const { trigger, dropdown } = elements;
@@ -1161,11 +1199,11 @@ var TurboThemeSelector = (function(exports) {
 		const savedTheme = getSavedTheme(windowObj, getValidThemeIds());
 		if (initialTheme && initialTheme === savedTheme) {
 			if (getCurrentThemeFromClasses(documentObj.documentElement) === savedTheme) {
-				await applyTheme(documentObj, savedTheme);
+				await applyTheme$1(documentObj, savedTheme);
 				return;
 			}
 		}
-		await applyTheme(documentObj, savedTheme);
+		await applyTheme$1(documentObj, savedTheme);
 	}
 	async function wireFlavorSelector(documentObj, windowObj) {
 		const abortController = new AbortController();
@@ -1178,7 +1216,7 @@ var TurboThemeSelector = (function(exports) {
 			currentIndex: -1,
 			menuItems: []
 		};
-		const currentThemeId = getSavedTheme(windowObj, getValidThemeIds()) || getCurrentTheme(documentObj, DEFAULT_THEME);
+		const currentThemeId = getSavedTheme(windowObj, getValidThemeIds()) || getCurrentTheme$1(documentObj, DEFAULT_THEME);
 		const stateManager = createDropdownStateManager(elements, state);
 		const ctx = {
 			documentObj,
@@ -1189,8 +1227,7 @@ var TurboThemeSelector = (function(exports) {
 			menuItems: state.menuItems,
 			closeDropdown: stateManager.closeDropdown,
 			onThemeSelect: async (themeId) => {
-				saveTheme(windowObj, themeId, getValidThemeIds());
-				await applyTheme(documentObj, themeId);
+				await applyTheme(themeId, documentObj, windowObj);
 			}
 		};
 		if (selectEl) wireNativeSelect(ctx, selectEl, themes, DEFAULT_THEME);
@@ -1216,10 +1253,14 @@ var TurboThemeSelector = (function(exports) {
 		}
 	});
 	//#endregion
+	exports.THEME_CHANGE_EVENT = THEME_CHANGE_EVENT;
+	exports.applyTheme = applyTheme;
 	exports.enhanceAccessibility = enhanceAccessibility;
 	exports.generateBlockingScript = generateBlockingScript;
+	exports.getCurrentTheme = getCurrentTheme;
 	exports.initNavbar = initNavbar;
 	exports.initTheme = initTheme;
+	exports.subscribeToThemeChanges = subscribeToThemeChanges;
 	exports.wireFlavorSelector = wireFlavorSelector;
 	return exports;
 })({});
