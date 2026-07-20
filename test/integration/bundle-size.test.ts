@@ -3,10 +3,11 @@ import { statSync, existsSync } from 'fs';
 
 // Size budgets in bytes (generous to allow growth, but catch major issues)
 const SIZE_BUDGETS: Record<string, number> = {
-  'packages/theme-selector/dist/index.js': 122_880, // 120KB (embedded theme JSON grows
-  // with each theme pack — 37 themes as of the Everforest pack (~118.9KB actual);
-  // Vite 8/Rolldown also adds ~7KB of quote-escaping overhead vs Vite 7; gzipped
-  // size is unchanged)
+  'packages/theme-selector/dist/index.js': 131_072, // 128KB (embedded theme JSON grows
+  // with each theme pack — 37 themes as of the Everforest pack; Vite 8/Rolldown
+  // also adds ~7KB of quote-escaping overhead vs Vite 7; gzipped size is
+  // unchanged. Raised from 120KB after the showcase integration API and
+  // lazy-CSS helpers landed (~120.1KB actual).
   'packages/adapters/tailwind/dist/preset.js': 30_000, // 30KB
   'packages/adapters/tailwind/dist/colors.js': 20_000, // 20KB
   'packages/css/dist/index.js': 35_000, // 35KB (increased: component CSS vars now emitted for all themes)

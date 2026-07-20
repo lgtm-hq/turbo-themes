@@ -1133,6 +1133,76 @@ var TurboThemeSelector = (function(exports) {
 			if (!pre.hasAttribute("aria-label")) pre.setAttribute("aria-label", "Code block");
 		});
 	}
+	var PREFETCH_TRIGGER_ATTRIBUTE = "data-theme-preview";
+	function themeCSSLinkId(themeId) {
+		return `theme-${themeId}-css`;
+	}
+	function themePrefetchLinkId(themeId) {
+		return `theme-${themeId}-prefetch`;
+	}
+	function isKnownThemeId(themeId) {
+		return isValidThemeId(themeId) && getValidThemeIds().has(themeId);
+	}
+	function isThemeCSSLoaded(documentObj, themeId) {
+		if (documentObj.getElementById(themeCSSLinkId(themeId))) return true;
+		const blockingLink = documentObj.getElementById(CSS_LINK_ID);
+		if (!blockingLink) return false;
+		if (blockingLink.getAttribute("data-theme-id") === themeId) return true;
+		return (blockingLink.getAttribute("href") ?? "").endsWith(`/${themeId}.css`);
+	}
+	function shouldLoadThemeCSS(documentObj, themeId) {
+		return isKnownThemeId(themeId) && !isThemeCSSLoaded(documentObj, themeId);
+	}
+	async function loadThemeCSSOnDemand(documentObj, themeId) {
+		if (!isKnownThemeId(themeId)) {
+			logThemeError(ThemeErrors.INVALID_THEME_ID(themeId));
+			return false;
+		}
+		if (isThemeCSSLoaded(documentObj, themeId)) return true;
+		const theme = resolveTheme(themeId);
+		if (!theme) return false;
+		await loadThemeCSS(documentObj, theme, getBaseUrl(documentObj));
+		return isThemeCSSLoaded(documentObj, themeId);
+	}
+	function prefetchThemeCSS(documentObj, themeId) {
+		if (!isKnownThemeId(themeId)) return false;
+		if (isThemeCSSLoaded(documentObj, themeId)) return false;
+		if (documentObj.getElementById(themePrefetchLinkId(themeId))) return false;
+		const theme = resolveTheme(themeId);
+		if (!theme) return false;
+		let href;
+		try {
+			href = resolveAssetPath(theme.cssFile, getBaseUrl(documentObj));
+		} catch {
+			logThemeError(ThemeErrors.INVALID_CSS_PATH(themeId));
+			return false;
+		}
+		const link = documentObj.createElement("link");
+		link.id = themePrefetchLinkId(themeId);
+		link.rel = "prefetch";
+		link.setAttribute("as", "style");
+		link.href = href;
+		link.setAttribute("data-theme-prefetch", themeId);
+		documentObj.head.appendChild(link);
+		return true;
+	}
+	function wireHoverPrefetch(documentObj = document) {
+		const handler = (event) => {
+			const target = event.target;
+			if (!(target instanceof Element)) return;
+			const trigger = target.closest(`[${PREFETCH_TRIGGER_ATTRIBUTE}]`);
+			if (!trigger) return;
+			const themeId = trigger.getAttribute(PREFETCH_TRIGGER_ATTRIBUTE);
+			if (!themeId) return;
+			prefetchThemeCSS(documentObj, themeId);
+		};
+		documentObj.addEventListener("mouseover", handler);
+		documentObj.addEventListener("focusin", handler);
+		return () => {
+			documentObj.removeEventListener("mouseover", handler);
+			documentObj.removeEventListener("focusin", handler);
+		};
+	}
 	function generateBlockingScript(options = {}) {
 		const { validThemes = VALID_THEMES, defaultTheme = DEFAULT_THEME$1, storageKey = STORAGE_KEY, legacyKeys = LEGACY_STORAGE_KEYS, themeAppearances = THEME_APPEARANCES } = options;
 		const config = {
@@ -1253,6 +1323,7 @@ var TurboThemeSelector = (function(exports) {
 		}
 	});
 	//#endregion
+	exports.PREFETCH_TRIGGER_ATTRIBUTE = PREFETCH_TRIGGER_ATTRIBUTE;
 	exports.THEME_CHANGE_EVENT = THEME_CHANGE_EVENT;
 	exports.applyTheme = applyTheme;
 	exports.enhanceAccessibility = enhanceAccessibility;
@@ -1260,8 +1331,13 @@ var TurboThemeSelector = (function(exports) {
 	exports.getCurrentTheme = getCurrentTheme;
 	exports.initNavbar = initNavbar;
 	exports.initTheme = initTheme;
+	exports.isThemeCSSLoaded = isThemeCSSLoaded;
+	exports.loadThemeCSSOnDemand = loadThemeCSSOnDemand;
+	exports.prefetchThemeCSS = prefetchThemeCSS;
+	exports.shouldLoadThemeCSS = shouldLoadThemeCSS;
 	exports.subscribeToThemeChanges = subscribeToThemeChanges;
 	exports.wireFlavorSelector = wireFlavorSelector;
+	exports.wireHoverPrefetch = wireHoverPrefetch;
 	return exports;
 })({});
 
