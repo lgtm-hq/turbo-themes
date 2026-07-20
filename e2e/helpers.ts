@@ -374,7 +374,7 @@ export async function serveThemeCssWithoutExternalImports(page: Page): Promise<v
  */
 export async function blockRemoteFonts(page: Page): Promise<void> {
   if (process.platform !== 'linux') return;
-  await page.route(/https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/, (route) => route.abort());
+  await page.route(/https:\/\/fonts\.(googleapis|gstatic)\.com/, (route) => route.abort());
 }
 
 /**
