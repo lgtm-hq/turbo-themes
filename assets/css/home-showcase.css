@@ -99,6 +99,7 @@
   position: relative;
   display: inline-block;
   cursor: default;
+
   --mx: 50%;
   --my: 50%;
 }
@@ -668,11 +669,11 @@
   white-space: nowrap;
 }
 
-#showcase-preview-primary.is-pressed {
+[id='showcase-preview-primary'].is-pressed {
   transform: scale(0.96);
 }
 
-#showcase-preview-outline.is-active {
+[id='showcase-preview-outline'].is-active {
   background: color-mix(in srgb, var(--turbo-brand-primary) 12%, transparent);
   border-color: var(--turbo-brand-primary);
   color: var(--turbo-brand-primary);
