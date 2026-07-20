@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.34.0] - 2026-07-20
+
+### ✨ Added
+
+- Redesign home page to Noir Editorial (#609)
+
 ## [0.33.0] - 2026-07-20
 
 ### ✨ Added

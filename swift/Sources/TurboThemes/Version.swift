@@ -2,5 +2,5 @@
 // Auto-synced by scripts/sync-version.mjs
 
 public enum TurboThemesVersion {
-    public static let string = "0.33.0"
+    public static let string = "0.34.0"
 }
