@@ -33,6 +33,30 @@ export interface ThemeChangeDetail {
 /** Listener invoked with the payload of each theme change. */
 export type ThemeChangeListener = (detail: ThemeChangeDetail) => void;
 
+/**
+ * Outcome of an applyTheme call, reporting each stage independently so
+ * consumers can distinguish full success from partial application.
+ */
+export interface ApplyThemeResult {
+  /**
+   * True when the theme ID was valid and the `data-theme` /
+   * `data-appearance` root attributes and theme class were applied.
+   */
+  applied: boolean;
+  /**
+   * True when the theme's stylesheet is confirmed loaded (fetched now or
+   * already linked). False means the DOM attributes may have changed
+   * while the previous theme's CSS is still in effect.
+   */
+  cssLoaded: boolean;
+  /**
+   * True when the selection was persisted to localStorage. False when
+   * storage is unavailable (e.g. private browsing) or over quota.
+   */
+  persisted: boolean;
+}
+
+
 /** Removes a listener previously registered via subscribeToThemeChanges. */
 export type Unsubscribe = () => void;
 
@@ -57,29 +81,44 @@ function emitThemeChange(documentObj: Document, themeId: string): void {
  * attributes and theme CSS, syncs dropdown state, and notifies
  * subscribers via the theme-change event.
  *
- * Unknown or malformed theme IDs are rejected: nothing is applied, no
- * event is dispatched, and `false` is returned.
+ * Each stage is reported independently in the returned
+ * {@link ApplyThemeResult} so consumers can distinguish full success
+ * from partial application:
+ *
+ * - Unknown or malformed theme IDs are rejected: nothing is applied, no
+ *   event is dispatched, and all result fields are false.
+ * - `persisted` is false when localStorage is unavailable or over
+ *   quota; the theme is still applied visually.
+ * - `cssLoaded` is false when the stylesheet fetch fails; the root
+ *   attributes have changed but the previous theme's CSS remains in
+ *   effect, so the theme-change event is NOT dispatched.
+ *
+ * The theme-change event fires only when the theme is visually applied
+ * (`applied && cssLoaded`); persistence failure alone does not suppress
+ * it.
  *
  * @param themeId - ID of the theme to apply (e.g. `catppuccin-mocha`)
  * @param documentObj - Document to apply the theme to (defaults to global)
  * @param windowObj - Window used for persistence (defaults to global)
- * @returns true if the theme was applied, false for invalid theme IDs
+ * @returns Per-stage outcome of the application
  */
 export async function applyTheme(
   themeId: string,
   documentObj: Document = document,
   windowObj: Window = window,
-): Promise<boolean> {
+): Promise<ApplyThemeResult> {
   const validIds = getValidThemeIds();
   if (!isValidThemeId(themeId) || !validIds.has(themeId)) {
     logThemeError(ThemeErrors.INVALID_THEME_ID(themeId));
-    return false;
+    return { applied: false, cssLoaded: false, persisted: false };
   }
 
-  saveTheme(windowObj, themeId, validIds);
-  await applyThemeToDocument(documentObj, themeId);
-  emitThemeChange(documentObj, themeId);
-  return true;
+  const persisted = saveTheme(windowObj, themeId, validIds);
+  const cssLoaded = await applyThemeToDocument(documentObj, themeId);
+  if (cssLoaded) {
+    emitThemeChange(documentObj, themeId);
+  }
+  return { applied: true, cssLoaded, persisted };
 }
 
 /**

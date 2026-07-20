@@ -70,10 +70,10 @@ describe('integration API', () => {
   });
 
   describe('applyTheme', () => {
-    it('applies a valid theme and returns true', async () => {
+    it('applies a valid theme and reports full success', async () => {
       const result = await applyTheme('catppuccin-latte', document, window);
 
-      expect(result).toBe(true);
+      expect(result).toEqual({ applied: true, cssLoaded: true, persisted: true });
       expect(document.documentElement.classList.contains('theme-catppuccin-latte')).toBe(true);
     });
 
@@ -103,10 +103,10 @@ describe('integration API', () => {
       document.removeEventListener(THEME_CHANGE_EVENT, listener);
     });
 
-    it('rejects an unknown theme ID and returns false', async () => {
+    it('rejects an unknown theme ID and reports nothing applied', async () => {
       const result = await applyTheme('not-a-real-theme', document, window);
 
-      expect(result).toBe(false);
+      expect(result).toEqual({ applied: false, cssLoaded: false, persisted: false });
       expect(document.documentElement.getAttribute('data-theme')).toBeNull();
       expect(storage.getItem(STORAGE_KEY)).toBeNull();
       expect(warnSpy).toHaveBeenCalledWith(
@@ -123,7 +123,7 @@ describe('integration API', () => {
     ])('rejects malformed theme ID ($description)', async ({ themeId }) => {
       const result = await applyTheme(themeId, document, window);
 
-      expect(result).toBe(false);
+      expect(result).toEqual({ applied: false, cssLoaded: false, persisted: false });
       expect(document.documentElement.getAttribute('data-theme')).toBeNull();
     });
 
@@ -140,9 +140,88 @@ describe('integration API', () => {
     it('defaults to the global document and window', async () => {
       const result = await applyTheme('catppuccin-latte');
 
-      expect(result).toBe(true);
+      expect(result).toEqual({ applied: true, cssLoaded: true, persisted: true });
       expect(document.documentElement.getAttribute('data-theme')).toBe('catppuccin-latte');
       expect(storage.getItem(STORAGE_KEY)).toBe('catppuccin-latte');
+    });
+
+    describe('partial-failure reporting', () => {
+      /** Creates a Storage whose writes always fail (quota/private browsing). */
+      function createFailingStorage(): Storage {
+        const readable = createMemoryStorage();
+        return {
+          get length(): number {
+            return readable.length;
+          },
+          clear: readable.clear,
+          getItem: readable.getItem,
+          key: readable.key,
+          removeItem: readable.removeItem,
+          setItem: (): void => {
+            throw new Error('QuotaExceededError');
+          },
+        };
+      }
+
+      it('reports persisted false when localStorage writes fail', async () => {
+        Object.defineProperty(window, 'localStorage', {
+          value: createFailingStorage(),
+          writable: true,
+          configurable: true,
+        });
+
+        const result = await applyTheme('catppuccin-latte', document, window);
+
+        expect(result).toEqual({ applied: true, cssLoaded: true, persisted: false });
+        expect(warnSpy).toHaveBeenCalledWith(
+          expect.stringContaining('localStorage setItem failed'),
+          expect.anything(),
+        );
+      });
+
+      it('still applies the theme and dispatches the event when persistence fails', async () => {
+        Object.defineProperty(window, 'localStorage', {
+          value: createFailingStorage(),
+          writable: true,
+          configurable: true,
+        });
+        const listener = vi.fn();
+        document.addEventListener(THEME_CHANGE_EVENT, listener);
+
+        await applyTheme('catppuccin-mocha', document, window);
+
+        expect(document.documentElement.getAttribute('data-theme')).toBe('catppuccin-mocha');
+        expect(listener).toHaveBeenCalledTimes(1);
+        document.removeEventListener(THEME_CHANGE_EVENT, listener);
+      });
+
+      it('reports cssLoaded false when the stylesheet fails to load', async () => {
+        const resultPromise = applyTheme('catppuccin-latte', document, window);
+        const link = document.getElementById(
+          'theme-catppuccin-latte-css',
+        ) as HTMLLinkElement | null;
+        expect(link).not.toBeNull();
+        link?.onerror?.(new Event('error'));
+
+        const result = await resultPromise;
+
+        expect(result).toEqual({ applied: true, cssLoaded: false, persisted: true });
+      });
+
+      it('does not dispatch the theme-change event when the stylesheet fails to load', async () => {
+        const listener = vi.fn();
+        document.addEventListener(THEME_CHANGE_EVENT, listener);
+
+        const resultPromise = applyTheme('catppuccin-latte', document, window);
+        const link = document.getElementById(
+          'theme-catppuccin-latte-css',
+        ) as HTMLLinkElement | null;
+        link?.onerror?.(new Event('error'));
+        await resultPromise;
+
+        expect(listener).not.toHaveBeenCalled();
+        document.removeEventListener(THEME_CHANGE_EVENT, listener);
+      });
     });
   });
 

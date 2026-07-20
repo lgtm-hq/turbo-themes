@@ -123,6 +123,7 @@ export {
   getCurrentTheme,
   subscribeToThemeChanges,
   THEME_CHANGE_EVENT,
+  type ApplyThemeResult,
   type ThemeChangeDetail,
   type ThemeChangeListener,
   type Unsubscribe,
