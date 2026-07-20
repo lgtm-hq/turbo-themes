@@ -4,6 +4,8 @@
   "label": "Kanagawa Wave",
   "vendor": "kanagawa",
   "appearance": "dark",
+  "description": "Heart-warming dark Kanagawa palette inspired by The Great Wave.",
+  "icon": "kanagawa-wave.png",
   "tokens": {
     "background": {
       "base": {

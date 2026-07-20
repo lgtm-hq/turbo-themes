@@ -105,6 +105,16 @@
       "icon": "tokyo-night.png"
     },
     {
+      "id": "kanagawa",
+      "name": "Kanagawa",
+      "description": "Japanese-inspired palette drawn from The Great Wave off Kanagawa",
+      "homepage": "https://github.com/rebelot/kanagawa.nvim",
+      "icon": {
+        "light": "kanagawa-lotus.png",
+        "dark": "kanagawa-wave.png"
+      }
+    },
+    {
       "id": "one-dark",
       "name": "One",
       "description": "The iconic Atom editor palette in dark and light",

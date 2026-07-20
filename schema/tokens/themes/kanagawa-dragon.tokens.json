@@ -4,6 +4,8 @@
   "label": "Kanagawa Dragon",
   "vendor": "kanagawa",
   "appearance": "dark",
+  "description": "Darker Kanagawa variant for late-night sessions.",
+  "icon": "kanagawa-dragon.png",
   "tokens": {
     "background": {
       "base": {

@@ -100,12 +100,12 @@ final class ThemeAccessibilityTests: XCTestCase {
     func testLightThemesHaveLighterBackgrounds() {
         let lightThemes: [ThemeId] = [
             .catppuccinLatte, .githubLight, .bulmaLight, .oneLight, .everforestLight,
+            .kanagawaLotus,
         ]
         let darkThemes: [ThemeId] = [
             .catppuccinMocha, .dracula, .githubDark, .bulmaDark, .oneDark, .everforestDark,
+            .kanagawaWave, .kanagawaDragon,
         ]
-        let lightThemes: [ThemeId] = [.catppuccinLatte, .githubLight, .bulmaLight, .kanagawaLotus]
-        let darkThemes: [ThemeId] = [.catppuccinMocha, .dracula, .githubDark, .bulmaDark, .kanagawaWave, .kanagawaDragon]
 
         for lightId in lightThemes {
             let lightBg = getBackgroundHex(for: lightId)
@@ -129,8 +129,7 @@ final class ThemeAccessibilityTests: XCTestCase {
     func testDarkThemesHaveDistinctBackgrounds() {
         let darkThemes: [ThemeId] = [
             .catppuccinMocha, .catppuccinFrappe, .catppuccinMacchiato,
-            .dracula, .githubDark, .bulmaDark, .oneDark
-            .dracula, .githubDark, .bulmaDark, .kanagawaWave, .kanagawaDragon
+            .dracula, .githubDark, .bulmaDark, .oneDark, .kanagawaWave, .kanagawaDragon,
         ]
 
         var backgrounds = Set<String>()

@@ -4,6 +4,8 @@
   "label": "Kanagawa Lotus",
   "vendor": "kanagawa",
   "appearance": "light",
+  "description": "Light Kanagawa palette for daytime use.",
+  "icon": "kanagawa-lotus.png",
   "tokens": {
     "background": {
       "base": {

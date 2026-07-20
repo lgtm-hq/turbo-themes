@@ -252,6 +252,42 @@
     }
   },
   {
+    "id": "kanagawa-dragon",
+    "label": "Kanagawa Dragon",
+    "vendor": "kanagawa",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#181616",
+      "surface": "#282727",
+      "accent": "#8ba4b0",
+      "text": "#c5c9c5"
+    }
+  },
+  {
+    "id": "kanagawa-lotus",
+    "label": "Kanagawa Lotus",
+    "vendor": "kanagawa",
+    "appearance": "light",
+    "preview": {
+      "bg": "#f2ecbc",
+      "surface": "#e7dba0",
+      "accent": "#4d699b",
+      "text": "#545464"
+    }
+  },
+  {
+    "id": "kanagawa-wave",
+    "label": "Kanagawa Wave",
+    "vendor": "kanagawa",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#1F1F28",
+      "surface": "#2A2A37",
+      "accent": "#7E9CD8",
+      "text": "#DCD7BA"
+    }
+  },
+  {
     "id": "nord",
     "label": "Nord",
     "vendor": "nord",
