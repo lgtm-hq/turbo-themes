@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.35.0] - 2026-07-20
+
+### ✨ Added
+
+- Add Radix Colors theme pack (#599)
+
 ## [0.34.0] - 2026-07-20
 
 ### ✨ Added
