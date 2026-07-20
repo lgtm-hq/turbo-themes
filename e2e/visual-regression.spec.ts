@@ -17,6 +17,13 @@ import { waitForThemeApplied } from './helpers';
 // Skip on non-chromium - visual tests need consistent baseline
 test.skip(({ browserName }) => browserName !== 'chromium', 'Visual tests run only on Chromium');
 
+// The showcase homepage animates via JS (spotlight drift, comet tilt) which
+// toHaveScreenshot's animations:'disabled' cannot freeze — emulate reduced
+// motion so the page renders deterministically for baselines.
+test.beforeEach(async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+});
+
 // Themes to test (representative light/dark samples)
 const themes = [
   { id: 'catppuccin-mocha', type: 'dark' },

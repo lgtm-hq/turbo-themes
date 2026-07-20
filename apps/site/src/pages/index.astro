@@ -1,294 +1,298 @@
 ---
 /**
- * Home — Noir Editorial (Design #2).
- * Source: landing-designs.html .d2 panel via issue #513.
+ * Home — Theme Showcase (ADR-0007).
+ * Lean markup for the showcase redesign (epic #689, swap #683). Styles live
+ * in assets/css/home.css; interactions in assets/js/homepage-showcase.ts,
+ * which drives theming exclusively through the theme-selector integration
+ * API and reads theme metadata from the data attributes rendered here.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { flavors } from '../../../../src/themes/registry.js';
-import {
-  themeNames,
-  themeIcons,
-  themeGroups,
-  themeAppearances,
-} from '../data/theme-meta';
-const themeCount = flavors.length;
+import { themeFullNames, themeIcons, validThemeIds } from '../data/theme-meta';
+
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
+const themeCount = validThemeIds.length;
+const row1 = validThemeIds.slice(0, Math.ceil(validThemeIds.length / 2));
+const row2 = validThemeIds.slice(Math.ceil(validThemeIds.length / 2));
 
-/** Prefer iconic dark variants when a vendor has several flavors. */
-const HERO_SWATCH_PREFERENCE: Record<string, string> = {
-  catppuccin: 'catppuccin-mocha',
-  dracula: 'dracula',
-  gruvbox: 'gruvbox-dark',
-  github: 'github-dark',
-  bulma: 'bulma-dark',
-  nord: 'nord',
-  radix: 'radix-slate-dark',
-  solarized: 'solarized-dark',
-  'rose-pine': 'rose-pine',
-  'tokyo-night': 'tokyo-night-dark',
-};
-
-const flavorById = Object.fromEntries(flavors.map((f) => [f.id, f]));
-
-const heroSwatches = themeGroups.map((group) => {
-  const preferred = HERO_SWATCH_PREFERENCE[group.id];
-  const id =
-    (preferred && group.flavors.includes(preferred) ? preferred : undefined) ??
-    group.flavors.find((fid) => themeAppearances[fid] === 'dark') ??
-    group.flavors[0];
-  const flavor = flavorById[id];
-  const short = themeNames[id] || flavor?.label || id;
-  const name =
-    short === group.displayName || group.displayName.includes(short)
-      ? group.displayName
-      : `${group.displayName} ${short}`;
-  const color = flavor?.tokens.brand.primary ?? '#cba6f7';
-  const colorEnd =
-    flavor?.tokens.state.info ?? flavor?.tokens.background.surface ?? color;
-  return { id, name, color, colorEnd };
-});
-
-const features: Array<{
-  num: string;
-  title: string;
-  body: string;
-  code?: string;
-}> = [
-  {
-    num: '01',
-    title: 'Pure CSS Variables',
-    body: 'No runtime. No JavaScript. No build step required. Just CSS custom properties that work everywhere — reference any token with',
-    code: 'var(--turbo-*)',
-  },
-  {
-    num: '02',
-    title: 'Platform Agnostic',
-    body: 'npm, Python, Ruby, Swift. One token system, every platform. Ship consistent design across your entire stack.',
-  },
-  {
-    num: '03',
-    title: 'Framework Adapters',
-    body: 'First-class adapters for Tailwind, Bulma, and Bootstrap. Drop in and your existing classes inherit theme colors instantly.',
-  },
-  {
-    num: '04',
-    title: 'WCAG Accessible',
-    body: 'Every theme is tested for contrast compliance. Keyboard and screen reader support baked into the component layer.',
-  },
-];
-
-// CDN needs BOTH the core stylesheet and a theme stylesheet — display a short
-// hint but copy the complete, usable two-<link> snippet.
-const installCdnSnippet = `<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css" />`;
-
-const installMethods = [
-  { label: 'npm', code: 'npm install turbo-themes' },
-  { label: 'CDN', code: 'unpkg.com/turbo-themes — core + theme <link> tags', copy: installCdnSnippet },
-  { label: 'Python', code: 'pip install turbo-themes' },
-  { label: 'Ruby', code: 'gem "turbo-themes"' },
+const previewTabs = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'components', label: 'Components' },
+  { id: 'themes', label: 'Themes' },
 ] as const;
+
+const features = [
+  { title: 'Pure CSS tokens', desc: 'Zero runtime. Swap a stylesheet, re-token the UI.' },
+  { title: `${themeCount} curated themes`, desc: 'Dark and light palettes from the community.' },
+  { title: 'Multi-platform', desc: 'npm, Ruby gem, Python, Swift — same tokens everywhere.' },
+  { title: 'Accessible by default', desc: 'WCAG contrast baked into every theme file.' },
+];
 ---
 
-<BaseLayout title="Home" isHome={true}>
+<BaseLayout title="Home" description="Platform-agnostic design tokens for any framework" isHome={true}>
   <link rel="stylesheet" href={`${baseUrl}/assets/css/home.css`} />
-  <section class="home-hero" aria-label="Hero">
-    <div class="home-hero-copy">
-      <p class="eyebrow">Design Tokens</p>
-      <h1 class="home-hero-title">Themes that <em>speak</em></h1>
-      <p class="home-hero-desc">
-        {themeCount} curated color systems, meticulously crafted as platform-agnostic
-        design tokens. Pure CSS. Zero dependencies. One import away.
-      </p>
-      <div class="home-hero-actions">
-        <a href={`${baseUrl}/docs/`} class="btn-editorial">
-          Get Started
-          <span class="btn-arrow" aria-hidden="true">→</span>
-        </a>
-        <a href={`${baseUrl}/themes/`} class="btn-editorial btn-editorial-ghost">
-          Browse Themes
-        </a>
-      </div>
+
+  <div class="showcase-page">
+    <div id="showcase-spotlight" class="showcase-spotlight" aria-hidden="true">
+      <div class="showcase-spotlight-left"></div>
+      <div class="showcase-spotlight-right"></div>
     </div>
 
-    <div class="home-hero-panel">
-      <div class="home-swatch-grid" role="group" aria-label="Theme previews">
-        {
-          heroSwatches.map((swatch) => (
-            <button
-              type="button"
-              class="home-swatch"
-              data-theme-preview={swatch.id}
-              data-name={swatch.name}
-              title={swatch.name}
-              aria-label={`Preview ${swatch.name} theme`}
-              aria-pressed="false"
-              style={`--swatch-a: ${swatch.color}; --swatch-b: ${swatch.colorEnd};`}
-            ></button>
-          ))
-        }
-      </div>
-      <p class="home-theme-count" aria-label={`${themeCount} themes`}>
-        <span class="home-theme-count-num">{themeCount}</span>
-        <sup class="home-theme-count-label">Themes</sup>
-      </p>
-    </div>
-  </section>
+    <section class="showcase-hero" aria-labelledby="showcase-headline">
+      <div class="showcase-hero-grid">
+        <div class="showcase-hero-copy">
+          <span class="showcase-badge showcase-reveal" style="--reveal-delay: 0.1s">Open Source</span>
 
-  <section class="home-split" aria-labelledby="why-turbo-heading">
-    <div class="home-split-label">
-      <h2 id="why-turbo-heading" class="home-split-heading">Why Turbo?</h2>
-    </div>
-    <div class="home-split-body">
-      <ul class="home-feature-list">
-        {
-          features.map((feature) => (
-            <li class="home-feature-row">
-              <span class="home-feature-num" aria-hidden="true">
-                {feature.num}
+          <div class="showcase-headline-wrap showcase-reveal" style="--reveal-delay: 0.25s">
+            <h1 id="showcase-headline" class="showcase-headline">
+              <span id="showcase-text-mask" class="showcase-text-mask">
+                <span class="showcase-text-mask-base">Beautiful themes</span>
+                <span class="showcase-text-mask-reveal" aria-hidden="true">Beautiful themes</span>
               </span>
-              <div class="home-feature-content">
-                <h3 class="home-feature-title">{feature.title}</h3>
-                <p class="home-feature-body">
-                  {feature.body}
-                  {feature.code ? (
-                    <>
-                      {' '}
-                      <code>{feature.code}</code>.
-                    </>
-                  ) : null}
-                </p>
+              <br />for any project
+            </h1>
+          </div>
+
+          <p class="showcase-lede showcase-reveal" style="--reveal-delay: 0.4s">
+            A design token system with {themeCount} curated color themes. Switch themes instantly with CSS custom properties.
+          </p>
+
+          <div class="showcase-cta showcase-reveal" style="--reveal-delay: 0.55s">
+            <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="home-cta-get-started">Get Started</a>
+            <a href={`${baseUrl}/themes/`} class="btn btn-outline btn-lg" data-testid="home-cta-explore-themes">
+              Explore Themes
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="showcase-hero-visual showcase-reveal" style="--reveal-delay: 0.35s">
+          <div class="showcase-comet-wrap">
+            <div id="showcase-comet-card" class="showcase-comet-card">
+              <div id="showcase-comet-glare" class="showcase-comet-glare" aria-hidden="true"></div>
+              <div class="showcase-preview">
+                <div class="showcase-preview-bar">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="showcase-preview-body">
+                  <div class="showcase-preview-nav" role="tablist" aria-label="Preview sections">
+                    {
+                      previewTabs.map((tab, i) => (
+                        <button
+                          type="button"
+                          class:list={['showcase-preview-tab', { active: i === 0 }]}
+                          role="tab"
+                          id={`showcase-tab-${tab.id}`}
+                          aria-selected={i === 0 ? 'true' : 'false'}
+                          aria-controls={`showcase-panel-${tab.id}`}
+                          data-preview-tab={tab.id}
+                          data-testid={`home-preview-tab-${tab.id}`}
+                        >
+                          {tab.label}
+                        </button>
+                      ))
+                    }
+                  </div>
+
+                  <div class="showcase-preview-panels">
+                    <div
+                      class="showcase-preview-panel is-active"
+                      id="showcase-panel-overview"
+                      data-preview-panel="overview"
+                      role="tabpanel"
+                      aria-labelledby="showcase-tab-overview"
+                    >
+                      <div class="showcase-preview-stats">
+                        <div class="showcase-preview-stat showcase-preview-stat-themes">
+                          <span class="showcase-stat-glow" aria-hidden="true"></span>
+                          <span class="label">Themes</span>
+                          <strong>{themeCount}</strong>
+                          <span class="showcase-stat-dots" aria-hidden="true">
+                            <span></span><span></span><span></span><span></span>
+                          </span>
+                        </div>
+                        <div class="showcase-preview-stat showcase-preview-stat-platforms">
+                          <span class="showcase-stat-glow" aria-hidden="true"></span>
+                          <span class="label">Platforms</span>
+                          <strong>4</strong>
+                          <span class="showcase-stat-chips">
+                            <span>npm</span>
+                            <span>Ruby</span>
+                            <span>Python</span>
+                            <span>Swift</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      <div class="showcase-preview-specimens">
+                        <div class="showcase-specimen">
+                          <span class="showcase-specimen-label">Code</span>
+                          <button
+                            type="button"
+                            class="showcase-code-block"
+                            id="showcase-preview-code"
+                            aria-label="Copy CSS example"
+                            data-testid="home-preview-code-copy"
+                          >
+                            <code>
+                              <span class="tok-prop">background</span>: <span class="tok-fn">var</span>(<span class="tok-var">--turbo-bg-surface</span>);
+                              <br />
+                              <span class="tok-prop">color</span>: <span class="tok-fn">var</span>(<span class="tok-var">--turbo-text-primary</span>);
+                            </code>
+                          </button>
+                        </div>
+
+                        <div class="showcase-specimen">
+                          <span class="showcase-specimen-label">Typography</span>
+                          <div class="showcase-type-sample">
+                            <p class="showcase-type-h1">Heading One</p>
+                            <p class="showcase-type-h2">Heading Two</p>
+                            <p class="showcase-type-h3">Heading Three</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="showcase-preview-progress">
+                        <div class="showcase-preview-progress-head">
+                          <span>Design coverage</span>
+                          <strong id="showcase-progress-value">0%</strong>
+                        </div>
+                        <div
+                          class="showcase-preview-progress-track"
+                          role="progressbar"
+                          aria-label="Design coverage"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          aria-valuenow="0"
+                          id="showcase-progress-bar"
+                        >
+                          <div id="showcase-progress-fill" class="showcase-preview-progress-fill"></div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="showcase-preview-panel"
+                      id="showcase-panel-components"
+                      data-preview-panel="components"
+                      role="tabpanel"
+                      aria-labelledby="showcase-tab-components"
+                      hidden
+                    >
+                      <label class="showcase-preview-field">
+                        <span>Email</span>
+                        <input type="email" class="showcase-preview-input" placeholder="you@example.com" />
+                      </label>
+                      <div class="showcase-preview-badges">
+                        <span class="showcase-badge-pill success">Success</span>
+                        <span class="showcase-badge-pill warning">Warning</span>
+                        <span class="showcase-badge-pill danger">Danger</span>
+                      </div>
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-primary btn-sm" id="showcase-preview-primary" data-testid="home-preview-primary">Primary</button>
+                        <button type="button" class="btn btn-outline btn-sm" id="showcase-preview-outline" data-testid="home-preview-outline">Outline</button>
+                      </div>
+                    </div>
+
+                    <div
+                      class="showcase-preview-panel"
+                      id="showcase-panel-themes"
+                      data-preview-panel="themes"
+                      role="tabpanel"
+                      aria-labelledby="showcase-tab-themes"
+                      hidden
+                    >
+                      <div class="showcase-preview-theme">
+                        <img
+                          id="showcase-preview-theme-icon"
+                          src={`${baseUrl}/assets/img/${themeIcons['catppuccin-mocha']}`}
+                          alt=""
+                          width="40"
+                          height="40"
+                        />
+                        <div>
+                          <span class="label">Active theme</span>
+                          <strong id="showcase-preview-theme-name">{themeFullNames['catppuccin-mocha']}</strong>
+                        </div>
+                      </div>
+                      <p class="showcase-preview-hint">Pick a theme from the carousel below — the whole page updates instantly.</p>
+                      <div class="showcase-preview-palette">
+                        <span class="dot" style="background: var(--turbo-brand-primary)"></span>
+                        <span class="dot" style="background: var(--turbo-state-info)"></span>
+                        <span class="dot" style="background: var(--turbo-state-success)"></span>
+                        <span class="dot" style="background: var(--turbo-state-warning)"></span>
+                        <span class="dot" style="background: var(--turbo-state-danger)"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p id="showcase-preview-toast" class="showcase-preview-toast" aria-live="polite" hidden></p>
+                </div>
               </div>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <section class="home-split" aria-labelledby="install-heading">
-    <div class="home-split-label">
-      <h2 id="install-heading" class="home-split-heading">Install</h2>
-    </div>
-    <div class="home-split-body">
-      <ul class="home-install-list">
+    <section class="showcase-marquees" aria-label="Theme carousel">
+      <div class="showcase-marquee-track">
         {
-          installMethods.map((method) => (
-            <li class="home-install-row">
-              <span class="home-install-label">{method.label}</span>
-              <button
-                type="button"
-                class="home-install-code"
-                data-copy={('copy' in method && method.copy) || method.code}
-                title="Click to copy"
-              >
-                <code>{method.code}</code>
-              </button>
-            </li>
+          [row1, row2].map((row, rowIndex) => (
+            <div class:list={['showcase-marquee-row', rowIndex === 0 ? 'showcase-marquee-left' : 'showcase-marquee-right']}>
+              {row.map((id) => (
+                <button
+                  type="button"
+                  class="showcase-marquee-card"
+                  data-theme-preview={id}
+                  data-theme-name={themeFullNames[id] || id}
+                  data-theme-icon={themeIcons[id]}
+                  data-testid={`home-marquee-theme-${id}`}
+                  title={themeFullNames[id] || id}
+                  aria-label={`Apply ${themeFullNames[id] || id} theme`}
+                  aria-pressed="false"
+                >
+                  <div class="showcase-marquee-swatch">
+                    <img class="showcase-marquee-icon" src={`${baseUrl}/assets/img/${themeIcons[id]}`} alt="" width="32" height="32" />
+                    <div class="showcase-marquee-dots">
+                      <span class="dot" style="background: var(--turbo-brand-primary)"></span>
+                      <span class="dot" style={`background: var(${rowIndex === 0 ? '--turbo-state-success' : '--turbo-state-info'})`}></span>
+                      <span class="dot" style={`background: var(${rowIndex === 0 ? '--turbo-state-danger' : '--turbo-state-warning'})`}></span>
+                    </div>
+                  </div>
+                  <span class="showcase-marquee-name">{themeFullNames[id] || id}</span>
+                </button>
+              ))}
+            </div>
           ))
         }
-      </ul>
-      <p id="home-copy-status" class="visually-hidden" role="status" aria-live="polite"></p>
-    </div>
-  </section>
+      </div>
 
-  <section class="home-cta" aria-labelledby="cta-heading">
-    <h2 id="cta-heading" class="home-cta-title">
-      Start building with <em>intention</em>
-    </h2>
-    <p class="home-cta-desc">Beautiful, accessible themes — ready in seconds.</p>
-    <div class="home-cta-actions">
-      <a href={`${baseUrl}/docs/`} class="btn-editorial">
-        Read Documentation
-        <span class="btn-arrow" aria-hidden="true">→</span>
-      </a>
-      <a
-        href="https://github.com/lgtm-hq/turbo-themes"
-        class="btn-editorial btn-editorial-ghost"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        View on GitHub
-      </a>
-    </div>
-  </section>
+      <p class="showcase-marquee-footer">
+        <a href={`${baseUrl}/themes/`} class="showcase-theme-more" data-testid="home-cta-view-all-themes">View all {themeCount} themes</a>
+      </p>
+    </section>
 
-  <script is:inline define:vars={{ themeNames, themeIcons }}>
-    (function () {
-      function syncSwatchActive(theme) {
-        document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (b) {
-          var isActive = b.getAttribute('data-theme-preview') === theme;
-          b.classList.toggle('active', isActive);
-          b.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-        });
-      }
-
-      function applyTheme(theme) {
-        var themeLink = document.getElementById('turbo-theme-css');
-        var baseUrl = document.documentElement.getAttribute('data-baseurl') || '';
-
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('turbo-theme', theme);
-
-        if (themeLink) {
-          themeLink.href = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
+    <section class="showcase-features" aria-labelledby="showcase-features-title">
+      <h2 id="showcase-features-title" class="visually-hidden">Features</h2>
+      <div class="showcase-features-grid">
+        {
+          features.map((f, i) => (
+            <article class="showcase-feature" data-showcase-reveal style={`--reveal-delay: ${i * 0.08}s`}>
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
+            </article>
+          ))
         }
+      </div>
+    </section>
 
-        var themeLabel = document.getElementById('theme-label');
-        var themeTriggerIcon = document.getElementById('theme-trigger-icon');
-        if (themeLabel) {
-          themeLabel.textContent = themeNames[theme] || theme;
-        }
-        if (themeTriggerIcon) {
-          themeTriggerIcon.src =
-            baseUrl + '/assets/img/' + (themeIcons[theme] || 'catppuccin-logo-macchiato.png');
-        }
+    <section class="showcase-footer-cta" data-showcase-reveal>
+      <code>npm install turbo-themes</code>
+      <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="home-cta-start-building">Start building</a>
+    </section>
+  </div>
 
-        syncSwatchActive(theme);
-
-        document.querySelectorAll('.theme-menu .theme-option').forEach(function (opt) {
-          opt.classList.toggle('active', opt.getAttribute('data-theme') === theme);
-        });
-      }
-
-      document.querySelectorAll('.home-swatch[data-theme-preview]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          var theme = btn.getAttribute('data-theme-preview');
-          if (theme) applyTheme(theme);
-        });
-      });
-
-      // Keep swatch pressed state in sync when the header theme menu changes
-      document.querySelectorAll('.theme-menu .theme-option').forEach(function (opt) {
-        opt.addEventListener('click', function () {
-          var theme = opt.getAttribute('data-theme');
-          if (theme) syncSwatchActive(theme);
-        });
-      });
-
-      syncSwatchActive(document.documentElement.getAttribute('data-theme') || 'catppuccin-mocha');
-
-      var copyStatus = document.getElementById('home-copy-status');
-      document.querySelectorAll('.home-install-code[data-copy]').forEach(function (el) {
-        el.addEventListener('click', function () {
-          var text = el.getAttribute('data-copy') || '';
-          if (!text || !navigator.clipboard) return;
-          navigator.clipboard.writeText(text).then(function () {
-            el.classList.add('copied');
-            if (copyStatus) {
-              copyStatus.textContent = 'Copied to clipboard';
-            }
-            setTimeout(function () {
-              el.classList.remove('copied');
-              if (copyStatus) {
-                copyStatus.textContent = '';
-              }
-            }, 1500);
-          }).catch(function () {
-            console.warn('Failed to copy to clipboard');
-          });
-        });
-      });
-    })();
-  </script>
+  <script is:inline defer src={`${baseUrl}/assets/js/homepage-showcase.min.js`}></script>
 </BaseLayout>
