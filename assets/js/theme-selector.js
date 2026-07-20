@@ -683,6 +683,7 @@ var TurboThemeSelector = (function(exports) {
 			blockingLink.id = CSS_LINK_ID;
 			blockingLink.removeAttribute("data-theme-id");
 			if (previousHref !== null) blockingLink.href = previousHref;
+			else blockingLink.removeAttribute("href");
 			logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
 			return false;
 		}

@@ -56,7 +56,6 @@ export interface ApplyThemeResult {
   persisted: boolean;
 }
 
-
 /** Removes a listener previously registered via subscribeToThemeChanges. */
 export type Unsubscribe = () => void;
 
