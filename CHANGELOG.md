@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.36.1] - 2026-07-20
+
+### 🤖 Internal
+
+- Tolerate missing playwright report in Pages bundle manifest (#674)
+
 ## [0.36.0] - 2026-07-20
 
 ### ✨ Added
