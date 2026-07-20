@@ -3,26 +3,48 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 /**
- * Vite configuration for building the theme-selector JavaScript library.
+ * Vite configuration for building the browser JavaScript bundles.
  *
- * Builds an IIFE bundle for browser usage, with both development and production modes:
- * - Development: Non-minified with source maps (theme-selector.js)
- * - Production: Minified without source maps (theme-selector.min.js)
+ * Builds IIFE bundles for browser usage, with both development and production modes:
+ * - Development: Non-minified with source maps (<target>.js)
+ * - Production: Minified without source maps (<target>.min.js)
+ *
+ * The bundle is selected via the JS_BUILD_TARGET environment variable
+ * (default: theme-selector). IIFE builds only support a single entry, so
+ * each target is built in its own invocation.
  *
  * @example
- * bun run build:js:dev   # Development build
- * bun run build:js:prod  # Production build
+ * bun run build:js:dev   # Development builds
+ * bun run build:js:prod  # Production builds
  */
+const targets = {
+  'theme-selector': {
+    entry: 'assets/js/theme-selector.ts',
+    name: 'TurboThemeSelector',
+  },
+  'homepage-showcase': {
+    entry: 'assets/js/homepage-showcase.ts',
+    name: 'TurboHomepageShowcase',
+  },
+};
+
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production';
+  const targetKey = process.env.JS_BUILD_TARGET ?? 'theme-selector';
+  const target = targets[targetKey];
+  if (!target) {
+    throw new Error(
+      `Unknown JS_BUILD_TARGET "${targetKey}". Valid targets: ${Object.keys(targets).join(', ')}`
+    );
+  }
 
   return {
     build: {
       lib: {
-        entry: resolve(import.meta.dirname, 'assets/js/theme-selector.ts'),
-        name: 'TurboThemeSelector',
+        entry: resolve(import.meta.dirname, target.entry),
+        name: target.name,
         formats: ['iife'],
-        fileName: () => (isProduction ? 'theme-selector.min.js' : 'theme-selector.js'),
+        fileName: () => (isProduction ? `${targetKey}.min.js` : `${targetKey}.js`),
       },
       outDir: 'assets/js',
       emptyOutDir: false,

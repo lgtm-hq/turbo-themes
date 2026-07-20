@@ -38,6 +38,8 @@ const assetsToCopy = [
   // JavaScript
   ['assets/js/theme-selector.js', 'assets/js/theme-selector.js'],
   ['assets/js/theme-selector.min.js', 'assets/js/theme-selector.min.js'],
+  ['assets/js/homepage-showcase.js', 'assets/js/homepage-showcase.js'],
+  ['assets/js/homepage-showcase.min.js', 'assets/js/homepage-showcase.min.js'],
 
   // Images
   ['assets/img', 'assets/img'],
