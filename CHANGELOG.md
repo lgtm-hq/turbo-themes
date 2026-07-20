@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.36.2] - 2026-07-20
+
+### 🤖 Internal
+
+- Drop unresolvable playwright bundle from Pages manifest (#676)
+
 ## [0.36.1] - 2026-07-20
 
 ### 🤖 Internal
