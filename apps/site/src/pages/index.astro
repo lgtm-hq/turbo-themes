@@ -76,9 +76,14 @@ const features: Array<{
   },
 ];
 
+// CDN needs BOTH the core stylesheet and a theme stylesheet — display a short
+// hint but copy the complete, usable two-<link> snippet.
+const installCdnSnippet = `<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
+<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css" />`;
+
 const installMethods = [
   { label: 'npm', code: 'npm install turbo-themes' },
-  { label: 'CDN', code: 'https://unpkg.com/turbo-themes/css/turbo-core.css' },
+  { label: 'CDN', code: 'unpkg.com/turbo-themes — core + theme <link> tags', copy: installCdnSnippet },
   { label: 'Python', code: 'pip install turbo-themes' },
   { label: 'Ruby', code: 'gem "turbo-themes"' },
 ] as const;
@@ -173,7 +178,7 @@ const installMethods = [
               <button
                 type="button"
                 class="home-install-code"
-                data-copy={method.code}
+                data-copy={('copy' in method && method.copy) || method.code}
                 title="Click to copy"
               >
                 <code>{method.code}</code>
