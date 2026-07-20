@@ -359,6 +359,25 @@ export async function serveThemeCssWithoutExternalImports(page: Page): Promise<v
 }
 
 /**
+ * Blocks remote webfont requests so visual captures always render with the
+ * fallback font stack.
+ *
+ * Linux CI baselines are captured with Google Fonts unreachable
+ * (harden-runner egress policy), but enforcement can degrade and let the
+ * webfont load, flipping dense-text screenshots between two renderings
+ * (#706). Aborting the font-host requests up front pins Linux rendering to
+ * the fallback stack. macOS baselines are captured locally where the
+ * webfont loads, so the block is scoped to Linux to keep each platform
+ * consistent with its own baselines.
+ *
+ * @param page - The Playwright page object
+ */
+export async function blockRemoteFonts(page: Page): Promise<void> {
+  if (process.platform !== 'linux') return;
+  await page.route(/https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/, (route) => route.abort());
+}
+
+/**
  * Waits for document fonts to finish loading before visual captures.
  *
  * Font-metric differences between the fallback and the webfont cause

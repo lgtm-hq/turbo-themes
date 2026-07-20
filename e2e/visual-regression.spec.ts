@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { waitForFontsReady, waitForThemeApplied } from './helpers';
+import { blockRemoteFonts, waitForFontsReady, waitForThemeApplied } from './helpers';
 
 /**
  * Visual regression tests for main site pages.
@@ -22,6 +22,8 @@ test.skip(({ browserName }) => browserName !== 'chromium', 'Visual tests run onl
 // motion so the page renders deterministically for baselines.
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  // Pin text rendering to the fallback font stack (#706).
+  await blockRemoteFonts(page);
 });
 
 // Themes to test (representative light/dark samples)
