@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.33.0] - 2026-07-20
+
+### ✨ Added
+
+- Establish Noir Editorial design foundation (#606)
+
 ## [0.32.0] - 2026-07-19
 
 ### ✨ Added
