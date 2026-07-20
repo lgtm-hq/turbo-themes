@@ -10,7 +10,7 @@ import { DOM_IDS } from '../src/constants.js';
 vi.mock('../src/theme-loader.js', () => ({
   getBaseUrl: vi.fn(() => '/base'),
   applyThemeClass: vi.fn(),
-  loadThemeCSS: vi.fn(() => Promise.resolve()),
+  loadThemeCSS: vi.fn(() => Promise.resolve(true)),
   resolveAssetPath: vi.fn((path: string, base: string) => `${base}/${path}`),
   getCurrentThemeFromClasses: vi.fn(),
 }));
@@ -37,6 +37,17 @@ describe('apply-theme', () => {
     it('loads theme CSS', async () => {
       await applyTheme(document, 'catppuccin-mocha');
       expect(themeLoader.loadThemeCSS).toHaveBeenCalled();
+    });
+
+    it('returns true when the theme CSS loads successfully', async () => {
+      await expect(applyTheme(document, 'catppuccin-mocha')).resolves.toBe(true);
+    });
+
+    it('returns false when the theme CSS fails to load', async () => {
+      vi.mocked(themeLoader.loadThemeCSS).mockResolvedValueOnce(false);
+
+      await expect(applyTheme(document, 'catppuccin-mocha')).resolves.toBe(false);
+      expect(themeLoader.applyThemeClass).toHaveBeenCalledWith(document, 'catppuccin-mocha');
     });
 
     it('falls back to default theme when unknown theme ID provided', async () => {

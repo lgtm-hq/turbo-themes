@@ -182,6 +182,35 @@ describe('lazy-css', () => {
       await expect(loadPromise).resolves.toBe(false);
       expect(document.getElementById(`theme-${THEME_A}-css`)).toBeNull();
     });
+
+    it('adopts the blocking link and resolves true once the repointed CSS loads', async () => {
+      const blockingLink = appendBlockingLink(`/assets/css/themes/turbo/${THEME_B}.css`);
+
+      const loadPromise = loadThemeCSSOnDemand(document, THEME_A);
+
+      // Repointed synchronously to the requested theme (FOUC-avoidance intact)
+      expect(blockingLink.getAttribute('href')).toBe(`/assets/css/themes/turbo/${THEME_A}.css`);
+      expect(blockingLink.id).toBe(`theme-${THEME_A}-css`);
+
+      blockingLink.onload?.(new Event('load'));
+      await expect(loadPromise).resolves.toBe(true);
+    });
+
+    it('resolves false when the repointed blocking link fails to load', async () => {
+      const blockingLink = appendBlockingLink(`/assets/css/themes/turbo/${THEME_B}.css`);
+
+      const loadPromise = loadThemeCSSOnDemand(document, THEME_A);
+
+      // Drive the repointed link's error handler (network failure)
+      blockingLink.onerror?.(new Event('error'));
+
+      await expect(loadPromise).resolves.toBe(false);
+      // Rolled back so a later switch can retry instead of false-positive
+      expect(blockingLink.id).toBe(CSS_LINK_ID);
+      expect(blockingLink.getAttribute('href')).toBe(`/assets/css/themes/turbo/${THEME_B}.css`);
+      expect(isThemeCSSLoaded(document, THEME_A)).toBe(false);
+      expect(shouldLoadThemeCSS(document, THEME_A)).toBe(true);
+    });
   });
 
   describe('prefetchThemeCSS', () => {

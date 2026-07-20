@@ -67,6 +67,19 @@ export function getBaseUrl(doc: Document): string {
 }
 
 /**
+ * Builds the element ID of a theme's stylesheet link.
+ *
+ * Single source of truth for the `theme-<id>-css` convention shared by
+ * the loader and the lazy-CSS helpers.
+ *
+ * @param themeId - Theme whose stylesheet link ID to build
+ * @returns The stylesheet link element ID
+ */
+export function themeLinkId(themeId: string): string {
+  return `theme-${themeId}-css`;
+}
+
+/**
  * Extracts the theme ID from a theme link element's ID.
  * Strips a leading "theme-" prefix and trailing "-css" suffix.
  */
@@ -143,75 +156,126 @@ export function applyThemeClass(doc: Document, themeId: string): void {
 }
 
 /**
- * Loads theme CSS file if not already loaded
+ * Removes stale theme stylesheet links, keeping the given theme's link
+ * and the shared base stylesheet.
+ */
+function removeStaleThemeLinks(doc: Document, keepThemeId: string): void {
+  doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS).forEach((link) => {
+    const linkThemeId = extractThemeIdFromLinkId(link.id);
+    if (linkThemeId !== keepThemeId && linkThemeId !== 'base') {
+      link.remove();
+    }
+  });
+}
+
+/**
+ * Adopts the blocking script's link element for a theme (prevents
+ * duplicate CSS loads).
+ *
+ * The repoint stays synchronous to preserve the blocking script's
+ * FOUC-avoidance behaviour; this only makes its outcome observable by
+ * awaiting the repointed link's load/error settlement. On load failure
+ * the link is rolled back to its previous identity and href so the
+ * document keeps the stylesheet that was already working.
+ *
+ * @returns true when the theme's CSS is confirmed loaded
+ */
+async function adoptBlockingLink(
+  doc: Document,
+  blockingLink: HTMLLinkElement,
+  theme: ThemeInfo,
+  baseUrl: string
+): Promise<boolean> {
+  let resolvedHref: string;
+  try {
+    resolvedHref = resolveAssetPath(theme.cssFile, baseUrl);
+  } catch {
+    logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
+    return false;
+  }
+
+  const previousHref = blockingLink.getAttribute('href');
+  blockingLink.id = themeLinkId(theme.id);
+  blockingLink.setAttribute('data-theme-id', theme.id);
+
+  // Already pointing at the theme's stylesheet (e.g. the blocking script
+  // loaded it before first paint) — no fetch to await.
+  if (previousHref === resolvedHref) {
+    removeStaleThemeLinks(doc, theme.id);
+    return true;
+  }
+
+  blockingLink.href = resolvedHref;
+  try {
+    await loadCSSWithTimeout(blockingLink, theme.id);
+  } catch (error) {
+    // Loading failed — restore the link's prior identity and href so the
+    // previously working stylesheet stays in effect.
+    blockingLink.id = CSS_LINK_ID;
+    blockingLink.removeAttribute('data-theme-id');
+    if (previousHref !== null) {
+      blockingLink.href = previousHref;
+    }
+    logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
+    return false;
+  }
+
+  removeStaleThemeLinks(doc, theme.id);
+  return true;
+}
+
+/**
+ * Loads theme CSS file if not already loaded.
+ *
+ * @returns true when the theme's stylesheet is present and confirmed
+ *   loaded (or was already linked), false when path resolution or the
+ *   network fetch failed
  */
 export async function loadThemeCSS(
   doc: Document,
   theme: ThemeInfo,
   baseUrl: string
-): Promise<void> {
-  const themeLinkId = `theme-${theme.id}-css`;
-  let themeLink = doc.getElementById(themeLinkId) as HTMLLinkElement | null;
+): Promise<boolean> {
+  const linkId = themeLinkId(theme.id);
+  const existingThemeLink = doc.getElementById(linkId) as HTMLLinkElement | null;
+
+  if (existingThemeLink) {
+    // Link already exists — clean up any other stale theme links
+    removeStaleThemeLinks(doc, theme.id);
+    return true;
+  }
 
   // Adopt the blocking script's link element if present (prevents duplicate CSS loads)
-  if (!themeLink) {
-    const blockingLink = doc.getElementById(CSS_LINK_ID) as HTMLLinkElement | null;
-    if (blockingLink) {
-      let resolvedHref: string;
-      try {
-        resolvedHref = resolveAssetPath(theme.cssFile, baseUrl);
-      } catch {
-        logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
-        return;
-      }
-      blockingLink.href = resolvedHref;
-      blockingLink.id = themeLinkId;
-      blockingLink.setAttribute('data-theme-id', theme.id);
-      themeLink = blockingLink;
-    }
+  const blockingLink = doc.getElementById(CSS_LINK_ID) as HTMLLinkElement | null;
+  if (blockingLink) {
+    return adoptBlockingLink(doc, blockingLink, theme, baseUrl);
   }
 
-  if (!themeLink) {
-    // Record existing theme links before appending the new one
-    const existingLinks = doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS);
+  const themeLink = doc.createElement('link');
+  themeLink.id = linkId;
+  themeLink.rel = 'stylesheet';
+  themeLink.type = 'text/css';
+  themeLink.setAttribute('data-theme-id', theme.id);
 
-    themeLink = doc.createElement('link');
-    themeLink.id = themeLinkId;
-    themeLink.rel = 'stylesheet';
-    themeLink.type = 'text/css';
-    themeLink.setAttribute('data-theme-id', theme.id);
-
-    try {
-      themeLink.href = resolveAssetPath(theme.cssFile, baseUrl);
-    } catch {
-      logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
-      return;
-    }
-
-    doc.head.appendChild(themeLink);
-
-    try {
-      await loadCSSWithTimeout(themeLink, theme.id);
-
-      // Only remove old theme links after successful load
-      existingLinks.forEach((link) => {
-        const linkThemeId = extractThemeIdFromLinkId(link.id);
-        if (linkThemeId !== theme.id && linkThemeId !== 'base') {
-          link.remove();
-        }
-      });
-    } catch (error) {
-      // Loading failed — remove the new link and keep prior theme intact
-      themeLink.remove();
-      logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
-    }
-  } else {
-    // Link already exists — clean up any other stale theme links
-    doc.querySelectorAll(DOM_SELECTORS.THEME_CSS_LINKS).forEach((link) => {
-      const linkThemeId = extractThemeIdFromLinkId(link.id);
-      if (linkThemeId !== theme.id && linkThemeId !== 'base') {
-        link.remove();
-      }
-    });
+  try {
+    themeLink.href = resolveAssetPath(theme.cssFile, baseUrl);
+  } catch {
+    logThemeError(ThemeErrors.INVALID_CSS_PATH(theme.id));
+    return false;
   }
+
+  doc.head.appendChild(themeLink);
+
+  try {
+    await loadCSSWithTimeout(themeLink, theme.id);
+  } catch (error) {
+    // Loading failed — remove the new link and keep prior theme intact
+    themeLink.remove();
+    logThemeError(ThemeErrors.CSS_LOAD_FAILED(theme.id, error));
+    return false;
+  }
+
+  // Only remove old theme links after successful load
+  removeStaleThemeLinks(doc, theme.id);
+  return true;
 }

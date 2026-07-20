@@ -9,6 +9,7 @@ import {
   loadCSSWithTimeout,
   applyThemeClass,
   loadThemeCSS,
+  themeLinkId,
 } from '../src/theme-loader.js';
 import { CSS_LINK_ID } from '../src/constants.js';
 
@@ -156,6 +157,26 @@ describe('theme-loader', () => {
     });
   });
 
+  describe('themeLinkId', () => {
+    it('builds the theme stylesheet link ID', () => {
+      expect(themeLinkId('catppuccin-mocha')).toBe('theme-catppuccin-mocha-css');
+    });
+
+    it('matches the ID convention used for injected links', async () => {
+      const theme = {
+        id: 'builder-theme',
+        cssFile: 'assets/css/themes/builder-theme.css',
+      };
+
+      const promise = loadThemeCSS(document, theme, '');
+      const link = document.getElementById(themeLinkId('builder-theme')) as HTMLLinkElement | null;
+      expect(link).not.toBeNull();
+      link?.onload?.(new Event('load'));
+      await promise;
+      link?.remove();
+    });
+  });
+
   describe('loadThemeCSS', () => {
     beforeEach(() => {
       document.head.innerHTML = '';
@@ -179,7 +200,22 @@ describe('theme-loader', () => {
         link.onload?.(new Event('load'));
       }, 10);
 
-      await promise;
+      await expect(promise).resolves.toBe(true);
+    });
+
+    it('resolves false and removes the link when loading fails', async () => {
+      const theme = {
+        id: 'test-theme',
+        cssFile: 'assets/css/themes/test-theme.css',
+      };
+
+      const promise = loadThemeCSS(document, theme, '');
+      const link = document.getElementById('theme-test-theme-css') as HTMLLinkElement | null;
+      expect(link).not.toBeNull();
+      link?.onerror?.(new Event('error'));
+
+      await expect(promise).resolves.toBe(false);
+      expect(document.getElementById('theme-test-theme-css')).toBeNull();
     });
 
     it('does not create duplicate link if already present', async () => {
@@ -193,7 +229,7 @@ describe('theme-loader', () => {
       existingLink.id = 'theme-test-theme-css';
       document.head.appendChild(existingLink);
 
-      await loadThemeCSS(document, theme, '');
+      await expect(loadThemeCSS(document, theme, '')).resolves.toBe(true);
 
       const links = document.querySelectorAll('#theme-test-theme-css');
       expect(links.length).toBe(1);
@@ -212,7 +248,7 @@ describe('theme-loader', () => {
         cssFile: 'assets/css/themes/dracula.css',
       };
 
-      await loadThemeCSS(document, theme, '');
+      await expect(loadThemeCSS(document, theme, '')).resolves.toBe(true);
 
       // Should adopt the blocking link (renamed to runtime convention)
       expect(document.getElementById('theme-dracula-css')).toBe(blockingLink);
@@ -221,6 +257,87 @@ describe('theme-loader', () => {
       expect(document.getElementById(CSS_LINK_ID)).toBeNull();
       // Should not have created a second link
       expect(document.querySelectorAll('link[rel="stylesheet"]').length).toBe(1);
+    });
+
+    it('adopts without refetching when the blocking link already points at the theme', async () => {
+      const blockingLink = document.createElement('link');
+      blockingLink.id = CSS_LINK_ID;
+      blockingLink.rel = 'stylesheet';
+      blockingLink.href = '/assets/css/themes/dracula.css';
+      document.head.appendChild(blockingLink);
+      const hrefBefore = blockingLink.getAttribute('href');
+
+      const theme = {
+        id: 'dracula',
+        cssFile: 'assets/css/themes/dracula.css',
+      };
+
+      await expect(loadThemeCSS(document, theme, '')).resolves.toBe(true);
+
+      expect(document.getElementById('theme-dracula-css')).toBe(blockingLink);
+      expect(blockingLink.getAttribute('data-theme-id')).toBe('dracula');
+      expect(blockingLink.getAttribute('href')).toBe(hrefBefore);
+    });
+
+    it('resolves false and rolls back the adopted link when the repointed CSS fails to load', async () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const blockingLink = document.createElement('link');
+      blockingLink.id = CSS_LINK_ID;
+      blockingLink.rel = 'stylesheet';
+      blockingLink.href = '/assets/css/themes/turbo/dracula.css';
+      document.head.appendChild(blockingLink);
+
+      const theme = {
+        id: 'nordfox',
+        cssFile: 'assets/css/themes/nordfox.css',
+      };
+
+      const promise = loadThemeCSS(document, theme, '');
+
+      // The repoint happens synchronously (FOUC avoidance) with handlers attached
+      expect(blockingLink.getAttribute('href')).toBe('/assets/css/themes/nordfox.css');
+      expect(blockingLink.id).toBe('theme-nordfox-css');
+
+      // Drive the repointed link's error handler (network failure)
+      blockingLink.onerror?.(new Event('error'));
+
+      await expect(promise).resolves.toBe(false);
+
+      // Rolled back: prior identity and href restored, adoption marker removed
+      expect(blockingLink.id).toBe(CSS_LINK_ID);
+      expect(blockingLink.getAttribute('href')).toBe('/assets/css/themes/turbo/dracula.css');
+      expect(blockingLink.getAttribute('data-theme-id')).toBeNull();
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Theme CSS failed to load'),
+        expect.anything()
+      );
+      warnSpy.mockRestore();
+    });
+
+    it('resolves only after the repointed link settles on the adoption path', async () => {
+      const blockingLink = document.createElement('link');
+      blockingLink.id = CSS_LINK_ID;
+      blockingLink.rel = 'stylesheet';
+      blockingLink.href = '/assets/css/themes/turbo/dracula.css';
+      document.head.appendChild(blockingLink);
+
+      const promise = loadThemeCSS(
+        document,
+        { id: 'nordfox', cssFile: 'assets/css/themes/nordfox.css' },
+        ''
+      );
+
+      let settled = false;
+      void promise.then(() => {
+        settled = true;
+      });
+
+      // Not yet settled: the repointed link has neither loaded nor errored
+      await Promise.resolve();
+      expect(settled).toBe(false);
+
+      blockingLink.onload?.(new Event('load'));
+      await expect(promise).resolves.toBe(true);
     });
 
     it('cleans up old theme CSS links', async () => {

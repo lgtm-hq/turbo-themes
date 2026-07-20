@@ -10,13 +10,17 @@ import { ThemeErrors, logThemeError } from './errors.js';
 import { resolveTheme } from './theme-resolver.js';
 
 /**
- * Applies a theme to the document
+ * Applies a theme to the document.
+ *
+ * @returns true when the theme's CSS is confirmed loaded, false when the
+ *   theme could not be resolved or its stylesheet failed to load (the
+ *   root attributes/class are still applied in the latter case)
  */
-export async function applyTheme(doc: Document, themeId: string): Promise<void> {
+export async function applyTheme(doc: Document, themeId: string): Promise<boolean> {
   const theme = resolveTheme(themeId);
   if (!theme) {
     logThemeError(ThemeErrors.NO_THEMES_AVAILABLE());
-    return;
+    return false;
   }
   const baseUrl = getBaseUrl(doc);
 
@@ -31,7 +35,7 @@ export async function applyTheme(doc: Document, themeId: string): Promise<void> 
     applyThemeClass(doc, theme.id);
 
     // Load theme CSS
-    await loadThemeCSS(doc, theme, baseUrl);
+    const cssLoaded = await loadThemeCSS(doc, theme, baseUrl);
 
     // Update trigger button icon
     const triggerIcon = doc.getElementById(
@@ -62,6 +66,8 @@ export async function applyTheme(doc: Document, themeId: string): Promise<void> 
     doc.querySelectorAll(DOM_SELECTORS.DROPDOWN_ITEMS).forEach((item) => {
       setItemActiveState(item, item.getAttribute('data-theme-id') === theme.id);
     });
+
+    return cssLoaded;
   } finally {
     if (trigger) {
       trigger.classList.remove('is-loading');

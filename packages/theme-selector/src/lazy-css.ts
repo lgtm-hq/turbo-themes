@@ -13,21 +13,11 @@
 import { CSS_LINK_ID } from './constants.js';
 import { ThemeErrors, logThemeError } from './errors.js';
 import type { Unsubscribe } from './integration.js';
-import { getBaseUrl, loadThemeCSS, resolveAssetPath } from './theme-loader.js';
+import { getBaseUrl, loadThemeCSS, resolveAssetPath, themeLinkId } from './theme-loader.js';
 import { getValidThemeIds, isValidThemeId, resolveTheme } from './theme-resolver.js';
 
 /** Attribute whose value names the theme to prefetch on hover/focus. */
 export const PREFETCH_TRIGGER_ATTRIBUTE = 'data-theme-preview';
-
-/**
- * Builds the element ID of a theme's stylesheet link.
- *
- * @param themeId - Theme whose stylesheet link ID to build
- * @returns The stylesheet link element ID
- */
-function themeCSSLinkId(themeId: string): string {
-  return `theme-${themeId}-css`;
-}
 
 /**
  * Builds the element ID of a theme's prefetch link.
@@ -60,7 +50,7 @@ function isKnownThemeId(themeId: string): boolean {
  * @returns True when the theme's CSS is already linked
  */
 export function isThemeCSSLoaded(documentObj: Document, themeId: string): boolean {
-  if (documentObj.getElementById(themeCSSLinkId(themeId))) {
+  if (documentObj.getElementById(themeLinkId(themeId))) {
     return true;
   }
   const blockingLink = documentObj.getElementById(CSS_LINK_ID) as HTMLLinkElement | null;
@@ -111,10 +101,9 @@ export async function loadThemeCSSOnDemand(
   if (!theme) {
     return false;
   }
-  await loadThemeCSS(documentObj, theme, getBaseUrl(documentObj));
-  // loadThemeCSS swallows load errors and removes the failed <link>, so
-  // re-check the DOM to report whether the stylesheet actually survived.
-  return isThemeCSSLoaded(documentObj, themeId);
+  // loadThemeCSS reports whether the stylesheet was confirmed loaded,
+  // including on the adoption path where the blocking link is repointed.
+  return loadThemeCSS(documentObj, theme, getBaseUrl(documentObj));
 }
 
 /**
