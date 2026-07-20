@@ -13,7 +13,7 @@
       "workflow": "Quality Check - E2E Tests",
       "artifact": "playwright-report",
       "dest": "playwright",
-      "require_success": true
+      "require_success": false
     },
     {
       "id": "lighthouse",
