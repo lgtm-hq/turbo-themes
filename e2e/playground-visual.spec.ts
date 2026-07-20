@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { blockRemoteFonts } from './helpers';
 
 /**
  * Visual regression tests for example pages.
@@ -19,6 +20,11 @@ import { expect, test } from '@playwright/test';
 
 // Skip on non-chromium browsers - visual tests run only on Chromium for consistent baselines
 test.skip(({ browserName }) => browserName !== 'chromium', 'Visual tests run only on Chromium');
+
+// Pin text rendering to the fallback font stack (#706).
+test.beforeEach(async ({ page }) => {
+  await blockRemoteFonts(page);
+});
 
 // Representative theme samples (light and dark variants)
 const themes = ['catppuccin-mocha', 'catppuccin-latte', 'dracula', 'github-dark', 'github-light'];
