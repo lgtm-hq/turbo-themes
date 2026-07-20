@@ -4,6 +4,8 @@
   "label": "Everforest Dark Hard",
   "vendor": "everforest",
   "appearance": "dark",
+  "description": "Highest contrast dark Everforest palette with deep forest shadows.",
+  "icon": "everforest-dark-hard.png",
   "tokens": {
     "background": {
       "base": {

@@ -4,6 +4,8 @@
   "label": "Everforest Dark",
   "vendor": "everforest",
   "appearance": "dark",
+  "description": "Classic Everforest dark palette with warm, natural greens.",
+  "icon": "everforest-dark.png",
   "tokens": {
     "background": {
       "base": {

@@ -3,8 +3,8 @@ import { statSync, existsSync } from 'fs';
 
 // Size budgets in bytes (generous to allow growth, but catch major issues)
 const SIZE_BUDGETS: Record<string, number> = {
-  'packages/theme-selector/dist/index.js': 106_496, // 104KB (embedded theme JSON grows
-  // with each theme pack — 31 themes as of the Radix Colors pack (~102.6KB actual);
+  'packages/theme-selector/dist/index.js': 122_880, // 120KB (embedded theme JSON grows
+  // with each theme pack — 37 themes as of the Everforest pack (~118.9KB actual);
   // Vite 8/Rolldown also adds ~7KB of quote-escaping overhead vs Vite 7; gzipped
   // size is unchanged)
   'packages/adapters/tailwind/dist/preset.js': 30_000, // 30KB
@@ -22,7 +22,7 @@ const SIZE_BUDGETS: Record<string, number> = {
 
 // CSS output size budgets
 const CSS_SIZE_BUDGETS: Record<string, number> = {
-  'packages/css/dist/turbo-themes-all.css': 112_640, // 110KB (all theme [data-theme] selectors)
+  'packages/css/dist/turbo-themes-all.css': 131_072, // 128KB (all theme [data-theme] selectors; ~121KB actual at 37 themes as of Everforest)
 };
 
 describe('Bundle size budgets', () => {

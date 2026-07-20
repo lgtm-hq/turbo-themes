@@ -84,6 +84,78 @@
     }
   },
   {
+    "id": "everforest-dark-hard",
+    "label": "Everforest Dark Hard",
+    "vendor": "everforest",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#272E33",
+      "surface": "#2E383C",
+      "accent": "#A7C080",
+      "text": "#D3C6AA"
+    }
+  },
+  {
+    "id": "everforest-dark-soft",
+    "label": "Everforest Dark Soft",
+    "vendor": "everforest",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#333C43",
+      "surface": "#3A464C",
+      "accent": "#A7C080",
+      "text": "#D3C6AA"
+    }
+  },
+  {
+    "id": "everforest-dark",
+    "label": "Everforest Dark",
+    "vendor": "everforest",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#2D353B",
+      "surface": "#343F44",
+      "accent": "#A7C080",
+      "text": "#D3C6AA"
+    }
+  },
+  {
+    "id": "everforest-light-hard",
+    "label": "Everforest Light Hard",
+    "vendor": "everforest",
+    "appearance": "light",
+    "preview": {
+      "bg": "#FFFBEF",
+      "surface": "#F8F5E4",
+      "accent": "#6B7C01",
+      "text": "#5C6A72"
+    }
+  },
+  {
+    "id": "everforest-light-soft",
+    "label": "Everforest Light Soft",
+    "vendor": "everforest",
+    "appearance": "light",
+    "preview": {
+      "bg": "#F3EAD3",
+      "surface": "#EAE4CA",
+      "accent": "#6B7C01",
+      "text": "#5C6A72"
+    }
+  },
+  {
+    "id": "everforest-light",
+    "label": "Everforest Light",
+    "vendor": "everforest",
+    "appearance": "light",
+    "preview": {
+      "bg": "#FDF6E3",
+      "surface": "#F4F0D9",
+      "accent": "#6B7C01",
+      "text": "#5C6A72"
+    }
+  },
+  {
     "id": "github-dark",
     "label": "GitHub Dark",
     "vendor": "github",

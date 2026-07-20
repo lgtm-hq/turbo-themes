@@ -4,6 +4,8 @@
   "label": "Everforest Light",
   "vendor": "everforest",
   "appearance": "light",
+  "description": "Classic Everforest light palette with warm paper tones.",
+  "icon": "everforest-light.png",
   "tokens": {
     "background": {
       "base": {

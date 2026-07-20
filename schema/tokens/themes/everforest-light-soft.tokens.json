@@ -4,6 +4,8 @@
   "label": "Everforest Light Soft",
   "vendor": "everforest",
   "appearance": "light",
+  "description": "Soft, low-contrast Everforest light palette for long sessions.",
+  "icon": "everforest-light-soft.png",
   "tokens": {
     "background": {
       "base": {

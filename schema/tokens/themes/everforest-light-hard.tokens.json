@@ -4,6 +4,8 @@
   "label": "Everforest Light Hard",
   "vendor": "everforest",
   "appearance": "light",
+  "description": "Bright, crisp Everforest light palette with extra contrast.",
+  "icon": "everforest-light-hard.png",
   "tokens": {
     "background": {
       "base": {

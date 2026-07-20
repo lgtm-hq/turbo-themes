@@ -4,6 +4,8 @@
   "label": "Everforest Dark Soft",
   "vendor": "everforest",
   "appearance": "dark",
+  "description": "Softer dark Everforest palette with reduced contrast.",
+  "icon": "everforest-dark-soft.png",
   "tokens": {
     "background": {
       "base": {
