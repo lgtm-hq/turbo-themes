@@ -101,9 +101,10 @@ const examples = [
 ---
 
 <BaseLayout title="Home">
-  <div class="examples-hero">
-    <h1 data-testid="examples-heading">Examples</h1>
-    <p class="examples-subtitle">
+  <div class="examples-hero site-reveal" style="--reveal-delay: 0.1s">
+    <span class="site-badge">Integrations</span>
+    <h1 class="site-headline" data-testid="examples-heading">Examples</h1>
+    <p class="site-lede examples-subtitle">
       Complete, working examples showing Turbo Themes integrated with popular frameworks.
       Each example includes theme switching, localStorage persistence, and FOUC prevention.
     </p>
@@ -111,18 +112,16 @@ const examples = [
 
   {examples.map((section) => (
     <section class="examples-section">
-      <div class="examples-card">
-        <h4 class="examples-category">{section.category}</h4>
-        <div class="examples-grid">
-          {section.items.map((example) => (
-            <ExampleCard {...example} />
-          ))}
-        </div>
+      <h2 class="examples-category">{section.category}</h2>
+      <div class="examples-grid">
+        {section.items.map((example) => (
+          <ExampleCard {...example} />
+        ))}
       </div>
     </section>
   ))}
 
-  <section class="examples-cta">
+  <section class="examples-cta site-footer-cta">
     <h2>Want to contribute?</h2>
     <p>
       We welcome new examples! If you've integrated Turbo Themes with a framework not listed here,
@@ -133,107 +132,3 @@ const examples = [
     </a>
   </section>
 </BaseLayout>
-
-<style>
-  .examples-hero {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding: 2rem;
-    background: linear-gradient(135deg, var(--turbo-bg-overlay) 0%, var(--turbo-bg-surface) 100%);
-    border-radius: 1rem;
-    border: 1px solid var(--turbo-border-default);
-  }
-
-  .examples-hero h1 {
-    margin-bottom: 0.75rem;
-    font-size: clamp(2rem, 5vw, 2.5rem);
-    background: linear-gradient(135deg, var(--turbo-brand-primary), var(--turbo-state-info));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .examples-subtitle {
-    color: var(--turbo-text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
-    font-size: 1.1rem;
-    line-height: 1.6;
-  }
-
-  .examples-section {
-    margin-bottom: 3rem;
-  }
-
-  .examples-card {
-    /* Container removed - bubbles float freely */
-  }
-
-  .examples-category {
-    font-size: 0.875rem;
-    font-weight: 600;
-    margin: 0 auto 1.5rem;
-    color: var(--turbo-text-primary);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: linear-gradient(135deg, var(--turbo-brand-primary), var(--turbo-state-info));
-    padding: 0.5rem 1.25rem;
-    border-radius: 9999px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
-  .examples-section {
-    text-align: center;
-  }
-
-  .examples-category::before {
-    display: none;
-  }
-
-  .examples-grid {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: flex-start;
-    gap: var(--space-lg);
-    padding-top: var(--space-md);
-  }
-
-  .examples-cta {
-    text-align: center;
-    padding: 3rem 2rem;
-    background: linear-gradient(135deg, var(--turbo-bg-surface) 0%, var(--turbo-bg-overlay) 100%);
-    border: 1px solid var(--turbo-border-default);
-    border-radius: 1rem;
-    margin-top: 3rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .examples-cta::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--turbo-brand-primary), var(--turbo-state-info), var(--turbo-state-success));
-  }
-
-  .examples-cta h2 {
-    margin-bottom: 0.75rem;
-    color: var(--turbo-text-primary);
-  }
-
-  .examples-cta p {
-    color: var(--turbo-text-secondary);
-    margin-bottom: 1.5rem;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
-  }
-</style>
