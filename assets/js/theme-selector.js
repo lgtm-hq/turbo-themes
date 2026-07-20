@@ -1162,7 +1162,7 @@ var TurboThemeSelector = (function(exports) {
 		const theme = resolveTheme(themeId);
 		if (!theme) return false;
 		await loadThemeCSS(documentObj, theme, getBaseUrl(documentObj));
-		return true;
+		return isThemeCSSLoaded(documentObj, themeId);
 	}
 	function prefetchThemeCSS(documentObj, themeId) {
 		if (!isKnownThemeId(themeId)) return false;

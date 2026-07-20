@@ -112,7 +112,9 @@ export async function loadThemeCSSOnDemand(
     return false;
   }
   await loadThemeCSS(documentObj, theme, getBaseUrl(documentObj));
-  return true;
+  // loadThemeCSS swallows load errors and removes the failed <link>, so
+  // re-check the DOM to report whether the stylesheet actually survived.
+  return isThemeCSSLoaded(documentObj, themeId);
 }
 
 /**

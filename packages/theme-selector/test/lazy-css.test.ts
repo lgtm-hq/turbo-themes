@@ -173,6 +173,15 @@ describe('lazy-css', () => {
       link?.onload?.(new Event('load'));
       await loadPromise;
     });
+
+    it('resolves false when the stylesheet fails to load', async () => {
+      const loadPromise = loadThemeCSSOnDemand(document, THEME_A);
+      const link = document.getElementById(`theme-${THEME_A}-css`) as HTMLLinkElement | null;
+      expect(link).not.toBeNull();
+      link?.onerror?.(new Event('error'));
+      await expect(loadPromise).resolves.toBe(false);
+      expect(document.getElementById(`theme-${THEME_A}-css`)).toBeNull();
+    });
   });
 
   describe('prefetchThemeCSS', () => {
