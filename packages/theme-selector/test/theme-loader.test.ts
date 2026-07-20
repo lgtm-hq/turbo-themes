@@ -314,6 +314,37 @@ describe('theme-loader', () => {
       warnSpy.mockRestore();
     });
 
+    it('removes the href attribute on rollback when the blocking link originally had none', async () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const blockingLink = document.createElement('link');
+      blockingLink.id = CSS_LINK_ID;
+      blockingLink.rel = 'stylesheet';
+      // No href attribute set — e.g. the blocking script bailed before assigning one
+      document.head.appendChild(blockingLink);
+
+      const theme = {
+        id: 'nordfox',
+        cssFile: 'assets/css/themes/nordfox.css',
+      };
+
+      const promise = loadThemeCSS(document, theme, '');
+
+      // The repoint happens synchronously with handlers attached
+      expect(blockingLink.getAttribute('href')).toBe('/assets/css/themes/nordfox.css');
+      expect(blockingLink.id).toBe('theme-nordfox-css');
+
+      // Drive the repointed link's error handler (network failure)
+      blockingLink.onerror?.(new Event('error'));
+
+      await expect(promise).resolves.toBe(false);
+
+      // Rolled back: identity restored and the failed URL cleared, not left in place
+      expect(blockingLink.id).toBe(CSS_LINK_ID);
+      expect(blockingLink.hasAttribute('href')).toBe(false);
+      expect(blockingLink.getAttribute('data-theme-id')).toBeNull();
+      warnSpy.mockRestore();
+    });
+
     it('resolves only after the repointed link settles on the adoption path', async () => {
       const blockingLink = document.createElement('link');
       blockingLink.id = CSS_LINK_ID;
