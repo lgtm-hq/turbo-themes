@@ -13,8 +13,10 @@ import {
   animateProgress,
   approach,
   computeTiltTargets,
+  focusTab,
   initShowcase,
   marqueePlayState,
+  nextTabFocusIndex,
   pointerPercent,
   prefersReducedMotion,
   readShowcaseMeta,
@@ -191,6 +193,7 @@ describe('applyTabSelection', () => {
 
     expect(tabs[1]!.classList.contains('active')).toBe(true);
     expect(tabs[1]!.getAttribute('aria-selected')).toBe('true');
+    expect(tabs[1]!.tabIndex).toBe(0);
     expect(panels[1]!.classList.contains('is-active')).toBe(true);
     expect(panels[1]!.hidden).toBe(false);
   });
@@ -203,6 +206,7 @@ describe('applyTabSelection', () => {
 
     expect(tabs[0]!.classList.contains('active')).toBe(false);
     expect(tabs[0]!.getAttribute('aria-selected')).toBe('false');
+    expect(tabs[0]!.tabIndex).toBe(-1);
     expect(panels[0]!.classList.contains('is-active')).toBe(false);
     expect(panels[0]!.hidden).toBe(true);
   });
@@ -216,6 +220,53 @@ describe('applyTabSelection', () => {
     for (const panel of panels) {
       expect(panel.hidden).toBe(true);
     }
+  });
+});
+
+describe('nextTabFocusIndex', () => {
+  it.each([
+    { key: 'ArrowRight', current: 0, expected: 1 },
+    { key: 'ArrowRight', current: 2, expected: 0 },
+    { key: 'ArrowLeft', current: 1, expected: 0 },
+    { key: 'ArrowLeft', current: 0, expected: 2 },
+    { key: 'Home', current: 2, expected: 0 },
+    { key: 'End', current: 0, expected: 2 },
+  ])('maps $key from index $current to $expected', ({ key, current, expected }) => {
+    expect(nextTabFocusIndex(key, current, 3)).toBe(expected);
+  });
+
+  it('ignores unrelated keys', () => {
+    expect(nextTabFocusIndex('Enter', 0, 3)).toBeNull();
+    expect(nextTabFocusIndex('Tab', 1, 3)).toBeNull();
+  });
+
+  it('returns null for an empty tablist', () => {
+    expect(nextTabFocusIndex('ArrowRight', 0, 0)).toBeNull();
+  });
+});
+
+describe('focusTab', () => {
+  it('moves roving tabindex and focus to the target tab', () => {
+    const tabs = [0, 1, 2].map(() => {
+      const tab = document.createElement('button');
+      document.body.appendChild(tab);
+      return tab;
+    });
+
+    focusTab(tabs, 1);
+
+    expect(tabs.map((tab) => tab.tabIndex)).toEqual([-1, 0, -1]);
+    expect(document.activeElement).toBe(tabs[1]);
+    for (const tab of tabs) tab.remove();
+  });
+
+  it('does nothing for an out-of-range index', () => {
+    const tab = document.createElement('button');
+    tab.tabIndex = 0;
+
+    focusTab([tab], 5);
+
+    expect(tab.tabIndex).toBe(0);
   });
 });
 

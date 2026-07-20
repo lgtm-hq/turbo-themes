@@ -210,12 +210,64 @@ export function applyTabSelection(
     const isActive = tab.getAttribute('data-preview-tab') === target;
     tab.classList.toggle('active', isActive);
     tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    tab.tabIndex = isActive ? 0 : -1;
   }
   for (const panel of panels) {
     const isActive = panel.getAttribute('data-preview-panel') === target;
     panel.classList.toggle('is-active', isActive);
     panel.hidden = !isActive;
   }
+}
+
+/**
+ * Resolve the tab index a tablist keydown should move focus to.
+ *
+ * Implements the horizontal ARIA tablist keyboard pattern (APG): Left/Right
+ * arrows move with wrap-around, Home/End jump to the edges. Activation is
+ * manual — Enter/Space fire the tab's native button click, so only focus
+ * movement is handled here.
+ *
+ * @param key - The KeyboardEvent.key value.
+ * @param currentIndex - Index of the tab that received the event.
+ * @param count - Total number of tabs.
+ * @returns The index to focus, or null when the key is not handled.
+ */
+export function nextTabFocusIndex(
+  key: string,
+  currentIndex: number,
+  count: number,
+): number | null {
+  if (count <= 0) return null;
+  switch (key) {
+    case 'ArrowRight':
+      return (currentIndex + 1) % count;
+    case 'ArrowLeft':
+      return (currentIndex - 1 + count) % count;
+    case 'Home':
+      return 0;
+    case 'End':
+      return count - 1;
+    default:
+      return null;
+  }
+}
+
+/**
+ * Move roving-tabindex focus to a tab without changing the selection.
+ *
+ * Per the ARIA tablist pattern, only the focused tab stays in the tab
+ * order; selection follows activation (Enter/Space/click), not focus.
+ *
+ * @param tabs - Preview tab buttons in document order.
+ * @param index - Index of the tab to focus.
+ */
+export function focusTab(tabs: readonly HTMLElement[], index: number): void {
+  const target = tabs[index];
+  if (!target) return;
+  for (const [i, tab] of tabs.entries()) {
+    tab.tabIndex = i === index ? 0 : -1;
+  }
+  target.focus();
 }
 
 /**
@@ -496,12 +548,18 @@ function initPreviewCard(reducedMotion: boolean, meta: ShowcaseMeta): (themeId: 
     animateProgress(progressElements, { target: PROGRESS_TARGET, reducedMotion });
   };
 
-  for (const tab of tabs) {
+  for (const [index, tab] of tabs.entries()) {
     tab.addEventListener('click', () => {
       const target = tab.getAttribute('data-preview-tab');
       if (!target) return;
       applyTabSelection(tabs, panels, target);
       if (target === 'overview') runProgress();
+    });
+    tab.addEventListener('keydown', (event: KeyboardEvent) => {
+      const focusIndex = nextTabFocusIndex(event.key, index, tabs.length);
+      if (focusIndex === null) return;
+      event.preventDefault();
+      focusTab(tabs, focusIndex);
     });
   }
 

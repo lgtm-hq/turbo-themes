@@ -83,7 +83,9 @@
   font-size: 0.75rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--turbo-text-secondary);
+
+  /* Secondary tone nudged toward text-primary for WCAG AA contrast (#684). */
+  color: color-mix(in srgb, var(--turbo-text-secondary) 50%, var(--turbo-text-primary));
 }
 
 .showcase-headline {
@@ -149,13 +151,19 @@
   margin-top: 1.25rem;
 }
 
-.showcase-theme-more {
+/*
+ * Scoped as .showcase-page descendants to out-rank the sitewide Noir chrome
+ * rule `html:root a`, which pins links to a fixed accent regardless of the
+ * active theme (#684). The brand accent is mixed toward the theme's text
+ * color so the link keeps WCAG AA contrast on every theme background.
+ */
+.showcase-page .showcase-theme-more {
   font-size: 0.875rem;
-  color: var(--turbo-brand-primary);
+  color: color-mix(in srgb, var(--turbo-brand-primary) 60%, var(--turbo-text-primary));
   text-decoration: none;
 }
 
-.showcase-theme-more:hover {
+.showcase-page .showcase-theme-more:hover {
   text-decoration: underline;
 }
 
@@ -855,12 +863,17 @@
 .showcase-feature h3 {
   margin: 0 0 0.5rem;
   font-size: 0.9375rem;
+
+  /* Per-level theme heading colors can fail AA at this size; use body text (#684). */
+  color: var(--turbo-text-primary);
 }
 
 .showcase-feature p {
   margin: 0;
   font-size: 0.8125rem;
-  color: var(--turbo-text-secondary);
+
+  /* Secondary tone nudged toward text-primary for WCAG AA contrast (#684). */
+  color: color-mix(in srgb, var(--turbo-text-secondary) 60%, var(--turbo-text-primary));
   line-height: 1.55;
 }
 
@@ -877,7 +890,9 @@
   margin-bottom: 1.25rem;
   font-family: var(--turbo-font-mono);
   font-size: 1.0625rem;
-  color: var(--turbo-brand-primary);
+
+  /* Brand accent mixed toward text-primary for WCAG AA contrast (#684). */
+  color: color-mix(in srgb, var(--turbo-brand-primary) 60%, var(--turbo-text-primary));
 }
 
 @media (max-width: 900px) {

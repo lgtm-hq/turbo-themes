@@ -1,5 +1,6 @@
 import { expect, test } from './fixtures';
 import {
+  serveThemeCssWithoutExternalImports,
   takeScreenshotWithHighlight,
   waitForStylesheetLoad,
 } from './helpers';
@@ -99,16 +100,10 @@ test.describe('Homepage Theme Switching @smoke', () => {
     });
 
     test('should apply a theme from a marquee card', async ({ homePage }) => {
-      // Theme stylesheets start with Google Fonts @imports. CI blocks
-      // external font hosts, which makes the <link> fire `error` and the
-      // selector roll the lazy load back (#698/#699). Serve the stylesheet
-      // with external imports stripped so the pipeline outcome is
-      // deterministic across environments.
-      await homePage.page.route('**/assets/css/themes/turbo/bulma-dark.css', async (route) => {
-        const response = await route.fetch();
-        const body = (await response.text()).replace(/@import url\((?:'|")https?:[^)]*\);/g, '');
-        await route.fulfill({ response, body });
-      });
+      // Serve theme CSS with external Google-Fonts @imports stripped so the
+      // lazy-load pipeline outcome is deterministic across environments
+      // (CI blocks external font hosts; see helper docs and #698/#699).
+      await serveThemeCssWithoutExternalImports(homePage.page);
 
       const card = homePage.getMarqueeThemeCard('bulma-dark');
 
