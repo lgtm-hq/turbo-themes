@@ -1,0 +1,492 @@
+/**
+ * Noir Editorial — design foundation tokens & shared patterns.
+ * Source: landing-designs.html Design #2 (.d2) via issue #512.
+ */
+
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
+
+:root {
+  /* Fonts */
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Backgrounds */
+  --noir-bg-base: #0a0a0b;
+  --noir-bg-panel: #0e0e10;
+  --noir-bg-code: #111114;
+
+  /* Text */
+  --noir-text-primary: #e8e6e3;
+  --noir-text-secondary: #888;
+  --noir-text-muted: #666;
+  --noir-text-muted-deep: #555;
+  --noir-text-eyebrow: #777;
+  --noir-ghost: #222;
+  --noir-ghost-deep: #1a1a1c;
+
+  /* Accent */
+  --noir-accent: #cba6f7;
+  --noir-accent-glow: rgba(203, 166, 247, 0.2);
+
+  /* Borders */
+  --noir-border-section: #222;
+  --noir-border-row: #1a1a1c;
+  --noir-border-ghost: #333;
+
+  /* Motion */
+  --noir-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --noir-duration: 250ms;
+  --transition-fast: 200ms var(--noir-ease);
+  --transition-normal: 250ms var(--noir-ease);
+  --transition-slow: 300ms var(--noir-ease);
+
+  /* Neutralize legacy gradient/shadow tokens used by site.css */
+  --gradient-primary: var(--noir-accent);
+  --gradient-surface: var(--noir-bg-panel);
+  --gradient-hero: var(--noir-bg-base);
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
+  --shadow-glow: 0 0 40px var(--noir-accent-glow);
+  --shadow-glow-sm: 0 0 20px var(--noir-accent-glow);
+}
+
+/*
+ * Sharp-edge tokens scoped to the Noir design context.
+ * Avoid a universal `* { border-radius: 0 }` reset — it overrides themed
+ * component radii. Editorial chrome sets border-radius explicitly instead.
+ * --radius-full stays pill-capable for tags/badges.
+ */
+[data-design='noir'] {
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-full: 9999px;
+}
+
+/* ==========================================================================
+   Global base (scoped to Noir design context)
+   ========================================================================== */
+
+html[data-design='noir'] body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--noir-text-primary);
+  background-color: var(--noir-bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--transition-slow),
+    color var(--transition-slow);
+}
+
+html[data-design='noir'] h1,
+html[data-design='noir'] h2,
+html[data-design='noir'] h3,
+html[data-design='noir'] .page-title {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--noir-text-primary);
+}
+
+html:root h1,
+html:root .page-title {
+  letter-spacing: -0.04em;
+}
+
+html:root h1 em,
+html:root h2 em,
+html:root h3 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--noir-accent);
+}
+
+html:root code,
+html:root pre,
+html:root kbd,
+html:root samp {
+  font-family: var(--font-mono);
+}
+
+html:root a {
+  color: var(--noir-accent);
+  transition: color var(--transition-fast);
+}
+
+html:root a:hover {
+  color: var(--noir-text-primary);
+}
+
+/* Kill gradient text utility under Noir */
+html:root .text-gradient {
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  -webkit-text-fill-color: unset;
+  color: var(--noir-accent);
+}
+
+/* ==========================================================================
+   Shared patterns
+   ========================================================================== */
+
+.btn-editorial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 16px 32px;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-normal),
+    color var(--transition-normal),
+    border-color var(--transition-normal),
+    box-shadow var(--transition-normal);
+  background: var(--noir-text-primary);
+  color: var(--noir-bg-base);
+  box-shadow: none;
+}
+
+.btn-editorial:hover {
+  background: var(--noir-accent);
+  color: var(--noir-bg-base);
+  box-shadow: 0 0 40px var(--noir-accent-glow);
+  text-decoration: none;
+}
+
+.btn-editorial-ghost {
+  background: transparent;
+  color: var(--noir-text-secondary);
+  border-color: var(--noir-border-ghost);
+  box-shadow: none;
+}
+
+.btn-editorial-ghost:hover {
+  background: transparent;
+  color: var(--noir-text-primary);
+  border-color: var(--noir-text-primary);
+  box-shadow: none;
+}
+
+.eyebrow,
+.eyebrow-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 1rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--noir-text-eyebrow);
+}
+
+.eyebrow::before,
+.eyebrow-label::before {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 1px;
+  background: var(--noir-text-muted-deep);
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Header — editorial chrome
+   ========================================================================== */
+
+html:root .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--noir-bg-base);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom: 1px solid var(--noir-border-section);
+  transition:
+    background-color var(--transition-slow),
+    border-color var(--transition-slow);
+}
+
+html:root .header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.875rem 1.5rem;
+  max-width: var(--container-wide, 1440px);
+  margin: 0 auto;
+}
+
+html:root .logo {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--noir-text-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0;
+}
+
+html:root .logo:hover {
+  color: var(--noir-accent);
+  text-decoration: none;
+}
+
+html:root .logo-icon {
+  color: var(--noir-accent);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+html:root .logo-text {
+  text-transform: none;
+}
+
+html:root .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+html:root .nav-link,
+html:root .nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--noir-text-muted);
+  text-decoration: none;
+  background: none;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+html:root .nav-link:hover,
+html:root .nav-dropdown-trigger:hover {
+  color: var(--noir-text-primary);
+  background: transparent;
+  text-decoration: none;
+}
+
+html:root .nav-link.active {
+  color: var(--noir-accent);
+  background: transparent;
+}
+
+html:root .menu-toggle {
+  border-radius: 0;
+  color: var(--noir-text-primary);
+}
+
+html:root .menu-toggle:hover {
+  background: var(--noir-bg-panel);
+}
+
+html:root .nav-dropdown-menu {
+  background: var(--noir-bg-panel);
+  border: 1px solid var(--noir-border-section);
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0.25rem 0;
+}
+
+html:root .nav-dropdown-item {
+  color: var(--noir-text-secondary);
+  border-radius: 0;
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+}
+
+html:root .nav-dropdown-item:hover {
+  color: var(--noir-text-primary);
+  background: var(--noir-bg-code);
+}
+
+html:root .nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  justify-content: flex-end;
+  max-width: 500px;
+}
+
+/* Theme / search chrome — sharp, muted */
+html:root .theme-trigger,
+html:root .search-bar-inner {
+  border-radius: 0;
+  border-color: var(--noir-border-ghost);
+  background: var(--noir-bg-panel);
+  color: var(--noir-text-secondary);
+}
+
+html:root .theme-menu,
+html:root .search-menu {
+  border-radius: 0;
+  border-color: var(--noir-border-section);
+  background: var(--noir-bg-panel);
+  box-shadow: none;
+}
+
+/* ==========================================================================
+   Footer — editorial chrome
+   ========================================================================== */
+
+html:root .footer {
+  padding: 0;
+  background: var(--noir-bg-base);
+  border-top: 1px solid var(--noir-border-section);
+  margin-top: var(--space-4xl, 6rem);
+}
+
+html:root .footer-content {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  padding: 3.75rem 1.5rem;
+  max-width: var(--container-wide, 1440px);
+  margin: 0 auto;
+}
+
+html:root .footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+html:root .footer-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+html:root .footer-logo {
+  color: var(--noir-accent);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+html:root .footer-title {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--noir-text-primary);
+}
+
+html:root .footer-tagline {
+  margin: 0;
+  max-width: 28ch;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--noir-text-secondary);
+}
+
+html:root .footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+html:root .footer-col-label {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--noir-text-eyebrow);
+}
+
+html:root .footer-col a,
+html:root .footer-links a {
+  color: var(--noir-text-secondary);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+html:root .footer-col a:hover,
+html:root .footer-links a:hover {
+  color: var(--noir-text-primary);
+  text-decoration: none;
+}
+
+html:root .footer-bottom {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--noir-border-row);
+}
+
+html:root .footer-copyright {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--noir-text-muted);
+}
+
+html:root .footer-separator {
+  color: var(--noir-text-muted-deep);
+}
+
+@media (max-width: 900px) {
+  html:root .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 2.5rem 1.25rem;
+  }
+
+  html:root .footer-brand {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  html:root .footer-content {
+    grid-template-columns: 1fr;
+  }
+}

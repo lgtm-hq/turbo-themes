@@ -1,6 +1,6 @@
 ---
 /**
- * Site footer component.
+ * Site footer — Noir Editorial chrome with uppercase column labels.
  */
 
 interface Props {
@@ -14,26 +14,57 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 <footer class="footer">
   <div class="container footer-content">
     <div class="footer-brand">
-      <span class="footer-logo">✦</span>
-      <span class="footer-title">{siteTitle}</span>
+      <div class="footer-brand-row">
+        <span class="footer-logo" aria-hidden="true">✦</span>
+        <span class="footer-title">{siteTitle}</span>
+      </div>
+      <p class="footer-tagline">
+        Platform-agnostic design tokens for any CSS framework.
+      </p>
     </div>
-    <p class="footer-tagline">
-      Platform-agnostic design tokens for any CSS framework.
-    </p>
-    <div class="footer-links">
+
+    <div class="footer-col">
+      <p class="footer-col-label">Explore</p>
+      <a href={`${baseUrl}/docs/`}>Documentation</a>
+      <a href={`${baseUrl}/themes/`}>Themes</a>
+      <a href={`${baseUrl}/components/`}>Components</a>
+      <a href={`${baseUrl}/examples/`}>Examples</a>
+    </div>
+
+    <div class="footer-col">
+      <p class="footer-col-label">Resources</p>
       <a
         href="https://github.com/lgtm-hq/turbo-themes"
         target="_blank"
-        rel="noopener"
+        rel="noopener noreferrer"
         data-testid="footer-link-github"
       >
         GitHub
       </a>
-      <span class="footer-separator">·</span>
-      <a href={`${baseUrl}/docs/`} data-testid="footer-link-docs">Documentation</a>
-      <span class="footer-separator">·</span>
-      <a href={`${baseUrl}/themes/`} data-testid="footer-link-themes">Themes</a>
+      <a href={`${baseUrl}/docs/getting-started/`}>Getting Started</a>
+      <a href={`${baseUrl}/docs/installation/`}>Installation</a>
+      <a href={`${baseUrl}/docs/api-reference/`}>API Reference</a>
     </div>
-    <p class="footer-copyright">Made with care. MIT License.</p>
+
+    <div class="footer-col">
+      <p class="footer-col-label">License</p>
+      <a
+        href="https://github.com/lgtm-hq/turbo-themes/blob/main/LICENSE"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        MIT License
+      </a>
+      <a href={`${baseUrl}/docs/contributing/`}>Contributing</a>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="footer-copyright">Made with care. MIT License.</p>
+      <div class="footer-links">
+        <a href={`${baseUrl}/docs/`} data-testid="footer-link-docs">Documentation</a>
+        <span class="footer-separator" aria-hidden="true">·</span>
+        <a href={`${baseUrl}/themes/`} data-testid="footer-link-themes">Themes</a>
+      </div>
+    </div>
   </div>
 </footer>

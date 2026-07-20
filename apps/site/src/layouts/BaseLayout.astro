@@ -2,11 +2,13 @@
 /**
  * Base layout for all pages.
  * Includes header, footer, theme selector, and framework selector.
+ * Noir Editorial foundation tokens/fonts live in ../styles/noir.css (#512).
  */
 import SEOHead from '../components/SEOHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { themeNames, themeIcons, validThemeIds } from '../data/theme-meta';
+import noirStylesHref from '../styles/noir.css?url';
 
 interface Props {
   title?: string;
@@ -27,6 +29,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 <!doctype html>
 <html
   lang="en"
+  data-design="noir"
   data-theme="catppuccin-mocha"
   data-baseurl={baseUrl}
 >
@@ -36,19 +39,19 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     <title>{pageTitle}</title>
     <SEOHead title={pageTitle} description={description} />
 
-    <!-- Preconnect to Google Fonts -->
+    <!-- Preconnect to Google Fonts (Noir Editorial: Playfair + Instrument Sans + JetBrains Mono) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap"
       onload="this.onload=null;this.rel='stylesheet';"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap"
       />
     </noscript>
 
@@ -65,6 +68,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <!-- Site CSS (always loaded) -->
     <link rel="stylesheet" href={`${baseUrl}/assets/css/site.css`} />
+    <!-- Noir Editorial foundation (tokens, chrome, shared patterns) — after site.css -->
+    <link rel="stylesheet" href={noirStylesHref} />
 
     <!-- Favicon -->
     <link rel="icon" href={`${baseUrl}/favicon.ico`} />
