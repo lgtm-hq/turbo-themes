@@ -129,7 +129,10 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
     "light": "assets/img/github-logo-light.png",
     "dark": "assets/img/github-logo-dark.png"
   },
-  "bulma": "assets/img/turbo-themes-logo.png",
+  "bulma": {
+    "light": "assets/img/bulma-logo.png",
+    "dark": "assets/img/bulma-logo-dark.png"
+  },
   "nord": "assets/img/nord.png",
   "radix": {
     "light": "assets/img/radix-slate-light.png",
@@ -139,10 +142,7 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
     "light": "assets/img/solarized-light.png",
     "dark": "assets/img/solarized-dark.png"
   },
-  "rose-pine": {
-    "light": "assets/img/rose-pine-dawn.png",
-    "dark": "assets/img/rose-pine.png"
-  },
+  "rose-pine": "assets/img/rose-pine.png",
   "tokyo-night": "assets/img/tokyo-night.png",
   "one-dark": {
     "light": "assets/img/one-light.png",

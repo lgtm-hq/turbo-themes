@@ -56,7 +56,10 @@
       "name": "Bulma",
       "description": "Classic Bulma themes",
       "homepage": "https://bulma.io/",
-      "icon": "turbo-themes-logo.png"
+      "icon": {
+        "light": "bulma-logo.png",
+        "dark": "bulma-logo-dark.png"
+      }
     },
     {
       "id": "nord",
@@ -91,10 +94,7 @@
       "name": "Rosé Pine",
       "description": "All natural pine, faux fur and a bit of soho vibes",
       "homepage": "https://rosepinetheme.com/",
-      "icon": {
-        "light": "rose-pine-dawn.png",
-        "dark": "rose-pine.png"
-      },
+      "icon": "rose-pine.png",
       "synced": true
     },
     {

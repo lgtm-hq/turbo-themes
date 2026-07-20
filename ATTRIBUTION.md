@@ -1,0 +1,38 @@
+# Attribution
+
+Provenance for the theme-pack icon artwork shipped under `assets/img/`. Icons are
+referenced by the `icon` fields in `schema/tokens/themes/*.tokens.json` and
+`schema/tokens/_vendors.json`. Each `.webp` file is derived from the `.png` of the same
+name and inherits that row's source and license below; the tables list only the `.png`
+filenames.
+
+All vendor logos remain the property of their respective projects and are used here
+solely to identify the corresponding theme packs.
+
+## Vendor logos
+
+| Vendor             | Files                                                                     | Source                                                                                                                                                                                       | License / policy                                                                                                                                                                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Catppuccin         | `catppuccin-logo-latte.png`, `catppuccin-logo-macchiato.png`              | [catppuccin/catppuccin logo exports](https://github.com/catppuccin/catppuccin/tree/main/assets/logos/exports) (`latte_circle.png`, `1544x1544_circle.png`)                                   | [MIT](https://github.com/catppuccin/catppuccin/blob/main/LICENSE). Upstream publishes logo exports only for the Latte and Macchiato flavors; Frappé and Mocha reuse the Macchiato (dark) logo.                                                                                  |
+| Dracula            | `dracula-logo.png`                                                        | [draculatheme.com](https://draculatheme.com/) mascot as previously vendored in this repo (downscaled from the original 512 px asset)                                                         | [MIT](https://github.com/dracula/dracula-theme/blob/main/LICENSE)                                                                                                                                                                                                               |
+| GitHub             | `github-logo-light.png` (black mark), `github-logo-dark.png` (white mark) | Rendered from the `mark-github` icon in [primer/octicons](https://github.com/primer/octicons/blob/main/icons/mark-github-24.svg)                                                             | Octicons code is [MIT](https://github.com/primer/octicons/blob/main/LICENSE). Logo © GitHub, Inc.; the Invertocat/Octocat design is a registered GitHub trademark, used here to identify the GitHub-derived color themes; see [GitHub's logo policy](https://github.com/logos). |
+| Nord               | `nord.png`                                                                | [nordtheme/assets](https://github.com/nordtheme/assets) (`static/images/logos/squares/dark/filled-256x256.png`)                                                                              | [MIT](https://github.com/nordtheme/assets/blob/main/license)                                                                                                                                                                                                                    |
+| Rosé Pine          | `rose-pine.png`                                                           | [rose-pine/rose-pine-theme](https://github.com/rose-pine/rose-pine-theme/blob/main/assets/icon.png) (`assets/icon.png`)                                                                      | [MIT](https://github.com/rose-pine/rose-pine-theme/blob/main/license). Upstream publishes a single badge icon; the Main, Moon, and Dawn variants share it (no per-variant or light-appearance art is published).                                                                |
+| Tokyo Night        | `tokyo-night.png`                                                         | [enkia/tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme/blob/master/icon.png) (`icon.png`)                                                                        | [MIT](https://github.com/enkia/tokyo-night-vscode-theme/blob/master/LICENSE). Upstream publishes one icon; the Dark, Storm, and Light flavors share it (no light-appearance variant is published).                                                                              |
+| Bulma              | `bulma-logo.png` (brand teal), `bulma-logo-dark.png` (white variant)      | Rendered from the brand assets in [jgthms/bulma](https://github.com/jgthms/bulma/tree/main/docs/assets/brand) (`Bulma Icon.svg`, `Bulma Icon White.svg`), square-padded                      | Bulma is [MIT](https://github.com/jgthms/bulma/blob/main/LICENSE); the logo © Jeremy Thomas ([brand page](https://bulma.io/brand/))                                                                                                                                             |
+| Radix              | `radix-slate-light.png` (black mark), `radix-slate-dark.png` (white mark) | Rendered from the Radix mark favicons in [radix-ui/website](https://github.com/radix-ui/website/blob/main/public/favicon-black.svg) (`public/favicon-black.svg`, `public/favicon-white.svg`) | [MIT](https://github.com/radix-ui/website/blob/main/LICENSE.md). Both Slate and Mauve theme variants share the mark.                                                                                                                                                            |
+| One (Atom palette) | `one-dark.png`                                                            | [Binaryify/OneDark-Pro](https://github.com/Binaryify/OneDark-Pro/blob/master/icon.png) (`icon.png`)                                                                                          | [MIT](https://github.com/Binaryify/OneDark-Pro/blob/master/LICENSE). Upstream publishes no light-appearance variant; `one-light.png` keeps the repo-original swatch.                                                                                                            |
+
+## Repo-original artwork
+
+The following icons are original to this repository (simple color swatches or glyphs
+created for theme packs whose upstream projects publish no logo):
+
+| Files                                                 | Note                                         |
+| ----------------------------------------------------- | -------------------------------------------- |
+| `everforest-*.png`                                    | Everforest publishes no project logo         |
+| `gruvbox-*.png`                                       | Gruvbox publishes no project logo            |
+| `solarized-*.png`                                     | Solarized publishes no standalone logo asset |
+| `one-light.png`                                       | See One (Atom palette) row above             |
+| `terminal.png`                                        | turbo-themes' own Terminal theme glyph       |
+| `turbo-themes-logo.png`, `turbo-themes-logo-dark.png` | turbo-themes project brand marks             |

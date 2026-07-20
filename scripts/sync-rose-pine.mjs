@@ -99,10 +99,11 @@ function buildTokens(variant) {
 
 function buildPackage() {
   const flavors = [];
+  // Rosé Pine publishes a single badge icon shared by all variants.
   const iconMap = {
     main: '/assets/img/rose-pine.png',
-    moon: '/assets/img/rose-pine-moon.png',
-    dawn: '/assets/img/rose-pine-dawn.png',
+    moon: '/assets/img/rose-pine.png',
+    dawn: '/assets/img/rose-pine.png',
   };
   // Sort variant keys for deterministic output
   const sortedKeys = Object.keys(variants).sort();

@@ -99,11 +99,13 @@ function buildPackage() {
   for (const [key, flavor] of Object.entries(catFlavors)) {
     const isDark = flavor.dark;
     const id = `catppuccin-${key.toLowerCase()}`;
+    // Upstream publishes logo exports only for Latte and Macchiato;
+    // Frappé and Mocha reuse the Macchiato (dark) logo.
     const iconMap = {
-      latte: '/assets/img/catppuccin-latte.png',
-      mocha: '/assets/img/catppuccin-mocha.png',
-      frappe: '/assets/img/catppuccin-mocha.png',
-      macchiato: '/assets/img/catppuccin-mocha.png',
+      latte: '/assets/img/catppuccin-logo-latte.png',
+      mocha: '/assets/img/catppuccin-logo-macchiato.png',
+      frappe: '/assets/img/catppuccin-logo-macchiato.png',
+      macchiato: '/assets/img/catppuccin-logo-macchiato.png',
     };
     flavors.push({
       id,

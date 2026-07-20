@@ -5,7 +5,7 @@
   "vendor": "bulma",
   "appearance": "light",
   "description": "Classic Bulma look with a bright, neutral palette.",
-  "icon": "turbo-themes-logo.png",
+  "icon": "bulma-logo.png",
   "tokens": {
     "background": {
       "base": {

@@ -120,8 +120,8 @@ export const THEME_DESCRIPTIONS = {
 
 /** Per-theme icon filenames relative to assets/img/. */
 export const THEME_ICONS = {
-  "bulma-dark": "turbo-themes-logo.png",
-  "bulma-light": "turbo-themes-logo.png",
+  "bulma-dark": "bulma-logo-dark.png",
+  "bulma-light": "bulma-logo.png",
   "catppuccin-frappe": "catppuccin-logo-macchiato.png",
   "catppuccin-latte": "catppuccin-logo-latte.png",
   "catppuccin-macchiato": "catppuccin-logo-macchiato.png",
@@ -144,12 +144,12 @@ export const THEME_ICONS = {
   "nord": "nord.png",
   "one-dark": "one-dark.png",
   "one-light": "one-light.png",
-  "radix-mauve-dark": "radix-mauve-dark.png",
-  "radix-mauve-light": "radix-mauve-light.png",
+  "radix-mauve-dark": "radix-slate-dark.png",
+  "radix-mauve-light": "radix-slate-light.png",
   "radix-slate-dark": "radix-slate-dark.png",
   "radix-slate-light": "radix-slate-light.png",
-  "rose-pine-dawn": "rose-pine-dawn.png",
-  "rose-pine-moon": "rose-pine-moon.png",
+  "rose-pine-dawn": "rose-pine.png",
+  "rose-pine-moon": "rose-pine.png",
   "rose-pine": "rose-pine.png",
   "solarized-dark": "solarized-dark.png",
   "solarized-light": "solarized-light.png",
@@ -178,7 +178,10 @@ export const VENDOR_ICONS = {
     "light": "github-logo-light.png",
     "dark": "github-logo-dark.png"
   },
-  "bulma": "turbo-themes-logo.png",
+  "bulma": {
+    "light": "bulma-logo.png",
+    "dark": "bulma-logo-dark.png"
+  },
   "nord": "nord.png",
   "radix": {
     "light": "radix-slate-light.png",
@@ -188,10 +191,7 @@ export const VENDOR_ICONS = {
     "light": "solarized-light.png",
     "dark": "solarized-dark.png"
   },
-  "rose-pine": {
-    "light": "rose-pine-dawn.png",
-    "dark": "rose-pine.png"
-  },
+  "rose-pine": "rose-pine.png",
   "tokyo-night": "tokyo-night.png",
   "one-dark": {
     "light": "one-light.png",

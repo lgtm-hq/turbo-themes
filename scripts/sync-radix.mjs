@@ -258,7 +258,7 @@ function buildPackage() {
     label: variant.label,
     vendor: "radix",
     appearance: variant.appearance,
-    iconUrl: `/assets/img/${variant.id}.png`,
+    iconUrl: `/assets/img/radix-slate-${variant.appearance}.png`,
     tokens: buildTokens(
       variant.neutral,
       variant.neutralPrefix,
@@ -334,7 +334,7 @@ function writeTokenJson(flavor) {
     vendor: flavor.vendor,
     appearance: flavor.appearance,
     description,
-    icon: `${flavor.id}.png`,
+    icon: `radix-slate-${flavor.appearance}.png`,
     tokens: {
       background: toColorGroup(tokens.background),
       text: toColorGroup(tokens.text),

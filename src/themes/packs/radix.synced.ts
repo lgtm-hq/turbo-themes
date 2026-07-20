@@ -28,7 +28,7 @@ export const radixSynced: ThemePackage = {
       label: "Radix Colors Mauve Dark",
       vendor: "radix",
       appearance: "dark",
-      iconUrl: "/assets/img/radix-mauve-dark.png",
+      iconUrl: "/assets/img/radix-slate-dark.png",
       tokens: {
         background: {
           base: "#121113",
@@ -111,7 +111,7 @@ export const radixSynced: ThemePackage = {
       label: "Radix Colors Mauve Light",
       vendor: "radix",
       appearance: "light",
-      iconUrl: "/assets/img/radix-mauve-light.png",
+      iconUrl: "/assets/img/radix-slate-light.png",
       tokens: {
         background: {
           base: "#fdfcfd",

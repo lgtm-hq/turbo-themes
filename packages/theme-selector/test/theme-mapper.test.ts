@@ -125,8 +125,11 @@ describe('theme-mapper', () => {
     });
 
     it('resolves icon path for vendor', () => {
-      const bulma = mapFlavorToUI(createMockFlavor({ vendor: 'bulma' }));
-      expect(bulma.icon).toBe('assets/img/turbo-themes-logo.png');
+      const bulmaLight = mapFlavorToUI(createMockFlavor({ vendor: 'bulma', appearance: 'light' }));
+      expect(bulmaLight.icon).toBe('assets/img/bulma-logo.png');
+
+      const bulmaDark = mapFlavorToUI(createMockFlavor({ vendor: 'bulma', appearance: 'dark' }));
+      expect(bulmaDark.icon).toBe('assets/img/bulma-logo-dark.png');
 
       const catppuccinLight = mapFlavorToUI(
         createMockFlavor({ vendor: 'catppuccin', appearance: 'light' })
