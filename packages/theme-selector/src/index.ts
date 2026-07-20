@@ -128,6 +128,16 @@ export {
   type Unsubscribe,
 } from './integration.js';
 
+// Re-export lazy theme-CSS loading helpers for showcase-style pages
+export {
+  isThemeCSSLoaded,
+  loadThemeCSSOnDemand,
+  prefetchThemeCSS,
+  shouldLoadThemeCSS,
+  wireHoverPrefetch,
+  PREFETCH_TRIGGER_ATTRIBUTE,
+} from './lazy-css.js';
+
 // Re-export navbar, accessibility, and blocking script functions
 export { initNavbar, enhanceAccessibility };
 export { generateBlockingScript, type BlockingScriptOptions } from './blocking-script.js';
