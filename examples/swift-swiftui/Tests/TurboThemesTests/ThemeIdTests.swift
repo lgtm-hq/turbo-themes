@@ -11,8 +11,7 @@ final class ThemeIdTests: XCTestCase {
     }
 
     func testThemeIdCaseCount() {
-        XCTAssertEqual(ThemeId.allCases.count, 23)
-        XCTAssertEqual(ThemeId.allCases.count, 25)
+        XCTAssertEqual(ThemeId.allCases.count, 27)
     }
 
     func testAllCasesContainsExpectedThemes() {
