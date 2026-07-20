@@ -349,7 +349,27 @@ export async function serveThemeCssWithoutExternalImports(page: Page): Promise<v
   await page.route(THEME_CSS_ROUTE, async (route) => {
     const response = await route.fetch();
     const body = (await response.text()).replace(/@import url\((?:'|")https?:[^)]*\);/g, '');
-    await route.fulfill({ response, body });
+    const headers = { ...response.headers() };
+    // Body was rewritten (and decompressed by response.text()); drop stale
+    // length/encoding so Playwright recomputes headers for the new body.
+    delete headers['content-length'];
+    delete headers['content-encoding'];
+    await route.fulfill({ response, body, headers });
+  });
+}
+
+/**
+ * Waits for document fonts to finish loading before visual captures.
+ *
+ * Font-metric differences between the fallback and the webfont cause
+ * full-page and viewport screenshot flakes when baselines are captured
+ * before `document.fonts.ready` settles.
+ *
+ * @param page - The Playwright page object
+ */
+export async function waitForFontsReady(page: Page): Promise<void> {
+  await page.evaluate(async () => {
+    await document.fonts.ready;
   });
 }
 
@@ -409,8 +429,14 @@ export async function getContrastRatio(target: Locator): Promise<number> {
     let node: Element | null = el;
     let foundOpaque = false;
     while (node) {
-      const parsed = parseColor(getComputedStyle(node).backgroundColor);
-      if (parsed && parsed.a > 0) {
+      const bgValue = getComputedStyle(node).backgroundColor;
+      const parsed = parseColor(bgValue);
+      if (!parsed) {
+        // Fail loudly on unknown spaces (oklch/lab/display-p3, etc.) so a
+        // silent skip cannot under-report contrast when themes leave sRGB.
+        throw new Error(`Unparseable background color: ${bgValue}`);
+      }
+      if (parsed.a > 0) {
         layers.push(parsed);
         if (parsed.a >= 1) {
           foundOpaque = true;

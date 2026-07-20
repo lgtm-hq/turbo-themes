@@ -413,6 +413,8 @@ describe('renderProgress', () => {
 });
 
 describe('initShowcase', () => {
+  let cleanup: (() => void) | undefined;
+
   beforeEach(() => {
     document.body.innerHTML = `
       <button class="showcase-preview-tab active" data-preview-tab="overview" aria-selected="true"></button>
@@ -449,13 +451,15 @@ describe('initShowcase', () => {
   });
 
   afterEach(() => {
+    cleanup?.();
+    cleanup = undefined;
     vi.restoreAllMocks();
     document.documentElement.removeAttribute('data-baseurl');
     document.body.innerHTML = '';
   });
 
   it('renders the progress target immediately under reduced motion', () => {
-    initShowcase();
+    cleanup = initShowcase();
 
     const fill = document.getElementById('showcase-progress-fill')!;
     expect(fill.style.width).toBe(`${PROGRESS_TARGET}%`);
@@ -465,7 +469,7 @@ describe('initShowcase', () => {
   });
 
   it('switches tabs and panels on click', () => {
-    initShowcase();
+    cleanup = initShowcase();
 
     const tokensTab = document.querySelector<HTMLElement>('[data-preview-tab="tokens"]')!;
     tokensTab.click();
@@ -480,7 +484,7 @@ describe('initShowcase', () => {
   });
 
   it('renders the current theme from server-rendered metadata on init', () => {
-    initShowcase();
+    cleanup = initShowcase();
 
     expect(document.getElementById('showcase-preview-theme-name')!.textContent).toBe(
       'Catppuccin Mocha',
@@ -490,7 +494,7 @@ describe('initShowcase', () => {
   });
 
   it('marks the active marquee card for the current theme on init', () => {
-    initShowcase();
+    cleanup = initShowcase();
 
     const active = document.querySelector('[data-theme-preview="catppuccin-mocha"]')!;
     const inactive = document.querySelector('[data-theme-preview="nord-dark"]')!;
@@ -501,7 +505,7 @@ describe('initShowcase', () => {
   });
 
   it('updates the preview when a turbo-theme-change event arrives', () => {
-    initShowcase();
+    cleanup = initShowcase();
 
     document.dispatchEvent(
       new CustomEvent('turbo-theme-change', {
@@ -517,7 +521,7 @@ describe('initShowcase', () => {
   it('warns when a marquee click cannot fully apply the theme', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
-    initShowcase();
+    cleanup = initShowcase();
 
     const badCard = document.createElement('button');
     badCard.setAttribute('data-theme-preview', 'not-a-real-theme');
@@ -530,7 +534,7 @@ describe('initShowcase', () => {
   });
 
   it('follows data-theme attribute changes made outside the integration API', async () => {
-    initShowcase();
+    cleanup = initShowcase();
 
     document.documentElement.setAttribute('data-theme', 'nord-dark');
     await vi.waitFor(() => {
@@ -541,7 +545,7 @@ describe('initShowcase', () => {
   });
 
   it('pauses and resumes the marquee row on hover', () => {
-    initShowcase();
+    cleanup = initShowcase();
 
     const row = document.querySelector<HTMLElement>('.showcase-marquee-row')!;
     row.dispatchEvent(new MouseEvent('mouseenter'));
@@ -549,5 +553,25 @@ describe('initShowcase', () => {
 
     row.dispatchEvent(new MouseEvent('mouseleave'));
     expect(row.style.animationPlayState).toBe('running');
+  });
+
+  it('tears down theme listeners so a second init does not stack handlers', () => {
+    cleanup = initShowcase();
+    cleanup();
+    cleanup = undefined;
+
+    const nameEl = document.getElementById('showcase-preview-theme-name')!;
+    nameEl.textContent = 'stale';
+
+    // A stray listener from the first init would rewrite the label.
+    document.dispatchEvent(
+      new CustomEvent('turbo-theme-change', {
+        detail: { themeId: 'nord-dark', appearance: 'dark' },
+      }),
+    );
+    expect(nameEl.textContent).toBe('stale');
+
+    cleanup = initShowcase();
+    expect(nameEl.textContent).toBe('Catppuccin Mocha');
   });
 });

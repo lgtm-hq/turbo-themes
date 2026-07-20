@@ -1559,47 +1559,65 @@ var TurboHomepageShowcase = (function(exports) {
 			renderProgress(elements, target);
 		});
 	}
+	/** No-op cleanup used when a feature has nothing to tear down. */
+	var NOOP_CLEANUP = () => void 0;
+	/** Active showcase cleanup; replaced on each `initShowcase` call. */
+	var activeShowcaseCleanup = null;
 	/**
 	* Start the spotlight drift animation.
 	*
 	* @param reducedMotion - Whether the user prefers reduced motion.
+	* @returns Cleanup that cancels the RAF loop.
 	*/
 	function initSpotlight(reducedMotion) {
 		const root = document.getElementById("showcase-spotlight");
-		if (!root || reducedMotion) return;
+		if (!root || reducedMotion) return NOOP_CLEANUP;
 		const left = root.querySelector(".showcase-spotlight-left");
 		const right = root.querySelector(".showcase-spotlight-right");
-		if (!left || !right) return;
+		if (!left || !right) return NOOP_CLEANUP;
 		let state = {
 			offset: 0,
 			direction: 1
 		};
+		let cancelled = false;
+		let rafId = 0;
 		const tick = () => {
+			if (cancelled) return;
 			state = stepSpotlight(state);
 			left.style.transform = `translateX(${state.offset}px)`;
 			right.style.transform = `translateX(${-state.offset}px)`;
-			requestAnimationFrame(tick);
+			rafId = requestAnimationFrame(tick);
 		};
-		requestAnimationFrame(tick);
+		rafId = requestAnimationFrame(tick);
+		return () => {
+			cancelled = true;
+			cancelAnimationFrame(rafId);
+		};
 	}
 	/**
 	* Wire the comet-card tilt and glare animation.
 	*
 	* @param reducedMotion - Whether the user prefers reduced motion.
+	* @returns Cleanup that cancels the RAF loop and removes pointer listeners.
 	*/
 	function initCometCard(reducedMotion) {
 		const card = document.getElementById("showcase-comet-card");
 		const glare = document.getElementById("showcase-comet-glare");
-		if (!card || reducedMotion) return;
+		if (!card || reducedMotion) return NOOP_CLEANUP;
 		let current = { ...RESTING_TILT_TARGETS };
 		let targets = { ...RESTING_TILT_TARGETS };
-		card.addEventListener("mousemove", (event) => {
+		let cancelled = false;
+		let rafId = 0;
+		const onMouseMove = (event) => {
 			targets = computeTiltTargets(event.clientX, event.clientY, card.getBoundingClientRect());
-		});
-		card.addEventListener("mouseleave", () => {
+		};
+		const onMouseLeave = () => {
 			targets = { ...RESTING_TILT_TARGETS };
-		});
+		};
+		card.addEventListener("mousemove", onMouseMove);
+		card.addEventListener("mouseleave", onMouseLeave);
 		const animate = () => {
+			if (cancelled) return;
 			current = {
 				rotateX: approach(current.rotateX, targets.rotateX, .12),
 				rotateY: approach(current.rotateY, targets.rotateY, .12),
@@ -1608,9 +1626,15 @@ var TurboHomepageShowcase = (function(exports) {
 			};
 			card.style.transform = `perspective(900px) rotateX(${current.rotateX}deg) rotateY(${current.rotateY}deg) scale3d(1.02,1.02,1.02)`;
 			if (glare) glare.style.background = `radial-gradient(circle at ${current.glareX}% ${current.glareY}%, color-mix(in srgb, var(--turbo-text-primary) 35%, transparent) 0%, transparent 65%)`;
-			requestAnimationFrame(animate);
+			rafId = requestAnimationFrame(animate);
 		};
-		animate();
+		rafId = requestAnimationFrame(animate);
+		return () => {
+			cancelled = true;
+			cancelAnimationFrame(rafId);
+			card.removeEventListener("mousemove", onMouseMove);
+			card.removeEventListener("mouseleave", onMouseLeave);
+		};
 	}
 	/**
 	* Wire the hover-following text mask.
@@ -1719,6 +1743,8 @@ var TurboHomepageShowcase = (function(exports) {
 			const snippet = "background: var(--turbo-bg-surface);\ncolor: var(--turbo-text-primary);";
 			if (typeof navigator.clipboard?.writeText === "function") navigator.clipboard.writeText(snippet).then(() => {
 				showToast("Copied CSS snippet");
+			}).catch(() => {
+				showToast(snippet);
 			});
 			else showToast(snippet);
 		});
@@ -1755,6 +1781,7 @@ var TurboHomepageShowcase = (function(exports) {
 	* duplicate notifications are collapsed.
 	*
 	* @param onTheme - Callback invoked with each newly active theme ID.
+	* @returns Cleanup that removes the event listener and disconnects the observer.
 	*/
 	function wireThemeObserver(onTheme) {
 		let lastTheme = null;
@@ -1763,15 +1790,20 @@ var TurboHomepageShowcase = (function(exports) {
 			lastTheme = themeId;
 			onTheme(themeId);
 		};
-		subscribeToThemeChanges((detail) => {
+		const unsubscribe = subscribeToThemeChanges((detail) => {
 			notify(detail.themeId);
 		}, document);
-		new MutationObserver(() => {
+		const observer = new MutationObserver(() => {
 			notify(document.documentElement.getAttribute("data-theme"));
-		}).observe(document.documentElement, {
+		});
+		observer.observe(document.documentElement, {
 			attributes: true,
 			attributeFilter: ["data-theme"]
 		});
+		return () => {
+			unsubscribe();
+			observer.disconnect();
+		};
 	}
 	/**
 	* Wire the marquee theme cards to the theme-selector integration API.
@@ -1784,9 +1816,11 @@ var TurboHomepageShowcase = (function(exports) {
 	* the selector keeps the previous theme's CSS in effect and suppresses
 	* the theme-change event, so the page logs the failure instead of
 	* pretending the switch happened.
+	*
+	* @returns Cleanup that removes click and prefetch listeners.
 	*/
 	function initThemeControls() {
-		document.addEventListener("click", (event) => {
+		const onClick = (event) => {
 			const target = event.target;
 			if (!(target instanceof Element)) return;
 			const themeId = target.closest(`[${THEME_TRIGGER_ATTRIBUTE}]`)?.getAttribute(THEME_TRIGGER_ATTRIBUTE);
@@ -1794,26 +1828,47 @@ var TurboHomepageShowcase = (function(exports) {
 			applyTheme(themeId).then((result) => {
 				if (!result.applied || !result.cssLoaded) console.warn(`Theme "${themeId}" was not fully applied: its stylesheet failed to load, keeping the previous theme CSS.`);
 			});
-		});
-		wireHoverPrefetch(document);
+		};
+		document.addEventListener("click", onClick);
+		const unwirePrefetch = wireHoverPrefetch(document);
+		return () => {
+			document.removeEventListener("click", onClick);
+			unwirePrefetch();
+		};
 	}
-	/** Initialize every showcase interaction on the current document. */
+	/**
+	* Initialize every showcase interaction on the current document.
+	*
+	* Re-entrant: a second call tears down the previous initialization first
+	* so RAF loops and document-level listeners never accumulate.
+	*
+	* @returns Cleanup that cancels animations and removes listeners.
+	*/
 	function initShowcase() {
+		activeShowcaseCleanup?.();
 		const reducedMotion = prefersReducedMotion(window);
 		const meta = readShowcaseMeta(document);
-		initSpotlight(reducedMotion);
-		initCometCard(reducedMotion);
+		const cleanups = [
+			initSpotlight(reducedMotion),
+			initCometCard(reducedMotion),
+			initThemeControls()
+		];
 		initTextMask(reducedMotion);
 		initScrollReveal(reducedMotion);
 		initMarqueePause();
-		initThemeControls();
 		const renderTheme = initPreviewCard(reducedMotion, meta);
 		const syncTheme = (themeId) => {
 			syncThemeTriggers(Array.from(document.querySelectorAll(`[${THEME_TRIGGER_ATTRIBUTE}]`)), themeId);
 			renderTheme(themeId);
 		};
-		wireThemeObserver(syncTheme);
+		cleanups.push(wireThemeObserver(syncTheme));
 		syncTheme(getCurrentTheme(document));
+		const cleanup = () => {
+			for (const teardown of cleanups) teardown();
+			if (activeShowcaseCleanup === cleanup) activeShowcaseCleanup = null;
+		};
+		activeShowcaseCleanup = cleanup;
+		return cleanup;
 	}
 	if (typeof document !== "undefined" && typeof window !== "undefined") document.addEventListener("DOMContentLoaded", () => {
 		initShowcase();
