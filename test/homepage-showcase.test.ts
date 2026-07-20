@@ -555,6 +555,19 @@ describe('initShowcase', () => {
     expect(row.style.animationPlayState).toBe('running');
   });
 
+  it('removes marquee hover listeners on cleanup', () => {
+    cleanup = initShowcase();
+    cleanup();
+    cleanup = undefined;
+
+    const row = document.querySelector<HTMLElement>('.showcase-marquee-row')!;
+    row.style.animationPlayState = 'running';
+    row.dispatchEvent(new MouseEvent('mouseenter'));
+
+    // A stray listener from the torn-down init would pause the row.
+    expect(row.style.animationPlayState).toBe('running');
+  });
+
   it('tears down theme listeners so a second init does not stack handlers', () => {
     cleanup = initShowcase();
     cleanup();

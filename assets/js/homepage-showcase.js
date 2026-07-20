@@ -1640,29 +1640,37 @@ var TurboHomepageShowcase = (function(exports) {
 	* Wire the hover-following text mask.
 	*
 	* @param reducedMotion - Whether the user prefers reduced motion.
+	* @returns Cleanup that removes the hover listeners.
 	*/
 	function initTextMask(reducedMotion) {
 		const wrap = document.getElementById("showcase-text-mask");
-		if (!wrap || reducedMotion) return;
-		wrap.addEventListener("mousemove", (event) => {
+		if (!wrap || reducedMotion) return NOOP_CLEANUP;
+		const onMouseMove = (event) => {
 			const { x, y } = pointerPercent(event.clientX, event.clientY, wrap.getBoundingClientRect());
 			wrap.style.setProperty("--mx", `${x}%`);
 			wrap.style.setProperty("--my", `${y}%`);
 			wrap.classList.add("is-hovering");
-		});
-		wrap.addEventListener("mouseleave", () => {
+		};
+		const onMouseLeave = () => {
 			wrap.classList.remove("is-hovering");
 			wrap.style.setProperty("--mx", "50%");
 			wrap.style.setProperty("--my", "50%");
-		});
+		};
+		wrap.addEventListener("mousemove", onMouseMove);
+		wrap.addEventListener("mouseleave", onMouseLeave);
+		return () => {
+			wrap.removeEventListener("mousemove", onMouseMove);
+			wrap.removeEventListener("mouseleave", onMouseLeave);
+		};
 	}
 	/**
 	* Reveal elements on scroll, or immediately with reduced motion.
 	*
 	* @param reducedMotion - Whether the user prefers reduced motion.
+	* @returns Cleanup that disconnects the reveal observer.
 	*/
 	function initScrollReveal(reducedMotion) {
-		if (!("IntersectionObserver" in window)) return;
+		if (!("IntersectionObserver" in window)) return NOOP_CLEANUP;
 		const items = document.querySelectorAll("[data-showcase-reveal]");
 		const observer = new IntersectionObserver((entries) => {
 			for (const entry of entries) if (entry.isIntersecting) {
@@ -1675,17 +1683,32 @@ var TurboHomepageShowcase = (function(exports) {
 		});
 		for (const el of items) if (reducedMotion) el.classList.add("is-visible");
 		else observer.observe(el);
+		return () => observer.disconnect();
 	}
-	/** Pause marquee rows on hover and resume on leave. */
+	/**
+	* Pause marquee rows on hover and resume on leave.
+	*
+	* @returns Cleanup that removes the hover listeners from every row.
+	*/
 	function initMarqueePause() {
+		const teardowns = [];
 		for (const row of document.querySelectorAll(".showcase-marquee-row")) {
-			row.addEventListener("mouseenter", () => {
+			const onEnter = () => {
 				row.style.animationPlayState = marqueePlayState(true);
-			});
-			row.addEventListener("mouseleave", () => {
+			};
+			const onLeave = () => {
 				row.style.animationPlayState = marqueePlayState(false);
+			};
+			row.addEventListener("mouseenter", onEnter);
+			row.addEventListener("mouseleave", onLeave);
+			teardowns.push(() => {
+				row.removeEventListener("mouseenter", onEnter);
+				row.removeEventListener("mouseleave", onLeave);
 			});
 		}
+		return () => {
+			for (const teardown of teardowns) teardown();
+		};
 	}
 	/**
 	* Wire the interactive preview card: tabs, progress bar, buttons, and
@@ -1851,11 +1874,11 @@ var TurboHomepageShowcase = (function(exports) {
 		const cleanups = [
 			initSpotlight(reducedMotion),
 			initCometCard(reducedMotion),
-			initThemeControls()
+			initThemeControls(),
+			initTextMask(reducedMotion),
+			initScrollReveal(reducedMotion),
+			initMarqueePause()
 		];
-		initTextMask(reducedMotion);
-		initScrollReveal(reducedMotion);
-		initMarqueePause();
 		const renderTheme = initPreviewCard(reducedMotion, meta);
 		const syncTheme = (themeId) => {
 			syncThemeTriggers(Array.from(document.querySelectorAll(`[${THEME_TRIGGER_ATTRIBUTE}]`)), themeId);
