@@ -9,13 +9,6 @@
       "require_success": true
     },
     {
-      "id": "playwright",
-      "workflow": "Quality Check - E2E Tests",
-      "artifact": "playwright-report",
-      "dest": "playwright",
-      "require_success": false
-    },
-    {
       "id": "lighthouse",
       "workflow": "Reporting - Lighthouse CI",
       "artifact": "lighthouse-reports",
