@@ -86,6 +86,7 @@ const features = [
                           id={`showcase-tab-${tab.id}`}
                           aria-selected={i === 0 ? 'true' : 'false'}
                           aria-controls={`showcase-panel-${tab.id}`}
+                          tabindex={i === 0 ? 0 : -1}
                           data-preview-tab={tab.id}
                           data-testid={`home-preview-tab-${tab.id}`}
                         >
