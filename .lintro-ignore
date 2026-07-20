@@ -63,6 +63,7 @@ assets/js/*.min.js
 
 # Generated JS bundles (contain console.* calls that trigger semgrep false positives)
 assets/js/theme-selector.js
+assets/js/homepage-showcase.js
 
 # GitHub metadata and policies handled externally
 .github/**
