@@ -20,9 +20,9 @@ final class ThemeRegistryTests: XCTestCase {
     }
 
     func testExpectedThemeCount() {
-        // We expect 23 themes based on the ThemeId enum
-        XCTAssertEqual(ThemeId.allCases.count, 23)
-        XCTAssertEqual(ThemeRegistry.allThemes.count, 23)
+        // We expect 27 themes based on the ThemeId enum
+        XCTAssertEqual(ThemeId.allCases.count, 27)
+        XCTAssertEqual(ThemeRegistry.allThemes.count, 27)
     }
 
     // MARK: - Theme Lookup Tests
@@ -75,6 +75,10 @@ final class ThemeRegistryTests: XCTestCase {
             .rosePineDawn: "Rosé Pine Dawn",
             .oneDark: "One Dark",
             .oneLight: "One Light",
+            .radixSlateDark: "Radix Colors Slate Dark",
+            .radixSlateLight: "Radix Colors Slate Light",
+            .radixMauveDark: "Radix Colors Mauve Dark",
+            .radixMauveLight: "Radix Colors Mauve Light",
         ]
 
         for (themeId, expectedLabel) in expectedLabels {
@@ -107,6 +111,10 @@ final class ThemeRegistryTests: XCTestCase {
         XCTAssertEqual(ThemeId.rosePineDawn.rawValue, "rose-pine-dawn")
         XCTAssertEqual(ThemeId.oneDark.rawValue, "one-dark")
         XCTAssertEqual(ThemeId.oneLight.rawValue, "one-light")
+        XCTAssertEqual(ThemeId.radixSlateDark.rawValue, "radix-slate-dark")
+        XCTAssertEqual(ThemeId.radixSlateLight.rawValue, "radix-slate-light")
+        XCTAssertEqual(ThemeId.radixMauveDark.rawValue, "radix-mauve-dark")
+        XCTAssertEqual(ThemeId.radixMauveLight.rawValue, "radix-mauve-light")
     }
 
     // MARK: - Default Palette Tests

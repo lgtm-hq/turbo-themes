@@ -13,6 +13,7 @@ scripts/
 ├── utils/              # Shared utility functions
 ├── build-gem.sh        # Build Ruby gem package
 ├── sync-catppuccin.mjs # Sync Catppuccin themes
+├── sync-radix.mjs      # Sync Radix Colors themes
 └── e2e-serve.mjs       # E2E test server
 ```
 
@@ -334,6 +335,23 @@ node scripts/sync-catppuccin.mjs
 - Requires: Node.js
 - Syncs: Catppuccin theme variants
 - Updates: Theme files in `assets/css/themes/`
+
+### `sync-radix.mjs`
+
+Synchronize Radix Colors theme files from `@radix-ui/colors`.
+
+**Usage:**
+
+```bash
+node scripts/sync-radix.mjs
+```
+
+**Environment:**
+
+- Requires: Node.js and `@radix-ui/colors` (devDependency)
+- Syncs: Slate/Mauve light and dark variants
+- Updates: `src/themes/packs/radix.synced.ts` and W3C token JSON under
+  `schema/tokens/themes/`
 
 ## 🔧 Adding New Scripts
 

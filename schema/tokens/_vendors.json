@@ -56,6 +56,17 @@
       "icon": "nord.png"
     },
     {
+      "id": "radix",
+      "name": "Radix Colors",
+      "description": "Accessibility-focused color system with comprehensive scales",
+      "homepage": "https://www.radix-ui.com/colors",
+      "icon": {
+        "light": "radix-slate-light.png",
+        "dark": "radix-slate-dark.png"
+      },
+      "synced": true
+    },
+    {
       "id": "solarized",
       "name": "Solarized",
       "description": "Precision-balanced light and dark modes",
