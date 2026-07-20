@@ -4,6 +4,8 @@
   "label": "Radix Colors Slate Light",
   "vendor": "radix",
   "appearance": "light",
+  "description": "Neutral blue-gray Radix light theme for accessible UIs.",
+  "icon": "radix-slate-light.png",
   "tokens": {
     "background": {
       "base": {

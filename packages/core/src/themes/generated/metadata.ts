@@ -27,6 +27,10 @@ export const THEME_IDS = [
   'nord',
   'one-dark',
   'one-light',
+  'radix-mauve-dark',
+  'radix-mauve-light',
+  'radix-slate-dark',
+  'radix-slate-light',
   'rose-pine-dawn',
   'rose-pine-moon',
   'rose-pine',
@@ -52,6 +56,7 @@ export const VENDOR_ORDER = [
   'github',
   'bulma',
   'nord',
+  'radix',
   'solarized',
   'rose-pine',
   'tokyo-night',
@@ -82,6 +87,10 @@ export const THEME_DESCRIPTIONS = {
   "nord": "Arctic, north-bluish color palette inspired by the polar night.",
   "one-dark": "The classic Atom One Dark palette with vivid syntax accents.",
   "one-light": "Companion One Light palette for bright, daytime editing.",
+  "radix-mauve-dark": "Neutral purple-gray Radix dark theme for accessible UIs.",
+  "radix-mauve-light": "Neutral purple-gray Radix light theme for accessible UIs.",
+  "radix-slate-dark": "Neutral blue-gray Radix dark theme for accessible UIs.",
+  "radix-slate-light": "Neutral blue-gray Radix light theme for accessible UIs.",
   "rose-pine-dawn": "Light Rosé Pine variant for daytime use.",
   "rose-pine-moon": "Deeper variant of Rosé Pine with enhanced contrast.",
   "rose-pine": "Elegant dark theme with natural pine and soho vibes.",
@@ -116,6 +125,10 @@ export const THEME_ICONS = {
   "nord": "nord.png",
   "one-dark": "one-dark.png",
   "one-light": "one-light.png",
+  "radix-mauve-dark": "radix-mauve-dark.png",
+  "radix-mauve-light": "radix-mauve-light.png",
+  "radix-slate-dark": "radix-slate-dark.png",
+  "radix-slate-light": "radix-slate-light.png",
   "rose-pine-dawn": "rose-pine-dawn.png",
   "rose-pine-moon": "rose-pine-moon.png",
   "rose-pine": "rose-pine.png",
@@ -144,6 +157,10 @@ export const VENDOR_ICONS = {
   },
   "bulma": "turbo-themes-logo.png",
   "nord": "nord.png",
+  "radix": {
+    "light": "radix-slate-light.png",
+    "dark": "radix-slate-dark.png"
+  },
   "solarized": {
     "light": "solarized-light.png",
     "dark": "solarized-dark.png"
@@ -185,6 +202,10 @@ export const VENDOR_FAMILY_META = {
   "nord": {
     "name": "Nord",
     "description": "Arctic, north-bluish color palette"
+  },
+  "radix": {
+    "name": "Radix Colors",
+    "description": "Accessibility-focused color system with comprehensive scales"
   },
   "solarized": {
     "name": "Solarized",

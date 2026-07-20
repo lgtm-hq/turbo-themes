@@ -12,6 +12,7 @@ export type ThemeFamily =
   | 'github'
   | 'bulma'
   | 'nord'
+  | 'radix'
   | 'solarized'
   | 'rose-pine'
   | 'tokyo-night'
@@ -49,6 +50,10 @@ export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
     "name": "Nord",
     "description": "Arctic, north-bluish color palette"
   },
+  "radix": {
+    "name": "Radix Colors",
+    "description": "Accessibility-focused color system with comprehensive scales"
+  },
   "solarized": {
     "name": "Solarized",
     "description": "Precision-balanced light and dark modes"
@@ -85,6 +90,7 @@ export const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
   "github": "github",
   "bulma": "bulma",
   "nord": "nord",
+  "radix": "radix",
   "solarized": "solarized",
   "rose-pine": "rose-pine",
   "tokyo-night": "tokyo-night",
@@ -115,6 +121,10 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
   },
   "bulma": "assets/img/turbo-themes-logo.png",
   "nord": "assets/img/nord.png",
+  "radix": {
+    "light": "assets/img/radix-slate-light.png",
+    "dark": "assets/img/radix-slate-dark.png"
+  },
   "solarized": {
     "light": "assets/img/solarized-light.png",
     "dark": "assets/img/solarized-dark.png"
@@ -151,6 +161,10 @@ export const FLAVOR_DESCRIPTIONS: Record<string, string> = {
   "nord": "Arctic, north-bluish color palette inspired by the polar night.",
   "one-dark": "The classic Atom One Dark palette with vivid syntax accents.",
   "one-light": "Companion One Light palette for bright, daytime editing.",
+  "radix-mauve-dark": "Neutral purple-gray Radix dark theme for accessible UIs.",
+  "radix-mauve-light": "Neutral purple-gray Radix light theme for accessible UIs.",
+  "radix-slate-dark": "Neutral blue-gray Radix dark theme for accessible UIs.",
+  "radix-slate-light": "Neutral blue-gray Radix light theme for accessible UIs.",
   "rose-pine-dawn": "Light Rosé Pine variant for daytime use.",
   "rose-pine-moon": "Deeper variant of Rosé Pine with enhanced contrast.",
   "rose-pine": "Elegant dark theme with natural pine and soho vibes.",

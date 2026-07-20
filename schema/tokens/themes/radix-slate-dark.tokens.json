@@ -4,6 +4,8 @@
   "label": "Radix Colors Slate Dark",
   "vendor": "radix",
   "appearance": "dark",
+  "description": "Neutral blue-gray Radix dark theme for accessible UIs.",
+  "icon": "radix-slate-dark.png",
   "tokens": {
     "background": {
       "base": {

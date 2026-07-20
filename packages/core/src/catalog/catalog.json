@@ -216,6 +216,54 @@
     }
   },
   {
+    "id": "radix-mauve-dark",
+    "label": "Radix Colors Mauve Dark",
+    "vendor": "radix",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#121113",
+      "surface": "#1a191b",
+      "accent": "#0090ff",
+      "text": "#eeeef0"
+    }
+  },
+  {
+    "id": "radix-mauve-light",
+    "label": "Radix Colors Mauve Light",
+    "vendor": "radix",
+    "appearance": "light",
+    "preview": {
+      "bg": "#fdfcfd",
+      "surface": "#faf9fb",
+      "accent": "#0090ff",
+      "text": "#211f26"
+    }
+  },
+  {
+    "id": "radix-slate-dark",
+    "label": "Radix Colors Slate Dark",
+    "vendor": "radix",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#111113",
+      "surface": "#18191b",
+      "accent": "#0090ff",
+      "text": "#edeef0"
+    }
+  },
+  {
+    "id": "radix-slate-light",
+    "label": "Radix Colors Slate Light",
+    "vendor": "radix",
+    "appearance": "light",
+    "preview": {
+      "bg": "#fcfcfd",
+      "surface": "#f9f9fb",
+      "accent": "#0090ff",
+      "text": "#1c2024"
+    }
+  },
+  {
     "id": "rose-pine-dawn",
     "label": "Rosé Pine Dawn",
     "vendor": "rose-pine",

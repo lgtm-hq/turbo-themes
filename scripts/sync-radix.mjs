@@ -312,14 +312,29 @@ function toColorGroup(group) {
  * Write W3C token JSON for a flavor (keeps schema tokens in sync with the pack).
  * @param {{ id: string, label: string, vendor: string, appearance: string, iconUrl?: string, tokens: Record<string, unknown> }} flavor
  */
+// Per-theme picker descriptions required by the ThemeFile schema (consumed by
+// generate-metadata.mjs).
+const THEME_DESCRIPTIONS = {
+  "radix-slate-dark": "Neutral blue-gray Radix dark theme for accessible UIs.",
+  "radix-slate-light": "Neutral blue-gray Radix light theme for accessible UIs.",
+  "radix-mauve-dark": "Neutral purple-gray Radix dark theme for accessible UIs.",
+  "radix-mauve-light": "Neutral purple-gray Radix light theme for accessible UIs.",
+};
+
 function writeTokenJson(flavor) {
   const tokens = /** @type {Record<string, any>} */ (flavor.tokens);
+  const description = THEME_DESCRIPTIONS[flavor.id];
+  if (!description) {
+    throw new Error(`[sync-radix] Missing THEME_DESCRIPTIONS entry for "${flavor.id}"`);
+  }
   const out = {
     $schema: "../../turbo-themes.schema.json#/$defs/ThemeFile",
     id: flavor.id,
     label: flavor.label,
     vendor: flavor.vendor,
     appearance: flavor.appearance,
+    description,
+    icon: `${flavor.id}.png`,
     tokens: {
       background: toColorGroup(tokens.background),
       text: toColorGroup(tokens.text),
@@ -397,16 +412,15 @@ const rawContent = `import type { ThemePackage } from '../types.js';
 export const radixSynced: ThemePackage = ${formatObject(pkg)} as const;
 `;
 
+// Write file first, then format with the repo-pinned oxfmt devDependency.
+// Must be an environment-independent formatter that fails loudly: silently
+// skipping formatting commits differently-quoted output and breaks the
+// theme-sync determinism check (issue #651).
 fs.writeFileSync(outPath, rawContent, "utf8");
-
-try {
-  execSync(`uv run lintro fmt "${outPath}"`, {
-    cwd: projectRoot,
-    stdio: "inherit",
-  });
-} catch {
-  console.warn(`Warning: lintro fmt failed for ${outPath}, file written but may not be formatted`);
-}
+execSync(`bunx oxfmt --ignore-path=.gitignore "${outPath}"`, {
+  cwd: projectRoot,
+  stdio: "inherit",
+});
 
 console.log(`Wrote ${outPath}`);
 
