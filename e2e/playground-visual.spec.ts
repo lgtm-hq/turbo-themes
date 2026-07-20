@@ -66,6 +66,10 @@ test.describe('Theme Selector Component @visual', () => {
 
   for (const theme of selectorThemes) {
     test(`dropdown open state with ${theme}`, async ({ page }) => {
+      // The showcase homepage animates via JS (spotlight drift) which
+      // animations:'disabled' cannot freeze — emulate reduced motion so
+      // the background renders deterministically.
+      await page.emulateMedia({ reducedMotion: 'reduce' });
       await page.goto('/');
       await page.waitForLoadState('networkidle');
 
