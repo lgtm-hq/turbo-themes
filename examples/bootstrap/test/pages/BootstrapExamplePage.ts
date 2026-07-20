@@ -2,7 +2,7 @@ import { type Locator, type Page, expect } from '@playwright/test';
 
 import { escapeRegex, type ThemeId } from '../../../test-utils';
 
-const LIGHT_THEMES: ThemeId[] = ['catppuccin-latte', 'github-light', 'bulma-light'];
+const LIGHT_THEMES: ThemeId[] = ['catppuccin-latte', 'github-light', 'bulma-light', 'everforest-light', 'everforest-light-hard', 'everforest-light-soft'];
 
 /**
  * Page object for the Bootstrap example.

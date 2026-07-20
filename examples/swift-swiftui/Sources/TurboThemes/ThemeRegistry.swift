@@ -1,5 +1,32 @@
 import SwiftUI
 
+
+// MARK: - Shared Everforest Palettes
+
+/// Shared foreground colors for all Everforest dark variants (only backgrounds differ).
+private let everforestDarkPalette = (
+    heading: Color(hex: "#A7C080"),
+    bodyPrimary: Color(hex: "#D3C6AA"),
+    bodySecondary: Color(hex: "#9DA9A0"),
+    brandPrimary: Color(hex: "#A7C080"),
+    stateSuccess: Color(hex: "#A7C080"),
+    stateDanger: Color(hex: "#E67E80"),
+    stateWarning: Color(hex: "#DBBC7F"),
+    stateInfo: Color(hex: "#7FBBB3")
+)
+
+/// Shared foreground colors for all Everforest light variants (only backgrounds differ).
+private let everforestLightPalette = (
+    heading: Color(hex: "#6B7C01"),
+    bodyPrimary: Color(hex: "#5C6A72"),
+    bodySecondary: Color(hex: "#708089"),
+    brandPrimary: Color(hex: "#6B7C01"),
+    stateSuccess: Color(hex: "#6B7C01"),
+    stateDanger: Color(hex: "#D03A38"),
+    stateWarning: Color(hex: "#A87800"),
+    stateInfo: Color(hex: "#2A7A9E")
+)
+
 // MARK: - Shared Gruvbox Palettes
 
 /// Shared foreground colors for all Gruvbox dark variants (only backgrounds differ).
@@ -186,6 +213,103 @@ public enum ThemeRegistry {
                 stateDanger: Color(hex: "#ef4444"),
                 stateWarning: Color(hex: "#f59e0b"),
                 stateInfo: Color(hex: "#3b82f6")
+            )
+        ),
+
+        .everforestDarkHard: ThemeDefinition(
+            id: .everforestDarkHard,
+            label: "Everforest Dark Hard",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#272E33"),
+                backgroundSurface: Color(hex: "#2E383C"),
+                heading: everforestDarkPalette.heading,
+                bodyPrimary: everforestDarkPalette.bodyPrimary,
+                bodySecondary: everforestDarkPalette.bodySecondary,
+                brandPrimary: everforestDarkPalette.brandPrimary,
+                stateSuccess: everforestDarkPalette.stateSuccess,
+                stateDanger: everforestDarkPalette.stateDanger,
+                stateWarning: everforestDarkPalette.stateWarning,
+                stateInfo: everforestDarkPalette.stateInfo
+            )
+        ),
+        .everforestDark: ThemeDefinition(
+            id: .everforestDark,
+            label: "Everforest Dark",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#2D353B"),
+                backgroundSurface: Color(hex: "#343F44"),
+                heading: everforestDarkPalette.heading,
+                bodyPrimary: everforestDarkPalette.bodyPrimary,
+                bodySecondary: everforestDarkPalette.bodySecondary,
+                brandPrimary: everforestDarkPalette.brandPrimary,
+                stateSuccess: everforestDarkPalette.stateSuccess,
+                stateDanger: everforestDarkPalette.stateDanger,
+                stateWarning: everforestDarkPalette.stateWarning,
+                stateInfo: everforestDarkPalette.stateInfo
+            )
+        ),
+        .everforestDarkSoft: ThemeDefinition(
+            id: .everforestDarkSoft,
+            label: "Everforest Dark Soft",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#333C43"),
+                backgroundSurface: Color(hex: "#3A464C"),
+                heading: everforestDarkPalette.heading,
+                bodyPrimary: everforestDarkPalette.bodyPrimary,
+                bodySecondary: everforestDarkPalette.bodySecondary,
+                brandPrimary: everforestDarkPalette.brandPrimary,
+                stateSuccess: everforestDarkPalette.stateSuccess,
+                stateDanger: everforestDarkPalette.stateDanger,
+                stateWarning: everforestDarkPalette.stateWarning,
+                stateInfo: everforestDarkPalette.stateInfo
+            )
+        ),
+        .everforestLightHard: ThemeDefinition(
+            id: .everforestLightHard,
+            label: "Everforest Light Hard",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#FFFBEF"),
+                backgroundSurface: Color(hex: "#F8F5E4"),
+                heading: everforestLightPalette.heading,
+                bodyPrimary: everforestLightPalette.bodyPrimary,
+                bodySecondary: everforestLightPalette.bodySecondary,
+                brandPrimary: everforestLightPalette.brandPrimary,
+                stateSuccess: everforestLightPalette.stateSuccess,
+                stateDanger: everforestLightPalette.stateDanger,
+                stateWarning: everforestLightPalette.stateWarning,
+                stateInfo: everforestLightPalette.stateInfo
+            )
+        ),
+        .everforestLight: ThemeDefinition(
+            id: .everforestLight,
+            label: "Everforest Light",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#FDF6E3"),
+                backgroundSurface: Color(hex: "#F4F0D9"),
+                heading: everforestLightPalette.heading,
+                bodyPrimary: everforestLightPalette.bodyPrimary,
+                bodySecondary: everforestLightPalette.bodySecondary,
+                brandPrimary: everforestLightPalette.brandPrimary,
+                stateSuccess: everforestLightPalette.stateSuccess,
+                stateDanger: everforestLightPalette.stateDanger,
+                stateWarning: everforestLightPalette.stateWarning,
+                stateInfo: everforestLightPalette.stateInfo
+            )
+        ),
+        .everforestLightSoft: ThemeDefinition(
+            id: .everforestLightSoft,
+            label: "Everforest Light Soft",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#F3EAD3"),
+                backgroundSurface: Color(hex: "#EAE4CA"),
+                heading: everforestLightPalette.heading,
+                bodyPrimary: everforestLightPalette.bodyPrimary,
+                bodySecondary: everforestLightPalette.bodySecondary,
+                brandPrimary: everforestLightPalette.brandPrimary,
+                stateSuccess: everforestLightPalette.stateSuccess,
+                stateDanger: everforestLightPalette.stateDanger,
+                stateWarning: everforestLightPalette.stateWarning,
+                stateInfo: everforestLightPalette.stateInfo
             )
         ),
         .gruvboxDarkHard: ThemeDefinition(

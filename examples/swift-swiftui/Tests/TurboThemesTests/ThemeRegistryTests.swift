@@ -21,8 +21,8 @@ final class ThemeRegistryTests: XCTestCase {
 
     func testExpectedThemeCount() {
         // We expect 27 themes based on the ThemeId enum
-        XCTAssertEqual(ThemeId.allCases.count, 27)
-        XCTAssertEqual(ThemeRegistry.allThemes.count, 27)
+        XCTAssertEqual(ThemeId.allCases.count, 33)
+        XCTAssertEqual(ThemeRegistry.allThemes.count, 33)
     }
 
     // MARK: - Theme Lookup Tests
@@ -57,6 +57,12 @@ final class ThemeRegistryTests: XCTestCase {
             .catppuccinFrappe: "Catppuccin Frappé",
             .catppuccinMacchiato: "Catppuccin Macchiato",
             .dracula: "Dracula",
+            .everforestDarkHard: "Everforest Dark Hard",
+            .everforestDark: "Everforest Dark",
+            .everforestDarkSoft: "Everforest Dark Soft",
+            .everforestLightHard: "Everforest Light Hard",
+            .everforestLight: "Everforest Light",
+            .everforestLightSoft: "Everforest Light Soft",
             .githubDark: "GitHub Dark",
             .githubLight: "GitHub Light",
             .bulmaLight: "Bulma Light",
@@ -93,6 +99,12 @@ final class ThemeRegistryTests: XCTestCase {
         XCTAssertEqual(ThemeId.catppuccinMocha.rawValue, "catppuccin-mocha")
         XCTAssertEqual(ThemeId.catppuccinLatte.rawValue, "catppuccin-latte")
         XCTAssertEqual(ThemeId.dracula.rawValue, "dracula")
+        XCTAssertEqual(ThemeId.everforestDarkHard.rawValue, "everforest-dark-hard")
+        XCTAssertEqual(ThemeId.everforestDark.rawValue, "everforest-dark")
+        XCTAssertEqual(ThemeId.everforestDarkSoft.rawValue, "everforest-dark-soft")
+        XCTAssertEqual(ThemeId.everforestLightHard.rawValue, "everforest-light-hard")
+        XCTAssertEqual(ThemeId.everforestLight.rawValue, "everforest-light")
+        XCTAssertEqual(ThemeId.everforestLightSoft.rawValue, "everforest-light-soft")
         XCTAssertEqual(ThemeId.githubDark.rawValue, "github-dark")
         XCTAssertEqual(ThemeId.githubLight.rawValue, "github-light")
         XCTAssertEqual(ThemeId.bulmaLight.rawValue, "bulma-light")

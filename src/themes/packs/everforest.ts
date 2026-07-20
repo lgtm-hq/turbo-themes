@@ -2,8 +2,8 @@ import type { ThemePackage, ThemeTokens } from "../types.js";
 import { hexToRgba } from "../utils.js";
 
 /**
- * Gruvbox theme - retro groove palette with warm, earthy tones.
- * @see https://github.com/morhetz/gruvbox
+ * Everforest theme - green-based, nature-inspired palette designed for eye comfort.
+ * @see https://github.com/sainnhe/everforest
  * @license MIT
  */
 const TYPOGRAPHY = {
@@ -18,38 +18,39 @@ const TYPOGRAPHY = {
 } as const;
 
 const DARK_ACCENTS = {
-  brand: "#d79921",
-  info: "#83a598",
-  success: "#b8bb26",
-  warning: "#fabd2f",
-  danger: "#fb4934",
-  link: "#83a598",
-  codeInline: "#fe8019",
+  brand: "#A7C080",
+  info: "#7FBBB3",
+  success: "#A7C080",
+  warning: "#DBBC7F",
+  danger: "#E67E80",
+  link: "#83C092",
+  codeInline: "#E69875",
   headings: {
-    h1: "#b8bb26",
-    h2: "#83a598",
-    h3: "#8ec07c",
-    h4: "#fabd2f",
-    h5: "#d3869b",
-    h6: "#fb4934",
+    h1: "#A7C080",
+    h2: "#7FBBB3",
+    h3: "#83C092",
+    h4: "#DBBC7F",
+    h5: "#D699B6",
+    h6: "#E67E80",
   },
 } as const;
 
 const LIGHT_ACCENTS = {
-  brand: "#b57614",
-  info: "#076678",
-  success: "#79740e",
-  warning: "#b57614",
-  danger: "#9d0006",
-  link: "#076678",
-  codeInline: "#af3a03",
+  // Darkened slightly from upstream light accents for WCAG AA readability on paper tones.
+  brand: "#6B7C01",
+  info: "#2A7A9E",
+  success: "#6B7C01",
+  warning: "#A87800",
+  danger: "#D03A38",
+  link: "#1D6B4F",
+  codeInline: "#C45A12",
   headings: {
-    h1: "#79740e",
-    h2: "#076678",
-    h3: "#427b58",
-    h4: "#b57614",
-    h5: "#8f3f71",
-    h6: "#9d0006",
+    h1: "#6B7C01",
+    h2: "#2A7A9E",
+    h3: "#1D6B4F",
+    h4: "#A87800",
+    h5: "#B84F96",
+    h6: "#D03A38",
   },
 } as const;
 
@@ -88,6 +89,15 @@ function buildTokens({ appearance, background, text, border }: TokensInput): The
       success: accents.success,
       warning: accents.warning,
       danger: accents.danger,
+      ...(appearance === "light"
+        ? {
+            // Light state colors are mid-tone; black label text meets AA large on buttons.
+            infoText: "#000000",
+            successText: "#000000",
+            warningText: "#000000",
+            dangerText: "#000000",
+          }
+        : {}),
     },
     border: {
       default: border,
@@ -223,135 +233,143 @@ function buildTokens({ appearance, background, text, border }: TokensInput): The
 }
 
 const DARK_TEXT = {
-  primary: "#ebdbb2",
-  secondary: "#d5c4a1",
+  primary: "#D3C6AA",
+  secondary: "#9DA9A0",
 } as const;
 
 const LIGHT_TEXT = {
-  primary: "#3c3836",
-  secondary: "#504945",
+  primary: "#5C6A72",
+  // statusline2 — greys from the light palette are too light for AA on soft paper.
+  secondary: "#708089",
 } as const;
 
-const DARK_BORDER = "#665c54";
-const LIGHT_BORDER = "#bdae93";
+const DARK_BORDER = "#4F585E";
+const LIGHT_BORDER = "#BDC3AF";
 
-export const gruvboxThemes: ThemePackage = {
-  id: "gruvbox",
-  name: "Gruvbox",
-  homepage: "https://github.com/morhetz/gruvbox",
+// Surface is too warm/dark for AA normal text; use base for code blocks.
+const everforestLightSoftBase = buildTokens({
+  appearance: "light",
+  background: {
+    base: "#F3EAD3",
+    surface: "#EAE4CA",
+    overlay: "#DDD8BE",
+  },
+  text: LIGHT_TEXT,
+  border: "#D8D3BA",
+});
+const everforestLightSoftTokens: ThemeTokens = {
+  ...everforestLightSoftBase,
+  content: {
+    ...everforestLightSoftBase.content,
+    codeBlock: { ...everforestLightSoftBase.content.codeBlock, bg: "#F3EAD3" },
+  },
+};
+
+export const everforestThemes: ThemePackage = {
+  id: "everforest",
+  name: "Everforest",
+  homepage: "https://github.com/sainnhe/everforest",
   license: {
     spdx: "MIT",
-    url: "https://github.com/morhetz/gruvbox/blob/master/LICENSE",
-    copyright: "Pavel Pertsev",
+    url: "https://github.com/sainnhe/everforest/blob/master/LICENSE",
+    copyright: "Sainnhe Park",
   },
   source: {
-    repository: "https://github.com/morhetz/gruvbox",
+    repository: "https://github.com/sainnhe/everforest",
   },
   flavors: [
     {
-      id: "gruvbox-dark-hard",
-      label: "Gruvbox Dark Hard",
-      vendor: "gruvbox",
+      id: "everforest-dark-hard",
+      label: "Everforest Dark Hard",
+      vendor: "everforest",
       appearance: "dark",
-      iconUrl: "/assets/img/gruvbox-dark-hard.png",
+      iconUrl: "/assets/img/everforest-dark-hard.png",
       tokens: buildTokens({
         appearance: "dark",
         background: {
-          base: "#1d2021",
-          surface: "#282828",
-          overlay: "#3c3836",
+          base: "#272E33",
+          surface: "#2E383C",
+          overlay: "#374145",
+        },
+        text: DARK_TEXT,
+        border: "#495156",
+      }),
+    },
+    {
+      id: "everforest-dark",
+      label: "Everforest Dark",
+      vendor: "everforest",
+      appearance: "dark",
+      iconUrl: "/assets/img/everforest-dark.png",
+      tokens: buildTokens({
+        appearance: "dark",
+        background: {
+          base: "#2D353B",
+          surface: "#343F44",
+          overlay: "#3D484D",
         },
         text: DARK_TEXT,
         border: DARK_BORDER,
       }),
     },
     {
-      id: "gruvbox-dark",
-      label: "Gruvbox Dark",
-      vendor: "gruvbox",
+      id: "everforest-dark-soft",
+      label: "Everforest Dark Soft",
+      vendor: "everforest",
       appearance: "dark",
-      iconUrl: "/assets/img/gruvbox-dark.png",
+      iconUrl: "/assets/img/everforest-dark-soft.png",
       tokens: buildTokens({
         appearance: "dark",
         background: {
-          base: "#282828",
-          surface: "#3c3836",
-          overlay: "#504945",
+          base: "#333C43",
+          surface: "#3A464C",
+          overlay: "#434F55",
         },
         text: DARK_TEXT,
-        border: DARK_BORDER,
+        border: "#555F66",
       }),
     },
     {
-      id: "gruvbox-dark-soft",
-      label: "Gruvbox Dark Soft",
-      vendor: "gruvbox",
-      appearance: "dark",
-      iconUrl: "/assets/img/gruvbox-dark-soft.png",
-      tokens: buildTokens({
-        appearance: "dark",
-        background: {
-          base: "#32302f",
-          surface: "#3c3836",
-          overlay: "#504945",
-        },
-        text: DARK_TEXT,
-        border: DARK_BORDER,
-      }),
-    },
-    {
-      id: "gruvbox-light-hard",
-      label: "Gruvbox Light Hard",
-      vendor: "gruvbox",
+      id: "everforest-light-hard",
+      label: "Everforest Light Hard",
+      vendor: "everforest",
       appearance: "light",
-      iconUrl: "/assets/img/gruvbox-light-hard.png",
+      iconUrl: "/assets/img/everforest-light-hard.png",
       tokens: buildTokens({
         appearance: "light",
         background: {
-          base: "#f9f5d7",
-          surface: "#fbf1c7",
-          overlay: "#ebdbb2",
+          base: "#FFFBEF",
+          surface: "#F8F5E4",
+          overlay: "#EDEADA",
+        },
+        text: LIGHT_TEXT,
+        border: "#E8E5D5",
+      }),
+    },
+    {
+      id: "everforest-light",
+      label: "Everforest Light",
+      vendor: "everforest",
+      appearance: "light",
+      iconUrl: "/assets/img/everforest-light.png",
+      tokens: buildTokens({
+        appearance: "light",
+        background: {
+          base: "#FDF6E3",
+          surface: "#F4F0D9",
+          overlay: "#E6E2CC",
         },
         text: LIGHT_TEXT,
         border: LIGHT_BORDER,
       }),
     },
     {
-      id: "gruvbox-light",
-      label: "Gruvbox Light",
-      vendor: "gruvbox",
+      id: "everforest-light-soft",
+      label: "Everforest Light Soft",
+      vendor: "everforest",
       appearance: "light",
-      iconUrl: "/assets/img/gruvbox-light.png",
-      tokens: buildTokens({
-        appearance: "light",
-        background: {
-          base: "#fbf1c7",
-          surface: "#ebdbb2",
-          overlay: "#d5c4a1",
-        },
-        text: LIGHT_TEXT,
-        border: LIGHT_BORDER,
-      }),
-    },
-    {
-      id: "gruvbox-light-soft",
-      label: "Gruvbox Light Soft",
-      vendor: "gruvbox",
-      appearance: "light",
-      iconUrl: "/assets/img/gruvbox-light-soft.png",
-      tokens: (() => {
-        const t = buildTokens({
-          appearance: "light",
-          background: {
-            base: "#f2e5bc",
-            surface: "#ebdbb2",
-            overlay: "#d5c4a1",
-          },
-          text: LIGHT_TEXT,
-          border: LIGHT_BORDER,
-        });
-        return { ...t, state: { ...t.state, warningText: "#3c3836" } };
-      })(),
+      iconUrl: "/assets/img/everforest-light-soft.png",
+      tokens: everforestLightSoftTokens,
     },
   ],
 } as const;

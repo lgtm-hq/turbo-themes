@@ -21,6 +21,16 @@
       "icon": "dracula-logo.png"
     },
     {
+      "id": "everforest",
+      "name": "Everforest",
+      "description": "Green-based, nature-inspired palette designed for eye comfort",
+      "homepage": "https://github.com/sainnhe/everforest",
+      "icon": {
+        "light": "everforest-light.png",
+        "dark": "everforest-dark.png"
+      }
+    },
+    {
       "id": "gruvbox",
       "name": "Gruvbox",
       "description": "Retro groove palette with warm, earthy tones",

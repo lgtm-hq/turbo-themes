@@ -1,6 +1,6 @@
 ---
 title: Theme Definitions
-description: Complete reference for all 24 Turbo Themes color schemes.
+description: Complete reference for all 30 Turbo Themes color schemes.
 category: api-reference
 order: 4
 prev: api-reference/tokens
@@ -9,42 +9,48 @@ next: api-reference/javascript-api
 
 # Theme Definitions
 
-Turbo Themes includes 24 color schemes across 9 vendor families. The canonical list is
+Turbo Themes includes 30 color schemes across 10 vendor families. The canonical list is
 always available at runtime:
 
 ```typescript
 import { themeIds } from '@lgtm-hq/turbo-themes';
-// → readonly string[] of all 24 theme IDs, sorted by vendor then variant
+// → readonly string[] of all 30 theme IDs, sorted by vendor then variant
 ```
 
 ## Theme Overview
 
-| Theme                | Vendor      | Appearance | ID                     |
-| -------------------- | ----------- | ---------- | ---------------------- |
-| Catppuccin Mocha     | Catppuccin  | Dark       | `catppuccin-mocha`     |
-| Catppuccin Macchiato | Catppuccin  | Dark       | `catppuccin-macchiato` |
-| Catppuccin Frappé    | Catppuccin  | Dark       | `catppuccin-frappe`    |
-| Catppuccin Latte     | Catppuccin  | Light      | `catppuccin-latte`     |
-| Dracula              | Dracula     | Dark       | `dracula`              |
-| Gruvbox Dark Hard    | Gruvbox     | Dark       | `gruvbox-dark-hard`    |
-| Gruvbox Dark         | Gruvbox     | Dark       | `gruvbox-dark`         |
-| Gruvbox Dark Soft    | Gruvbox     | Dark       | `gruvbox-dark-soft`    |
-| Gruvbox Light Hard   | Gruvbox     | Light      | `gruvbox-light-hard`   |
-| Gruvbox Light        | Gruvbox     | Light      | `gruvbox-light`        |
-| Gruvbox Light Soft   | Gruvbox     | Light      | `gruvbox-light-soft`   |
-| GitHub Dark          | GitHub      | Dark       | `github-dark`          |
-| GitHub Light         | GitHub      | Light      | `github-light`         |
-| Bulma Dark           | Bulma       | Dark       | `bulma-dark`           |
-| Bulma Light          | Bulma       | Light      | `bulma-light`          |
-| Nord                 | Nord        | Dark       | `nord`                 |
-| Rosé Pine            | Rosé Pine   | Dark       | `rose-pine`            |
-| Rosé Pine Moon       | Rosé Pine   | Dark       | `rose-pine-moon`       |
-| Rosé Pine Dawn       | Rosé Pine   | Light      | `rose-pine-dawn`       |
-| Solarized Dark       | Solarized   | Dark       | `solarized-dark`       |
-| Solarized Light      | Solarized   | Light      | `solarized-light`      |
-| Tokyo Night Dark     | Tokyo Night | Dark       | `tokyo-night-dark`     |
-| Tokyo Night Storm    | Tokyo Night | Dark       | `tokyo-night-storm`    |
-| Tokyo Night Light    | Tokyo Night | Light      | `tokyo-night-light`    |
+| Theme                 | Vendor      | Appearance | ID                      |
+| --------------------- | ----------- | ---------- | ----------------------- |
+| Catppuccin Mocha      | Catppuccin  | Dark       | `catppuccin-mocha`      |
+| Catppuccin Macchiato  | Catppuccin  | Dark       | `catppuccin-macchiato`  |
+| Catppuccin Frappé     | Catppuccin  | Dark       | `catppuccin-frappe`     |
+| Catppuccin Latte      | Catppuccin  | Light      | `catppuccin-latte`      |
+| Dracula               | Dracula     | Dark       | `dracula`               |
+| Everforest Dark Hard  | Everforest  | Dark       | `everforest-dark-hard`  |
+| Everforest Dark       | Everforest  | Dark       | `everforest-dark`       |
+| Everforest Dark Soft  | Everforest  | Dark       | `everforest-dark-soft`  |
+| Everforest Light Hard | Everforest  | Light      | `everforest-light-hard` |
+| Everforest Light      | Everforest  | Light      | `everforest-light`      |
+| Everforest Light Soft | Everforest  | Light      | `everforest-light-soft` |
+| Gruvbox Dark Hard     | Gruvbox     | Dark       | `gruvbox-dark-hard`     |
+| Gruvbox Dark          | Gruvbox     | Dark       | `gruvbox-dark`          |
+| Gruvbox Dark Soft     | Gruvbox     | Dark       | `gruvbox-dark-soft`     |
+| Gruvbox Light Hard    | Gruvbox     | Light      | `gruvbox-light-hard`    |
+| Gruvbox Light         | Gruvbox     | Light      | `gruvbox-light`         |
+| Gruvbox Light Soft    | Gruvbox     | Light      | `gruvbox-light-soft`    |
+| GitHub Dark           | GitHub      | Dark       | `github-dark`           |
+| GitHub Light          | GitHub      | Light      | `github-light`          |
+| Bulma Dark            | Bulma       | Dark       | `bulma-dark`            |
+| Bulma Light           | Bulma       | Light      | `bulma-light`           |
+| Nord                  | Nord        | Dark       | `nord`                  |
+| Rosé Pine             | Rosé Pine   | Dark       | `rose-pine`             |
+| Rosé Pine Moon        | Rosé Pine   | Dark       | `rose-pine-moon`        |
+| Rosé Pine Dawn        | Rosé Pine   | Light      | `rose-pine-dawn`        |
+| Solarized Dark        | Solarized   | Dark       | `solarized-dark`        |
+| Solarized Light       | Solarized   | Light      | `solarized-light`       |
+| Tokyo Night Dark      | Tokyo Night | Dark       | `tokyo-night-dark`      |
+| Tokyo Night Storm     | Tokyo Night | Dark       | `tokyo-night-storm`     |
+| Tokyo Night Light     | Tokyo Night | Light      | `tokyo-night-light`     |
 
 ## Curating a theme subset
 
@@ -58,7 +64,7 @@ import {
   getThemesByAppearance,
 } from '@lgtm-hq/turbo-themes';
 
-// All 24 themes
+// All 30 themes
 const all = themeIds;
 
 // Vendor opt-in
@@ -173,6 +179,35 @@ A warm, creamy light theme.
 | State Warning      | `#ffb86c` |
 | State Danger       | `#ff5555` |
 | State Info         | `#8be9fd` |
+
+## Everforest Themes
+
+[Everforest](https://github.com/sainnhe/everforest) is a green-based, nature-inspired
+color scheme designed to be warm and soft on the eyes.
+
+### Everforest Dark (Medium)
+
+The default dark Everforest variant with balanced contrast.
+
+| Token              | Value     |
+| ------------------ | --------- |
+| Background Base    | `#2D353B` |
+| Background Surface | `#343F44` |
+| Background Overlay | `#3D484D` |
+| Text Primary       | `#D3C6AA` |
+| Brand Primary      | `#A7C080` |
+
+### Everforest Light (Medium)
+
+The default light Everforest variant with warm paper tones.
+
+| Token              | Value     |
+| ------------------ | --------- |
+| Background Base    | `#FDF6E3` |
+| Background Surface | `#F4F0D9` |
+| Background Overlay | `#E6E2CC` |
+| Text Primary       | `#5C6A72` |
+| Brand Primary      | `#6B7C01` |
 
 ## Gruvbox Themes
 

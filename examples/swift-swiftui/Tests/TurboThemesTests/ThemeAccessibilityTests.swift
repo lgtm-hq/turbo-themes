@@ -98,8 +98,12 @@ final class ThemeAccessibilityTests: XCTestCase {
     // MARK: - Light vs Dark Theme Tests
 
     func testLightThemesHaveLighterBackgrounds() {
-        let lightThemes: [ThemeId] = [.catppuccinLatte, .githubLight, .bulmaLight, .oneLight]
-        let darkThemes: [ThemeId] = [.catppuccinMocha, .dracula, .githubDark, .bulmaDark, .oneDark]
+        let lightThemes: [ThemeId] = [
+            .catppuccinLatte, .githubLight, .bulmaLight, .oneLight, .everforestLight,
+        ]
+        let darkThemes: [ThemeId] = [
+            .catppuccinMocha, .dracula, .githubDark, .bulmaDark, .oneDark, .everforestDark,
+        ]
 
         for lightId in lightThemes {
             let lightBg = getBackgroundHex(for: lightId)
@@ -161,6 +165,12 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .catppuccinFrappe: return "#303446"
         case .catppuccinMacchiato: return "#24273a"
         case .dracula: return "#282a36"
+        case .everforestDarkHard: return "#272E33"
+        case .everforestDark: return "#2D353B"
+        case .everforestDarkSoft: return "#333C43"
+        case .everforestLightHard: return "#FFFBEF"
+        case .everforestLight: return "#FDF6E3"
+        case .everforestLightSoft: return "#F3EAD3"
         case .githubDark: return "#0d1117"
         case .githubLight: return "#ffffff"
         case .bulmaLight: return "#ffffff"
@@ -193,6 +203,8 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .catppuccinFrappe: return "#c6d0f5"
         case .catppuccinMacchiato: return "#cad3f5"
         case .dracula: return "#f8f8f2"
+        case .everforestDarkHard, .everforestDark, .everforestDarkSoft: return "#D3C6AA"
+        case .everforestLightHard, .everforestLight, .everforestLightSoft: return "#5C6A72"
         case .githubDark: return "#c9d1d9"
         case .githubLight: return "#24292f"
         case .bulmaLight: return "#363636"
@@ -220,6 +232,8 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .catppuccinFrappe: return "#b5bfe2"
         case .catppuccinMacchiato: return "#b8c0e0"
         case .dracula: return "#c5c8d4"
+        case .everforestDarkHard, .everforestDark, .everforestDarkSoft: return "#9DA9A0"
+        case .everforestLightHard, .everforestLight, .everforestLightSoft: return "#708089"
         case .githubDark: return "#8b949e"
         case .githubLight: return "#57606a"
         case .bulmaLight: return "#4a4a4a"
@@ -246,6 +260,8 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .catppuccinFrappe: return "#f2d5cf"
         case .catppuccinMacchiato: return "#f4dbd6"
         case .dracula: return "#f8f8f2"
+        case .everforestDarkHard, .everforestDark, .everforestDarkSoft: return "#A7C080"
+        case .everforestLightHard, .everforestLight, .everforestLightSoft: return "#6B7C01"
         case .githubDark: return "#e6edf3"
         case .githubLight: return "#1f2328"
         case .bulmaLight: return "#242424"
@@ -277,6 +293,10 @@ final class ThemeAccessibilityTests: XCTestCase {
             return ["#a6da95", "#ed8796", "#eed49f", "#91d7e3"]
         case .dracula:
             return ["#50fa7b", "#ff5555", "#f1fa8c", "#8be9fd"]
+        case .everforestDarkHard, .everforestDark, .everforestDarkSoft:
+            return ["#A7C080", "#E67E80", "#DBBC7F", "#7FBBB3"]
+        case .everforestLightHard, .everforestLight, .everforestLightSoft:
+            return ["#6B7C01", "#D03A38", "#A87800", "#2A7A9E"]
         case .githubDark:
             return ["#3fb950", "#f85149", "#d29922", "#2f81f7"]
         case .githubLight:

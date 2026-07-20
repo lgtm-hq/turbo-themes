@@ -16,6 +16,12 @@ export const THEME_IDS = [
   'catppuccin-macchiato',
   'catppuccin-mocha',
   'dracula',
+  'everforest-dark-hard',
+  'everforest-dark-soft',
+  'everforest-dark',
+  'everforest-light-hard',
+  'everforest-light-soft',
+  'everforest-light',
   'github-dark',
   'github-light',
   'gruvbox-dark-hard',
@@ -52,6 +58,7 @@ export type ThemeId = (typeof THEME_IDS)[number];
 export const VENDOR_ORDER = [
   'catppuccin',
   'dracula',
+  'everforest',
   'gruvbox',
   'github',
   'bulma',
@@ -76,6 +83,12 @@ export const THEME_DESCRIPTIONS = {
   "catppuccin-macchiato": "Deep, atmospheric Catppuccin variant with rich contrast.",
   "catppuccin-mocha": "Cozy, high-contrast Catppuccin theme for late-night sessions.",
   "dracula": "Iconic Dracula dark theme with vibrant accents.",
+  "everforest-dark-hard": "Highest contrast dark Everforest palette with deep forest shadows.",
+  "everforest-dark-soft": "Softer dark Everforest palette with reduced contrast.",
+  "everforest-dark": "Classic Everforest dark palette with warm, natural greens.",
+  "everforest-light-hard": "Bright, crisp Everforest light palette with extra contrast.",
+  "everforest-light-soft": "Soft, low-contrast Everforest light palette for long sessions.",
+  "everforest-light": "Classic Everforest light palette with warm paper tones.",
   "github-dark": "GitHub dark theme optimized for code-heavy views.",
   "github-light": "GitHub-inspired light theme suited for documentation and UI heavy pages.",
   "gruvbox-dark-hard": "Highest contrast dark Gruvbox palette with deep shadows.",
@@ -114,6 +127,12 @@ export const THEME_ICONS = {
   "catppuccin-macchiato": "catppuccin-logo-macchiato.png",
   "catppuccin-mocha": "catppuccin-logo-macchiato.png",
   "dracula": "dracula-logo.png",
+  "everforest-dark-hard": "everforest-dark-hard.png",
+  "everforest-dark-soft": "everforest-dark-soft.png",
+  "everforest-dark": "everforest-dark.png",
+  "everforest-light-hard": "everforest-light-hard.png",
+  "everforest-light-soft": "everforest-light-soft.png",
+  "everforest-light": "everforest-light.png",
   "github-dark": "github-logo-dark.png",
   "github-light": "github-logo-light.png",
   "gruvbox-dark-hard": "gruvbox-dark-hard.png",
@@ -147,6 +166,10 @@ export const VENDOR_ICONS = {
     "dark": "catppuccin-logo-macchiato.png"
   },
   "dracula": "dracula-logo.png",
+  "everforest": {
+    "light": "everforest-light.png",
+    "dark": "everforest-dark.png"
+  },
   "gruvbox": {
     "light": "gruvbox-light.png",
     "dark": "gruvbox-dark.png"
@@ -186,6 +209,10 @@ export const VENDOR_FAMILY_META = {
   "dracula": {
     "name": "Dracula",
     "description": "Dark vampire aesthetic"
+  },
+  "everforest": {
+    "name": "Everforest",
+    "description": "Green-based, nature-inspired palette designed for eye comfort"
   },
   "gruvbox": {
     "name": "Gruvbox",

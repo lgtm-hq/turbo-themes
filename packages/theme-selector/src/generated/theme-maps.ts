@@ -8,6 +8,7 @@
 export type ThemeFamily =
   | 'catppuccin'
   | 'dracula'
+  | 'everforest'
   | 'gruvbox'
   | 'github'
   | 'bulma'
@@ -33,6 +34,10 @@ export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
   "dracula": {
     "name": "Dracula",
     "description": "Dark vampire aesthetic"
+  },
+  "everforest": {
+    "name": "Everforest",
+    "description": "Green-based, nature-inspired palette designed for eye comfort"
   },
   "gruvbox": {
     "name": "Gruvbox",
@@ -86,6 +91,7 @@ export const DEFAULT_FAMILY: ThemeFamily = 'catppuccin';
 export const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
   "catppuccin": "catppuccin",
   "dracula": "dracula",
+  "everforest": "everforest",
   "gruvbox": "gruvbox",
   "github": "github",
   "bulma": "bulma",
@@ -111,6 +117,10 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
     "dark": "assets/img/catppuccin-logo-macchiato.png"
   },
   "dracula": "assets/img/dracula-logo.png",
+  "everforest": {
+    "light": "assets/img/everforest-light.png",
+    "dark": "assets/img/everforest-dark.png"
+  },
   "gruvbox": {
     "light": "assets/img/gruvbox-light.png",
     "dark": "assets/img/gruvbox-dark.png"
@@ -150,6 +160,12 @@ export const FLAVOR_DESCRIPTIONS: Record<string, string> = {
   "catppuccin-macchiato": "Deep, atmospheric Catppuccin variant with rich contrast.",
   "catppuccin-mocha": "Cozy, high-contrast Catppuccin theme for late-night sessions.",
   "dracula": "Iconic Dracula dark theme with vibrant accents.",
+  "everforest-dark-hard": "Highest contrast dark Everforest palette with deep forest shadows.",
+  "everforest-dark-soft": "Softer dark Everforest palette with reduced contrast.",
+  "everforest-dark": "Classic Everforest dark palette with warm, natural greens.",
+  "everforest-light-hard": "Bright, crisp Everforest light palette with extra contrast.",
+  "everforest-light-soft": "Soft, low-contrast Everforest light palette for long sessions.",
+  "everforest-light": "Classic Everforest light palette with warm paper tones.",
   "github-dark": "GitHub dark theme optimized for code-heavy views.",
   "github-light": "GitHub-inspired light theme suited for documentation and UI heavy pages.",
   "gruvbox-dark-hard": "Highest contrast dark Gruvbox palette with deep shadows.",
