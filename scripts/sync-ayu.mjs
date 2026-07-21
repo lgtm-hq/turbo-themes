@@ -281,16 +281,30 @@ function toW3cTokens(tokens) {
   };
 }
 
+// Per-theme picker descriptions and icons required by the ThemeFile schema
+// (consumed by generate-metadata.mjs), mirroring sync-radix.mjs.
+const THEME_DESCRIPTIONS = {
+  'ayu-dark': 'Deep Ayu dark theme for low-light environments.',
+  'ayu-mirage': 'Soft dark Ayu variant with subtle, muted accents.',
+  'ayu-light': 'Bright Ayu palette designed for comfortable daytime coding.',
+};
+
 function writeW3cThemeFiles(pkg) {
   const themesDir = path.join(projectRoot, 'schema', 'tokens', 'themes');
   fs.mkdirSync(themesDir, { recursive: true });
   for (const flavor of pkg.flavors) {
+    const description = THEME_DESCRIPTIONS[flavor.id];
+    if (!description) {
+      throw new Error(`[sync-ayu] Missing THEME_DESCRIPTIONS entry for "${flavor.id}"`);
+    }
     const doc = {
       $schema: '../../turbo-themes.schema.json#/$defs/ThemeFile',
       id: flavor.id,
       label: flavor.label,
       vendor: flavor.vendor,
       appearance: flavor.appearance,
+      description,
+      icon: `${flavor.id}.png`,
       tokens: toW3cTokens(flavor.tokens),
     };
     const outPath = path.join(themesDir, `${flavor.id}.tokens.json`);

@@ -4,6 +4,8 @@
   "label": "Ayu Light",
   "vendor": "ayu",
   "appearance": "light",
+  "description": "Bright Ayu palette designed for comfortable daytime coding.",
+  "icon": "ayu-light.png",
   "tokens": {
     "background": {
       "base": {

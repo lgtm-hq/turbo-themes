@@ -19,6 +19,7 @@ export type ThemeFamily =
   | 'tokyo-night'
   | 'kanagawa'
   | 'one-dark'
+  | 'ayu'
   | 'turbo';
 
 export interface ThemeFamilyMeta {
@@ -80,6 +81,10 @@ export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
     "name": "One",
     "description": "The iconic Atom editor palette in dark and light"
   },
+  "ayu": {
+    "name": "Ayu",
+    "description": "Bright colors designed for comfortable all-day coding"
+  },
   "turbo": {
     "name": "Terminal",
     "description": "CRT phosphor green on void"
@@ -107,6 +112,7 @@ export const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
   "tokyo-night": "tokyo-night",
   "kanagawa": "kanagawa",
   "one-dark": "one-dark",
+  "ayu": "ayu",
   "turbo": "turbo"
 };
 
@@ -158,11 +164,18 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
     "light": "assets/img/one-light.png",
     "dark": "assets/img/one-dark.png"
   },
+  "ayu": {
+    "light": "assets/img/ayu-light.png",
+    "dark": "assets/img/ayu-dark.png"
+  },
   "turbo": "assets/img/terminal.png"
 };
 
 /** Predefined flavor descriptions keyed by theme id. */
 export const FLAVOR_DESCRIPTIONS: Record<string, string> = {
+  "ayu-dark": "Deep Ayu dark theme for low-light environments.",
+  "ayu-light": "Bright Ayu palette designed for comfortable daytime coding.",
+  "ayu-mirage": "Soft dark Ayu variant with subtle, muted accents.",
   "bulma-dark": "Dark Bulma theme tuned for low-light reading.",
   "bulma-light": "Classic Bulma look with a bright, neutral palette.",
   "catppuccin-frappe": "Balanced dark Catppuccin theme for focused work.",

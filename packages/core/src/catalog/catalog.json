@@ -1,5 +1,41 @@
 [
   {
+    "id": "ayu-dark",
+    "label": "Ayu Dark",
+    "vendor": "ayu",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#0d1017",
+      "surface": "#141821",
+      "accent": "#e6b450",
+      "text": "#bfbdb6"
+    }
+  },
+  {
+    "id": "ayu-light",
+    "label": "Ayu Light",
+    "vendor": "ayu",
+    "appearance": "light",
+    "preview": {
+      "bg": "#f8f9fa",
+      "surface": "#fafafa",
+      "accent": "#f29718",
+      "text": "#5c6166"
+    }
+  },
+  {
+    "id": "ayu-mirage",
+    "label": "Ayu Mirage",
+    "vendor": "ayu",
+    "appearance": "dark",
+    "preview": {
+      "bg": "#1f2430",
+      "surface": "#282e3b",
+      "accent": "#ffcc66",
+      "text": "#cccac2"
+    }
+  },
+  {
     "id": "bulma-dark",
     "label": "Bulma Dark",
     "vendor": "bulma",

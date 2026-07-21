@@ -4,6 +4,8 @@
   "label": "Ayu Dark",
   "vendor": "ayu",
   "appearance": "dark",
+  "description": "Deep Ayu dark theme for low-light environments.",
+  "icon": "ayu-dark.png",
   "tokens": {
     "background": {
       "base": {

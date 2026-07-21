@@ -4,6 +4,8 @@
   "label": "Ayu Mirage",
   "vendor": "ayu",
   "appearance": "dark",
+  "description": "Soft dark Ayu variant with subtle, muted accents.",
+  "icon": "ayu-mirage.png",
   "tokens": {
     "background": {
       "base": {
