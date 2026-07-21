@@ -106,3 +106,8 @@ jobs:
     permissions:
       contents: write
       id-token: write
+      # Static validation requires granting everything ANY callee job requests,
+      # even jobs skipped in release-assets mode (scan/attest); missing these
+      # startup-failed every tag run since v0.25.0 (#720).
+      security-events: write
+      attestations: write
