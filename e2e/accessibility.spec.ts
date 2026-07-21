@@ -321,4 +321,52 @@ test.describe('Accessibility Tests @a11y', () => {
       await expect(activeLink.first()).toHaveAttribute('aria-current', 'page');
     });
   });
+
+  /**
+   * Regression for #741: Noir `html:root a` used to paint accent ink on
+   * `<a class="btn btn-primary">`, making pastel-gradient CTAs unreadable.
+   */
+  test.describe('btn-primary anchor contrast', () => {
+    const btnThemes = ['catppuccin-frappe', 'catppuccin-latte'] as const;
+
+    btnThemes.forEach((theme) => {
+      test(`should keep home and examples primary CTA contrast under ${theme}`, async ({
+        homePage,
+      }) => {
+        await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
+        await serveThemeCssWithoutExternalImports(homePage.page);
+        try {
+          await homePage.goto();
+          await homePage.switchToTheme(theme);
+          await waitForStylesheetLoad(homePage.getThemeCss());
+          expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
+
+          await test.step('Homepage Get started CTA meets AA contrast', async () => {
+            const cta = homePage.page.getByTestId('home-cta-get-started');
+            await expect(cta).toBeVisible();
+            const ratio = await getContrastRatio(cta);
+            expect(
+              ratio,
+              `home-cta-get-started contrast under ${theme} (got ${ratio.toFixed(2)})`
+            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+          });
+
+          await test.step('Examples page primary CTA meets AA contrast', async () => {
+            await homePage.page.goto('/examples/');
+            await homePage.page.waitForLoadState('domcontentloaded');
+            expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
+            const cta = homePage.page.getByTestId('examples-cta-contribute');
+            await expect(cta).toBeVisible();
+            const ratio = await getContrastRatio(cta);
+            expect(
+              ratio,
+              `examples-cta-contribute contrast under ${theme} (got ${ratio.toFixed(2)})`
+            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+          });
+        } finally {
+          await homePage.page.unrouteAll({ behavior: 'ignoreErrors' });
+        }
+      });
+    });
+  });
 });
