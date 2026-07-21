@@ -126,9 +126,10 @@ test.describe('Component State Visual Regression @visual', () => {
     const firstItem = page.locator('.theme-option').first();
     await firstItem.hover();
 
-    await expect(page).toHaveScreenshot('theme-menu-item-hover.png', {
-      fullPage: false,
-    });
+    // Screenshot only the menu: the hover interaction makes full-page shots
+    // nondeterministic (hover-induced layout/scroll shifts, #709), and the
+    // test's subject is the item highlight, not the page behind it.
+    await expect(menu).toHaveScreenshot('theme-menu-item-hover.png');
   });
 });
 
