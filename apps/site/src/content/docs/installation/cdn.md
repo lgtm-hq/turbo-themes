@@ -121,7 +121,7 @@ For production, pin to a specific version to avoid unexpected changes:
       href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
     />
     <link
-      id="theme-css"
+      id="turbo-theme-css"
       rel="stylesheet"
       href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
     />
@@ -166,7 +166,7 @@ For production, pin to a specific version to avoid unexpected changes:
       function toggleTheme() {
         currentIndex = (currentIndex + 1) % themes.length;
         const theme = themes[currentIndex];
-        document.getElementById('theme-css').href =
+        document.getElementById('turbo-theme-css').href =
           `https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/${theme}.css`;
       }
     </script>

@@ -76,7 +76,11 @@ Give your theme CSS link an ID so JavaScript can swap it:
   <link rel="stylesheet" href="/css/turbo-base.css" />
 
   <!-- Theme (with ID for JavaScript access) -->
-  <link id="theme-css" rel="stylesheet" href="/css/themes/turbo/catppuccin-mocha.css" />
+  <link
+    id="turbo-theme-css"
+    rel="stylesheet"
+    href="/css/themes/turbo/catppuccin-mocha.css"
+  />
 </head>
 ```
 
@@ -94,7 +98,8 @@ const CATALOG = [
 function setTheme(themeName) {
   if (!CATALOG.includes(themeName)) return;
 
-  document.getElementById('theme-css').href = `/css/themes/turbo/${themeName}.css`;
+  document.getElementById('turbo-theme-css').href =
+    `/css/themes/turbo/${themeName}.css`;
   document.documentElement.setAttribute('data-theme', themeName);
   localStorage.setItem('turbo-theme', themeName);
 }
@@ -195,7 +200,7 @@ For plain HTML files, write the script directly using your hardcoded catalog:
       var theme = saved && VALID_THEMES.indexOf(saved) !== -1 ? saved : DEFAULT_THEME;
 
       document.documentElement.setAttribute('data-theme', theme);
-      var link = document.getElementById('theme-css');
+      var link = document.getElementById('turbo-theme-css');
       if (link) link.href = '/css/themes/turbo/' + theme + '.css';
     } catch (e) {
       console.warn('Unable to load saved theme:', e);

@@ -99,46 +99,28 @@ Combine multiple theme layers for complex designs:
 }
 ```
 
-### Theme Inheritance
+### Theme Catalog Variants
 
-Create theme variants that inherit from a base:
+Curate light/dark (or vendor-scoped) subsets with `createThemeCatalog` — there is no
+`createTheme` factory on the package root. For brand-new palettes, author CSS token
+files instead (see [Custom Themes](/docs/guides/custom-themes/)).
 
 ```javascript
-// themes/custom-theme.js
-import { createTheme } from '@lgtm-hq/turbo-themes';
+import { createThemeCatalog } from '@lgtm-hq/turbo-themes';
 
-const baseTheme = {
-  colors: {
-    brand: {
-      primary: '#7c3aed',
-      secondary: '#a78bfa',
-    },
-  },
-};
+// Light-only catalog for a settings panel
+export const lightCatalog = createThemeCatalog({ appearances: ['light'] });
 
-export const lightVariant = createTheme({
-  ...baseTheme,
-  mode: 'light',
-  colors: {
-    ...baseTheme.colors,
-    background: {
-      base: '#ffffff',
-      surface: '#f8fafc',
-    },
-  },
+// Dark-only catalog
+export const darkCatalog = createThemeCatalog({ appearances: ['dark'] });
+
+// Vendor-scoped catalog (e.g. Catppuccin + Dracula)
+export const accentCatalog = createThemeCatalog({
+  vendors: ['catppuccin', 'dracula'],
 });
 
-export const darkVariant = createTheme({
-  ...baseTheme,
-  mode: 'dark',
-  colors: {
-    ...baseTheme.colors,
-    background: {
-      base: '#0f172a',
-      surface: '#1e293b',
-    },
-  },
-});
+// Use catalog.themeIds / catalog.flavors / catalog.vendorGroups in your UI
+console.log(lightCatalog.themeIds);
 ```
 
 ## Dynamic Theming

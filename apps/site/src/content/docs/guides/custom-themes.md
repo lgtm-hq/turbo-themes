@@ -203,7 +203,7 @@ function setTheme(themeId) {
   const basePath = isCustom ? '/css/' : '/css/themes/turbo/';
   const fileName = isCustom ? 'my-custom-theme.css' : `${themeId}.css`;
 
-  document.getElementById('theme-css').href = basePath + fileName;
+  document.getElementById('turbo-theme-css').href = basePath + fileName;
   localStorage.setItem('turbo-theme', themeId);
 }
 ```

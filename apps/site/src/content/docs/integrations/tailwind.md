@@ -43,9 +43,17 @@ Add the theme CSS to your HTML:
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
 />
 <link
+  id="turbo-theme-css"
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
+```
+
+Or with a bundler:
+
+```javascript
+import '@lgtm-hq/turbo-themes/css/core';
+import '@lgtm-hq/turbo-themes/css/themes/catppuccin-mocha.css';
 ```
 
 ## Available Classes
@@ -114,12 +122,16 @@ The preset adds these color utilities:
 ## Theme Switching
 
 Theme switching works automatically. When you change the theme CSS file, Tailwind
-utilities update because they reference CSS variables:
+utilities update because they reference CSS variables. Use the same `node_modules/…`
+path as the initial `<link>` (a site-root `/packages/…` URL will 404 on a standard
+install). That form suits plain-HTML pages served from the project root during
+development; in production, copy the themes directory into your public assets or use the
+CDN URLs:
 
 ```javascript
 function setTheme(themeName) {
-  const link = document.getElementById('theme-css');
-  link.href = `/packages/css/dist/themes/${themeName}.css`;
+  const link = document.getElementById('turbo-theme-css');
+  link.href = `node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
 }
 ```
 

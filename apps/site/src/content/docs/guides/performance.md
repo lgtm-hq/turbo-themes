@@ -92,9 +92,9 @@ Import only what you need:
 // Instead of importing everything
 // import { themes, tokens, utils } from '@lgtm-hq/turbo-themes';
 
-// Import specific modules
+// Import specific modules from their public entry points
 import { getTheme } from '@lgtm-hq/turbo-themes';
-import { applyTheme } from '@lgtm-hq/turbo-themes';
+import { applyTheme } from '@lgtm-hq/turbo-themes/selector';
 ```
 
 ### CSS Purging
