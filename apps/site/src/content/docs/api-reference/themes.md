@@ -457,7 +457,7 @@ const lightThemes = getThemesByAppearance('light').map((f) => f.id); // 9 themes
 
 ```javascript
 function setTheme(themeId) {
-  const link = document.getElementById('theme-css');
+  const link = document.getElementById('turbo-theme-css');
   link.href = `/css/themes/turbo/${themeId}.css`;
   document.documentElement.setAttribute('data-theme', themeId);
   localStorage.setItem('turbo-theme', themeId);

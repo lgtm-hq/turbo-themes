@@ -88,7 +88,7 @@ To enable runtime theme switching:
 ```javascript
 function setTheme(themeName) {
   // Update the theme CSS
-  const themeLink = document.getElementById('theme-css');
+  const themeLink = document.getElementById('turbo-theme-css');
   themeLink.href = `node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
 
   // Persist the choice
@@ -106,7 +106,7 @@ Make sure your theme link has an ID:
 
 ```html
 <link
-  id="theme-css"
+  id="turbo-theme-css"
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />

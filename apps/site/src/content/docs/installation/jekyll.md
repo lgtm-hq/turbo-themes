@@ -70,7 +70,7 @@ In your `_layouts/default.html`:
     <link rel="stylesheet" href="{{ '/assets/css/turbo-core.css' | relative_url }}" />
     <link rel="stylesheet" href="{{ '/assets/css/turbo-base.css' | relative_url }}" />
     <link
-      id="theme-css"
+      id="turbo-theme-css"
       rel="stylesheet"
       href="{{ '/assets/css/themes/turbo/catppuccin-mocha.css' | relative_url }}"
     />
@@ -100,7 +100,7 @@ Create a theme switcher component:
 
 <script>
   function setTheme(theme) {
-    document.getElementById('theme-css').href =
+    document.getElementById('turbo-theme-css').href =
       '{{ "/assets/css/themes/turbo/" | relative_url }}' + theme + '.css';
     localStorage.setItem('turbo-theme', theme);
   }
@@ -147,7 +147,7 @@ Add a blocking script in your `<head>` to apply the saved theme before render:
 <script>
   (function () {
     var theme = localStorage.getItem('turbo-theme') || 'catppuccin-mocha';
-    var link = document.getElementById('theme-css');
+    var link = document.getElementById('turbo-theme-css');
     if (link) {
       link.href = '{{ "/assets/css/themes/turbo/" | relative_url }}' + theme + '.css';
     }

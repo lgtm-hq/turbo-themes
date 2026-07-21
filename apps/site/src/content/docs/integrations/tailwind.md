@@ -43,7 +43,7 @@ Add the theme CSS to your HTML:
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
 />
 <link
-  id="theme-css"
+  id="turbo-theme-css"
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -130,7 +130,7 @@ CDN URLs:
 
 ```javascript
 function setTheme(themeName) {
-  const link = document.getElementById('theme-css');
+  const link = document.getElementById('turbo-theme-css');
   link.href = `node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
 }
 ```

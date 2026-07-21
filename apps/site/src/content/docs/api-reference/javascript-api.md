@@ -240,7 +240,7 @@ For static pages, write the script directly. Keep `VALID_THEMES` in sync with yo
       var theme = saved && VALID_THEMES.indexOf(saved) !== -1 ? saved : DEFAULT_THEME;
 
       document.documentElement.setAttribute('data-theme', theme);
-      var link = document.getElementById('theme-css');
+      var link = document.getElementById('turbo-theme-css');
       if (link) link.href = '/css/themes/turbo/' + theme + '.css';
     } catch (e) {
       console.warn('Unable to load saved theme:', e);
@@ -269,7 +269,7 @@ function getStoredTheme(): string {
 function setTheme(themeId: string): void {
   if (!CATALOG.includes(themeId)) return;
 
-  const link = document.getElementById('theme-css') as HTMLLinkElement | null;
+  const link = document.getElementById('turbo-theme-css') as HTMLLinkElement | null;
   if (link) link.href = `/css/themes/turbo/${themeId}.css`;
 
   document.documentElement.setAttribute('data-theme', themeId);
@@ -301,14 +301,14 @@ export function useTheme() {
     if (!CATALOG.includes(newTheme)) return;
     setThemeState(newTheme);
     localStorage.setItem(STORAGE_KEY, newTheme);
-    const link = document.getElementById('theme-css') as HTMLLinkElement | null;
+    const link = document.getElementById('turbo-theme-css') as HTMLLinkElement | null;
     if (link) link.href = `/css/themes/turbo/${newTheme}.css`;
     document.documentElement.setAttribute('data-theme', newTheme);
   };
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    const link = document.getElementById('theme-css') as HTMLLinkElement | null;
+    const link = document.getElementById('turbo-theme-css') as HTMLLinkElement | null;
     if (link) link.href = `/css/themes/turbo/${theme}.css`;
   }, [theme]);
 
@@ -340,7 +340,7 @@ function setTheme(newTheme: string) {
 
 watch(theme, (id) => {
   document.documentElement.setAttribute('data-theme', id);
-  const link = document.getElementById('theme-css') as HTMLLinkElement | null;
+  const link = document.getElementById('turbo-theme-css') as HTMLLinkElement | null;
   if (link) link.href = `/css/themes/turbo/${id}.css`;
   localStorage.setItem(STORAGE_KEY, id);
 });
@@ -373,7 +373,7 @@ onMounted(() => {
     currentTheme = theme;
     localStorage.setItem('turbo-theme', theme);
 
-    const link = document.getElementById('theme-css') as HTMLLinkElement;
+    const link = document.getElementById('turbo-theme-css') as HTMLLinkElement;
     if (link) {
       link.href = `/css/themes/turbo/${theme}.css`;
     }

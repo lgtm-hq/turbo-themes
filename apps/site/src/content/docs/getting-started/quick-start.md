@@ -48,7 +48,7 @@ No installation needed - just add the links to your HTML:
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
 />
 <link
-  id="theme-css"
+  id="turbo-theme-css"
   rel="stylesheet"
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -71,7 +71,7 @@ If you installed via npm, import the CSS files in your project:
 
 <!-- Choose a theme (id required for the switcher below) -->
 <link
-  id="theme-css"
+  id="turbo-theme-css"
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -131,7 +131,7 @@ bundle the CSS, copy the themes directory into their public assets, or use the C
 
 ```javascript
 function setTheme(themeName) {
-  const themeLink = document.getElementById('theme-css');
+  const themeLink = document.getElementById('turbo-theme-css');
   themeLink.href = `node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
 
   // Persist the choice
@@ -147,7 +147,7 @@ setTheme('catppuccin-latte');
 
 ```javascript
 function setTheme(themeName) {
-  const themeLink = document.getElementById('theme-css');
+  const themeLink = document.getElementById('turbo-theme-css');
   themeLink.href = `https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
   localStorage.setItem('turbo-theme', themeName);
 }

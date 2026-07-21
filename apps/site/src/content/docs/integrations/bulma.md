@@ -32,7 +32,7 @@ Add the CSS files in this order:
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
 />
 <link
-  id="theme-css"
+  id="turbo-theme-css"
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -58,7 +58,7 @@ Add the CSS files in this order:
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
 />
 <link
-  id="theme-css"
+  id="turbo-theme-css"
   rel="stylesheet"
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -198,7 +198,7 @@ your public assets or use the CDN URLs:
 
 ```javascript
 function setTheme(themeName) {
-  const link = document.getElementById('theme-css');
+  const link = document.getElementById('turbo-theme-css');
   link.href = `node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
   localStorage.setItem('turbo-theme', themeName);
 }
@@ -212,7 +212,7 @@ setTheme('catppuccin-latte');
 
 ```javascript
 function setTheme(themeName) {
-  const link = document.getElementById('theme-css');
+  const link = document.getElementById('turbo-theme-css');
   link.href = `https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
   localStorage.setItem('turbo-theme', themeName);
 }
