@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.38.6] - 2026-07-21
+
+### 🔧 Changed
+
+- Upgrade Astro to 7.1.3 for XSS advisory fixes (#738)
+
 ## [0.38.5] - 2026-07-21
 
 ### 🐛 Fixed
