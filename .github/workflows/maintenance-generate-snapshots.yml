@@ -1,4 +1,8 @@
 ---
+# Generate Linux @visual baselines in an environment aligned with quality-e2e.yml
+# (harden-runner block + same allowlist, playwright install --with-deps, apt Ruby
+# via bootstrap-e2e-snapshots.sh). Audit-mode / setup-env / install-without-deps
+# previously produced byte-stable baselines that still failed e2e (#708).
 name: Maintenance - Generate E2E Snapshots
 
 on:
@@ -15,7 +19,7 @@ permissions:
   actions: read
 
 env:
-  NODE_VERSION: 22
+  NODE_VERSION: '22'
   PLAYWRIGHT_SNAPSHOT_DIR: snapshots
 
 jobs:
@@ -25,31 +29,65 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0cd4708d7b5920 # v2.20.0
+        uses: step-security/harden-runner@bf7454d06d71f1098171f2acdf0dc4708d7b5920 # v2.20.0
         with:
-          egress-policy: audit
+          # Match quality-e2e.yml full-suite egress (block + allowlist), not audit.
+          egress-policy: block
+          allowed-endpoints: >-
+            github.com:443
+            api.github.com:443
+            codeload.github.com:443
+            objects.githubusercontent.com:443
+            raw.githubusercontent.com:443
+            release-assets.githubusercontent.com:443
+            pipelines.actions.githubusercontent.com:443
+            registry.npmjs.org:443
+            bun.sh:443
+            cdn.playwright.dev:443
+            playwright.azureedge.net:443
+            playwright-akamai.azureedge.net:443
+            playwright-verizon.azureedge.net:443
+            playwright.download.prss.microsoft.com:443
+            storage.googleapis.com:443
+            archive.ubuntu.com:80
+            security.ubuntu.com:80
+            azure.archive.ubuntu.com:80
+            esm.ubuntu.com:443
+            packages.microsoft.com:443
+            rubygems.org:443
+            api.rubygems.org:443
+            index.rubygems.org:443
+            bundler.rubygems.org:443
+            rubygems.global.ssl.fastly.net:443
+            rubygems-downloads.global.ssl.fastly.net:443
 
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ inputs.branch }}
 
-      - name: Setup environment
-        uses: ./.github/actions/setup-env
+      # Mirror the lgtm-ci Playwright reusable setup used by quality-e2e.yml
+      # (Node + Bun + frozen install + playwright --with-deps), not setup-env
+      # (which pulls Ruby via setup-ruby / Python / uv and different packages).
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: '${{ env.NODE_VERSION }}'
-          skip-ruby: 'false'
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
 
       - name: Install Playwright browsers
-        run: bun run e2e:install
-
-      - name: Build site
-        run: bun run e2e:prep
+        # --with-deps pulls the same system font/library packages as quality-e2e.
+        run: npx playwright install --with-deps chromium
 
       - name: Generate snapshots
-        run: bun run e2e --update-snapshots --grep @visual
-        env:
-          UPDATE_SNAPSHOTS: '1'
+        run: ./scripts/ci/bootstrap-e2e-snapshots.sh
 
       - name: Upload Linux snapshots
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0

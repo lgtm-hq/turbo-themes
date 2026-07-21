@@ -31,6 +31,9 @@ concurrency:
 # - allowed-endpoints is the complete enforced allowlist (pre-enforcement
 #   replace semantics, lgtm-ci#467): playwright preset + Playwright CDN
 #   fallbacks + Ubuntu apt mirrors (+ RubyGems on the full-suite leg).
+# - Linux @visual baselines must be regenerated via
+#   maintenance-generate-snapshots.yml, which mirrors this job's egress policy,
+#   playwright install --with-deps, and apt-Ruby bootstrap (#708).
 jobs:
   # Org ruleset context: e2e / 🎭 E2E Tests
   e2e:
