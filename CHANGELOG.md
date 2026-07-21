@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.38.5] - 2026-07-21
+
+### 🐛 Fixed
+
+- Stabilize homepage CLS under the 0.1 CWV budget (#739)
+
 ## [0.38.4] - 2026-07-21
 
 ### 🤖 Internal
