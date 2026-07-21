@@ -443,12 +443,40 @@ export async function getContrastRatio(target: Locator): Promise<number> {
       a: 1,
     });
 
-    // Collect background layers from the element upward until opaque.
+    /**
+     * Extract gradient color stops from a computed background-image. Computed
+     * styles serialize stop colors as rgb()/rgba()/color(srgb …), so the same
+     * parser applies. Returns [] for none/unparseable images.
+     */
+    const gradientStops = (image: string): Rgba[] => {
+      if (!image || image === 'none' || !image.includes('gradient(')) return [];
+      const stops: Rgba[] = [];
+      const colorPattern = /rgba?\([^)]+\)|color\(srgb[^)]+\)/g;
+      for (const match of image.match(colorPattern) ?? []) {
+        const parsed = parseColor(match);
+        if (parsed) stops.push(parsed);
+      }
+      return stops;
+    };
+
+    // Collect background layers from the element upward until opaque. The
+    // first gradient encountered contributes its stops: contrast is later
+    // evaluated against EVERY stop and the worst ratio wins, since text sits
+    // on all of them as the gradient sweeps (#741).
     const layers: Rgba[] = [];
+    let stops: Rgba[] = [];
     let node: Element | null = el;
     let foundOpaque = false;
     while (node) {
-      const bgValue = getComputedStyle(node).backgroundColor;
+      const style = getComputedStyle(node);
+      if (stops.length === 0) {
+        stops = gradientStops(style.backgroundImage);
+        if (stops.length > 0 && stops.every((s) => s.a >= 1)) {
+          foundOpaque = true;
+          break;
+        }
+      }
+      const bgValue = style.backgroundColor;
       const parsed = parseColor(bgValue);
       if (!parsed) {
         // Fail loudly on unknown spaces (oklch/lab/display-p3, etc.) so a
@@ -473,11 +501,15 @@ export async function getContrastRatio(target: Locator): Promise<number> {
       background = over(layers[i] as Rgba, background);
     }
 
+    // With a gradient present, the effective backgrounds are its stops
+    // (translucent stops composited over the backdrop resolved above).
+    const backgrounds: Rgba[] =
+      stops.length > 0 ? stops.map((s) => (s.a >= 1 ? { ...s, a: 1 } : over(s, background))) : [background];
+
     const textColor = parseColor(getComputedStyle(el).color);
     if (!textColor) {
       throw new Error(`Unparseable text color: ${getComputedStyle(el).color}`);
     }
-    const text = textColor.a < 1 ? over(textColor, background) : textColor;
 
     /** WCAG relative luminance of an opaque sRGB color. */
     const luminance = (c: Rgba): number => {
@@ -488,9 +520,14 @@ export async function getContrastRatio(target: Locator): Promise<number> {
       return 0.2126 * channel(c.r) + 0.7152 * channel(c.g) + 0.0722 * channel(c.b);
     };
 
-    const l1 = luminance(text);
-    const l2 = luminance(background);
-    return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    let worst = Infinity;
+    for (const bg of backgrounds) {
+      const text = textColor.a < 1 ? over(textColor, bg) : textColor;
+      const l1 = luminance(text);
+      const l2 = luminance(bg);
+      worst = Math.min(worst, (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05));
+    }
+    return worst;
   });
 }
 
