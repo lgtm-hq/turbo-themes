@@ -30,6 +30,9 @@ export const THEME_IDS = [
   'gruvbox-light-hard',
   'gruvbox-light-soft',
   'gruvbox-light',
+  'kanagawa-dragon',
+  'kanagawa-lotus',
+  'kanagawa-wave',
   'nord',
   'one-dark',
   'one-light',
@@ -67,6 +70,7 @@ export const VENDOR_ORDER = [
   'solarized',
   'rose-pine',
   'tokyo-night',
+  'kanagawa',
   'one-dark',
   'turbo',
 ] as const;
@@ -97,6 +101,9 @@ export const THEME_DESCRIPTIONS = {
   "gruvbox-light-hard": "Bright, crisp Gruvbox light palette with extra contrast.",
   "gruvbox-light-soft": "Soft, low-contrast Gruvbox light palette for long sessions.",
   "gruvbox-light": "Classic Gruvbox light palette with warm paper tones.",
+  "kanagawa-dragon": "Darker Kanagawa variant for late-night sessions.",
+  "kanagawa-lotus": "Light Kanagawa palette for daytime use.",
+  "kanagawa-wave": "Heart-warming dark Kanagawa palette inspired by The Great Wave.",
   "nord": "Arctic, north-bluish color palette inspired by the polar night.",
   "one-dark": "The classic Atom One Dark palette with vivid syntax accents.",
   "one-light": "Companion One Light palette for bright, daytime editing.",
@@ -141,6 +148,9 @@ export const THEME_ICONS = {
   "gruvbox-light-hard": "gruvbox-light-hard.png",
   "gruvbox-light-soft": "gruvbox-light-soft.png",
   "gruvbox-light": "gruvbox-light.png",
+  "kanagawa-dragon": "kanagawa-dragon.png",
+  "kanagawa-lotus": "kanagawa-lotus.png",
+  "kanagawa-wave": "kanagawa-wave.png",
   "nord": "nord.png",
   "one-dark": "one-dark.png",
   "one-light": "one-light.png",
@@ -193,6 +203,10 @@ export const VENDOR_ICONS = {
   },
   "rose-pine": "rose-pine.png",
   "tokyo-night": "tokyo-night.png",
+  "kanagawa": {
+    "light": "kanagawa-lotus.png",
+    "dark": "kanagawa-wave.png"
+  },
   "one-dark": {
     "light": "one-light.png",
     "dark": "one-dark.png"
@@ -245,6 +259,10 @@ export const VENDOR_FAMILY_META = {
   "tokyo-night": {
     "name": "Tokyo Night",
     "description": "Neon-infused nightscape with crisp contrast"
+  },
+  "kanagawa": {
+    "name": "Kanagawa",
+    "description": "Japanese-inspired palette drawn from The Great Wave off Kanagawa"
   },
   "one-dark": {
     "name": "One",

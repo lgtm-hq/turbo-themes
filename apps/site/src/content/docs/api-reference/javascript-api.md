@@ -234,6 +234,9 @@ For static pages, write the script directly. Keep `VALID_THEMES` in sync with yo
         'tokyo-night-dark',
         'tokyo-night-light',
         'tokyo-night-storm',
+        'kanagawa-wave',
+        'kanagawa-dragon',
+        'kanagawa-lotus',
       ];
 
       var saved = localStorage.getItem('turbo-theme');

@@ -17,6 +17,7 @@ export type ThemeFamily =
   | 'solarized'
   | 'rose-pine'
   | 'tokyo-night'
+  | 'kanagawa'
   | 'one-dark'
   | 'turbo';
 
@@ -71,6 +72,10 @@ export const THEME_FAMILIES: Record<ThemeFamily, ThemeFamilyMeta> = {
     "name": "Tokyo Night",
     "description": "Neon-infused nightscape with crisp contrast"
   },
+  "kanagawa": {
+    "name": "Kanagawa",
+    "description": "Japanese-inspired palette drawn from The Great Wave off Kanagawa"
+  },
   "one-dark": {
     "name": "One",
     "description": "The iconic Atom editor palette in dark and light"
@@ -100,6 +105,7 @@ export const VENDOR_FAMILY_MAP: Record<string, ThemeFamily> = {
   "solarized": "solarized",
   "rose-pine": "rose-pine",
   "tokyo-night": "tokyo-night",
+  "kanagawa": "kanagawa",
   "one-dark": "one-dark",
   "turbo": "turbo"
 };
@@ -144,6 +150,10 @@ export const VENDOR_ICON_MAP: Record<string, string | AppearanceIcons> = {
   },
   "rose-pine": "assets/img/rose-pine.png",
   "tokyo-night": "assets/img/tokyo-night.png",
+  "kanagawa": {
+    "light": "assets/img/kanagawa-lotus.png",
+    "dark": "assets/img/kanagawa-wave.png"
+  },
   "one-dark": {
     "light": "assets/img/one-light.png",
     "dark": "assets/img/one-dark.png"
@@ -174,6 +184,9 @@ export const FLAVOR_DESCRIPTIONS: Record<string, string> = {
   "gruvbox-light-hard": "Bright, crisp Gruvbox light palette with extra contrast.",
   "gruvbox-light-soft": "Soft, low-contrast Gruvbox light palette for long sessions.",
   "gruvbox-light": "Classic Gruvbox light palette with warm paper tones.",
+  "kanagawa-dragon": "Darker Kanagawa variant for late-night sessions.",
+  "kanagawa-lotus": "Light Kanagawa palette for daytime use.",
+  "kanagawa-wave": "Heart-warming dark Kanagawa palette inspired by The Great Wave.",
   "nord": "Arctic, north-bluish color palette inspired by the polar night.",
   "one-dark": "The classic Atom One Dark palette with vivid syntax accents.",
   "one-light": "Companion One Light palette for bright, daytime editing.",

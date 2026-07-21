@@ -36,6 +36,9 @@ const THEMES = [
   { id: "radix-slate-light", name: "Radix Slate Light" },
   { id: "radix-mauve-dark", name: "Radix Mauve Dark" },
   { id: "radix-mauve-light", name: "Radix Mauve Light" },
+  { id: "kanagawa-wave", name: "Kanagawa Wave" },
+  { id: "kanagawa-dragon", name: "Kanagawa Dragon" },
+  { id: "kanagawa-lotus", name: "Kanagawa Lotus" },
 ] as const;
 
 const VALID_THEME_IDS = THEMES.map((t) => t.id);

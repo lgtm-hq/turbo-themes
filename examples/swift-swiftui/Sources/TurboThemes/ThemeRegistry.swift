@@ -602,6 +602,54 @@ public enum ThemeRegistry {
             )
         ),
 
+        .kanagawaWave: ThemeDefinition(
+            id: .kanagawaWave,
+            label: "Kanagawa Wave",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#1F1F28"),
+                backgroundSurface: Color(hex: "#2A2A37"),
+                heading: Color(hex: "#7E9CD8"),
+                bodyPrimary: Color(hex: "#DCD7BA"),
+                bodySecondary: Color(hex: "#C8C093"),
+                brandPrimary: Color(hex: "#7E9CD8"),
+                stateSuccess: Color(hex: "#98BB6C"),
+                stateDanger: Color(hex: "#E82424"),
+                stateWarning: Color(hex: "#FF9E3B"),
+                stateInfo: Color(hex: "#658594")
+            )
+        ),
+        .kanagawaDragon: ThemeDefinition(
+            id: .kanagawaDragon,
+            label: "Kanagawa Dragon",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#181616"),
+                backgroundSurface: Color(hex: "#282727"),
+                heading: Color(hex: "#8ba4b0"),
+                bodyPrimary: Color(hex: "#c5c9c5"),
+                bodySecondary: Color(hex: "#C8C093"),
+                brandPrimary: Color(hex: "#8ba4b0"),
+                stateSuccess: Color(hex: "#98BB6C"),
+                stateDanger: Color(hex: "#E82424"),
+                stateWarning: Color(hex: "#FF9E3B"),
+                stateInfo: Color(hex: "#658594")
+            )
+        ),
+        .kanagawaLotus: ThemeDefinition(
+            id: .kanagawaLotus,
+            label: "Kanagawa Lotus",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#f2ecbc"),
+                backgroundSurface: Color(hex: "#e7dba0"),
+                heading: Color(hex: "#4d699b"),
+                bodyPrimary: Color(hex: "#545464"),
+                bodySecondary: Color(hex: "#43436c"),
+                brandPrimary: Color(hex: "#4d699b"),
+                stateSuccess: Color(hex: "#6f894e"),
+                stateDanger: Color(hex: "#e82424"),
+                stateWarning: Color(hex: "#e98a00"),
+                stateInfo: Color(hex: "#5a7785")
+            )
+        ),
     ]
 
     /// Get a theme by its ID.

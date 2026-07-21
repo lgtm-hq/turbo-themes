@@ -100,9 +100,11 @@ final class ThemeAccessibilityTests: XCTestCase {
     func testLightThemesHaveLighterBackgrounds() {
         let lightThemes: [ThemeId] = [
             .catppuccinLatte, .githubLight, .bulmaLight, .oneLight, .everforestLight,
+            .kanagawaLotus,
         ]
         let darkThemes: [ThemeId] = [
             .catppuccinMocha, .dracula, .githubDark, .bulmaDark, .oneDark, .everforestDark,
+            .kanagawaWave, .kanagawaDragon,
         ]
 
         for lightId in lightThemes {
@@ -127,7 +129,7 @@ final class ThemeAccessibilityTests: XCTestCase {
     func testDarkThemesHaveDistinctBackgrounds() {
         let darkThemes: [ThemeId] = [
             .catppuccinMocha, .catppuccinFrappe, .catppuccinMacchiato,
-            .dracula, .githubDark, .bulmaDark, .oneDark
+            .dracula, .githubDark, .bulmaDark, .oneDark, .kanagawaWave, .kanagawaDragon,
         ]
 
         var backgrounds = Set<String>()
@@ -193,6 +195,9 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .radixSlateLight: return "#fcfcfd"
         case .radixMauveDark: return "#121113"
         case .radixMauveLight: return "#fdfcfd"
+        case .kanagawaWave: return "#1F1F28"
+        case .kanagawaDragon: return "#181616"
+        case .kanagawaLotus: return "#f2ecbc"
         }
     }
 
@@ -222,6 +227,9 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .radixSlateLight: return "#1c2024"
         case .radixMauveDark: return "#eeeef0"
         case .radixMauveLight: return "#211f26"
+        case .kanagawaWave: return "#DCD7BA"
+        case .kanagawaDragon: return "#c5c9c5"
+        case .kanagawaLotus: return "#545464"
         }
     }
 
@@ -250,6 +258,8 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .radixSlateLight: return "#60646c"
         case .radixMauveDark: return "#b5b2bc"
         case .radixMauveLight: return "#65636d"
+        case .kanagawaWave, .kanagawaDragon: return "#C8C093"
+        case .kanagawaLotus: return "#43436c"
         }
     }
 
@@ -278,6 +288,9 @@ final class ThemeAccessibilityTests: XCTestCase {
         case .radixSlateLight: return "#218358"
         case .radixMauveDark: return "#3dd68c"
         case .radixMauveLight: return "#218358"
+        case .kanagawaWave: return "#7E9CD8"
+        case .kanagawaDragon: return "#8ba4b0"
+        case .kanagawaLotus: return "#4d699b"
         }
     }
 
@@ -327,6 +340,10 @@ final class ThemeAccessibilityTests: XCTestCase {
             return ["#30a46c", "#e5484d", "#ffc53d", "#00a2c7"]
         case .radixSlateLight, .radixMauveLight:
             return ["#30a46c", "#e5484d", "#ffc53d", "#00a2c7"]
+        case .kanagawaWave, .kanagawaDragon:
+            return ["#98BB6C", "#E82424", "#FF9E3B", "#658594"]
+        case .kanagawaLotus:
+            return ["#6f894e", "#e82424", "#e98a00", "#5a7785"]
         }
     }
 
