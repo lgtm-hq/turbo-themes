@@ -54,15 +54,18 @@ const groupedDocs = categories.map(cat => ({
 
     <main class="docs-main">
       <div class="docs-landing-content">
-        <header class="docs-landing-hero">
-          <h1>Documentation</h1>
-          <p>Learn how to use Turbo Themes for beautiful, consistent theming across any platform.</p>
-          <a href={`${baseUrl}/docs/getting-started/`} class="docs-landing-cta">
-            Get Started
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
-          </a>
+        <header class="docs-landing-hero site-reveal" style="--reveal-delay: 0.1s">
+          <span class="site-badge">Docs</span>
+          <h1 class="site-headline">Documentation</h1>
+          <p class="site-lede">Learn how to use Turbo Themes for beautiful, consistent theming across any platform.</p>
+          <div class="site-cta">
+            <a href={`${baseUrl}/docs/getting-started/`} class="btn btn-primary btn-lg">
+              Get Started
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </div>
         </header>
 
         <div class="docs-landing-grid">

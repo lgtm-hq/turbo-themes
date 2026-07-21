@@ -74,27 +74,7 @@
   align-items: center;
 }
 
-.showcase-badge {
-  display: inline-flex;
-  padding: 0.25rem 0.625rem;
-  border-radius: 9999px;
-  border: 1px solid var(--turbo-border-default);
-  background: color-mix(in srgb, var(--turbo-bg-surface) 80%, transparent);
-  font-size: 0.75rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-
-  /* Secondary tone nudged toward text-primary for WCAG AA contrast (#684). */
-  color: color-mix(in srgb, var(--turbo-text-secondary) 50%, var(--turbo-text-primary));
-}
-
-.showcase-headline {
-  margin: 0.75rem 0 0;
-  font-size: clamp(2.25rem, 6vw, 3.75rem);
-  font-weight: 800;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-}
+/* .showcase-badge / .showcase-headline → site.css (#685) */
 
 .showcase-text-mask {
   position: relative;
@@ -136,20 +116,7 @@
   clip-path: circle(120px at var(--mx) var(--my));
 }
 
-.showcase-lede {
-  margin: 0.75rem 0 0;
-  max-width: 36rem;
-  color: var(--turbo-text-secondary);
-  line-height: 1.6;
-  font-size: clamp(1rem, 2vw, 1.125rem);
-}
-
-.showcase-cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
-}
+/* .showcase-lede / .showcase-cta → site.css (#685) */
 
 /*
  * Scoped as .showcase-page descendants to out-rank the sitewide Noir chrome
@@ -582,27 +549,7 @@
   margin-bottom: 0.75rem;
 }
 
-.showcase-badge-pill {
-  padding: 0.2rem 0.5rem;
-  border-radius: 9999px;
-  font-size: 0.6875rem;
-  font-weight: 600;
-}
-
-.showcase-badge-pill.success {
-  background: color-mix(in srgb, var(--turbo-state-success) 18%, transparent);
-  color: var(--turbo-state-success);
-}
-
-.showcase-badge-pill.warning {
-  background: color-mix(in srgb, var(--turbo-state-warning) 18%, transparent);
-  color: var(--turbo-state-warning);
-}
-
-.showcase-badge-pill.danger {
-  background: color-mix(in srgb, var(--turbo-state-danger) 18%, transparent);
-  color: var(--turbo-state-danger);
-}
+/* .showcase-badge-pill → site.css (#685) */
 
 .showcase-preview-theme {
   display: flex;
@@ -686,33 +633,7 @@
   color: var(--turbo-brand-primary);
 }
 
-.showcase-reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  animation: showcase-fade-up 0.55s ease forwards;
-  animation-delay: var(--reveal-delay, 0s);
-}
-
-@keyframes showcase-fade-up {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-[data-showcase-reveal] {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.45s ease,
-    transform 0.45s ease;
-  transition-delay: var(--reveal-delay, 0s);
-}
-
-[data-showcase-reveal].is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* reveal primitives → site.css (#685) */
 
 .showcase-marquees {
   position: relative;
@@ -842,102 +763,21 @@
   border-top: 1px solid var(--turbo-border-default);
 }
 
-.showcase-features-grid {
-  width: min(1120px, 100%);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0;
-  border: 1px solid var(--turbo-border-default);
-}
-
-.showcase-feature {
-  padding: 1.125rem;
-  border-right: 1px solid var(--turbo-border-default);
-}
-
-.showcase-feature:last-child {
-  border-right: none;
-}
-
-.showcase-feature h3 {
-  margin: 0 0 0.5rem;
-  font-size: 0.9375rem;
-
-  /* Per-level theme heading colors can fail AA at this size; use body text (#684). */
-  color: var(--turbo-text-primary);
-}
-
-.showcase-feature p {
-  margin: 0;
-  font-size: 0.8125rem;
-
-  /* Secondary tone nudged toward text-primary for WCAG AA contrast (#684). */
-  color: color-mix(in srgb, var(--turbo-text-secondary) 60%, var(--turbo-text-primary));
-  line-height: 1.55;
-}
-
-.showcase-footer-cta {
-  position: relative;
-  z-index: 1;
-  padding: 2rem 1.5rem 5.5rem;
-  text-align: center;
-  border-top: 1px solid var(--turbo-border-default);
-}
-
-.showcase-footer-cta code {
-  display: block;
-  margin-bottom: 1.25rem;
-  font-family: var(--turbo-font-mono);
-  font-size: 1.0625rem;
-
-  /* Brand accent mixed toward text-primary for WCAG AA contrast (#684). */
-  color: color-mix(in srgb, var(--turbo-brand-primary) 60%, var(--turbo-text-primary));
-}
+/* .showcase-features-grid / .showcase-feature / .showcase-footer-cta → site.css (#685) */
 
 @media (max-width: 900px) {
   .showcase-hero-grid {
     grid-template-columns: 1fr;
   }
-
-  .showcase-features-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .showcase-feature:nth-child(2) {
-    border-right: none;
-  }
-
-  .showcase-feature {
-    border-bottom: 1px solid var(--turbo-border-default);
-  }
 }
 
-@media (max-width: 640px) {
-  .showcase-features-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .showcase-feature {
-    border-right: none;
-  }
-
-  /* Drop the 900px-query border-bottom so it does not double the grid border. */
-  .showcase-feature:last-child {
-    border-bottom: none;
-  }
-}
+/* feature-grid responsive rules (incl. mobile double-border fix) → site.css (#685) */
 
 @media (prefers-reduced-motion: reduce) {
   .showcase-marquee-left,
-  .showcase-marquee-right,
-  .showcase-reveal {
+  .showcase-marquee-right {
     animation: none;
   }
 
-  .showcase-reveal,
-  [data-showcase-reveal] {
-    opacity: 1;
-    transform: none;
-  }
+  /* reveal reduced-motion → site.css (#685) */
 }
