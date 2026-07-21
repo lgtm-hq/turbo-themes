@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.38.0] - 2026-07-21
+
+### ✨ Added
+
+- Align themes, components, and docs with showcase visual language (#705)
+
 ## [0.37.0] - 2026-07-21
 
 ### ✨ Added
