@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.0] - 2026-07-21
+
+### ✨ Added
+
+- Add Ayu theme pack (#607)
+
 ## [0.39.0] - 2026-07-21
 
 ### ✨ Added
