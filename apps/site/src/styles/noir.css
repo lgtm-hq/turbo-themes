@@ -156,12 +156,12 @@ html:root samp {
  * Exclude `.btn` anchors so component button colors win over this chrome
  * accent rule. `html:root a` out-specifies `.btn-primary` (#741).
  */
-html:root a:not(.btn) {
+html:root a:where(:not(.btn)) {
   color: var(--noir-accent);
   transition: color var(--transition-fast);
 }
 
-html:root a:not(.btn):hover {
+html:root a:where(:not(.btn)):hover {
   color: var(--noir-text-primary);
 }
 
