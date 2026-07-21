@@ -122,11 +122,11 @@ The preset adds these color utilities:
 ## Theme Switching
 
 Theme switching works automatically. When you change the theme CSS file, Tailwind
-utilities update because they reference CSS variables. Use the same
-`node_modules/…` path as the initial `<link>` (a site-root `/packages/…` URL will
-404 on a standard install). That form suits plain-HTML pages served from the
-project root during development; in production, copy the themes directory into
-your public assets or use the CDN URLs:
+utilities update because they reference CSS variables. Use the same `node_modules/…`
+path as the initial `<link>` (a site-root `/packages/…` URL will 404 on a standard
+install). That form suits plain-HTML pages served from the project root during
+development; in production, copy the themes directory into your public assets or use the
+CDN URLs:
 
 ```javascript
 function setTheme(themeName) {

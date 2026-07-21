@@ -124,9 +124,8 @@ Now you can use Turbo Themes tokens in your CSS:
 To enable theme switching, swap the theme CSS file dynamically. Keep the href in the
 same form as your initial `<link>` (npm `node_modules/…` path, or a CDN URL — not a
 site-root `/packages/…` path, which will 404). The `node_modules/…` form suits
-plain-HTML pages served from the project root during development; production apps
-should bundle the CSS, copy the themes directory into their public assets, or use
-the CDN URLs:
+plain-HTML pages served from the project root during development; production apps should
+bundle the CSS, copy the themes directory into their public assets, or use the CDN URLs:
 
 #### npm / local install
 
