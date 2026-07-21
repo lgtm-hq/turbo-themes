@@ -12,23 +12,10 @@
 
 set -euo pipefail
 
-if ! command -v ruby >/dev/null 2>&1; then
-  echo "Installing Ruby via apt..."
-  sudo apt-get update -y
-  sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ruby-full
-fi
-echo "ruby: $(ruby --version)"
-
-if ! command -v bundle >/dev/null 2>&1; then
-  echo "Installing bundler..."
-  sudo gem install bundler --no-document
-fi
-echo "bundler: $(bundle --version)"
-
-# Vendor the bundle locally so `bundle exec jekyll build` (prepare-examples.mjs)
-# resolves gems without writing to system paths.
-bundle config set --local path vendor/bundle
-bundle install
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/ci/ensure-e2e-ruby.sh
+source "${SCRIPT_DIR}/ensure-e2e-ruby.sh"
+ensure_e2e_ruby
 
 # Heavy prep build up front: the playwright.config webServer timeout (120s) is
 # too short for a cold e2e:prep, so the webServer then only serves the dist.

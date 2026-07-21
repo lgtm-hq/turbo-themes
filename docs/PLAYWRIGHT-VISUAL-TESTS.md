@@ -92,9 +92,14 @@ npx playwright test --grep @visual --update-snapshots
 ### Updating Linux Snapshots
 
 ```bash
-# Update Linux snapshots (matches CI environment)
+# Update Linux snapshots locally via Docker
 bash scripts/local/generate-linux-snapshots.sh
 ```
+
+For CI-matching Linux baselines, dispatch **Maintenance - Generate E2E Snapshots**
+(`maintenance-generate-snapshots.yml`) on the target branch. That workflow uses the same
+harden-runner allowlist, `playwright install --with-deps`, and apt-Ruby bootstrap as
+`quality-e2e.yml`, then uploads `e2e-snapshots-linux` for commit.
 
 **Important**: Always update both macOS and Linux snapshots when making visual changes
 to ensure tests pass in both environments.

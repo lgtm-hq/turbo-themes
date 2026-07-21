@@ -36,3 +36,7 @@ reports locally.
 
 Playwright is integrated into GitHub Actions via `quality-e2e.yml`. It generates PR
 comments and uploads artifacts for reports.
+
+Linux visual baselines for CI should be regenerated with
+`maintenance-generate-snapshots.yml` (aligned with the full e2e job environment) so
+font/system packages match verification.
