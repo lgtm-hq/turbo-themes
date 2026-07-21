@@ -68,8 +68,9 @@ If you installed via npm, import the CSS files in your project:
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
 />
 
-<!-- Choose a theme -->
+<!-- Choose a theme (id required for the switcher below) -->
 <link
+  id="theme-css"
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -79,6 +80,14 @@ If you installed via npm, import the CSS files in your project:
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css"
 />
+```
+
+With a bundler, prefer the public CSS export paths:
+
+```javascript
+import '@lgtm-hq/turbo-themes/css/core';
+import '@lgtm-hq/turbo-themes/css/base';
+import '@lgtm-hq/turbo-themes/css/themes/catppuccin-mocha.css';
 ```
 
 ## Step 3: Use the Tokens
@@ -111,12 +120,16 @@ Now you can use Turbo Themes tokens in your CSS:
 
 ## Step 4: Switch Themes (Optional)
 
-To enable theme switching, swap the theme CSS file dynamically:
+To enable theme switching, swap the theme CSS file dynamically. Keep the href in the
+same form as your initial `<link>` (npm `node_modules/…` path, or a CDN URL — not a
+site-root `/packages/…` path, which will 404):
+
+#### npm / local install
 
 ```javascript
 function setTheme(themeName) {
   const themeLink = document.getElementById('theme-css');
-  themeLink.href = `/packages/css/dist/themes/${themeName}.css`;
+  themeLink.href = `node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
 
   // Persist the choice
   localStorage.setItem('turbo-theme', themeName);
@@ -125,6 +138,16 @@ function setTheme(themeName) {
 // Usage
 setTheme('dracula');
 setTheme('catppuccin-latte');
+```
+
+#### CDN
+
+```javascript
+function setTheme(themeName) {
+  const themeLink = document.getElementById('theme-css');
+  themeLink.href = `https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
+  localStorage.setItem('turbo-theme', themeName);
+}
 ```
 
 ## All Done

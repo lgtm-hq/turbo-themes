@@ -32,6 +32,7 @@ Add the CSS files in this order:
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
 />
 <link
+  id="theme-css"
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -57,6 +58,7 @@ Add the CSS files in this order:
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
 />
 <link
+  id="theme-css"
   rel="stylesheet"
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -187,18 +189,31 @@ Use standard Bulma classes - they'll automatically use your theme colors.
 
 ## Theme Switching
 
-Switching themes updates all Bulma components automatically:
+Switching themes updates all Bulma components automatically. Match the href form to
+how you loaded the initial theme:
+
+#### npm / local install
 
 ```javascript
 function setTheme(themeName) {
   const link = document.getElementById('theme-css');
-  link.href = `/packages/css/dist/themes/${themeName}.css`;
+  link.href = `node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
   localStorage.setItem('turbo-theme', themeName);
 }
 
 // Example usage
 setTheme('dracula');
 setTheme('catppuccin-latte');
+```
+
+#### CDN
+
+```javascript
+function setTheme(themeName) {
+  const link = document.getElementById('theme-css');
+  link.href = `https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
+  localStorage.setItem('turbo-theme', themeName);
+}
 ```
 
 ## Customizing the Adapter

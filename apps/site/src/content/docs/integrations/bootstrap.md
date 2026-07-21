@@ -22,6 +22,7 @@ Use Turbo Themes with Bootstrap by mapping tokens to Bootstrap's CSS variables.
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
 />
 <link
+  id="theme-css"
   rel="stylesheet"
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
@@ -197,10 +198,12 @@ Use standard Bootstrap classes:
 
 ## Theme Switching
 
+Keep the switcher on the same CDN origin as the initial `#theme-css` `<link>`:
+
 ```javascript
 function setTheme(themeName) {
   const link = document.getElementById('theme-css');
-  link.href = `/packages/css/dist/themes/${themeName}.css`;
+  link.href = `https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
   localStorage.setItem('turbo-theme', themeName);
 }
 ```
