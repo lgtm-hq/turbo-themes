@@ -16,9 +16,9 @@ Use Turbo Themes with Bulma CSS for component-based theming.
 ### 1. Install Packages
 
 ```bash
-npm install turbo-themes bulma
+npm install @lgtm-hq/turbo-themes bulma
 # or
-bun add turbo-themes bulma
+bun add @lgtm-hq/turbo-themes bulma
 ```
 
 ### 2. Include CSS Files

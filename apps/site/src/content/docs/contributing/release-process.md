@@ -192,7 +192,7 @@ npm publish --tag beta
 Install with:
 
 ```bash
-npm install turbo-themes@beta
+npm install @lgtm-hq/turbo-themes@beta
 ```
 
 ### Canary Release
@@ -202,7 +202,7 @@ Canary releases are automatic from main branch commits.
 Install with:
 
 ```bash
-npm install turbo-themes@canary
+npm install @lgtm-hq/turbo-themes@canary
 ```
 
 ## Rollback Procedure

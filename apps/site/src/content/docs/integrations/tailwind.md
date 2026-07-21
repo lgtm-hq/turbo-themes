@@ -16,9 +16,9 @@ Use Turbo Themes with Tailwind CSS for utility-first theming.
 ### 1. Install Packages
 
 ```bash
-npm install turbo-themes tailwindcss
+npm install @lgtm-hq/turbo-themes tailwindcss
 # or
-bun add turbo-themes tailwindcss
+bun add @lgtm-hq/turbo-themes tailwindcss
 ```
 
 ### 2. Configure Tailwind

@@ -21,14 +21,30 @@ const previewTabs = [
 ] as const;
 
 const features = [
-  { title: 'Pure CSS tokens', desc: 'Zero runtime. Swap a stylesheet, re-token the UI.' },
-  { title: `${themeCount} curated themes`, desc: 'Dark and light palettes from the community.' },
-  { title: 'Multi-platform', desc: 'npm, Ruby gem, Python, Swift — same tokens everywhere.' },
-  { title: 'Accessible by default', desc: 'WCAG contrast baked into every theme file.' },
+  {
+    title: 'CSS custom properties',
+    desc: 'Ship tokens as a stylesheet. Restyle the UI without a runtime theme engine.',
+  },
+  {
+    title: `${themeCount} curated themes`,
+    desc: 'Light and dark packs from Catppuccin, Dracula, Nord, Gruvbox, and more.',
+  },
+  {
+    title: 'Four platforms',
+    desc: 'npm, RubyGems, PyPI, and Swift Package Manager — one token model everywhere.',
+  },
+  {
+    title: 'Accessible by design',
+    desc: 'WCAG AA contrast pairs for core text and surfaces, guarded by axe checks in CI.',
+  },
 ];
 ---
 
-<BaseLayout title="Home" description="Platform-agnostic design tokens for any framework" isHome={true}>
+<BaseLayout
+  title="Home"
+  description="Platform-agnostic design tokens and curated theme packs for web, Ruby, Python, and Swift"
+  isHome={true}
+>
   <link rel="stylesheet" href={`${baseUrl}/assets/css/home.css`} />
 
   <div class="showcase-page">
@@ -40,26 +56,27 @@ const features = [
     <section class="showcase-hero" aria-labelledby="showcase-headline">
       <div class="showcase-hero-grid">
         <div class="showcase-hero-copy">
-          <span class="showcase-badge showcase-reveal" style="--reveal-delay: 0.1s">Open Source</span>
+          <span class="showcase-badge showcase-reveal" style="--reveal-delay: 0.1s">Design tokens</span>
 
           <div class="showcase-headline-wrap showcase-reveal" style="--reveal-delay: 0.25s">
             <h1 id="showcase-headline" class="showcase-headline">
               <span id="showcase-text-mask" class="showcase-text-mask">
-                <span class="showcase-text-mask-base">Beautiful themes</span>
-                <span class="showcase-text-mask-reveal" aria-hidden="true">Beautiful themes</span>
+                <span class="showcase-text-mask-base">Curated themes</span>
+                <span class="showcase-text-mask-reveal" aria-hidden="true">Curated themes</span>
               </span>
-              <br />for any project
+              <br />for every stack
             </h1>
           </div>
 
           <p class="showcase-lede showcase-reveal" style="--reveal-delay: 0.4s">
-            A design token system with {themeCount} curated color themes. Switch themes instantly with CSS custom properties.
+            Platform-agnostic design tokens spanning {themeCount} curated light and dark packs.
+            Swap CSS custom properties—or the matching Ruby, Python, or Swift bindings—and keep one look everywhere.
           </p>
 
           <div class="showcase-cta showcase-reveal" style="--reveal-delay: 0.55s">
-            <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="home-cta-get-started">Get Started</a>
+            <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="home-cta-get-started">Get started</a>
             <a href={`${baseUrl}/themes/`} class="btn btn-outline btn-lg" data-testid="home-cta-explore-themes">
-              Explore Themes
+              Browse themes
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <path d="M5 12h14M12 5l7 7-7 7"></path>
               </svg>
@@ -217,7 +234,7 @@ const features = [
                           <strong id="showcase-preview-theme-name">{themeFullNames['catppuccin-mocha']}</strong>
                         </div>
                       </div>
-                      <p class="showcase-preview-hint">Pick a theme from the carousel below — the whole page updates instantly.</p>
+                      <p class="showcase-preview-hint">Choose a pack from the carousel below — the theme selector restyles the whole page.</p>
                       <div class="showcase-preview-palette">
                         <span class="dot" style="background: var(--turbo-brand-primary)"></span>
                         <span class="dot" style="background: var(--turbo-state-info)"></span>
@@ -276,7 +293,7 @@ const features = [
     </section>
 
     <section class="showcase-features" aria-labelledby="showcase-features-title">
-      <h2 id="showcase-features-title" class="visually-hidden">Features</h2>
+      <h2 id="showcase-features-title" class="visually-hidden">Why Turbo Themes</h2>
       <div class="showcase-features-grid">
         {
           features.map((f, i) => (
@@ -290,8 +307,8 @@ const features = [
     </section>
 
     <section class="showcase-footer-cta" data-showcase-reveal>
-      <code>npm install turbo-themes</code>
-      <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="home-cta-start-building">Start building</a>
+      <code>npm install @lgtm-hq/turbo-themes</code>
+      <a href={`${baseUrl}/docs/`} class="btn btn-primary btn-lg" data-testid="home-cta-start-building">Read the docs</a>
     </section>
   </div>
 
