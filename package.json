@@ -213,7 +213,7 @@
     "happy-dom": "20.9.0",
     "http-server": "14.1.1",
     "husky": "9.1.7",
-    "js-yaml": "4.2.0",
+    "js-yaml": "4.3.0",
     "lightningcss": "1.32.0",
     "lint-staged": "16.4.0",
     "oxfmt": "0.48.0",
@@ -246,7 +246,7 @@
     "path-to-regexp": "8.4.2",
     "@isaacs/brace-expansion": "5.0.1",
     "minimatch": "10.2.5",
-    "brace-expansion": "5.0.6",
+    "brace-expansion": "5.0.7",
     "h3": "2.0.0",
     "tmp": "0.2.7",
     "esbuild": "0.28.1",
@@ -256,10 +256,12 @@
     "postcss": "8.5.10",
     "ws": "8.20.1",
     "shell-quote": "1.9.0",
-    "js-yaml": "4.2.0"
+    "js-yaml": "4.3.0"
   },
   "dependencies": {
     "astro": "6.4.6",
+    "body-parser": "2.3.0",
+    "brace-expansion": "5.0.7",
     "esbuild": "0.28.1",
     "h3": "2.0.0",
     "qs": "6.15.2",
