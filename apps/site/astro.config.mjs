@@ -13,6 +13,9 @@ export default defineConfig({
   site: 'https://lgtm-hq.github.io',
   base,
   output: 'static',
+  // Keep Astro 6 HTML-aware whitespace compression so inline spacing (and
+  // visual snapshots) stay stable under Astro 7's default compressHTML: 'jsx'.
+  compressHTML: true,
   integrations: [sitemap()],
   markdown: {
     shikiConfig: {
