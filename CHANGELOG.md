@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.38.7] - 2026-07-21
+
+### 🐛 Fixed
+
+- Bump nested immutable to 5.1.9 for GHSA-v56q-mh7h-f735 (#755)
+- Map MWC select/text-field colors for readable dropdowns (#745)
+
 ## [0.38.6] - 2026-07-21
 
 ### 🔧 Changed
