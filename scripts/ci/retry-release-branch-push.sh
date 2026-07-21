@@ -31,7 +31,11 @@ if ! git rev-parse --verify "refs/heads/${RELEASE_BRANCH}" &>/dev/null; then
 fi
 
 echo "🔁 Retrying push of '${RELEASE_BRANCH}' after transient rejection..."
-"${SCRIPT_DIR}/push-with-retry.sh" origin "${RELEASE_BRANCH}"
+# The workflow checks out with persist-credentials disabled, so a bare
+# "git push origin" has no auth (#734). Push to an explicit tokenized URL
+# instead of rewriting the remote, so the token never lands in git config.
+PUSH_URL="https://x-access-token:${GH_TOKEN:?GH_TOKEN is required}@github.com/${GITHUB_REPOSITORY}.git"
+"${SCRIPT_DIR}/push-with-retry.sh" "${PUSH_URL}" "${RELEASE_BRANCH}"
 
 # Create or update the PR.
 echo "🔍 Checking for an existing open PR for '${RELEASE_BRANCH}'..."
