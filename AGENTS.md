@@ -40,8 +40,7 @@ the source of truth. Notes below are non-obvious caveats for this environment.
   `bun run e2e:install` and cached in `~/.cache/ms-playwright` (persisted in the
   snapshot). If Playwright is upgraded and E2E complains about a missing browser, re-run
   `bun run e2e:install`.
-- Astro prints harmless warnings on startup: "New version of Astro available" and "Vite
-  8 detected … Astro requires Vite 7". These are expected given the pinned overrides and
-  do not break dev/build.
+- Astro may print a harmless "New version of Astro available" notice on startup; it does
+  not break dev/build.
 - CSS theme files under `assets/css/themes/` are git-ignored build artifacts generated
   by `bun run build`; do not commit them.
