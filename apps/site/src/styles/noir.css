@@ -323,6 +323,14 @@ html[data-design='noir'] .header .search-bar-inner {
   color: var(--noir-text-secondary);
 }
 
+/* Icon-only theme trigger: square chrome, no name chip (#743) */
+html:root .theme-trigger {
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  gap: 0;
+}
+
 html:root .theme-menu,
 html:root .search-menu {
   border-color: var(--noir-border-section);
