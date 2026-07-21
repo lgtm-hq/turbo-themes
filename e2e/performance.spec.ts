@@ -181,10 +181,9 @@ test.describe('Performance @performance', () => {
             });
           };
 
-          for (const entry of performance.getEntriesByType('layout-shift')) {
-            record(entry as LayoutShiftEntry);
-          }
-
+          // The buffered observer below replays entries recorded before
+          // registration — no manual getEntriesByType pre-read, or every
+          // buffered shift would be counted twice.
           const observer = new PerformanceObserver((list) => {
             for (const entry of list.getEntries()) {
               record(entry as LayoutShiftEntry);
