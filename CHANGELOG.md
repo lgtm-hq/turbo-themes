@@ -10,6 +10,16 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.38.1] - 2026-07-21
+
+### 🔧 Changed
+
+- Scope remaining npm package refs to @lgtm-hq/turbo-themes (#722)
+
+### 🤖 Internal
+
+- Align snapshot generation env with quality-e2e (#724)
+
 ## [0.38.0] - 2026-07-21
 
 ### ✨ Added
