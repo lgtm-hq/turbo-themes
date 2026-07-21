@@ -105,7 +105,7 @@ Create theme variants that inherit from a base:
 
 ```javascript
 // themes/custom-theme.js
-import { createTheme } from 'turbo-themes';
+import { createTheme } from '@lgtm-hq/turbo-themes';
 
 const baseTheme = {
   colors: {

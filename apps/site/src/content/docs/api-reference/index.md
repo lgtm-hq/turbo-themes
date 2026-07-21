@@ -96,7 +96,7 @@ turbo-themes/
 ### JavaScript/TypeScript
 
 ```typescript
-import { themeIds, type ThemeId } from 'turbo-themes';
+import { themeIds, type ThemeId } from '@lgtm-hq/turbo-themes';
 
 // Array of all theme IDs
 themeIds: string[]

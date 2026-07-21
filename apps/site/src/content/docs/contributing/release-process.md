@@ -115,7 +115,7 @@ For critical bug fixes:
 npm publish
 ```
 
-Published to: https://www.npmjs.com/package/turbo-themes
+Published to: https://www.npmjs.com/package/@lgtm-hq/turbo-themes
 
 ### RubyGems (Jekyll)
 
@@ -212,7 +212,7 @@ If a release has critical issues:
 1. **Unpublish** (within 72 hours on npm):
 
    ```bash
-   npm unpublish turbo-themes@1.2.3
+   npm unpublish @lgtm-hq/turbo-themes@1.2.3
    ```
 
 2. **Or publish a fixed patch**:
@@ -225,7 +225,7 @@ If a release has critical issues:
 3. **Deprecate** (if can't unpublish):
 
    ```bash
-   npm deprecate turbo-themes@1.2.3 "Critical bug, please upgrade to 1.2.4"
+   npm deprecate @lgtm-hq/turbo-themes@1.2.3 "Critical bug, please upgrade to 1.2.4"
    ```
 
 ## Release Checklist

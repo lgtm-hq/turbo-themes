@@ -35,11 +35,17 @@ Add the CSS files to your HTML or import them in your bundler:
 
 ```html
 <!-- In your HTML -->
-<link rel="stylesheet" href="node_modules/turbo-themes/css/turbo-core.css" />
-<link rel="stylesheet" href="node_modules/turbo-themes/css/turbo-base.css" />
 <link
   rel="stylesheet"
-  href="node_modules/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
+/>
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
 ```
 
@@ -47,9 +53,9 @@ Or with a bundler like Vite or webpack:
 
 ```javascript
 // In your JavaScript entry point
-import 'turbo-themes/css/turbo-core.css';
-import 'turbo-themes/css/turbo-base.css';
-import 'turbo-themes/css/themes/turbo/catppuccin-mocha.css';
+import '@lgtm-hq/turbo-themes/css/core';
+import '@lgtm-hq/turbo-themes/css/base';
+import '@lgtm-hq/turbo-themes/css/themes/catppuccin-mocha.css';
 ```
 
 ### 2. Use the Tokens
@@ -69,7 +75,10 @@ Now use the CSS custom properties in your styles:
 For code blocks with theme-aware syntax highlighting:
 
 ```html
-<link rel="stylesheet" href="node_modules/turbo-themes/css/turbo-syntax.css" />
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css"
+/>
 ```
 
 ## Theme Switching
@@ -80,7 +89,7 @@ To enable runtime theme switching:
 function setTheme(themeName) {
   // Update the theme CSS
   const themeLink = document.getElementById('theme-css');
-  themeLink.href = `node_modules/turbo-themes/css/themes/turbo/${themeName}.css`;
+  themeLink.href = `node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/${themeName}.css`;
 
   // Persist the choice
   localStorage.setItem('turbo-theme', themeName);
@@ -99,7 +108,7 @@ Make sure your theme link has an ID:
 <link
   id="theme-css"
   rel="stylesheet"
-  href="node_modules/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
 ```
 
@@ -108,7 +117,7 @@ Make sure your theme link has an ID:
 Turbo Themes includes TypeScript definitions for the theme registry:
 
 ```typescript
-import { themeIds, type ThemeId } from 'turbo-themes';
+import { themeIds, type ThemeId } from '@lgtm-hq/turbo-themes';
 
 // All available theme IDs
 console.log(themeIds);

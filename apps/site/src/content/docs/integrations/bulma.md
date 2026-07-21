@@ -27,14 +27,20 @@ Add the CSS files in this order:
 
 ```html
 <!-- 1. Turbo Themes core and your chosen theme -->
-<link rel="stylesheet" href="node_modules/turbo-themes/css/turbo-core.css" />
 <link
   rel="stylesheet"
-  href="node_modules/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
 
 <!-- 2. Bulma adapter (maps Turbo tokens to Bulma variables) -->
-<link rel="stylesheet" href="node_modules/turbo-themes/css/adapters/bulma.css" />
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/adapters/bulma/dist/bulma-adapter.css"
+/>
 
 <!-- 3. Bulma CSS -->
 <link rel="stylesheet" href="node_modules/bulma/css/bulma.min.css" />
@@ -46,12 +52,18 @@ Add the CSS files in this order:
 
 ```html
 <!-- Turbo Themes -->
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
 <link
   rel="stylesheet"
-  href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
 />
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/adapters/bulma.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/adapters/bulma/dist/bulma-adapter.css"
+/>
 
 <!-- Bulma -->
 <link
@@ -180,7 +192,7 @@ Switching themes updates all Bulma components automatically:
 ```javascript
 function setTheme(themeName) {
   const link = document.getElementById('theme-css');
-  link.href = `/css/themes/turbo/${themeName}.css`;
+  link.href = `/packages/css/dist/themes/${themeName}.css`;
   localStorage.setItem('turbo-theme', themeName);
 }
 

@@ -90,11 +90,11 @@ Import only what you need:
 
 ```javascript
 // Instead of importing everything
-// import { themes, tokens, utils } from 'turbo-themes';
+// import { themes, tokens, utils } from '@lgtm-hq/turbo-themes';
 
 // Import specific modules
-import { getTheme } from 'turbo-themes/themes';
-import { applyTheme } from 'turbo-themes/utils';
+import { getTheme } from '@lgtm-hq/turbo-themes';
+import { applyTheme } from '@lgtm-hq/turbo-themes';
 ```
 
 ### CSS Purging

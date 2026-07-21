@@ -172,7 +172,7 @@ Each theme includes metadata:
 ### JavaScript/TypeScript
 
 ```typescript
-import tokens from 'turbo-themes/tokens.json';
+import tokens from '@lgtm-hq/turbo-themes/tokens.json';
 
 // Access theme data
 const mocha = tokens.themes['catppuccin-mocha'];
