@@ -31,6 +31,14 @@ if ! git rev-parse --verify "refs/heads/${RELEASE_BRANCH}" &>/dev/null; then
 fi
 
 echo "🔁 Retrying push of '${RELEASE_BRANCH}' after transient rejection..."
+# The workflow checks out with persist-credentials disabled, so a bare
+# "git push origin" has no auth (#734). Set a tokenized push-only URL on
+# origin — pushing to a raw URL would drop origin's remote-tracking refs
+# and break bare --force-with-lease in push-with-retry.sh. The push URL is
+# removed again afterwards so the token does not outlive this script.
+PUSH_URL="https://x-access-token:${GH_TOKEN:?GH_TOKEN is required}@github.com/${GITHUB_REPOSITORY}.git"
+git remote set-url --push origin "${PUSH_URL}"
+trap 'git remote set-url --delete --push origin ".*" 2>/dev/null || true' EXIT
 "${SCRIPT_DIR}/push-with-retry.sh" origin "${RELEASE_BRANCH}"
 
 # Create or update the PR.

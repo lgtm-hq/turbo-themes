@@ -26,7 +26,10 @@ fi
 attempt=1
 delay="${INITIAL_DELAY}"
 
-echo "🚀 Pushing ${REFSPEC} to ${REMOTE} (max ${MAX_RETRIES} attempts)..."
+# Never print embedded credentials when the remote is a tokenized URL.
+REMOTE_DISPLAY="$(sed -E 's#(https?://)[^@/]+@#\1#' <<<"${REMOTE}")"
+
+echo "🚀 Pushing ${REFSPEC} to ${REMOTE_DISPLAY} (max ${MAX_RETRIES} attempts)..."
 
 while true; do
   if git push --force-with-lease "${REMOTE}" "${REFSPEC}"; then
