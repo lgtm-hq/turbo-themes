@@ -15,16 +15,16 @@ The recommended way to install Turbo Themes for JavaScript and TypeScript projec
 
 ```bash
 # npm
-npm install turbo-themes
+npm install @lgtm-hq/turbo-themes
 
 # Bun
-bun add turbo-themes
+bun add @lgtm-hq/turbo-themes
 
 # pnpm
-pnpm add turbo-themes
+pnpm add @lgtm-hq/turbo-themes
 
 # Yarn
-yarn add turbo-themes
+yarn add @lgtm-hq/turbo-themes
 ```
 
 ## Basic Setup

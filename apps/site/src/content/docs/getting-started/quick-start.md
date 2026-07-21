@@ -29,9 +29,9 @@ Choose your preferred installation method:
 ### npm / Bun
 
 ```bash
-npm install turbo-themes
+npm install @lgtm-hq/turbo-themes
 # or
-bun add turbo-themes
+bun add @lgtm-hq/turbo-themes
 ```
 
 ### CDN
