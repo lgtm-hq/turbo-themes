@@ -52,6 +52,9 @@ jobs:
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
           token: ${{ steps.app-token.outputs.token }}
+          # On workflow_dispatch github.ref is a branch; the release must
+          # target the dispatched tag instead (#725).
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
           body: |
             ## 📦 @turbocoder13/turbo-themes ${{ github.ref_name }}
 
