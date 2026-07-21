@@ -62,7 +62,7 @@ export const REQUIRED_KEYS: readonly string[] = [
   // Paper items
   'paper-item-icon-color',
   'paper-item-icon-active-color',
-  // Inputs
+  // Inputs (legacy paper / ha-form)
   'input-fill-color',
   'input-ink-color',
   'input-label-ink-color',
@@ -70,6 +70,18 @@ export const REQUIRED_KEYS: readonly string[] = [
   'input-disabled-ink-color',
   'input-idle-line-color',
   'input-hover-line-color',
+  // Material selects / text fields (ha-select, ha-textfield / MWC)
+  'mdc-select-fill-color',
+  'mdc-select-ink-color',
+  'mdc-select-label-ink-color',
+  'mdc-select-dropdown-icon-color',
+  'mdc-select-idle-line-color',
+  'mdc-select-hover-line-color',
+  'mdc-text-field-fill-color',
+  'mdc-text-field-ink-color',
+  'mdc-text-field-label-ink-color',
+  'mdc-text-field-idle-line-color',
+  'mdc-text-field-hover-line-color',
   // Tables
   'table-row-background-color',
   'table-row-alternative-background-color',
@@ -104,6 +116,7 @@ export const REQUIRED_KEYS: readonly string[] = [
   'mdc-theme-on-secondary',
   'mdc-theme-on-surface',
   'mdc-theme-on-background',
+  'mdc-theme-text-primary-on-background',
   'mdc-theme-error',
   // Code editor (CodeMirror)
   'codemirror-keyword',
@@ -187,7 +200,7 @@ export function mapTokensToHomeAssistant(tokens: ThemeTokens): Record<string, st
     // Paper items
     'paper-item-icon-color': text.secondary,
     'paper-item-icon-active-color': brand.primary,
-    // Inputs
+    // Inputs (legacy paper / ha-form)
     'input-fill-color': background.surface,
     'input-ink-color': text.primary,
     'input-label-ink-color': text.secondary,
@@ -195,6 +208,18 @@ export function mapTokensToHomeAssistant(tokens: ThemeTokens): Record<string, st
     'input-disabled-ink-color': text.secondary,
     'input-idle-line-color': border.default,
     'input-hover-line-color': brand.primary,
+    // Material selects / text fields (ha-select, ha-textfield / MWC)
+    'mdc-select-fill-color': background.surface,
+    'mdc-select-ink-color': text.primary,
+    'mdc-select-label-ink-color': text.secondary,
+    'mdc-select-dropdown-icon-color': text.secondary,
+    'mdc-select-idle-line-color': border.default,
+    'mdc-select-hover-line-color': brand.primary,
+    'mdc-text-field-fill-color': background.surface,
+    'mdc-text-field-ink-color': text.primary,
+    'mdc-text-field-label-ink-color': text.secondary,
+    'mdc-text-field-idle-line-color': border.default,
+    'mdc-text-field-hover-line-color': brand.primary,
     // Tables
     'table-row-background-color': background.surface,
     'table-row-alternative-background-color': background.overlay,
@@ -229,6 +254,7 @@ export function mapTokensToHomeAssistant(tokens: ThemeTokens): Record<string, st
     'mdc-theme-on-secondary': text.inverse,
     'mdc-theme-on-surface': text.primary,
     'mdc-theme-on-background': text.primary,
+    'mdc-theme-text-primary-on-background': text.primary,
     'mdc-theme-error': state.danger,
     // Code editor (CodeMirror)
     'codemirror-keyword': brand.primary,

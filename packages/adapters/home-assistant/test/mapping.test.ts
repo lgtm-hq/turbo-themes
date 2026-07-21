@@ -76,4 +76,30 @@ describe('mapTokensToHomeAssistant', () => {
     expect(mapping['card-mod-theme']).toBe(CARD_MOD_THEME);
     expect(CARD_MOD_THEME).toBe('turbo-themes');
   });
+
+  it.each(['catppuccin-mocha', 'catppuccin-latte'] as const)(
+    'maps MWC select/text-field variables from surface/text tokens (%s)',
+    (themeId) => {
+      const flavor = flavors.find((f) => f.id === themeId);
+      if (!flavor) throw new Error(`Expected ${themeId} in the registry`);
+      const mapped = mapTokensToHomeAssistant(flavor.tokens);
+      const { background, text, brand, border } = flavor.tokens;
+
+      expect(mapped['mdc-select-fill-color']).toBe(background.surface);
+      expect(mapped['mdc-select-ink-color']).toBe(text.primary);
+      expect(mapped['mdc-select-label-ink-color']).toBe(text.secondary);
+      expect(mapped['mdc-select-dropdown-icon-color']).toBe(text.secondary);
+      expect(mapped['mdc-select-idle-line-color']).toBe(border.default);
+      expect(mapped['mdc-select-hover-line-color']).toBe(brand.primary);
+
+      expect(mapped['mdc-text-field-fill-color']).toBe(background.surface);
+      expect(mapped['mdc-text-field-ink-color']).toBe(text.primary);
+      expect(mapped['mdc-text-field-label-ink-color']).toBe(text.secondary);
+      expect(mapped['mdc-text-field-idle-line-color']).toBe(border.default);
+      expect(mapped['mdc-text-field-hover-line-color']).toBe(brand.primary);
+
+      expect(mapped['mdc-theme-surface']).toBe(background.surface);
+      expect(mapped['mdc-theme-text-primary-on-background']).toBe(text.primary);
+    },
+  );
 });
