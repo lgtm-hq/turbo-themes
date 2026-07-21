@@ -25,13 +25,17 @@ const CONFIG = {
   minorTypes: ['feat', 'feature'],
   patchTypes: ['fix', 'bugfix', 'patch', 'docs', 'style', 'refactor', 'perf', 'test', 'chore'],
   // Subset of patchTypes that represent true defect fixes (→ "🐛 Fixed" changelog bucket).
-  // All other patchTypes (docs, style, refactor, perf, test, chore) go to "🔧 Changed".
+  // style/refactor/perf/test/chore (without an internal scope) go to "🔧 Changed".
+  // docs type commits are routed to Internal (see changelogInternalTypes).
   fixTypes: ['fix', 'bugfix', 'patch'],
   ignoreTypes: ['ci', 'build', 'release'],
   // Scopes routed to the non-consumer "Internal" changelog section (not Fixed/Added/Changed).
   // These commits still participate in version bump decisions via their type.
   // Breaking changes always stay in BREAKING CHANGES regardless of scope.
-  changelogInternalScopes: ['ci', 'build', 'test'],
+  changelogInternalScopes: ['ci', 'build', 'test', 'docs'],
+  // Commit types always routed to Internal (Keep a Changelog "Changed" is for
+  // consumer-facing functional changes; docs updates are not).
+  changelogInternalTypes: ['docs'],
   ignorePatterns: ['chore(release):'], // Full prefix patterns to skip entirely
   changelogFile: join(projectRoot, 'CHANGELOG.md'),
   packageFile: join(projectRoot, 'package.json'),
@@ -75,6 +79,15 @@ function parseCommit(commit) {
 function isChangelogInternalScope(scope) {
   if (!scope) return false;
   return CONFIG.changelogInternalScopes.includes(scope.toLowerCase());
+}
+
+/**
+ * Whether a commit's type belongs in the non-consumer Internal changelog section.
+ * Version bump logic is unaffected — only changelog rendering consults this.
+ */
+function isChangelogInternalType(type) {
+  if (!type) return false;
+  return CONFIG.changelogInternalTypes.includes(type.toLowerCase());
 }
 
 /**
@@ -241,9 +254,9 @@ function generateChangelogEntry(commits, version, bumpType) {
       continue;
     }
 
-    // Route non-consumer scopes (e.g. fix(ci): …) to Internal — not Fixed/Added/Changed.
-    // Bump decisions still use these commits via determineBumpType().
-    if (isChangelogInternalScope(parsed.scope)) {
+    // Route non-consumer scopes/types (e.g. fix(ci): …, docs(site): …) to Internal —
+    // not Fixed/Added/Changed. Bump decisions still use these via determineBumpType().
+    if (isChangelogInternalScope(parsed.scope) || isChangelogInternalType(parsed.type)) {
       internal.push(entry);
       continue;
     }
@@ -253,7 +266,7 @@ function generateChangelogEntry(commits, version, bumpType) {
     } else if (CONFIG.fixTypes.includes(parsed.type)) {
       fixes.push(entry);
     } else {
-      // docs, style, refactor, perf, test, chore → "### 🔧 Changed"
+      // style, refactor, perf, test, chore → "### 🔧 Changed"
       others.push(entry);
     }
   }
@@ -391,6 +404,7 @@ export {
   generateChangelogEntry,
   formatChangelogDescription,
   isChangelogInternalScope,
+  isChangelogInternalType,
   isBreakingCommit,
   parseCommit,
 };
