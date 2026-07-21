@@ -10,6 +10,18 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.38.8] - 2026-07-21
+
+### 🐛 Fixed
+
+- Bump svgo to 4.0.2 for GHSA-2p49-hgcm-8545 (#760)
+- Bump fast-uri to 3.1.3 for GHSA-4c8g-83qw-93j6 (#758)
+- Keep btn-primary anchor CTAs readable under Noir (#746)
+
+### 🤖 Internal
+
+- Document lgtm-ci reusable release-version-pr adoption audit (#656)
+
 ## [0.38.7] - 2026-07-21
 
 ### 🐛 Fixed
