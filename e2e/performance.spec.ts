@@ -142,27 +142,52 @@ test.describe('Performance @performance', () => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
 
-      // Get CLS from Performance API with proper accumulation
-      const cls = await page.evaluate(() => {
-        return new Promise<number>((resolve) => {
-          let clsValue = 0;
+      // Accumulate CLS and per-element attributions (#729) so budget failures
+      // name the shifting nodes instead of only reporting a float.
+      const { cls, attributions } = await page.evaluate(() => {
+        type LayoutShiftSource = {
+          node: Element | null;
+          previousRect: DOMRectReadOnly;
+          currentRect: DOMRectReadOnly;
+        };
+        type LayoutShiftEntry = PerformanceEntry & {
+          hadRecentInput: boolean;
+          value: number;
+          sources?: ReadonlyArray<LayoutShiftSource>;
+        };
 
-          // Get existing layout shift entries
-          const existingEntries = performance.getEntriesByType('layout-shift');
-          for (const entry of existingEntries) {
-            const layoutEntry = entry as PerformanceEntry & { hadRecentInput: boolean; value: number };
-            if (!layoutEntry.hadRecentInput) {
-              clsValue += layoutEntry.value;
-            }
+        const describeNode = (node: Element | null): string => {
+          if (!node) return '(unknown)';
+          if (node.id) return `#${node.id}`;
+          const className = typeof node.className === 'string' ? node.className.trim() : '';
+          if (className) return `.${className.split(/\s+/).slice(0, 3).join('.')}`;
+          return node.tagName.toLowerCase();
+        };
+
+        return new Promise<{
+          cls: number;
+          attributions: Array<{ value: number; startTime: number; nodes: string[] }>;
+        }>((resolve) => {
+          let clsValue = 0;
+          const attributions: Array<{ value: number; startTime: number; nodes: string[] }> = [];
+
+          const record = (entry: LayoutShiftEntry) => {
+            if (entry.hadRecentInput) return;
+            clsValue += entry.value;
+            attributions.push({
+              value: entry.value,
+              startTime: entry.startTime,
+              nodes: (entry.sources ?? []).map((source) => describeNode(source.node)),
+            });
+          };
+
+          for (const entry of performance.getEntriesByType('layout-shift')) {
+            record(entry as LayoutShiftEntry);
           }
 
-          // Also observe for new shifts
           const observer = new PerformanceObserver((list) => {
             for (const entry of list.getEntries()) {
-              const layoutEntry = entry as PerformanceEntry & { hadRecentInput: boolean; value: number };
-              if (!layoutEntry.hadRecentInput) {
-                clsValue += layoutEntry.value;
-              }
+              record(entry as LayoutShiftEntry);
             }
           });
 
@@ -172,16 +197,18 @@ test.describe('Performance @performance', () => {
             // CLS observation not supported
           }
 
-          // Wait for any pending shifts and resolve
           setTimeout(() => {
             observer.disconnect();
-            resolve(clsValue);
+            resolve({ cls: clsValue, attributions });
           }, 2000);
         });
       });
 
       // CLS should be under threshold for "good" rating
-      expect(cls).toBeLessThan(WEB_VITALS.CLS);
+      expect(
+        cls,
+        `CLS ${cls.toFixed(5)} exceeded ${WEB_VITALS.CLS}. Attributions: ${JSON.stringify(attributions)}`,
+      ).toBeLessThan(WEB_VITALS.CLS);
     });
 
     test('should have good FCP (First Contentful Paint)', async ({ page }) => {

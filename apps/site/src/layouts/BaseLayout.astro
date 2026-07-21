@@ -39,19 +39,24 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
     <title>{pageTitle}</title>
     <SEOHead title={pageTitle} description={description} />
 
-    <!-- Preconnect to Google Fonts (Noir Editorial: Playfair + Instrument Sans + JetBrains Mono) -->
+    <!--
+      Preconnect + optional webfonts (Noir: Playfair + Instrument Sans + JetBrains Mono).
+      display=optional avoids late font-swap layout shifts that push homepage CLS
+      against the 0.1 CWV budget (#729). Fonts apply only if ready in the first
+      paint window; otherwise the page keeps the metric-tuned fallbacks in noir.css.
+    -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=optional"
       onload="this.onload=null;this.rel='stylesheet';"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=optional"
       />
     </noscript>
 

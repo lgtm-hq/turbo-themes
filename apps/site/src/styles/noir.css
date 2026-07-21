@@ -7,11 +7,43 @@
    Design tokens
    ========================================================================== */
 
+/*
+ * Fallback faces with size-adjust so system fonts approximate webfont metrics.
+ * Paired with display=optional in BaseLayout (#729) to keep homepage CLS under
+ * the 0.1 CWV budget when Instrument Sans / Playfair swap (or never load).
+ */
+@font-face {
+  font-family: 'Instrument Sans Fallback';
+  src: local('Arial'), local('Helvetica Neue'), local('Helvetica');
+  size-adjust: 102%;
+  ascent-override: 95%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Playfair Display Fallback';
+  src: local('Times New Roman'), local('Times'), local('Georgia');
+  size-adjust: 108%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono Fallback';
+  src: local('Menlo'), local('Consolas'), local('Monaco'), local('Courier New');
+  size-adjust: 100%;
+  ascent-override: 92%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
 :root {
   /* Fonts */
-  --font-display: 'Playfair Display', serif;
-  --font-body: 'Instrument Sans', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Playfair Display', 'Playfair Display Fallback', Georgia, serif;
+  --font-body: 'Instrument Sans', 'Instrument Sans Fallback', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'JetBrains Mono Fallback', ui-monospace, monospace;
 
   /* Backgrounds */
   --noir-bg-base: #0a0a0b;
