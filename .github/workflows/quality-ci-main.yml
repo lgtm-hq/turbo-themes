@@ -40,7 +40,7 @@ jobs:
   # expressible through the reusable's inputs and live in the reporting job.
   build:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-build-artifact.yml@443a687caa93b3afa306a066aae8d8a2b4e60c3c # v0.59.0
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-build-artifact.yml@b534217fcb869368b69014dc9732a0eda6fde4ee # v0.59.2
     with:
       job-name: '🏗️ Build & Quality Checks'
       node-version-matrix: '["20","22"]'
@@ -49,7 +49,7 @@ jobs:
       artifact-path: dist
       retention-days: 7
       timeout-minutes: 45
-      tooling-ref: '443a687caa93b3afa306a066aae8d8a2b4e60c3c'  # v0.59.0
+      tooling-ref: 'b534217fcb869368b69014dc9732a0eda6fde4ee'  # v0.59.2
       egress-policy: block
       # Complete enforced allowlist (pre-enforcement replace semantics):
       # GitHub (incl. uv release tarball + python-build-standalone downloads)
