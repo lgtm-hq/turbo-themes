@@ -316,10 +316,11 @@ html:root .search-bar-inner {
   color: var(--noir-text-secondary);
 }
 
-/* Icon-only theme trigger: square chrome, no name chip (#743) */
+/* Icon-only theme trigger: square chrome, no name chip (#743).
+   2.5rem preserves the 40px minimum touch target. */
 html:root .theme-trigger {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2.5rem;
+  height: 2.5rem;
   padding: 0;
   gap: 0;
 }

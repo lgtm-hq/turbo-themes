@@ -496,9 +496,10 @@ html:root .theme-trigger {
   align-items: center;
   justify-content: center;
   gap: 0;
-  /* Compact icon-only control — theme name lives in aria-label/title (#743) */
-  width: 2.25rem;
-  height: 2.25rem;
+  /* Compact icon-only control — theme name lives in aria-label/title (#743).
+   * 2.5rem keeps the 40px minimum touch target the mobile e2e enforces. */
+  width: 2.5rem;
+  height: 2.5rem;
   padding: 0;
   font-size: 0.875rem;
   font-weight: 500;
@@ -1403,7 +1404,7 @@ html:root .footer-links a:hover {
 
   html:root .theme-trigger {
     /* Keep the header control icon-only on small screens (#743) */
-    width: 2.25rem;
+    width: 2.5rem;
     justify-content: center;
   }
 
