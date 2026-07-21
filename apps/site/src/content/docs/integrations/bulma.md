@@ -190,7 +190,9 @@ Use standard Bulma classes - they'll automatically use your theme colors.
 ## Theme Switching
 
 Switching themes updates all Bulma components automatically. Match the href form to
-how you loaded the initial theme:
+how you loaded the initial theme. The `node_modules/…` form suits plain-HTML pages
+served from the project root during development; in production, copy the themes
+directory into your public assets or use the CDN URLs:
 
 #### npm / local install
 
