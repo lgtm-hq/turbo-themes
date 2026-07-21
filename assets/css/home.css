@@ -71,7 +71,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
-  align-items: center;
+  /* Top-align so webfont metric deltas in the copy column do not vertically
+     re-center the preview card (dominant CLS source on the homepage, #729). */
+  align-items: start;
+}
+
+.showcase-hero-copy {
+  /* Reserve room for the clamp() headline + lede so late font metrics do not
+     push the marquees / sections below as hard when display=optional still
+     applies a face within the first paint window. */
+  min-height: 22rem;
 }
 
 /* .showcase-badge / .showcase-headline → site.css (#685) */
@@ -768,6 +777,10 @@
 @media (max-width: 900px) {
   .showcase-hero-grid {
     grid-template-columns: 1fr;
+  }
+
+  .showcase-hero-copy {
+    min-height: 0;
   }
 }
 
