@@ -10,6 +10,16 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.38.3] - 2026-07-21
+
+### 🐛 Fixed
+
+- Keep security pins in overrides only (#732)
+
+### 🤖 Internal
+
+- Fix broken export and theme-switcher examples (#731)
+
 ## [0.38.2] - 2026-07-21
 
 ### 🤖 Internal
