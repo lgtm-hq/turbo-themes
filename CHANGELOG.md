@@ -10,6 +10,32 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.37.0] - 2026-07-21
+
+### ✨ Added
+
+- Correct and upgrade theme pack icons (#700)
+- Swap home page to showcase design (#701)
+- Add lazy theme-CSS loading helpers for homepage showcase (#694)
+- Expose integration API for homepage showcase (#692)
+- Stage showcase homepage styles as home-showcase.css (#691)
+- Rewrite homepage showcase script in TypeScript with build and tests (#693)
+
+### 🐛 Fixed
+
+- Resolve six new OSV advisories in the quality gate (#712)
+- Apply showcase follow-up fixes from review (#703)
+- Clear adopted link href on rollback when original had none (#699)
+- Report CSS-load and persistence failures from applyTheme (#698)
+
+### 🔧 Changed
+
+- Rewrite homepage marketing copy (#704)
+- Screenshot only the menu in the hover-state visual test (#714)
+- Block remote webfonts in visual specs on linux (#707)
+- Extend axe and contrast coverage for showcase homepage (#702)
+- Add ADR for showcase homepage replacing Noir Editorial (#690)
+
 ## [0.36.2] - 2026-07-20
 
 ### 🤖 Internal
