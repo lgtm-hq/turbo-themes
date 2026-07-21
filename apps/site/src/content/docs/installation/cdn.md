@@ -17,8 +17,14 @@ Add these links to your HTML `<head>`:
 
 ```html
 <!-- Core tokens and base styles -->
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
+/>
 
 <!-- Choose a theme -->
 <link
@@ -27,7 +33,10 @@ Add these links to your HTML `<head>`:
 />
 
 <!-- Optional: Syntax highlighting -->
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css"
+/>
 ```
 
 ## CDN Providers
@@ -56,7 +65,10 @@ For production, pin to a specific version to avoid unexpected changes:
 
 ```html
 <!-- Pin to specific version -->
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes@1.0.0/packages/css/dist/turbo-core.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes@1.0.0/packages/css/dist/turbo-core.css"
+/>
 ```
 
 ## Available Files
@@ -100,8 +112,14 @@ For production, pin to a specific version to avoid unexpected changes:
     <title>My Turbo Themed Site</title>
 
     <!-- Turbo Themes -->
-    <link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
-    <link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
+    />
     <link
       id="theme-css"
       rel="stylesheet"

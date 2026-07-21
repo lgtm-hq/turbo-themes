@@ -38,7 +38,10 @@ module.exports = {
 Add the theme CSS to your HTML:
 
 ```html
-<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
 <link
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"

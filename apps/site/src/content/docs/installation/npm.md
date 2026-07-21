@@ -35,8 +35,14 @@ Add the CSS files to your HTML or import them in your bundler:
 
 ```html
 <!-- In your HTML -->
-<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
-<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
+/>
 <link
   rel="stylesheet"
   href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
@@ -69,7 +75,10 @@ Now use the CSS custom properties in your styles:
 For code blocks with theme-aware syntax highlighting:
 
 ```html
-<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css" />
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css"
+/>
 ```
 
 ## Theme Switching

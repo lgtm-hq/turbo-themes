@@ -58,8 +58,14 @@ Here's how simple it is to use Turbo Themes:
 
 ```html
 <!-- Include the core CSS and a theme -->
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
+/>
 <link
   rel="stylesheet"
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"

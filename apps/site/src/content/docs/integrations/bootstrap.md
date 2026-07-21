@@ -17,7 +17,10 @@ Use Turbo Themes with Bootstrap by mapping tokens to Bootstrap's CSS variables.
 
 ```html
 <!-- Turbo Themes -->
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
 <link
   rel="stylesheet"
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"

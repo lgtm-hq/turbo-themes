@@ -39,8 +39,14 @@ bun add @lgtm-hq/turbo-themes
 No installation needed - just add the links to your HTML:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
-<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
+/>
 <link
   rel="stylesheet"
   href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
@@ -53,8 +59,14 @@ If you installed via npm, import the CSS files in your project:
 
 ```html
 <!-- Core tokens and base styles -->
-<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
-<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css"
+/>
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css"
+/>
 
 <!-- Choose a theme -->
 <link
@@ -63,7 +75,10 @@ If you installed via npm, import the CSS files in your project:
 />
 
 <!-- Optional: Syntax highlighting for code blocks -->
-<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css" />
+<link
+  rel="stylesheet"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css"
+/>
 ```
 
 ## Step 3: Use the Tokens
