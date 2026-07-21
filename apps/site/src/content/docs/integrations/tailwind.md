@@ -29,7 +29,7 @@ Use the Turbo Themes preset in your `tailwind.config.js`:
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,js,ts,jsx,tsx}'],
-  presets: [require('turbo-themes/adapters/tailwind/preset')],
+  presets: [require('@lgtm-hq/turbo-themes/adapters/tailwind/preset')],
 };
 ```
 
@@ -38,10 +38,10 @@ module.exports = {
 Add the theme CSS to your HTML:
 
 ```html
-<link rel="stylesheet" href="node_modules/turbo-themes/css/turbo-core.css" />
+<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
 <link
   rel="stylesheet"
-  href="node_modules/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
 ```
 
@@ -116,7 +116,7 @@ utilities update because they reference CSS variables:
 ```javascript
 function setTheme(themeName) {
   const link = document.getElementById('theme-css');
-  link.href = `/css/themes/turbo/${themeName}.css`;
+  link.href = `/packages/css/dist/themes/${themeName}.css`;
 }
 ```
 
@@ -130,7 +130,7 @@ No rebuild required - changes are instant.
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,js,ts,jsx,tsx}'],
-  presets: [require('turbo-themes/adapters/tailwind/preset')],
+  presets: [require('@lgtm-hq/turbo-themes/adapters/tailwind/preset')],
   theme: {
     extend: {
       // Add your own extensions

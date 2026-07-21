@@ -17,10 +17,10 @@ Use Turbo Themes with Bootstrap by mapping tokens to Bootstrap's CSS variables.
 
 ```html
 <!-- Turbo Themes -->
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
+<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
 <link
   rel="stylesheet"
-  href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
 
 <!-- Bootstrap -->
@@ -197,7 +197,7 @@ Use standard Bootstrap classes:
 ```javascript
 function setTheme(themeName) {
   const link = document.getElementById('theme-css');
-  link.href = `/css/themes/turbo/${themeName}.css`;
+  link.href = `/packages/css/dist/themes/${themeName}.css`;
   localStorage.setItem('turbo-theme', themeName);
 }
 ```

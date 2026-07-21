@@ -39,11 +39,11 @@ bun add @lgtm-hq/turbo-themes
 No installation needed - just add the links to your HTML:
 
 ```html
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-base.css" />
+<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
+<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
 <link
   rel="stylesheet"
-  href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
 ```
 
@@ -53,17 +53,17 @@ If you installed via npm, import the CSS files in your project:
 
 ```html
 <!-- Core tokens and base styles -->
-<link rel="stylesheet" href="node_modules/turbo-themes/css/turbo-core.css" />
-<link rel="stylesheet" href="node_modules/turbo-themes/css/turbo-base.css" />
+<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
+<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
 
 <!-- Choose a theme -->
 <link
   rel="stylesheet"
-  href="node_modules/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
 
 <!-- Optional: Syntax highlighting for code blocks -->
-<link rel="stylesheet" href="node_modules/turbo-themes/css/turbo-syntax.css" />
+<link rel="stylesheet" href="node_modules/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css" />
 ```
 
 ## Step 3: Use the Tokens
@@ -101,7 +101,7 @@ To enable theme switching, swap the theme CSS file dynamically:
 ```javascript
 function setTheme(themeName) {
   const themeLink = document.getElementById('theme-css');
-  themeLink.href = `/css/themes/turbo/${themeName}.css`;
+  themeLink.href = `/packages/css/dist/themes/${themeName}.css`;
 
   // Persist the choice
   localStorage.setItem('turbo-theme', themeName);

@@ -17,17 +17,17 @@ Add these links to your HTML `<head>`:
 
 ```html
 <!-- Core tokens and base styles -->
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-base.css" />
+<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
+<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
 
 <!-- Choose a theme -->
 <link
   rel="stylesheet"
-  href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
 />
 
 <!-- Optional: Syntax highlighting -->
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-syntax.css" />
+<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-syntax.css" />
 ```
 
 ## CDN Providers
@@ -37,7 +37,7 @@ Add these links to your HTML `<head>`:
 ```html
 <link
   rel="stylesheet"
-  href="https://unpkg.com/turbo-themes@latest/css/turbo-core.css"
+  href="https://unpkg.com/@lgtm-hq/turbo-themes@latest/packages/css/dist/turbo-core.css"
 />
 ```
 
@@ -46,7 +46,7 @@ Add these links to your HTML `<head>`:
 ```html
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/turbo-themes@latest/css/turbo-core.css"
+  href="https://cdn.jsdelivr.net/npm/@lgtm-hq/turbo-themes@latest/packages/css/dist/turbo-core.css"
 />
 ```
 
@@ -56,38 +56,38 @@ For production, pin to a specific version to avoid unexpected changes:
 
 ```html
 <!-- Pin to specific version -->
-<link rel="stylesheet" href="https://unpkg.com/turbo-themes@1.0.0/css/turbo-core.css" />
+<link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes@1.0.0/packages/css/dist/turbo-core.css" />
 ```
 
 ## Available Files
 
 ### Core Files
 
-| File                | URL                     | Size |
-| ------------------- | ----------------------- | ---- |
-| Core tokens         | `/css/turbo-core.css`   | ~2KB |
-| Base styles         | `/css/turbo-base.css`   | ~1KB |
-| Syntax highlighting | `/css/turbo-syntax.css` | ~1KB |
+| File                | URL                                   | Size |
+| ------------------- | ------------------------------------- | ---- |
+| Core tokens         | `/packages/css/dist/turbo-core.css`   | ~2KB |
+| Base styles         | `/packages/css/dist/turbo-base.css`   | ~1KB |
+| Syntax highlighting | `/packages/css/dist/turbo-syntax.css` | ~1KB |
 
 ### Theme Files
 
-| Theme                | URL                                          |
-| -------------------- | -------------------------------------------- |
-| Catppuccin Mocha     | `/css/themes/turbo/catppuccin-mocha.css`     |
-| Catppuccin Macchiato | `/css/themes/turbo/catppuccin-macchiato.css` |
-| Catppuccin Frappé    | `/css/themes/turbo/catppuccin-frappe.css`    |
-| Catppuccin Latte     | `/css/themes/turbo/catppuccin-latte.css`     |
-| Dracula              | `/css/themes/turbo/dracula.css`              |
-| GitHub Dark          | `/css/themes/turbo/github-dark.css`          |
-| GitHub Light         | `/css/themes/turbo/github-light.css`         |
-| Bulma Dark           | `/css/themes/turbo/bulma-dark.css`           |
-| Bulma Light          | `/css/themes/turbo/bulma-light.css`          |
+| Theme                | URL                                                  |
+| -------------------- | ---------------------------------------------------- |
+| Catppuccin Mocha     | `/packages/css/dist/themes/catppuccin-mocha.css`     |
+| Catppuccin Macchiato | `/packages/css/dist/themes/catppuccin-macchiato.css` |
+| Catppuccin Frappé    | `/packages/css/dist/themes/catppuccin-frappe.css`    |
+| Catppuccin Latte     | `/packages/css/dist/themes/catppuccin-latte.css`     |
+| Dracula              | `/packages/css/dist/themes/dracula.css`              |
+| GitHub Dark          | `/packages/css/dist/themes/github-dark.css`          |
+| GitHub Light         | `/packages/css/dist/themes/github-light.css`         |
+| Bulma Dark           | `/packages/css/dist/themes/bulma-dark.css`           |
+| Bulma Light          | `/packages/css/dist/themes/bulma-light.css`          |
 
 ### Adapters
 
-| Adapter | URL                       |
-| ------- | ------------------------- |
-| Bulma   | `/css/adapters/bulma.css` |
+| Adapter | URL                                               |
+| ------- | ------------------------------------------------- |
+| Bulma   | `/packages/adapters/bulma/dist/bulma-adapter.css` |
 
 ## Complete Example
 
@@ -100,12 +100,12 @@ For production, pin to a specific version to avoid unexpected changes:
     <title>My Turbo Themed Site</title>
 
     <!-- Turbo Themes -->
-    <link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-core.css" />
-    <link rel="stylesheet" href="https://unpkg.com/turbo-themes/css/turbo-base.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-core.css" />
+    <link rel="stylesheet" href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/turbo-base.css" />
     <link
       id="theme-css"
       rel="stylesheet"
-      href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+      href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
     />
 
     <style>
@@ -149,7 +149,7 @@ For production, pin to a specific version to avoid unexpected changes:
         currentIndex = (currentIndex + 1) % themes.length;
         const theme = themes[currentIndex];
         document.getElementById('theme-css').href =
-          `https://unpkg.com/turbo-themes/css/themes/turbo/${theme}.css`;
+          `https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/${theme}.css`;
       }
     </script>
   </body>
@@ -170,7 +170,7 @@ For production, pin to a specific version to avoid unexpected changes:
    <link
      rel="preload"
      as="style"
-     href="https://unpkg.com/turbo-themes/css/themes/turbo/catppuccin-mocha.css"
+     href="https://unpkg.com/@lgtm-hq/turbo-themes/packages/css/dist/themes/catppuccin-mocha.css"
    />
    ```
 

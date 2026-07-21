@@ -71,7 +71,7 @@ The Tailwind preset extends your color palette:
 ```javascript
 // tailwind.config.js
 module.exports = {
-  presets: [require('turbo-themes/adapters/tailwind/preset')],
+  presets: [require('@lgtm-hq/turbo-themes/adapters/tailwind/preset')],
 };
 ```
 
