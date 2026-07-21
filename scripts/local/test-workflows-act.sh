@@ -87,9 +87,6 @@ workflow_support_level() {
   security-codeql.yml | security-dependency-review.yml | security-scorecards.yml)
     echo "unsupported"
     ;;
-  reusable-sbom.yml)
-    echo "unsupported"
-    ;;
   *)
     # Check if workflow uses setup-env or setup-node action (requires full-22.04 image with node+ruby)
     # Note: setup-node is a JS action that needs Node.js to run, creating a chicken-and-egg problem

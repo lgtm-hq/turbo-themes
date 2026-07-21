@@ -216,7 +216,7 @@ allowed-endpoints: >
 ### SBOM Generation Workflow
 
 ```yaml
-# reusable-sbom.yml
+# security-sbom.yml + publish-* (lgtm-ci reusable-sbom.yml, egress-preset: sbom)
 allowed-endpoints: >
   github.com:443 api.github.com:443 objects.githubusercontent.com:443
   codeload.github.com:443 anchore.io:443 toolbox-data.anchore.io:443
