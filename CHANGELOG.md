@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.38.4] - 2026-07-21
+
+### 🤖 Internal
+
+- Authenticate the release-branch recovery push (#736)
+
 ## [0.38.3] - 2026-07-21
 
 ### 🐛 Fixed
