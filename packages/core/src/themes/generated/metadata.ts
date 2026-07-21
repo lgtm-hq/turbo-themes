@@ -9,6 +9,9 @@
  * Used to derive the {@link ThemeId} literal union.
  */
 export const THEME_IDS = [
+  'ayu-dark',
+  'ayu-light',
+  'ayu-mirage',
   'bulma-dark',
   'bulma-light',
   'catppuccin-frappe',
@@ -72,6 +75,7 @@ export const VENDOR_ORDER = [
   'tokyo-night',
   'kanagawa',
   'one-dark',
+  'ayu',
   'turbo',
 ] as const;
 
@@ -80,6 +84,9 @@ export type VendorId = (typeof VENDOR_ORDER)[number];
 
 /** Per-theme human-readable descriptions for UI pickers. */
 export const THEME_DESCRIPTIONS = {
+  "ayu-dark": "Deep Ayu dark theme for low-light environments.",
+  "ayu-light": "Bright Ayu palette designed for comfortable daytime coding.",
+  "ayu-mirage": "Soft dark Ayu variant with subtle, muted accents.",
   "bulma-dark": "Dark Bulma theme tuned for low-light reading.",
   "bulma-light": "Classic Bulma look with a bright, neutral palette.",
   "catppuccin-frappe": "Balanced dark Catppuccin theme for focused work.",
@@ -127,6 +134,9 @@ export const THEME_DESCRIPTIONS = {
 
 /** Per-theme icon filenames relative to assets/img/. */
 export const THEME_ICONS = {
+  "ayu-dark": "ayu-dark.png",
+  "ayu-light": "ayu-light.png",
+  "ayu-mirage": "ayu-mirage.png",
   "bulma-dark": "bulma-logo-dark.png",
   "bulma-light": "bulma-logo.png",
   "catppuccin-frappe": "catppuccin-logo-macchiato.png",
@@ -211,6 +221,10 @@ export const VENDOR_ICONS = {
     "light": "one-light.png",
     "dark": "one-dark.png"
   },
+  "ayu": {
+    "light": "ayu-light.png",
+    "dark": "ayu-dark.png"
+  },
   "turbo": "terminal.png"
 } as const;
 
@@ -267,6 +281,10 @@ export const VENDOR_FAMILY_META = {
   "one-dark": {
     "name": "One",
     "description": "The iconic Atom editor palette in dark and light"
+  },
+  "ayu": {
+    "name": "Ayu",
+    "description": "Bright colors designed for comfortable all-day coding"
   },
   "turbo": {
     "name": "Terminal",

@@ -198,6 +198,9 @@ For plain HTML files, write the script directly using your hardcoded catalog:
         'kanagawa-wave',
         'kanagawa-dragon',
         'kanagawa-lotus',
+        'ayu-dark',
+        'ayu-mirage',
+        'ayu-light',
       ];
 
       var saved = localStorage.getItem('turbo-theme');

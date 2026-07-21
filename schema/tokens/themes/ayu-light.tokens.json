@@ -1,0 +1,205 @@
+{
+  "$schema": "../../turbo-themes.schema.json#/$defs/ThemeFile",
+  "id": "ayu-light",
+  "label": "Ayu Light",
+  "vendor": "ayu",
+  "appearance": "light",
+  "description": "Bright Ayu palette designed for comfortable daytime coding.",
+  "icon": "ayu-light.png",
+  "tokens": {
+    "background": {
+      "base": {
+        "$value": "#f8f9fa",
+        "$type": "color"
+      },
+      "surface": {
+        "$value": "#fafafa",
+        "$type": "color"
+      },
+      "overlay": {
+        "$value": "#e7eaed",
+        "$type": "color"
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "#5c6166",
+        "$type": "color"
+      },
+      "secondary": {
+        "$value": "#828e9f",
+        "$type": "color"
+      },
+      "inverse": {
+        "$value": "#f8f9fa",
+        "$type": "color"
+      }
+    },
+    "brand": {
+      "primary": {
+        "$value": "#f29718",
+        "$type": "color"
+      }
+    },
+    "state": {
+      "info": {
+        "$value": "#55b4d4",
+        "$type": "color"
+      },
+      "success": {
+        "$value": "#86b300",
+        "$type": "color"
+      },
+      "warning": {
+        "$value": "#ff7e33",
+        "$type": "color"
+      },
+      "danger": {
+        "$value": "#e65050",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "successText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "warningText": {
+        "$value": "#000000",
+        "$type": "color"
+      }
+    },
+    "border": {
+      "default": {
+        "$value": "#e7eaed",
+        "$type": "color"
+      }
+    },
+    "accent": {
+      "link": {
+        "$value": "#a37acc",
+        "$type": "color"
+      }
+    },
+    "typography": {
+      "fonts": {
+        "sans": {
+          "$value": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\"",
+          "$type": "fontFamily"
+        },
+        "mono": {
+          "$value": "JetBrains Mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+          "$type": "fontFamily"
+        }
+      },
+      "webFonts": [
+        "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap",
+        "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap"
+      ]
+    },
+    "content": {
+      "heading": {
+        "h1": {
+          "$value": "#f2a300",
+          "$type": "color"
+        },
+        "h2": {
+          "$value": "#399ee6",
+          "$type": "color"
+        },
+        "h3": {
+          "$value": "#55b4d4",
+          "$type": "color"
+        },
+        "h4": {
+          "$value": "#86b300",
+          "$type": "color"
+        },
+        "h5": {
+          "$value": "#a37acc",
+          "$type": "color"
+        },
+        "h6": {
+          "$value": "#ff7e33",
+          "$type": "color"
+        }
+      },
+      "body": {
+        "primary": {
+          "$value": "#5c6166",
+          "$type": "color"
+        },
+        "secondary": {
+          "$value": "#828e9f",
+          "$type": "color"
+        }
+      },
+      "link": {
+        "default": {
+          "$value": "#a37acc",
+          "$type": "color"
+        }
+      },
+      "selection": {
+        "fg": {
+          "$value": "#5c6166",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#e5e9ed",
+          "$type": "color"
+        }
+      },
+      "blockquote": {
+        "border": {
+          "$value": "#e7eaed",
+          "$type": "color"
+        },
+        "fg": {
+          "$value": "#5c6166",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#fafafa",
+          "$type": "color"
+        }
+      },
+      "codeInline": {
+        "fg": {
+          "$value": "#5c6166",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#e7eaed",
+          "$type": "color"
+        }
+      },
+      "codeBlock": {
+        "fg": {
+          "$value": "#5c6166",
+          "$type": "color"
+        },
+        "bg": {
+          "$value": "#e7eaed",
+          "$type": "color"
+        }
+      },
+      "table": {
+        "border": {
+          "$value": "#e7eaed",
+          "$type": "color"
+        },
+        "stripe": {
+          "$value": "#fafafa",
+          "$type": "color"
+        },
+        "theadBg": {
+          "$value": "#e7eaed",
+          "$type": "color"
+        }
+      }
+    }
+  }
+}

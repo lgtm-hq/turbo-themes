@@ -125,6 +125,16 @@
       }
     },
     {
+      "id": "ayu",
+      "name": "Ayu",
+      "description": "Bright colors designed for comfortable all-day coding",
+      "homepage": "https://github.com/ayu-theme",
+      "icon": {
+        "light": "ayu-light.png",
+        "dark": "ayu-dark.png"
+      }
+    },
+    {
       "id": "turbo",
       "name": "Terminal",
       "description": "CRT phosphor green on void",

@@ -20,9 +20,9 @@ final class ThemeRegistryTests: XCTestCase {
     }
 
     func testExpectedThemeCount() {
-        // We expect 36 themes based on the ThemeId enum
-        XCTAssertEqual(ThemeId.allCases.count, 36)
-        XCTAssertEqual(ThemeRegistry.allThemes.count, 36)
+        // We expect 39 themes based on the ThemeId enum
+        XCTAssertEqual(ThemeId.allCases.count, 39)
+        XCTAssertEqual(ThemeRegistry.allThemes.count, 39)
     }
 
     // MARK: - Theme Lookup Tests
@@ -88,6 +88,9 @@ final class ThemeRegistryTests: XCTestCase {
             .kanagawaWave: "Kanagawa Wave",
             .kanagawaDragon: "Kanagawa Dragon",
             .kanagawaLotus: "Kanagawa Lotus",
+            .ayuDark: "Ayu Dark",
+            .ayuMirage: "Ayu Mirage",
+            .ayuLight: "Ayu Light",
         ]
 
         for (themeId, expectedLabel) in expectedLabels {
@@ -133,6 +136,9 @@ final class ThemeRegistryTests: XCTestCase {
         XCTAssertEqual(ThemeId.kanagawaWave.rawValue, "kanagawa-wave")
         XCTAssertEqual(ThemeId.kanagawaDragon.rawValue, "kanagawa-dragon")
         XCTAssertEqual(ThemeId.kanagawaLotus.rawValue, "kanagawa-lotus")
+        XCTAssertEqual(ThemeId.ayuDark.rawValue, "ayu-dark")
+        XCTAssertEqual(ThemeId.ayuMirage.rawValue, "ayu-mirage")
+        XCTAssertEqual(ThemeId.ayuLight.rawValue, "ayu-light")
     }
 
     // MARK: - Default Palette Tests

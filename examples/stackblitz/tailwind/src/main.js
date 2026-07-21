@@ -36,6 +36,9 @@ const THEMES = [
   { id: 'kanagawa-wave', isLight: false },
   { id: 'kanagawa-dragon', isLight: false },
   { id: 'kanagawa-lotus', isLight: true },
+  { id: 'ayu-dark', isLight: false },
+  { id: 'ayu-mirage', isLight: false },
+  { id: 'ayu-light', isLight: true },
 ];
 const VALID_THEMES = THEMES.map((t) => t.id);
 const DEFAULT_THEME = 'catppuccin-mocha';

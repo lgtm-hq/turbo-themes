@@ -2,6 +2,7 @@
 // Theme registry - collects all available theme flavors
 
 import type { ThemeFlavor } from './types.js';
+import { ayuSynced } from './packs/ayu.synced.js';
 import { bulmaThemes } from './packs/bulma.js';
 import { catppuccinSynced } from './packs/catppuccin.synced.js';
 import { draculaThemes } from './packs/dracula.js';
@@ -19,6 +20,7 @@ import { kanagawaThemes } from './packs/kanagawa.js';
 
 // Collect all flavors from all theme packages
 const allFlavors: ThemeFlavor[] = [
+  ...ayuSynced.flavors,
   ...bulmaThemes.flavors,
   ...catppuccinSynced.flavors,
   ...draculaThemes.flavors,

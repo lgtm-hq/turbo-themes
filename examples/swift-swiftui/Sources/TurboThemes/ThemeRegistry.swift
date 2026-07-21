@@ -650,6 +650,54 @@ public enum ThemeRegistry {
                 stateInfo: Color(hex: "#5a7785")
             )
         ),
+        .ayuDark: ThemeDefinition(
+            id: .ayuDark,
+            label: "Ayu Dark",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#0d1017"),
+                backgroundSurface: Color(hex: "#141821"),
+                heading: Color(hex: "#ffb454"),
+                bodyPrimary: Color(hex: "#bfbdb6"),
+                bodySecondary: Color(hex: "#5b6876"),
+                brandPrimary: Color(hex: "#e6b450"),
+                stateSuccess: Color(hex: "#aad94c"),
+                stateDanger: Color(hex: "#d95757"),
+                stateWarning: Color(hex: "#ff8f40"),
+                stateInfo: Color(hex: "#39bae6")
+            )
+        ),
+        .ayuMirage: ThemeDefinition(
+            id: .ayuMirage,
+            label: "Ayu Mirage",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#1f2430"),
+                backgroundSurface: Color(hex: "#282e3b"),
+                heading: Color(hex: "#ffd173"),
+                bodyPrimary: Color(hex: "#cccac2"),
+                bodySecondary: Color(hex: "#707a8c"),
+                brandPrimary: Color(hex: "#ffcc66"),
+                stateSuccess: Color(hex: "#d5ff80"),
+                stateDanger: Color(hex: "#ff6666"),
+                stateWarning: Color(hex: "#ffad66"),
+                stateInfo: Color(hex: "#5ccfe6")
+            )
+        ),
+        .ayuLight: ThemeDefinition(
+            id: .ayuLight,
+            label: "Ayu Light",
+            palette: ThemePalette(
+                backgroundBase: Color(hex: "#f8f9fa"),
+                backgroundSurface: Color(hex: "#fafafa"),
+                heading: Color(hex: "#f2a300"),
+                bodyPrimary: Color(hex: "#5c6166"),
+                bodySecondary: Color(hex: "#828e9f"),
+                brandPrimary: Color(hex: "#f29718"),
+                stateSuccess: Color(hex: "#86b300"),
+                stateDanger: Color(hex: "#e65050"),
+                stateWarning: Color(hex: "#ff7e33"),
+                stateInfo: Color(hex: "#55b4d4")
+            )
+        ),
     ]
 
     /// Get a theme by its ID.

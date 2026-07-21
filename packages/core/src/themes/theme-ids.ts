@@ -9,6 +9,9 @@
  * `../tokens/index.ts`. Used to derive the {@link ThemeId} literal union.
  */
 export const THEME_IDS = [
+  'ayu-dark',
+  'ayu-light',
+  'ayu-mirage',
   'bulma-dark',
   'bulma-light',
   'catppuccin-frappe',

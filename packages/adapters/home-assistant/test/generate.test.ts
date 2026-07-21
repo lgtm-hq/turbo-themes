@@ -47,9 +47,9 @@ describe('generateHomeAssistantThemes', () => {
     expect(output).not.toContain('var(');
   });
 
-  it('emits exactly 48 top-level themes (40 flat + 8 auto)', () => {
-    expect(Object.keys(parsed)).toHaveLength(48);
-    expect(flavors).toHaveLength(40);
+  it('emits exactly 51 top-level themes (43 flat + 8 auto)', () => {
+    expect(Object.keys(parsed)).toHaveLength(51);
+    expect(flavors).toHaveLength(43);
     expect(AUTO_THEME_PAIRINGS).toHaveLength(8);
   });
 

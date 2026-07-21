@@ -1,6 +1,6 @@
 ---
 title: Theme Definitions
-description: Complete reference for all 40 Turbo Themes color schemes.
+description: Complete reference for all 43 Turbo Themes color schemes.
 category: api-reference
 order: 4
 prev: api-reference/tokens
@@ -9,12 +9,12 @@ next: api-reference/javascript-api
 
 # Theme Definitions
 
-Turbo Themes includes 40 color schemes across 14 vendor families. The canonical list is
+Turbo Themes includes 43 color schemes across 15 vendor families. The canonical list is
 always available at runtime:
 
 ```typescript
 import { themeIds } from '@lgtm-hq/turbo-themes';
-// → readonly string[] of all 40 theme IDs, sorted by vendor then variant
+// → readonly string[] of all 43 theme IDs, sorted by vendor then variant
 ```
 
 ## Theme Overview
@@ -60,6 +60,9 @@ import { themeIds } from '@lgtm-hq/turbo-themes';
 | Kanagawa Lotus        | Kanagawa    | Light      | `kanagawa-lotus`        |
 | One Dark              | One Dark    | Dark       | `one-dark`              |
 | One Light             | One Dark    | Light      | `one-light`             |
+| Ayu Dark              | Ayu         | Dark       | `ayu-dark`              |
+| Ayu Mirage            | Ayu         | Dark       | `ayu-mirage`            |
+| Ayu Light             | Ayu         | Light      | `ayu-light`             |
 | Terminal              | Terminal    | Dark       | `terminal`              |
 
 ## Curating a theme subset
@@ -74,7 +77,7 @@ import {
   getThemesByAppearance,
 } from '@lgtm-hq/turbo-themes';
 
-// All 40 themes
+// All 43 themes
 const all = themeIds;
 
 // Vendor opt-in
@@ -475,6 +478,45 @@ A darker variant for late-night sessions.
 | Background Overlay | `#e4d794` |
 | Text Primary       | `#545464` |
 | Brand Primary      | `#4d699b` |
+
+## Ayu Themes
+
+[Ayu](https://github.com/ayu-theme/ayu-colors) is a simple, bright and elegant theme
+that comes in three flavors.
+
+### Ayu Dark
+
+| Token              | Value     |
+| ------------------ | --------- |
+| Background Base    | `#0d1017` |
+| Background Surface | `#141821` |
+| Background Overlay | `#1b1f29` |
+| Text Primary       | `#bfbdb6` |
+| Brand Primary      | `#e6b450` |
+| State Success      | `#aad94c` |
+| State Danger       | `#d95757` |
+
+### Ayu Mirage
+
+A softer, medium-contrast dark variant.
+
+| Token              | Value     |
+| ------------------ | --------- |
+| Background Base    | `#1f2430` |
+| Background Surface | `#282e3b` |
+| Background Overlay | `#293040` |
+| Text Primary       | `#cccac2` |
+| Brand Primary      | `#ffcc66` |
+
+### Ayu Light
+
+| Token              | Value     |
+| ------------------ | --------- |
+| Background Base    | `#f8f9fa` |
+| Background Surface | `#fafafa` |
+| Background Overlay | `#e7eaed` |
+| Text Primary       | `#5c6166` |
+| Brand Primary      | `#f29718` |
 
 ## Choosing a Theme
 

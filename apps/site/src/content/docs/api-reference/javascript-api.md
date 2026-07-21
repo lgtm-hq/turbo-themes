@@ -204,6 +204,9 @@ For static pages, write the script directly. Keep `VALID_THEMES` in sync with yo
     try {
       var DEFAULT_THEME = 'catppuccin-mocha';
       var VALID_THEMES = [
+        'ayu-dark',
+        'ayu-light',
+        'ayu-mirage',
         'bulma-dark',
         'bulma-light',
         'catppuccin-frappe',
