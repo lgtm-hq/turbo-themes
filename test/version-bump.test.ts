@@ -2,9 +2,10 @@
  * Tests for generateChangelogEntry() bucketing logic in scripts/ci/version-bump.mjs.
  *
  * Regression coverage for:
- * - GitHub issue #546: docs/style/refactor/perf/test/chore under Changed (not Fixed)
+ * - GitHub issue #546: style/refactor/perf/test/chore under Changed (not Fixed)
  * - GitHub issue #581: scope-aware Internal section (ci/build) + human-readable descriptions
  * - Greptile P1 on #602: breaking changes with ci/build scopes must not be dropped
+ * - GitHub issue #718: docs type/scope → Internal (not Changed)
  */
 import { describe, expect, it } from 'vitest';
 
@@ -16,6 +17,7 @@ const {
   determineBumpType,
   formatChangelogDescription,
   isChangelogInternalScope,
+  isChangelogInternalType,
   parseCommit,
 } = await import('../scripts/ci/version-bump.mjs');
 
@@ -49,7 +51,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
   });
 
   describe('non-fix patch types → ### 🔧 Changed (not ### 🐛 Fixed)', () => {
-    it.each(['docs', 'style', 'refactor', 'perf', 'test', 'chore'] as const)(
+    it.each(['style', 'refactor', 'perf', 'test', 'chore'] as const)(
       '"%s" commit appears under Changed, not Fixed',
       (type) => {
         const commits = [fakeCommit(type, `update ${type} thing`)];
@@ -61,15 +63,16 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
     );
   });
 
-  describe('issue #546 regression: docs-only release', () => {
-    it('docs commit is NOT listed under Fixed (reproduces 0.22.1 misclassification)', () => {
+  describe('issue #718: docs type → ### 🤖 Internal (not Changed/Fixed)', () => {
+    it('docs commit appears under Internal, not Fixed or Changed', () => {
       const commits = [
         fakeCommit('docs', 'add AGENTS.md with Cursor Cloud dev environment instructions (#542)'),
       ];
       const entry = generateChangelogEntry(commits, '0.22.1', 'patch');
 
       expect(entry).not.toContain('### 🐛 Fixed');
-      expect(entry).toContain('### 🔧 Changed');
+      expect(entry).not.toContain('### 🔧 Changed');
+      expect(entry).toContain('### 🤖 Internal');
       expect(entry).toContain(
         '- Add AGENTS.md with Cursor Cloud dev environment instructions (#542)',
       );
@@ -102,8 +105,8 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
     );
   });
 
-  describe('issue #581/#648: ci/build/test scopes → ### 🤖 Internal (not consumer sections)', () => {
-    it.each(['ci', 'build', 'test'] as const)(
+  describe('issue #581/#648/#718: ci/build/test/docs scopes → ### 🤖 Internal (not consumer sections)', () => {
+    it.each(['ci', 'build', 'test', 'docs'] as const)(
       'fix(%s) appears under Internal, not Fixed',
       (scope) => {
         const commits = [
@@ -122,7 +125,7 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       },
     );
 
-    it.each(['ci', 'build', 'test'] as const)(
+    it.each(['ci', 'build', 'test', 'docs'] as const)(
       'feat(%s) appears under Internal, not Added',
       (scope) => {
         const commits = [
@@ -140,17 +143,17 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       },
     );
 
-    it.each(['ci', 'build', 'test'] as const)(
+    it.each(['ci', 'build', 'test', 'docs'] as const)(
       'chore(%s) appears under Internal, not Changed',
       (scope) => {
         const commits = [
           fakeCommit('chore', 'tweak pipeline cache', scope),
-          fakeCommit('docs', 'update README'),
+          fakeCommit('style', 'format README'),
         ];
         const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
 
         expect(entry).toContain('### 🔧 Changed');
-        expect(entry).toContain('- Update README');
+        expect(entry).toContain('- Format README');
         expect(entry).toContain('### 🤖 Internal');
         expect(entry).toContain('- Tweak pipeline cache');
         const changedSection = entry.split('### 🤖 Internal')[0];
@@ -255,21 +258,25 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
       expect(entry).toContain('- Fix token import');
 
       expect(entry).toContain('### 🔧 Changed');
-      expect(entry).toContain('- Update README');
       expect(entry).toContain('- Bump deps');
       expect(entry).toContain('- Simplify renderer');
 
       expect(entry).not.toContain('add lint job');
       expect(entry).toContain('### 🤖 Internal');
+      expect(entry).toContain('- Update README');
       expect(entry).toContain('- Address greptile P2 findings');
+      const changedSection = entry.split('### 🤖 Internal')[0];
+      expect(changedSection).not.toContain('Update README');
     });
   });
 
   describe('scoped commits', () => {
-    it('docs(site) commit goes to Changed, not Fixed', () => {
+    it('docs(site) commit goes to Internal, not Changed/Fixed (#718)', () => {
       const commits = [fakeCommit('docs', 'add API reference', 'site')];
       const entry = generateChangelogEntry(commits, '1.0.1', 'patch');
-      expect(entry).toContain('### 🔧 Changed');
+      expect(entry).toContain('### 🤖 Internal');
+      expect(entry).toContain('- Add API reference');
+      expect(entry).not.toContain('### 🔧 Changed');
       expect(entry).not.toContain('### 🐛 Fixed');
     });
 
@@ -283,9 +290,12 @@ describe('generateChangelogEntry – changelog section bucketing', () => {
 });
 
 describe('isChangelogInternalScope', () => {
-  it.each(['ci', 'build', 'CI', 'Build'] as const)('"%s" is internal', (scope) => {
-    expect(isChangelogInternalScope(scope)).toBe(true);
-  });
+  it.each(['ci', 'build', 'test', 'docs', 'CI', 'Build', 'Test', 'Docs'] as const)(
+    '"%s" is internal',
+    (scope) => {
+      expect(isChangelogInternalScope(scope)).toBe(true);
+    },
+  );
 
   it.each(['core', 'site', 'deps'] as const)('"%s" is not internal', (scope) => {
     expect(isChangelogInternalScope(scope)).toBe(false);
@@ -294,6 +304,21 @@ describe('isChangelogInternalScope', () => {
   it('null/undefined scopes are not internal', () => {
     expect(isChangelogInternalScope(null)).toBe(false);
     expect(isChangelogInternalScope(undefined)).toBe(false);
+  });
+});
+
+describe('isChangelogInternalType', () => {
+  it.each(['docs', 'Docs'] as const)('"%s" is internal', (type) => {
+    expect(isChangelogInternalType(type)).toBe(true);
+  });
+
+  it.each(['fix', 'feat', 'chore', 'test', 'style'] as const)('"%s" is not internal', (type) => {
+    expect(isChangelogInternalType(type)).toBe(false);
+  });
+
+  it('null/undefined types are not internal', () => {
+    expect(isChangelogInternalType(null)).toBe(false);
+    expect(isChangelogInternalType(undefined)).toBe(false);
   });
 });
 
