@@ -4,8 +4,8 @@ var TurboThemeSelector = (function(exports) {
 	var tokens = {
 		$schema: "https://design-tokens.org/schema.json",
 		$description: "Turbo Themes - Flat tokens for 37 themes",
-		$version: "0.38.7",
-		$generated: "21799014c43c3a4bd5b250cfe72fbe99b2ab8882719bcca48fe20955d72b3f1e",
+		$version: "0.38.8",
+		$generated: "539fb8b486556a01f444fabfadae7a1e114e7ebe03b8bec3993e29817f0a6bd6",
 		meta: {
 			"themeIds": [
 				"bulma-dark",
