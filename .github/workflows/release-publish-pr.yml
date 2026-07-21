@@ -56,7 +56,7 @@ jobs:
           # target the dispatched tag instead (#725).
           tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
           body: |
-            ## 📦 @turbocoder13/turbo-themes ${{ github.ref_name }}
+            ## 📦 @turbocoder13/turbo-themes ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
 
             Published to npm: https://www.npmjs.com/package/@turbocoder13/turbo-themes
 
@@ -85,7 +85,7 @@ jobs:
         run: |
           {
             echo "## GitHub Release Summary"
-            echo "✅ Release ${{ github.ref_name }} published and released"
+            echo "✅ Release ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }} published and released"
           } >> "$GITHUB_STEP_SUMMARY"
 
   # Generate multi-format SBOMs at the release tag, cosign-sign them, and
