@@ -1,4 +1,59 @@
 ---
+# =============================================================================
+# lgtm-ci reusable adoption audit — issue #647 (supersedes stale PR #489)
+# =============================================================================
+# Decision: DEFER. Keep this local workflow; do NOT swap it for a thin
+# `workflow_call` caller of lgtm-hq/lgtm-ci `reusable-release-version-pr.yml`.
+#
+# Audited against: lgtm-hq/lgtm-ci reusable-release-version-pr.yml
+#   version v0.59.0 — SHA 443a687caa93b3afa306a066aae8d8a2b4e60c3c
+#
+# Behaviors that ARE expressible via the current reusable (no blocker):
+#   - sign-commits: true (hardcoded upstream; required-signatures ruleset #544)
+#   - release-commit guard loop prevention (skip-patterns default
+#     `^chore\(release\):` matches guard-release-commit.sh)
+#   - CODEOWNER review AND assignee (#621): upstream assign-codeowner.sh does
+#     `--add-assignee` and requests review for Bot-authored PRs when
+#     REQUEST_CODEOWNER_REVIEW=true (parity with request-codeowner-review.sh)
+#   - Auto-merge for minor+patch bumps (current practice, e.g. 0.29.0): set
+#     `auto-merge: true` + `auto-merge-patch-only: false`. Patch-only remains a
+#     deliberate future product decision, NOT adopted here.
+#   - Failure reporting (#568): upstream report-release-failure job opens/updates
+#     a deduplicated issue (different mechanism, comparable coverage).
+#
+# BLOCKING gaps that would REGRESS load-bearing behavior if adopted today:
+#   1. Version-stamped artifact regeneration (#635) — BLOCKER. The reusable job
+#      has no Bun/Node toolchain setup and no `bun install`; its only
+#      repo-specific hook, `version-update-script`, runs bare with just
+#      NEXT_VERSION in env. turbo-themes must run
+#      `scripts/ci/regenerate-release-artifacts.sh`
+#      (bun run build && build:js:dev && build:js:prod), which requires the
+#      installed workspace toolchain, to refresh committed version-stamped
+#      artifacts: the tokens.json `$version` + recomputed `$generated` sha256
+#      hashes (packages/core, python, swift) and the `assets/js/theme-selector*`
+#      IIFE bundles that embed the tokens payload. A caller cannot inject
+#      setup/install steps into a reusable job, so adoption would ship
+#      stale/hash-mismatched artifacts in the release PR.
+#   2. Transient push-retry in-run recovery (#568) — upstream drops
+#      retry-release-branch-push.sh; it fails then reports via issue rather than
+#      recovering the push within the same run.
+#   3. Cross-platform version sync semantics (scripts/sync-version.mjs) —
+#      tokens `$generated` hash recompute is turbo-themes-specific and is not
+#      covered by the generic per-ecosystem updaters; it too needs the toolchain
+#      hook from gap #1.
+#
+# Upstream (lgtm-ci) needs before this can be adopted without regression:
+#   - A pre-PR toolchain/build hook that runs with repo dependencies installed
+#     (e.g. caller-provided setup-commands / node+bun setup + install before the
+#     version-update-script step), so repo-specific artifact regeneration can
+#     run inside the reusable job.
+#   - Optionally, an in-run transient push-retry option (or accept dedup-issue
+#     reporting as the replacement for recovery).
+#
+# Revisit when: lgtm-ci ships the pre-PR toolchain/build hook above. Re-run this
+# diff against the then-current reusable SHA before adopting; never regress
+# sign-commits or artifact regeneration.
+# =============================================================================
 name: Release - Version PR
 
 on:
