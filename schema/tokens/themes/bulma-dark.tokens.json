@@ -87,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#6579d0",
+        "$value": "#7386d4",
         "$type": "color"
       }
     },
@@ -146,7 +146,7 @@
       },
       "link": {
         "default": {
-          "$value": "#6579d0",
+          "$value": "#7386d4",
           "$type": "color"
         }
       },
@@ -156,7 +156,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#306dd1",
+          "$value": "#2f6acb",
           "$type": "color"
         }
       },
@@ -176,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#f35e7c",
+          "$value": "#f46884",
           "$type": "color"
         },
         "bg": {

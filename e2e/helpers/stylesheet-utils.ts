@@ -68,11 +68,34 @@ export async function waitForThemeApplied(page: Page, themeId?: string, timeoutM
       if (!bgBase || bgBase.trim() === '') {
         return false;
       }
-      // If a specific theme is expected, verify the data-theme attribute
-      if (expectedTheme) {
-        return document.documentElement.dataset.theme === expectedTheme;
+      if (!expectedTheme) {
+        return true;
       }
-      return true;
+      if (document.documentElement.dataset.theme !== expectedTheme) {
+        return false;
+      }
+
+      // Href can update before the sheet's custom properties paint. Read the
+      // expected brand from the active theme stylesheet and wait until the
+      // computed value matches (avoids mid-swap / transition contrast flakes).
+      const link = document.querySelector('#turbo-theme-css') as HTMLLinkElement | null;
+      if (!link?.href?.includes(`${expectedTheme}.css`) || !link.sheet) {
+        return false;
+      }
+      let expectedBrand = '';
+      for (const rule of Array.from(link.sheet.cssRules)) {
+        if (!(rule instanceof CSSStyleRule)) continue;
+        const value = rule.style.getPropertyValue('--turbo-brand-primary').trim();
+        if (value) {
+          expectedBrand = value;
+          break;
+        }
+      }
+      if (!expectedBrand) {
+        return false;
+      }
+      const actualBrand = style.getPropertyValue('--turbo-brand-primary').trim();
+      return actualBrand === expectedBrand;
     },
     themeId,
     { timeout: timeoutMs }

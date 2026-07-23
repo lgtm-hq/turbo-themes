@@ -14,8 +14,17 @@
   text-decoration: none;
   border: none;
   border-radius: var(--radius-lg);
-  cursor: pointer;
-  transition: all var(--transition-fast);
+  /* Transform/shadow only — animating color/background during theme swaps
+     produces mid-flight contrast that fails WCAG AA (and axe) scans. */
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
 }
 
 .btn:hover:not(:disabled) {
@@ -38,7 +47,13 @@
   transform: none;
 }
 
-/* Primary — use brand-primary-text for WCAG AA contrast on the brand fill */
+/* Primary — use brand-primary-text for WCAG AA contrast on the brand fill.
+   Include `a.btn-primary` (+ hover/focus) so link CTAs beat global `a`/`a:hover`
+   accent rules that share equal specificity and load later on the docs site. */
+a.btn-primary,
+a.btn-primary:hover,
+a.btn-primary:focus,
+a.btn-primary:focus-visible,
 .btn-primary {
   color: var(--turbo-brand-primary-text, var(--turbo-text-inverse));
   background: var(--turbo-brand-primary);

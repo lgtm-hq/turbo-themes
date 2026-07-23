@@ -58,7 +58,7 @@ class TurboTokens:
     body_secondary: str = "#a6adc8"  # color
     link_default: str = "#89b4fa"  # color
     selection_fg: str = "#cdd6f4"  # color
-    selection_bg: str = "#595c6d"  # color
+    selection_bg: str = "#56596a"  # color
     blockquote_border: str = "#7f849c"  # color
     blockquote_fg: str = "#cdd6f4"  # color
     blockquote_bg: str = "#181825"  # color

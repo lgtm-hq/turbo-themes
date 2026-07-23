@@ -32,6 +32,21 @@ describe('CSS Output - Color Contrast Accessibility', () => {
     });
   });
 
+  describe('primary text on surface (required)', () => {
+    it.each(flavorTestData)(
+      '%s primary meets WCAG AA on surface',
+      (_id, flavor) => {
+        const fg = flavor.tokens.text.primary;
+        const bg = flavor.tokens.background.surface;
+        const ratio = getContrastRatio(fg, bg);
+        expect(
+          ratio,
+          `${flavor.id}: primary on surface ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
+      }
+    );
+  });
+
   describe('secondary text contrast (required)', () => {
     it.each(flavorTestData)(
       '%s secondary text meets WCAG AA normal text',
@@ -59,6 +74,36 @@ describe('CSS Output - Color Contrast Accessibility', () => {
         expect(
           ratio,
           `${flavor.id}: body secondary contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
+      }
+    );
+  });
+
+  describe('secondary text on surface (required)', () => {
+    it.each(flavorTestData)(
+      '%s secondary meets WCAG AA on surface',
+      (_id, flavor) => {
+        const fg = flavor.tokens.text.secondary;
+        const bg = flavor.tokens.background.surface;
+        const ratio = getContrastRatio(fg, bg);
+        expect(
+          ratio,
+          `${flavor.id}: secondary on surface ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
+      }
+    );
+  });
+
+  describe('links on surface (required)', () => {
+    it.each(flavorTestData)(
+      '%s accent link meets WCAG AA on surface',
+      (_id, flavor) => {
+        const fg = flavor.tokens.accent.link;
+        const bg = flavor.tokens.background.surface;
+        const ratio = getContrastRatio(fg, bg);
+        expect(
+          ratio,
+          `${flavor.id}: link on surface ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
         ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
       }
     );

@@ -27,7 +27,7 @@
         "$type": "color"
       },
       "secondary": {
-        "$value": "#9DA9A0",
+        "$value": "#a4afa7",
         "$type": "color"
       },
       "inverse": {
@@ -140,7 +140,7 @@
           "$type": "color"
         },
         "secondary": {
-          "$value": "#9DA9A0",
+          "$value": "#a4afa7",
           "$type": "color"
         }
       },
@@ -166,7 +166,7 @@
           "$type": "color"
         },
         "fg": {
-          "$value": "#9faba2",
+          "$value": "#a4afa7",
           "$type": "color"
         },
         "bg": {
@@ -176,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#e9a486",
+          "$value": "#eaaa8d",
           "$type": "color"
         },
         "bg": {

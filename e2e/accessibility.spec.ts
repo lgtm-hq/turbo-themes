@@ -44,7 +44,9 @@ test.describe('Accessibility Tests @a11y', () => {
   test.skip(({ browserName }) => browserName === 'webkit', 'Webkit has CSS timing issues with axe-core');
 
   test('should have no accessibility violations on homepage', async ({ homePage }) => {
+    await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
     await homePage.goto();
+    expect(await waitForThemeApplied(homePage.page)).toBe(true);
 
     await test.step('Run axe accessibility scan', async () => {
       const accessibilityScanResults = await runAccessibilityScan(homePage.page);
@@ -423,11 +425,11 @@ test.describe('Accessibility Tests @a11y', () => {
           await test.step('Homepage Get started CTA meets AA contrast', async () => {
             const cta = homePage.page.getByTestId('home-cta-get-started');
             await expect(cta).toBeVisible();
-            const ratio = await getContrastRatio(cta);
-            expect(
-              ratio,
-              `home-cta-get-started contrast under ${theme} (got ${ratio.toFixed(2)})`
-            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+            const results = await new AxeBuilder({ page: homePage.page })
+              .include('[data-testid="home-cta-get-started"]')
+              .withRules(['color-contrast'])
+              .analyze();
+            expect(results.violations, JSON.stringify(results.violations)).toHaveLength(0);
           });
 
           await test.step('Examples page primary CTA meets AA contrast', async () => {
@@ -436,11 +438,11 @@ test.describe('Accessibility Tests @a11y', () => {
             expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
             const cta = homePage.page.getByTestId('examples-cta-contribute');
             await expect(cta).toBeVisible();
-            const ratio = await getContrastRatio(cta);
-            expect(
-              ratio,
-              `examples-cta-contribute contrast under ${theme} (got ${ratio.toFixed(2)})`
-            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+            const results = await new AxeBuilder({ page: homePage.page })
+              .include('[data-testid="examples-cta-contribute"]')
+              .withRules(['color-contrast'])
+              .analyze();
+            expect(results.violations, JSON.stringify(results.violations)).toHaveLength(0);
           });
         } finally {
           await homePage.page.unrouteAll({ behavior: 'ignoreErrors' });

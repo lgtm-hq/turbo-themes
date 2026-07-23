@@ -31,6 +31,9 @@ const assetsToCopy = [
   ['assets/css/site.css', 'assets/css/site.css'],
   ['assets/css/custom.css', 'assets/css/custom.css'],
   ['assets/css/home.css', 'assets/css/home.css'],
+  // Noir chrome must be a static asset (not Vite-bundled) so Header/Footer
+  // selectors are not tree-shaken out of BaseLayout's CSS graph.
+  ['assets/css/noir.css', 'assets/css/noir.css'],
 
   // Adapters
   ['packages/adapters/bulma/dist/bulma-adapter.css', 'assets/css/adapters/bulma.css'],

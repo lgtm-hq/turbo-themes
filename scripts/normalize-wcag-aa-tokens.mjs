@@ -10,7 +10,7 @@
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const AA_N = 4.5;
+const AA_N = 4.75; // headroom above axe/WCAG 4.5 floor (sampling + AA edge cases)
 const AA_L = 3.0;
 const DIR = 'schema/tokens/themes';
 
@@ -122,41 +122,79 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
     }
   };
 
+  // Overlay can be a mid-tone accent surface that cannot host the same ink as
+  // base/surface; gate text/link/heading AA against base + surface only.
+  const bgs = [base, t.background?.surface?.$value].filter(Boolean);
+
+  const ensureOnAllBgs = (fg, min) => {
+    const ok = (cand) => bgs.every((bg) => ratio(cand, bg) >= min);
+    if (ok(fg)) return fg;
+    // Search mixes toward black and white; keep the first candidate that
+    // clears every background (avoids sequential tug-of-war across layers).
+    let best = fg;
+    let bestScore = Math.min(...bgs.map((bg) => ratio(fg, bg)));
+    for (const target of ['#000000', '#ffffff']) {
+      for (let i = 1; i <= 100; i++) {
+        const cand = mixToward(fg, target, i / 100);
+        const score = Math.min(...bgs.map((bg) => ratio(cand, bg)));
+        if (score > bestScore) {
+          bestScore = score;
+          best = cand;
+        }
+        if (ok(cand)) return cand;
+      }
+    }
+    return best;
+  };
+
+  if (t.text?.primary?.$value) {
+    const old = t.text.primary.$value;
+    const neu = ensureOnAllBgs(old, AA_N);
+    bump('text.primary', old, neu);
+    t.text.primary.$value = neu;
+  }
+  if (t.content?.body?.primary?.$value) {
+    const old = t.content.body.primary.$value;
+    const neu = ensureOnAllBgs(old, AA_N);
+    bump('body.primary', old, neu);
+    t.content.body.primary.$value = neu;
+  }
   if (t.text?.secondary?.$value) {
     const old = t.text.secondary.$value;
-    const neu = ensureContrast(old, base, AA_N);
+    const neu = ensureOnAllBgs(old, AA_N);
     bump('text.secondary', old, neu);
     t.text.secondary.$value = neu;
   }
   if (t.text?.muted?.$value) {
     const old = t.text.muted.$value;
-    const neu = ensureContrast(old, base, AA_N);
+    const neu = ensureOnAllBgs(old, AA_N);
     bump('text.muted', old, neu);
     t.text.muted.$value = neu;
   }
   if (t.content?.body?.secondary?.$value) {
     const old = t.content.body.secondary.$value;
-    const neu = ensureContrast(old, base, AA_N);
+    const neu = ensureOnAllBgs(old, AA_N);
     bump('body.secondary', old, neu);
     t.content.body.secondary.$value = neu;
   }
   if (t.accent?.link?.$value) {
     const old = t.accent.link.$value;
-    const neu = ensureContrast(old, base, AA_N);
+    const neu = ensureOnAllBgs(old, AA_N);
     bump('accent.link', old, neu);
     t.accent.link.$value = neu;
   }
   if (t.content?.link?.default?.$value) {
     const old = t.content.link.default.$value;
-    const neu = ensureContrast(old, base, AA_N);
+    const neu = ensureOnAllBgs(old, AA_N);
     bump('content.link', old, neu);
     t.content.link.default.$value = neu;
   }
+  // Headings can sit on surface panels in demos too
   if (t.content?.heading) {
     for (const h of ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']) {
       if (!t.content.heading[h]?.$value) continue;
       const old = t.content.heading[h].$value;
-      const neu = ensureContrast(old, base, AA_L);
+      const neu = ensureOnAllBgs(old, AA_L);
       bump(`heading.${h}`, old, neu);
       t.content.heading[h].$value = neu;
     }

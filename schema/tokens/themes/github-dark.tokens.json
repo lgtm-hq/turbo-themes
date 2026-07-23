@@ -37,7 +37,7 @@
     },
     "brand": {
       "primary": {
-        "$value": "#1f6feb",
+        "$value": "#1e6de6",
         "$type": "color"
       },
       "primaryText": {

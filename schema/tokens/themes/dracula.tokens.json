@@ -27,7 +27,7 @@
         "$type": "color"
       },
       "secondary": {
-        "$value": "#8390b7",
+        "$value": "#8995bb",
         "$type": "color"
       },
       "inverse": {
@@ -139,7 +139,7 @@
           "$type": "color"
         },
         "secondary": {
-          "$value": "#8390b7",
+          "$value": "#8995bb",
           "$type": "color"
         }
       },
@@ -165,7 +165,7 @@
           "$type": "color"
         },
         "fg": {
-          "$value": "#7b89b3",
+          "$value": "#7f8db5",
           "$type": "color"
         },
         "bg": {

@@ -23,11 +23,11 @@
     },
     "text": {
       "primary": {
-        "$value": "#5C6A72",
+        "$value": "#56646c",
         "$type": "color"
       },
       "secondary": {
-        "$value": "#5e6c73",
+        "$value": "#56646a",
         "$type": "color"
       },
       "inverse": {
@@ -51,7 +51,7 @@
         "$type": "color"
       },
       "success": {
-        "$value": "#6B7C01",
+        "$value": "#697a01",
         "$type": "color"
       },
       "warning": {
@@ -136,11 +136,11 @@
       },
       "body": {
         "primary": {
-          "$value": "#5C6A72",
+          "$value": "#56646c",
           "$type": "color"
         },
         "secondary": {
-          "$value": "#5e6c73",
+          "$value": "#56646a",
           "$type": "color"
         }
       },
@@ -156,7 +156,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#ebe8d8",
+          "$value": "#efede0",
           "$type": "color"
         }
       },
@@ -166,7 +166,7 @@
           "$type": "color"
         },
         "fg": {
-          "$value": "#5b686f",
+          "$value": "#57646b",
           "$type": "color"
         },
         "bg": {
@@ -176,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#99460e",
+          "$value": "#92430e",
           "$type": "color"
         },
         "bg": {
@@ -186,7 +186,7 @@
       },
       "codeBlock": {
         "fg": {
-          "$value": "#5C6A72",
+          "$value": "#5a6870",
           "$type": "color"
         },
         "bg": {

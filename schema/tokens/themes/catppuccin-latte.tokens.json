@@ -27,7 +27,7 @@
         "$type": "color"
       },
       "secondary": {
-        "$value": "#6a6d82",
+        "$value": "#616477",
         "$type": "color"
       },
       "inverse": {
@@ -87,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#1d63ee",
+        "$value": "#1b5cdd",
         "$type": "color"
       }
     },
@@ -110,7 +110,7 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#3f9e2b",
+          "$value": "#3c9829",
           "$type": "color"
         },
         "h2": {
@@ -118,11 +118,11 @@
           "$type": "color"
         },
         "h3": {
-          "$value": "#1e97ac",
+          "$value": "#1d92a7",
           "$type": "color"
         },
         "h4": {
-          "$value": "#c07a19",
+          "$value": "#ba7618",
           "$type": "color"
         },
         "h5": {
@@ -140,13 +140,13 @@
           "$type": "color"
         },
         "secondary": {
-          "$value": "#6a6d82",
+          "$value": "#616477",
           "$type": "color"
         }
       },
       "link": {
         "default": {
-          "$value": "#1d63ee",
+          "$value": "#1b5cdd",
           "$type": "color"
         }
       },
@@ -156,7 +156,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#c1c3cc",
+          "$value": "#c6c8d0",
           "$type": "color"
         }
       },

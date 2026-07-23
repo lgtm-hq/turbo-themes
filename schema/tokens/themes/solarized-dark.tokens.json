@@ -23,11 +23,11 @@
     },
     "text": {
       "primary": {
-        "$value": "#839496",
+        "$value": "#90a0a1",
         "$type": "color"
       },
       "secondary": {
-        "$value": "#7e9097",
+        "$value": "#91a0a6",
         "$type": "color"
       },
       "inverse": {
@@ -59,7 +59,7 @@
         "$type": "color"
       },
       "danger": {
-        "$value": "#dc322f",
+        "$value": "#d8312e",
         "$type": "color"
       },
       "dangerText": {
@@ -87,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#3794d6",
+        "$value": "#54a4db",
         "$type": "color"
       }
     },
@@ -126,27 +126,27 @@
           "$type": "color"
         },
         "h5": {
-          "$value": "#cb4b16",
+          "$value": "#ce5422",
           "$type": "color"
         },
         "h6": {
-          "$value": "#d33682",
+          "$value": "#d53e87",
           "$type": "color"
         }
       },
       "body": {
         "primary": {
-          "$value": "#839496",
+          "$value": "#90a0a1",
           "$type": "color"
         },
         "secondary": {
-          "$value": "#7e9097",
+          "$value": "#91a0a6",
           "$type": "color"
         }
       },
       "link": {
         "default": {
-          "$value": "#3794d6",
+          "$value": "#54a4db",
           "$type": "color"
         }
       },
@@ -166,7 +166,7 @@
           "$type": "color"
         },
         "fg": {
-          "$value": "#8c9b9d",
+          "$value": "#92a0a2",
           "$type": "color"
         },
         "bg": {
@@ -176,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#39a89f",
+          "$value": "#43aca4",
           "$type": "color"
         },
         "bg": {

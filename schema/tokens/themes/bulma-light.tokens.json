@@ -110,7 +110,7 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#00a78e",
+          "$value": "#00a088",
           "$type": "color"
         },
         "h2": {
@@ -122,11 +122,11 @@
           "$type": "color"
         },
         "h4": {
-          "$value": "#3ca777",
+          "$value": "#399f71",
           "$type": "color"
         },
         "h5": {
-          "$value": "#a6925a",
+          "$value": "#9f8c56",
           "$type": "color"
         },
         "h6": {
@@ -176,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#ca3b57",
+          "$value": "#c23853",
           "$type": "color"
         },
         "bg": {

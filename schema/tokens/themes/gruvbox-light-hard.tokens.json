@@ -176,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#ad3903",
+          "$value": "#a83703",
           "$type": "color"
         },
         "bg": {

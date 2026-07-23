@@ -50,7 +50,7 @@ public struct TurboTokens {
     public static let bodySecondary = "#a6adc8"  // color
     public static let linkDefault = "#89b4fa"  // color
     public static let selectionFg = "#cdd6f4"  // color
-    public static let selectionBg = "#595c6d"  // color
+    public static let selectionBg = "#56596a"  // color
     public static let blockquoteBorder = "#7f849c"  // color
     public static let blockquoteFg = "#cdd6f4"  // color
     public static let blockquoteBg = "#181825"  // color

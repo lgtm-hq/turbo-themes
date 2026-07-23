@@ -135,8 +135,11 @@
  */
 .showcase-page .showcase-theme-more {
   font-size: 0.875rem;
-  color: color-mix(in srgb, var(--turbo-brand-primary) 60%, var(--turbo-text-primary));
-  text-decoration: none;
+  color: var(--turbo-accent-link, var(--turbo-text-primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  /* Beat chrome link color transitions during theme application. */
+  transition: none;
 }
 
 .showcase-page .showcase-theme-more:hover {
@@ -764,6 +767,7 @@
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.25;
+  color: var(--turbo-text-primary);
 }
 
 .showcase-features {

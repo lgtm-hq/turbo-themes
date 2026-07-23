@@ -11,10 +11,10 @@ const SIZE_BUDGETS: Record<string, number> = {
   'packages/adapters/tailwind/dist/colors.js': 20_000, // 20KB
   'packages/css/dist/index.js': 35_000, // 35KB (increased: component CSS vars now emitted for all themes)
   'packages/adapters/bulma/dist/index.js': 20_000, // 20KB
-  // HA adapter inlines all theme token data (27 flavors, emitted twice for the
-  // 8 auto themes' dark/light modes) into a self-contained YAML generator; the
-  // bundle sits near ~80KB, so 112KB leaves headroom as theme packs grow.
-  'packages/adapters/home-assistant/dist/index.js': 114_688, // 112KB
+  // HA adapter inlines all theme token data (43 flavors, emitted twice for the
+  // auto themes' dark/light modes) into a self-contained YAML generator; AA
+  // brand/state text tokens grew the payload (~116KB), so 128KB leaves headroom.
+  'packages/adapters/home-assistant/dist/index.js': 131_072, // 128KB
   // Slim picker metadata (~174 bytes/theme; 40 themes ≈ 7.0KB as of the
   // Kanagawa pack); 8KB leaves headroom for the remaining theme packs.
   'dist/catalog.json': 8_192,

@@ -51,7 +51,7 @@
         "$type": "color"
       },
       "success": {
-        "$value": "#2f866c",
+        "$value": "#31876d",
         "$type": "color"
       },
       "warning": {
@@ -87,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#2667bf",
+        "$value": "#2159a5",
         "$type": "color"
       }
     },
@@ -110,7 +110,7 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#2e7de9",
+          "$value": "#2c77dd",
           "$type": "color"
         },
         "h2": {
@@ -118,7 +118,7 @@
           "$type": "color"
         },
         "h3": {
-          "$value": "#0089a5",
+          "$value": "#00849e",
           "$type": "color"
         },
         "h4": {
@@ -126,7 +126,7 @@
           "$type": "color"
         },
         "h5": {
-          "$value": "#cf6741",
+          "$value": "#bc5e3b",
           "$type": "color"
         },
         "h6": {
@@ -146,7 +146,7 @@
       },
       "link": {
         "default": {
-          "$value": "#2667bf",
+          "$value": "#2159a5",
           "$type": "color"
         }
       },

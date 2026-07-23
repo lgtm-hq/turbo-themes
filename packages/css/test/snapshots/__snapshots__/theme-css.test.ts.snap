@@ -308,7 +308,7 @@ exports[`CSS Output Snapshots > Theme CSS Variables > matches catppuccin-latte t
 --turbo-bg-surface: #e6e9ef;
 --turbo-bg-overlay: #dce0e8;
 --turbo-text-primary: #4c4f69;
---turbo-text-secondary: #6a6d82;
+--turbo-text-secondary: #616477;
 --turbo-text-inverse: #eff1f5;
 --turbo-brand-primary: #1e66f5;
 --turbo-brand-primary-text: #ffffff;
@@ -336,7 +336,7 @@ exports[`CSS Output Snapshots > Theme CSS Variables > matches github-dark theme 
 --turbo-text-primary: #f0f6fc;
 --turbo-text-secondary: #9198a1;
 --turbo-text-inverse: #ffffff;
---turbo-brand-primary: #1f6feb;
+--turbo-brand-primary: #1e6de6;
 --turbo-brand-primary-text: #ffffff;
 --turbo-state-info: #4493f8;
 --turbo-state-success: #3fb950;"

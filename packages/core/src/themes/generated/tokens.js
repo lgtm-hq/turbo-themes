@@ -51,7 +51,7 @@ export const tokens = {
   bodySecondary: { value: '#a6adc8', $type: 'color' },
   linkDefault: { value: '#89b4fa', $type: 'color' },
   selectionFg: { value: '#cdd6f4', $type: 'color' },
-  selectionBg: { value: '#595c6d', $type: 'color' },
+  selectionBg: { value: '#56596a', $type: 'color' },
   blockquoteBorder: { value: '#7f849c', $type: 'color' },
   blockquoteFg: { value: '#cdd6f4', $type: 'color' },
   blockquoteBg: { value: '#181825', $type: 'color' },

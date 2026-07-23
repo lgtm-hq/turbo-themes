@@ -8,7 +8,6 @@ import SEOHead from '../components/SEOHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { themeNames, themeIcons, validThemeIds } from '../data/theme-meta';
-import noirStylesHref from '../styles/noir.css?url';
 
 interface Props {
   title?: string;
@@ -73,8 +72,12 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
     <!-- Site CSS (always loaded) -->
     <link rel="stylesheet" href={`${baseUrl}/assets/css/site.css`} />
-    <!-- Noir Editorial foundation (tokens, chrome, shared patterns) — after site.css -->
-    <link rel="stylesheet" href={noirStylesHref} />
+    <!--
+      Noir Editorial foundation (tokens, chrome, shared patterns) — after site.css.
+      Served as a static asset (not Vite `?url`) so chrome selectors used by Header /
+      Footer are not tree-shaken away from BaseLayout's module graph.
+    -->
+    <link rel="stylesheet" href={`${baseUrl}/assets/css/noir.css`} />
 
     <!-- Favicon -->
     <link rel="icon" href={`${baseUrl}/favicon.ico`} />

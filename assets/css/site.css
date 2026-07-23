@@ -140,14 +140,17 @@ p {
   margin: 0 0 var(--space-md);
 }
 
-a {
-  color: var(--turbo-brand-primary);
+/* Exclude `.btn` anchors so component button colors win over chrome link ink
+   (same pattern as noir.css / #741). `a:hover` must not paint brand-primary
+   text onto primary CTAs. Do not transition `color` — theme swaps would
+   animate through mid-flight ink that fails WCAG AA / axe scans. */
+a:where(:not(.btn)) {
+  color: var(--turbo-accent-link, var(--turbo-brand-primary));
   text-decoration: none;
-  transition: color var(--transition-fast);
 }
 
-a:hover {
-  color: var(--turbo-accent-link, var(--turbo-brand-primary));
+a:where(:not(.btn)):hover {
+  color: var(--turbo-brand-primary, var(--turbo-accent-link));
 }
 
 /* Links in text need underlines for accessibility (WCAG link-in-text-block) */
@@ -542,16 +545,15 @@ html:root .theme-menu {
   border: 1px solid var(--turbo-border-default);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  opacity: 0;
-  visibility: hidden;
+  /* display:none when closed so axe/AT skip offscreen menu ink (opacity:0 still scans) */
+  display: none;
   transform: translateY(-8px);
-  transition: all var(--transition-fast);
+  transition: transform var(--transition-fast);
   z-index: 100;
 }
 
 html:root .theme-dropdown.open .theme-menu {
-  opacity: 1;
-  visibility: visible;
+  display: block;
   transform: translateY(0);
 }
 
@@ -3261,7 +3263,10 @@ html:root .footer-links a:hover {
   margin-bottom: 1.25rem;
   font-family: var(--turbo-font-mono);
   font-size: 1.0625rem;
-  color: color-mix(in srgb, var(--turbo-brand-primary) 60%, var(--turbo-text-primary));
+  color: var(--turbo-text-primary);
+  /* Reset global/inline-code chip backgrounds so primary ink stays AA */
+  background: transparent;
+  padding: 0;
 }
 
 @media (max-width: 900px) {
@@ -3301,6 +3306,17 @@ html:root .footer-links a:hover {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  /* Theme swaps change CSS variables; lingering transitions otherwise leave
+     text/background mid-blend under axe contrast checks. */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
