@@ -10,6 +10,16 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.1] - 2026-07-23
+
+### 🐛 Fixed
+
+- Bump fast-uri 3.1.4 and sharp 0.35.0 for new advisories (#765)
+
+### 🤖 Internal
+
+- Format synced Ayu source with oxfmt, failing loudly (#769)
+
 ## [0.40.0] - 2026-07-21
 
 ### ✨ Added
