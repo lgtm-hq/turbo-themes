@@ -47,7 +47,7 @@
     },
     "state": {
       "info": {
-        "$value": "#4493f8",
+        "$value": "#3573c1",
         "$type": "color"
       },
       "success": {
@@ -63,19 +63,19 @@
         "$type": "color"
       },
       "successText": {
-        "$value": "#000000",
+        "$value": "#0d1117",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#0d1117",
         "$type": "color"
       },
       "infoText": {
-        "$value": "#000000",
+        "$value": "#fdfeff",
         "$type": "color"
       },
       "dangerText": {
-        "$value": "#000000",
+        "$value": "#0d1117",
         "$type": "color"
       }
     },

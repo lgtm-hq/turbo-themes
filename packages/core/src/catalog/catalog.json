@@ -163,7 +163,7 @@
     "preview": {
       "bg": "#FFFBEF",
       "surface": "#F8F5E4",
-      "accent": "#6B7C01",
+      "accent": "#697a01",
       "text": "#5C6A72"
     }
   },
@@ -175,7 +175,7 @@
     "preview": {
       "bg": "#F3EAD3",
       "surface": "#EAE4CA",
-      "accent": "#6B7C01",
+      "accent": "#697a01",
       "text": "#56646c"
     }
   },
@@ -187,7 +187,7 @@
     "preview": {
       "bg": "#FDF6E3",
       "surface": "#F4F0D9",
-      "accent": "#6B7C01",
+      "accent": "#697a01",
       "text": "#5C6A72"
     }
   },

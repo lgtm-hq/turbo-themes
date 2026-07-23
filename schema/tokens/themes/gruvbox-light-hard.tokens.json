@@ -41,13 +41,13 @@
         "$type": "color"
       },
       "primaryText": {
-        "$value": "#000000",
+        "$value": "#161613",
         "$type": "color"
       }
     },
     "state": {
       "info": {
-        "$value": "#076678",
+        "$value": "#478e9b",
         "$type": "color"
       },
       "success": {
@@ -63,19 +63,19 @@
         "$type": "color"
       },
       "successText": {
-        "$value": "#ffffff",
+        "$value": "#fefdf5",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#161613",
         "$type": "color"
       },
       "infoText": {
-        "$value": "#ffffff",
+        "$value": "#161613",
         "$type": "color"
       },
       "dangerText": {
-        "$value": "#ffffff",
+        "$value": "#f9f5d7",
         "$type": "color"
       }
     },

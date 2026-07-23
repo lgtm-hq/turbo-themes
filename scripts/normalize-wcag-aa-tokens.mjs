@@ -6,6 +6,11 @@
  * - Normal text pairs: 4.5:1
  * - Heading (large text) pairs: 3:1
  * Ensures brand.primaryText and state.*Text exist with AA contrast on fills.
+ *
+ * Ink picking prefers near-theme colors that already clear AA — it does not
+ * maximize into #000/#fff when a themed pair (e.g. text.inverse on brand)
+ * already meets the floor. Brand CTA ink is gated against both
+ * `--gradient-primary` stops (brand.primary + state.info).
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -13,6 +18,7 @@ import { join } from 'node:path';
 const AA_N = 4.75; // headroom above axe/WCAG 4.5 floor (sampling + AA edge cases)
 const AA_L = 3.0;
 const DIR = 'schema/tokens/themes';
+const EXTREMES = ['#000000', '#ffffff'];
 
 function hexToRgb(hex) {
   const c = hex.replace('#', '');
@@ -50,11 +56,16 @@ function mixToward(hex, target, t) {
   return rgbToHex(a.map((v, i) => v + (b[i] - v) * t));
 }
 
+function isExtreme(hex) {
+  const h = hex.toLowerCase();
+  return h === '#000000' || h === '#000' || h === '#ffffff' || h === '#fff';
+}
+
 function ensureContrast(fg, bg, min) {
   if (ratio(fg, bg) >= min) return fg;
   let best = fg;
   let bestR = ratio(fg, bg);
-  for (const target of ['#000000', '#ffffff']) {
+  for (const target of EXTREMES) {
     for (let i = 1; i <= 100; i++) {
       const cand = mixToward(fg, target, i / 100);
       const r = ratio(cand, bg);
@@ -72,7 +83,7 @@ function ensureContrastBg(fg, bg, min) {
   if (ratio(fg, bg) >= min) return bg;
   let best = bg;
   let bestR = ratio(fg, bg);
-  for (const target of ['#000000', '#ffffff']) {
+  for (const target of EXTREMES) {
     for (let i = 1; i <= 100; i++) {
       const cand = mixToward(bg, target, i / 100);
       const r = ratio(fg, cand);
@@ -86,13 +97,46 @@ function ensureContrastBg(fg, bg, min) {
   return best;
 }
 
-function bestOn(bg, candidates) {
-  let best = candidates[0];
-  let bestR = -1;
+/**
+ * Pick ink for one or more fills: keep the first near-theme candidate that
+ * already clears `min` on every background; otherwise nudge a themed seed
+ * toward black/white until AA; extremes only as last resort.
+ * Returns null when no ink clears every background (caller may nudge fills).
+ */
+function pickInkOn(bgs, preferred, min) {
+  const near = preferred.filter(Boolean);
+  const themed = near.filter((c) => !isExtreme(c));
+
+  for (const c of themed) {
+    if (bgs.every((bg) => ratio(c, bg) >= min)) return c;
+  }
+
+  const seed = themed[0] ?? near[0] ?? '#ffffff';
+  for (const target of EXTREMES) {
+    for (let i = 1; i <= 100; i++) {
+      const cand = mixToward(seed, target, i / 100);
+      if (bgs.every((bg) => ratio(cand, bg) >= min)) return cand;
+    }
+  }
+
+  for (const ext of EXTREMES) {
+    if (bgs.every((bg) => ratio(ext, bg) >= min)) return ext;
+  }
+  return null;
+}
+
+/** Extreme (or near-theme) with the best worst-case contrast across fills. */
+function bestEffortInk(bgs, preferred) {
+  const candidates = [
+    ...preferred.filter((c) => c && !isExtreme(c)),
+    ...EXTREMES,
+  ];
+  let best = candidates[0] ?? '#000000';
+  let bestScore = -1;
   for (const c of candidates.filter(Boolean)) {
-    const r = ratio(c, bg);
-    if (r > bestR) {
-      bestR = r;
+    const score = Math.min(...bgs.map((bg) => ratio(c, bg)));
+    if (score > bestScore) {
+      bestScore = score;
       best = c;
     }
   }
@@ -133,7 +177,7 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
     // clears every background (avoids sequential tug-of-war across layers).
     let best = fg;
     let bestScore = Math.min(...bgs.map((bg) => ratio(fg, bg)));
-    for (const target of ['#000000', '#ffffff']) {
+    for (const target of EXTREMES) {
       for (let i = 1; i <= 100; i++) {
         const cand = mixToward(fg, target, i / 100);
         const score = Math.min(...bgs.map((bg) => ratio(cand, bg)));
@@ -229,18 +273,45 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
   }
 
   if (t.brand?.primary?.$value) {
-    const brand = t.brand.primary.$value;
-    const candidates = [
-      t.brand.primaryText?.$value,
+    // CTA gradient stops: brand.primary → state.info (see packages/css generator)
+    let brand = t.brand.primary.$value;
+    let info = t.state?.info?.$value;
+    const existing = t.brand.primaryText?.$value;
+    const preferred = [
+      existing && !isExtreme(existing) ? existing : null,
       t.text?.inverse?.$value,
       t.background?.base?.$value,
-      '#000000',
-      '#ffffff',
     ];
-    const best = bestOn(brand, candidates);
-    const old = t.brand.primaryText?.$value ?? '';
-    setColor(t.brand, 'primaryText', best);
-    if (old.toLowerCase() !== best.toLowerCase()) {
+    const gradientStops = [brand, info].filter(Boolean);
+    let fg = pickInkOn(gradientStops, preferred, AA_N);
+
+    if (!fg) {
+      // No single ink clears both stops — keep themed ink on brand, then
+      // nudge fills just enough so the gradient end is AA too.
+      fg = pickInkOn([brand], preferred, AA_N) ?? bestEffortInk([brand], preferred);
+      if (ratio(fg, brand) < AA_N) {
+        const next = ensureContrastBg(fg, brand, AA_N);
+        if (next.toLowerCase() !== brand.toLowerCase()) {
+          brand = next;
+          t.brand.primary.$value = brand;
+          changed = true;
+          fixCount++;
+        }
+      }
+      if (info && ratio(fg, info) < AA_N) {
+        const next = ensureContrastBg(fg, info, AA_N);
+        if (next.toLowerCase() !== info.toLowerCase()) {
+          info = next;
+          t.state.info.$value = info;
+          changed = true;
+          fixCount++;
+        }
+      }
+    }
+
+    const old = existing ?? '';
+    setColor(t.brand, 'primaryText', fg);
+    if (old.toLowerCase() !== fg.toLowerCase()) {
       changed = true;
       fixCount++;
     }
@@ -251,32 +322,35 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
       if (!t.state[key]?.$value) continue;
       let bg = t.state[key].$value;
       const textKey = `${key}Text`;
-      const candidates = [
-        t.state[textKey]?.$value,
+      const existing = t.state[textKey]?.$value;
+      const preferred = [
+        existing && !isExtreme(existing) ? existing : null,
         t.text?.inverse?.$value,
         t.text?.primary?.$value,
-        '#000000',
-        '#ffffff',
+        t.background?.base?.$value,
       ];
-      let fg = bestOn(bg, candidates);
+      let fg = pickInkOn([bg], preferred, AA_N) ?? bestEffortInk([bg], preferred);
       if (ratio(fg, bg) < AA_N) {
-        const preferBlack = ratio('#000000', bg) >= ratio('#ffffff', bg);
-        fg = preferBlack ? '#000000' : '#ffffff';
-        const toward = preferBlack ? '#ffffff' : '#000000';
-        for (let i = 1; i <= 100; i++) {
-          const cand = mixToward(bg, toward, i / 100);
-          if (ratio(fg, cand) >= AA_N) {
-            bg = cand;
-            break;
-          }
-        }
-        if (bg.toLowerCase() !== t.state[key].$value.toLowerCase()) {
+        // Fill itself cannot host readable ink — nudge the fill until AA clears.
+        const next = ensureContrastBg(fg, bg, AA_N);
+        if (next.toLowerCase() !== bg.toLowerCase()) {
+          bg = next;
           t.state[key].$value = bg;
           changed = true;
           fixCount++;
         }
+        if (ratio(fg, bg) < AA_N) {
+          fg = bestEffortInk([bg], EXTREMES);
+          const nudged = ensureContrastBg(fg, bg, AA_N);
+          if (nudged.toLowerCase() !== bg.toLowerCase()) {
+            bg = nudged;
+            t.state[key].$value = bg;
+            changed = true;
+            fixCount++;
+          }
+        }
       }
-      const old = t.state[textKey]?.$value ?? '';
+      const old = existing ?? '';
       setColor(t.state, textKey, fg);
       if (old.toLowerCase() !== fg.toLowerCase()) {
         changed = true;

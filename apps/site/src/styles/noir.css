@@ -76,31 +76,11 @@
   --transition-normal: 250ms var(--noir-ease);
   --transition-slow: 300ms var(--noir-ease);
 
-  /* Neutralize legacy gradient/shadow tokens used by site.css */
-  --gradient-primary: var(--noir-accent);
-  --gradient-surface: var(--noir-bg-panel);
-  --gradient-hero: var(--noir-bg-base);
-  --shadow-sm: none;
-  --shadow-md: none;
-  --shadow-lg: none;
-  --shadow-xl: none;
-  --shadow-glow: 0 0 40px var(--noir-accent-glow);
-  --shadow-glow-sm: 0 0 20px var(--noir-accent-glow);
-}
-
-/*
- * Sharp-edge tokens scoped to the Noir design context.
- * Avoid a universal `* { border-radius: 0 }` reset — it overrides themed
- * component radii. Editorial chrome sets border-radius explicitly instead.
- * --radius-full stays pill-capable for tags/badges.
- */
-[data-design='noir'] {
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
-  --radius-full: 9999px;
+  /*
+   * Theme gradients / radii / elevation come from site.css + turbo tokens.
+   * Do not flatten them here — that fought showcase/prod glam while Noir
+   * chrome remains temporarily (full Noir retirement is a separate task).
+   */
 }
 
 /* ==========================================================================
@@ -143,7 +123,7 @@ html:root h2 em,
 html:root h3 em {
   font-style: italic;
   font-weight: 400;
-  color: var(--noir-accent);
+  color: var(--turbo-brand-primary, var(--noir-accent));
 }
 
 html:root code,
@@ -165,13 +145,6 @@ html:root a:where(:not(.btn)) {
 
 html:root a:where(:not(.btn)):hover {
   color: var(--turbo-brand-primary, var(--noir-text-primary));
-}
-
-/* Kill gradient text utility under Noir */
-html:root .text-gradient {
-  background: none;
-  background-clip: unset;
-  color: var(--noir-accent);
 }
 
 /* ==========================================================================
@@ -210,16 +183,15 @@ html:root .logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border-radius: 0;
 }
 
 html:root .logo:hover {
-  color: var(--noir-accent);
+  color: var(--turbo-brand-primary, var(--noir-accent));
   text-decoration: none;
 }
 
 html:root .logo-icon {
-  color: var(--noir-accent);
+  color: var(--turbo-brand-primary, var(--noir-accent));
   font-size: 1rem;
   line-height: 1;
 }
@@ -228,8 +200,13 @@ html:root .logo-text {
   text-transform: none;
 }
 
+/*
+ * Do not set `display` here — site.css owns desktop flex + the mobile
+ * `display: none` / `.open` drawer. Noir loads after site.css; an
+ * unconditional `display: flex` kept the mobile menu permanently open
+ * and hid the homepage behind the drawer.
+ */
 html:root .nav-links {
-  display: flex;
   align-items: center;
   gap: 0.25rem;
   list-style: none;
@@ -255,7 +232,7 @@ html[data-design='noir'] .header .nav-dropdown-trigger {
   text-decoration: none;
   background: none;
   border: none;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition:
     color var(--transition-fast),
@@ -269,13 +246,13 @@ html[data-design='noir'] .header .nav-dropdown-trigger:hover {
   text-decoration: none;
 }
 
+/* Match site.css active pill — theme brand, not fixed Noir mauve */
 html[data-design='noir'] .header .nav-link.active {
-  color: var(--noir-accent);
-  background: transparent;
+  color: var(--turbo-brand-primary);
+  background: color-mix(in srgb, var(--turbo-brand-primary) 15%, transparent);
 }
 
 html:root .menu-toggle {
-  border-radius: 0;
   color: var(--noir-text-primary);
 }
 
@@ -286,14 +263,14 @@ html:root .menu-toggle:hover {
 html:root .nav-dropdown-menu {
   background: var(--noir-bg-panel);
   border: 1px solid var(--noir-border-section);
-  border-radius: 0;
-  box-shadow: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   padding: 0.25rem 0;
 }
 
 html:root .nav-dropdown-item {
   color: var(--noir-text-secondary);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   font-size: 0.8125rem;
   letter-spacing: 0.04em;
 }
@@ -312,10 +289,9 @@ html:root .nav-controls {
   max-width: 500px;
 }
 
-/* Theme / search chrome — sharp, muted */
+/* Theme / search chrome — muted panel, theme radii */
 html[data-design='noir'] .header .theme-trigger,
 html[data-design='noir'] .header .search-bar-inner {
-  border-radius: 0;
   border-color: var(--noir-border-ghost);
   background: var(--noir-bg-panel);
   color: var(--noir-text-secondary);
@@ -323,10 +299,9 @@ html[data-design='noir'] .header .search-bar-inner {
 
 html:root .theme-menu,
 html:root .search-menu {
-  border-radius: 0;
   border-color: var(--noir-border-section);
   background: var(--noir-bg-panel);
-  box-shadow: none;
+  box-shadow: var(--shadow-lg);
 }
 
 /* ==========================================================================
@@ -363,7 +338,7 @@ html:root .footer-brand-row {
 }
 
 html[data-design='noir'] .footer .footer-logo {
-  color: var(--noir-accent);
+  color: var(--turbo-brand-primary, var(--noir-accent));
   font-size: 1rem;
   line-height: 1;
 }

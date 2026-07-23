@@ -41,7 +41,7 @@
         "$type": "color"
       },
       "primaryText": {
-        "$value": "#ffffff",
+        "$value": "#fffffe",
         "$type": "color"
       }
     },
@@ -63,15 +63,15 @@
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#353429",
         "$type": "color"
       },
       "infoText": {
-        "$value": "#ffffff",
+        "$value": "#fffffe",
         "$type": "color"
       },
       "successText": {
-        "$value": "#000000",
+        "$value": "#13130f",
         "$type": "color"
       },
       "dangerText": {

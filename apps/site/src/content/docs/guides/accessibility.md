@@ -9,10 +9,10 @@ next: contributing/index
 
 # Accessibility
 
-Turbo Themes targets **strict WCAG 2.x AA** for theme tokens and the docs site.
-Unit tests gate normal-text pairs at 4.5:1 (including secondary text, links, inline
-code, selection, blockquotes, and state/brand button labels). Headings are gated at
-the large-text AA floor of 3:1. End-to-end axe scans use A + AA tags with contrast,
+Turbo Themes targets **strict WCAG 2.x AA** for theme tokens and the docs site. Unit
+tests gate normal-text pairs at 4.5:1 (including secondary text, links, inline code,
+selection, blockquotes, and state/brand button labels). Headings are gated at the
+large-text AA floor of 3:1. End-to-end axe scans use A + AA tags with contrast,
 target-size, link-in-text-block, and scrollable-region-focusable enabled.
 
 ## Color Contrast
@@ -45,8 +45,8 @@ body {
 }
 
 .btn-primary {
-  background: var(--turbo-brand-primary);
-  color: var(--turbo-brand-primary-text); /* ✓ 4.5:1+ on brand fill */
+  background: var(--gradient-primary, var(--turbo-brand-primary));
+  color: var(--turbo-brand-primary-text); /* ✓ 4.5:1+ on both gradient stops */
 }
 
 .btn-success {

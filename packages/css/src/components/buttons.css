@@ -47,16 +47,18 @@
   transform: none;
 }
 
-/* Primary — use brand-primary-text for WCAG AA contrast on the brand fill.
-   Include `a.btn-primary` (+ hover/focus) so link CTAs beat global `a`/`a:hover`
-   accent rules that share equal specificity and load later on the docs site. */
+/* Primary — gradient fill (falls back to solid brand). Ink uses
+   brand-primary-text, gated AA against both gradient stops in the
+   token normalizer. Include `a.btn-primary` (+ hover/focus) so link CTAs
+   beat global `a`/`a:hover` accent rules that share equal specificity
+   and load later on the docs site. */
 a.btn-primary,
 a.btn-primary:hover,
 a.btn-primary:focus,
 a.btn-primary:focus-visible,
 .btn-primary {
   color: var(--turbo-brand-primary-text, var(--turbo-text-inverse));
-  background: var(--turbo-brand-primary);
+  background: var(--gradient-primary, var(--turbo-brand-primary));
   box-shadow: var(--shadow-md);
 }
 

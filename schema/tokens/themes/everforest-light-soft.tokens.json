@@ -37,11 +37,11 @@
     },
     "brand": {
       "primary": {
-        "$value": "#6B7C01",
+        "$value": "#697a01",
         "$type": "color"
       },
       "primaryText": {
-        "$value": "#ffffff",
+        "$value": "#fffefd",
         "$type": "color"
       }
     },
@@ -63,19 +63,19 @@
         "$type": "color"
       },
       "infoText": {
-        "$value": "#ffffff",
+        "$value": "#fefefc",
         "$type": "color"
       },
       "successText": {
-        "$value": "#ffffff",
+        "$value": "#fffefd",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#11100f",
         "$type": "color"
       },
       "dangerText": {
-        "$value": "#ffffff",
+        "$value": "#fefdfa",
         "$type": "color"
       }
     },

@@ -41,7 +41,7 @@
         "$type": "color"
       },
       "primaryText": {
-        "$value": "#000000",
+        "$value": "#2D353B",
         "$type": "color"
       }
     },
@@ -63,19 +63,19 @@
         "$type": "color"
       },
       "infoText": {
-        "$value": "#000000",
+        "$value": "#2D353B",
         "$type": "color"
       },
       "successText": {
-        "$value": "#000000",
+        "$value": "#2D353B",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#2D353B",
         "$type": "color"
       },
       "dangerText": {
-        "$value": "#000000",
+        "$value": "#2a3237",
         "$type": "color"
       }
     },
