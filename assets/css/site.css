@@ -362,6 +362,7 @@ html:root .nav-dropdown-trigger {
   align-items: center;
   gap: var(--space-xs);
   padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
   font-size: 0.9375rem;
   font-weight: 500;
   color: var(--turbo-text-secondary);
@@ -496,6 +497,8 @@ html:root .theme-trigger {
   align-items: center;
   gap: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  min-width: 44px;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--turbo-text-primary);
@@ -574,6 +577,7 @@ html:root .theme-option {
   align-items: center;
   gap: var(--space-sm);
   width: 100%;
+  min-height: 44px;
   padding: var(--space-sm) var(--space-sm);
   font-size: 0.875rem;
   font-weight: 500;

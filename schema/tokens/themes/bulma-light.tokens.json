@@ -39,6 +39,10 @@
       "primary": {
         "$value": "#00d1b2",
         "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#000000",
+        "$type": "color"
       }
     },
     "state": {
@@ -59,11 +63,19 @@
         "$type": "color"
       },
       "successText": {
-        "$value": "#363636",
+        "$value": "#000000",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#363636",
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#000000",
         "$type": "color"
       }
     },
@@ -98,7 +110,7 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#00d1b2",
+          "$value": "#00a78e",
           "$type": "color"
         },
         "h2": {
@@ -110,11 +122,11 @@
           "$type": "color"
         },
         "h4": {
-          "$value": "#48c78e",
+          "$value": "#3ca777",
           "$type": "color"
         },
         "h5": {
-          "$value": "#ffe08a",
+          "$value": "#a6925a",
           "$type": "color"
         },
         "h6": {
@@ -164,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#f14668",
+          "$value": "#ca3b57",
           "$type": "color"
         },
         "bg": {

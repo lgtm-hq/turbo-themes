@@ -132,7 +132,9 @@ export const radixSynced: ThemePackage = {
           warning: "#ffc53d",
           danger: "#e5484d",
           infoText: "#000000",
+          successText: "#000000",
           warningText: "#000000",
+          dangerText: "#000000",
         },
         border: {
           default: "#dbd8e0",
@@ -300,7 +302,9 @@ export const radixSynced: ThemePackage = {
           warning: "#ffc53d",
           danger: "#e5484d",
           infoText: "#000000",
+          successText: "#000000",
           warningText: "#000000",
+          dangerText: "#000000",
         },
         border: {
           default: "#d9d9e0",

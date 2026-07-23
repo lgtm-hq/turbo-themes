@@ -14,12 +14,16 @@ export interface ThemeTokens {
   };
   brand: {
     primary: string;
+    primaryText?: string;
   };
   state: {
     info: string;
     success: string;
     warning: string;
     danger: string;
+    infoText?: string;
+    successText?: string;
+    warningText?: string;
     dangerText?: string;
   };
   border: {

@@ -39,6 +39,10 @@
       "primary": {
         "$value": "#4078f2",
         "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#000000",
+        "$type": "color"
       }
     },
     "state": {
@@ -83,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#4078f2",
+        "$value": "#3a6ddc",
         "$type": "color"
       }
     },
@@ -142,7 +146,7 @@
       },
       "link": {
         "default": {
-          "$value": "#4078f2",
+          "$value": "#3a6ddc",
           "$type": "color"
         }
       },

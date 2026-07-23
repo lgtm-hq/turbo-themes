@@ -27,10 +27,15 @@ public struct TurboTokens {
     public static let textSecondary = "#a6adc8"  // color
     public static let textInverse = "#1e1e2e"  // color
     public static let brandPrimary = "#89b4fa"  // color
+    public static let brandPrimaryText = "#000000"  // color
     public static let stateInfo = "#89dceb"  // color
     public static let stateSuccess = "#a6e3a1"  // color
     public static let stateWarning = "#f9e2af"  // color
     public static let stateDanger = "#f38ba8"  // color
+    public static let stateInfoText = "#000000"  // color
+    public static let stateSuccessText = "#000000"  // color
+    public static let stateWarningText = "#000000"  // color
+    public static let stateDangerText = "#000000"  // color
     public static let borderDefault = "#6c7086"  // color
     public static let accentLink = "#89b4fa"  // color
     public static let fontSans = "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\""  // fontFamily
@@ -45,7 +50,7 @@ public struct TurboTokens {
     public static let bodySecondary = "#a6adc8"  // color
     public static let linkDefault = "#89b4fa"  // color
     public static let selectionFg = "#cdd6f4"  // color
-    public static let selectionBg = "#7f849c"  // color
+    public static let selectionBg = "#595c6d"  // color
     public static let blockquoteBorder = "#7f849c"  // color
     public static let blockquoteFg = "#cdd6f4"  // color
     public static let blockquoteBg = "#181825"  // color

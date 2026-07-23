@@ -1,7 +1,9 @@
 /**
  * Color Contrast Accessibility Tests
  *
- * Tests WCAG 2.1 color contrast requirements for all themes.
+ * Strict WCAG 2.1 AA gates for all themes:
+ * - Normal text / UI copy: 4.5:1
+ * - Large text (headings): 3:1
  */
 
 import { describe, expect, it } from 'vitest';
@@ -12,12 +14,9 @@ import { getContrastRatio } from './test-utils';
 const WCAG_AA_NORMAL = 4.5;
 const WCAG_AA_LARGE = 3.0;
 
-// Known accessibility issues to track (vendor themes have intentional design choices)
-// These use a lower threshold to document issues without blocking CI
-const KNOWN_ISSUES_THRESHOLD = 1.8;
-
 // Prepare flavor data for parametrized tests
 const flavorTestData = flavors.map((f) => [f.id, f] as const);
+const headingLevels = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const;
 
 describe('CSS Output - Color Contrast Accessibility', () => {
   describe('primary text contrast (required)', () => {
@@ -35,7 +34,7 @@ describe('CSS Output - Color Contrast Accessibility', () => {
 
   describe('secondary text contrast (required)', () => {
     it.each(flavorTestData)(
-      '%s secondary text meets WCAG AA for large text',
+      '%s secondary text meets WCAG AA normal text',
       (_id, flavor) => {
         const bg = flavor.tokens.background.base;
         const fg = flavor.tokens.text.secondary;
@@ -43,44 +42,76 @@ describe('CSS Output - Color Contrast Accessibility', () => {
 
         expect(
           ratio,
-          `${flavor.id}: secondary text contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_LARGE}:1`
-        ).toBeGreaterThanOrEqual(WCAG_AA_LARGE);
+          `${flavor.id}: secondary text contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
       }
     );
   });
 
-  describe('link contrast (minimum readability)', () => {
+  describe('body secondary contrast (required)', () => {
     it.each(flavorTestData)(
-      '%s link color has minimum readability',
+      '%s body secondary meets WCAG AA normal text',
+      (_id, flavor) => {
+        const bg = flavor.tokens.background.base;
+        const fg = flavor.tokens.content.body.secondary;
+        const ratio = getContrastRatio(fg, bg);
+
+        expect(
+          ratio,
+          `${flavor.id}: body secondary contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
+      }
+    );
+  });
+
+  describe('link contrast (required)', () => {
+    it.each(flavorTestData)(
+      '%s accent link meets WCAG AA normal text',
       (_id, flavor) => {
         const bg = flavor.tokens.background.base;
         const fg = flavor.tokens.accent.link;
         const ratio = getContrastRatio(fg, bg);
 
-        // Use large text threshold - links are often underlined which aids visibility
         expect(
           ratio,
-          `${flavor.id}: link contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_LARGE}:1`
-        ).toBeGreaterThanOrEqual(WCAG_AA_LARGE);
+          `${flavor.id}: link contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
       }
     );
   });
 
-  describe('heading contrast (decorative threshold)', () => {
+  describe('content link contrast (required)', () => {
     it.each(flavorTestData)(
-      '%s h1 heading has minimum visibility',
+      '%s content link meets WCAG AA normal text',
       (_id, flavor) => {
         const bg = flavor.tokens.background.base;
-        const fg = flavor.tokens.content.heading.h1;
+        const fg = flavor.tokens.content.link.default;
         const ratio = getContrastRatio(fg, bg);
 
-        // Headings may be decorative; use relaxed threshold
         expect(
           ratio,
-          `${flavor.id}: h1 contrast ${ratio.toFixed(2)}:1 too low`
-        ).toBeGreaterThanOrEqual(KNOWN_ISSUES_THRESHOLD);
+          `${flavor.id}: content link contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
       }
     );
+  });
+
+  describe('heading contrast (large text AA)', () => {
+    for (const level of headingLevels) {
+      it.each(flavorTestData)(
+        `%s ${level} heading meets WCAG AA large text`,
+        (_id, flavor) => {
+          const bg = flavor.tokens.background.base;
+          const fg = flavor.tokens.content.heading[level];
+          const ratio = getContrastRatio(fg, bg);
+
+          expect(
+            ratio,
+            `${flavor.id}: ${level} contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_LARGE}:1`
+          ).toBeGreaterThanOrEqual(WCAG_AA_LARGE);
+        }
+      );
+    }
   });
 
   describe('code block contrast (required)', () => {
@@ -99,36 +130,50 @@ describe('CSS Output - Color Contrast Accessibility', () => {
     );
   });
 
-  describe('inline code contrast (large text threshold)', () => {
+  describe('inline code contrast (required)', () => {
     it.each(flavorTestData)(
-      '%s inline code has minimum readability',
+      '%s inline code meets WCAG AA normal text',
       (_id, flavor) => {
         const bg = flavor.tokens.content.codeInline.bg;
         const fg = flavor.tokens.content.codeInline.fg;
         const ratio = getContrastRatio(fg, bg);
 
-        // Inline code often has background color distinction; use large text threshold
         expect(
           ratio,
-          `${flavor.id}: inline code contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_LARGE}:1`
-        ).toBeGreaterThanOrEqual(WCAG_AA_LARGE);
+          `${flavor.id}: inline code contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
       }
     );
   });
 
-  describe('selection contrast (minimum visibility)', () => {
+  describe('selection contrast (required)', () => {
     it.each(flavorTestData)(
-      '%s selection has minimum visibility',
+      '%s selection meets WCAG AA normal text',
       (_id, flavor) => {
         const bg = flavor.tokens.content.selection.bg;
         const fg = flavor.tokens.content.selection.fg;
         const ratio = getContrastRatio(fg, bg);
 
-        // Selection is temporary UI state; use relaxed threshold
         expect(
           ratio,
-          `${flavor.id}: selection contrast ${ratio.toFixed(2)}:1 too low`
-        ).toBeGreaterThanOrEqual(KNOWN_ISSUES_THRESHOLD);
+          `${flavor.id}: selection contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
+      }
+    );
+  });
+
+  describe('blockquote contrast (required)', () => {
+    it.each(flavorTestData)(
+      '%s blockquote meets WCAG AA normal text',
+      (_id, flavor) => {
+        const bg = flavor.tokens.content.blockquote.bg;
+        const fg = flavor.tokens.content.blockquote.fg;
+        const ratio = getContrastRatio(fg, bg);
+
+        expect(
+          ratio,
+          `${flavor.id}: blockquote contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1`
+        ).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
       }
     );
   });
@@ -143,9 +188,4 @@ describe('CSS Output - Color Contrast Accessibility', () => {
       expect(unique.size).toBe(4);
     });
   });
-
-  // Note: State colors (info, success, warning, danger) are not tested for contrast
-  // against base background because they are typically used with their own backgrounds
-  // (e.g., alert boxes with matching bg color) rather than as standalone text colors.
-  // Vendors like Bulma intentionally use bright yellows/greens that are low contrast.
 });

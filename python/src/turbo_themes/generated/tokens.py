@@ -35,10 +35,15 @@ class TurboTokens:
     text_secondary: str = "#a6adc8"  # color
     text_inverse: str = "#1e1e2e"  # color
     brand_primary: str = "#89b4fa"  # color
+    brand_primary_text: str = "#000000"  # color
     state_info: str = "#89dceb"  # color
     state_success: str = "#a6e3a1"  # color
     state_warning: str = "#f9e2af"  # color
     state_danger: str = "#f38ba8"  # color
+    state_info_text: str = "#000000"  # color
+    state_success_text: str = "#000000"  # color
+    state_warning_text: str = "#000000"  # color
+    state_danger_text: str = "#000000"  # color
     border_default: str = "#6c7086"  # color
     accent_link: str = "#89b4fa"  # color
     font_sans: str = "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\""  # fontFamily
@@ -53,7 +58,7 @@ class TurboTokens:
     body_secondary: str = "#a6adc8"  # color
     link_default: str = "#89b4fa"  # color
     selection_fg: str = "#cdd6f4"  # color
-    selection_bg: str = "#7f849c"  # color
+    selection_bg: str = "#595c6d"  # color
     blockquote_border: str = "#7f849c"  # color
     blockquote_fg: str = "#cdd6f4"  # color
     blockquote_bg: str = "#181825"  # color

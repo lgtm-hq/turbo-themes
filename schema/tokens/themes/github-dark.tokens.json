@@ -39,6 +39,10 @@
       "primary": {
         "$value": "#1f6feb",
         "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#ffffff",
+        "$type": "color"
       }
     },
     "state": {
@@ -63,6 +67,14 @@
         "$type": "color"
       },
       "warningText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "dangerText": {
         "$value": "#000000",
         "$type": "color"
       }

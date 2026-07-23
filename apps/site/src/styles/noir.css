@@ -54,7 +54,8 @@
   --noir-text-primary: #e8e6e3;
   --noir-text-secondary: #888;
   --noir-text-muted: #7c7c7c;
-  --noir-text-muted-deep: #555;
+  /* AA normal text on --noir-bg-base (#0a0a0b): was #555 (~2.65:1) */
+  --noir-text-muted-deep: #8a8a8a;
   --noir-text-eyebrow: #7c7c7c;
   --noir-ghost: #222;
   --noir-ghost-deep: #1a1a1c;

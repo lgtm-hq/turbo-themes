@@ -39,6 +39,10 @@
       "primary": {
         "$value": "#2e7de9",
         "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#000000",
+        "$type": "color"
       }
     },
     "state": {
@@ -57,6 +61,22 @@
       "danger": {
         "$value": "#d81159",
         "$type": "color"
+      },
+      "infoText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "successText": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "warningText": {
+        "$value": "#ffffff",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#ffffff",
+        "$type": "color"
       }
     },
     "border": {
@@ -67,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#2e7de9",
+        "$value": "#2667bf",
         "$type": "color"
       }
     },
@@ -106,7 +126,7 @@
           "$type": "color"
         },
         "h5": {
-          "$value": "#f1784b",
+          "$value": "#cf6741",
           "$type": "color"
         },
         "h6": {
@@ -126,7 +146,7 @@
       },
       "link": {
         "default": {
-          "$value": "#2e7de9",
+          "$value": "#2667bf",
           "$type": "color"
         }
       },

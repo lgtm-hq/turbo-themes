@@ -27,7 +27,7 @@
         "$type": "color"
       },
       "secondary": {
-        "$value": "#657b83",
+        "$value": "#5f747b",
         "$type": "color"
       },
       "inverse": {
@@ -38,6 +38,10 @@
     "brand": {
       "primary": {
         "$value": "#268bd2",
+        "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#000000",
         "$type": "color"
       }
     },
@@ -59,15 +63,19 @@
         "$type": "color"
       },
       "infoText": {
-        "$value": "#002b36",
+        "$value": "#000000",
         "$type": "color"
       },
       "successText": {
-        "$value": "#002b36",
+        "$value": "#000000",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#002b36",
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#ffffff",
         "$type": "color"
       }
     },
@@ -79,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#268bd2",
+        "$value": "#2076b3",
         "$type": "color"
       }
     },
@@ -106,15 +114,15 @@
           "$type": "color"
         },
         "h2": {
-          "$value": "#2aa198",
+          "$value": "#299e95",
           "$type": "color"
         },
         "h3": {
-          "$value": "#859900",
+          "$value": "#849700",
           "$type": "color"
         },
         "h4": {
-          "$value": "#b58900",
+          "$value": "#b38800",
           "$type": "color"
         },
         "h5": {
@@ -132,13 +140,13 @@
           "$type": "color"
         },
         "secondary": {
-          "$value": "#657b83",
+          "$value": "#5f747b",
           "$type": "color"
         }
       },
       "link": {
         "default": {
-          "$value": "#268bd2",
+          "$value": "#2076b3",
           "$type": "color"
         }
       },
@@ -158,7 +166,7 @@
           "$type": "color"
         },
         "fg": {
-          "$value": "#657b83",
+          "$value": "#586b72",
           "$type": "color"
         },
         "bg": {
@@ -168,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#6c71c4",
+          "$value": "#5d61a9",
           "$type": "color"
         },
         "bg": {

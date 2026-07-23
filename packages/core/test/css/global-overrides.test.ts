@@ -140,9 +140,11 @@ describe('cssGlobalOverrides', () => {
 
   it('contains accessibility contrast fixes', () => {
     const css = cssGlobalOverrides();
-    expect(css).toContain("/* Accessibility contrast fixes (Axe) */");
+    expect(css).toContain('/* Accessibility contrast fixes (Axe / WCAG AA) */');
     expect(css).toContain("[data-flavor='catppuccin-latte']");
+    expect(css).toContain("[data-theme='catppuccin-latte']");
     expect(css).toContain("[data-flavor='github-dark']");
+    expect(css).toContain("[data-theme='github-dark']");
   });
 
   it('contains select theme styling', () => {

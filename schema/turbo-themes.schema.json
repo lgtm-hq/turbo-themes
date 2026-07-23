@@ -130,7 +130,11 @@
     "BrandTokens": {
       "type": "object",
       "properties": {
-        "primary": { "$ref": "#/$defs/ColorToken" }
+        "primary": { "$ref": "#/$defs/ColorToken" },
+        "primaryText": {
+          "$ref": "#/$defs/ColorToken",
+          "description": "Text/icon color for fills using brand.primary (WCAG AA)"
+        }
       },
       "required": ["primary"]
     },
@@ -140,7 +144,11 @@
         "info": { "$ref": "#/$defs/ColorToken" },
         "success": { "$ref": "#/$defs/ColorToken" },
         "warning": { "$ref": "#/$defs/ColorToken" },
-        "danger": { "$ref": "#/$defs/ColorToken" }
+        "danger": { "$ref": "#/$defs/ColorToken" },
+        "infoText": { "$ref": "#/$defs/ColorToken" },
+        "successText": { "$ref": "#/$defs/ColorToken" },
+        "warningText": { "$ref": "#/$defs/ColorToken" },
+        "dangerText": { "$ref": "#/$defs/ColorToken" }
       },
       "required": ["info", "success", "warning", "danger"]
     },
