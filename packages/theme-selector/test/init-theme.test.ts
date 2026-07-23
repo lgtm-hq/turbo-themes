@@ -212,4 +212,29 @@ describe('initTheme', () => {
 
     expect(document.documentElement.classList.add).toHaveBeenCalledWith('theme-catppuccin-latte');
   });
+
+  describe('subset options', () => {
+    it('falls back to defaultTheme when persisted theme is outside the allowlist', async () => {
+      // 'dracula' is a valid theme but not part of the catppuccin subset.
+      mocks.mockLocalStorage.getItem.mockReturnValue('dracula');
+      mockThemeLoading();
+      await initTheme(document, window, {
+        vendors: ['catppuccin'],
+        defaultTheme: 'catppuccin-latte',
+      });
+      expect(document.documentElement.classList.add).toHaveBeenCalledWith('theme-catppuccin-latte');
+    });
+
+    it('keeps a persisted theme that is inside the allowlist', async () => {
+      mocks.mockLocalStorage.getItem.mockReturnValue('catppuccin-frappe');
+      mockThemeLoading();
+      await initTheme(document, window, {
+        vendors: ['catppuccin'],
+        defaultTheme: 'catppuccin-latte',
+      });
+      expect(document.documentElement.classList.add).toHaveBeenCalledWith(
+        'theme-catppuccin-frappe'
+      );
+    });
+  });
 });

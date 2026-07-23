@@ -50,13 +50,21 @@ function safeRemoveItem(windowObj: Window, key: string): void {
 
 /**
  * Validates a theme ID against a set of valid IDs.
- * Returns the theme ID if valid, otherwise returns the default theme.
+ * Returns the theme ID if valid, otherwise returns the fallback theme.
+ *
+ * @param themeId - The candidate theme ID (may be null when unset).
+ * @param validIds - The set of allowed theme IDs.
+ * @param fallback - Theme returned when `themeId` is missing or disallowed.
  */
-export function validateThemeId(themeId: string | null, validIds: Set<string>): string {
+export function validateThemeId(
+  themeId: string | null,
+  validIds: Set<string>,
+  fallback: string = DEFAULT_THEME
+): string {
   if (themeId && validIds.has(themeId)) {
     return themeId;
   }
-  return DEFAULT_THEME;
+  return fallback;
 }
 
 /**
@@ -74,16 +82,24 @@ export function migrateLegacyStorage(windowObj: Window): void {
 }
 
 /**
- * Gets the saved theme from localStorage, or returns default.
+ * Gets the saved theme from localStorage, or returns the fallback.
  * Optionally validates against a set of valid theme IDs.
  * Safely handles unavailable localStorage (e.g., private browsing).
+ *
+ * @param windowObj - Window object with localStorage.
+ * @param validIds - Optional set of valid theme IDs for validation.
+ * @param fallback - Theme used when nothing valid is stored.
  */
-export function getSavedTheme(windowObj: Window, validIds?: Set<string>): string {
+export function getSavedTheme(
+  windowObj: Window,
+  validIds?: Set<string>,
+  fallback: string = DEFAULT_THEME
+): string {
   const stored = safeGetItem(windowObj, STORAGE_KEY);
   if (validIds) {
-    return validateThemeId(stored, validIds);
+    return validateThemeId(stored, validIds, fallback);
   }
-  return stored || DEFAULT_THEME;
+  return stored || fallback;
 }
 
 /**
