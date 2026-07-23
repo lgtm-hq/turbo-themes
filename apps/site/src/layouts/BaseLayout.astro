@@ -161,13 +161,20 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
 
         var themeTriggerIcon = document.getElementById('theme-trigger-icon');
 
+        function syncTriggerChrome(theme) {
+          var name = themeNames[theme] || theme;
+          themeLabel.textContent = name;
+          themeTrigger.setAttribute('aria-label', 'Select theme: ' + name);
+          themeTrigger.setAttribute('title', name);
+          themeTriggerIcon.src =
+            baseUrl +
+            '/assets/img/' +
+            (themeIcons[theme] || 'catppuccin-logo-macchiato.png');
+        }
+
         // Set initial state from saved theme
         var savedTheme = window.__INITIAL_THEME__ || 'catppuccin-mocha';
-        themeLabel.textContent = themeNames[savedTheme] || savedTheme;
-        themeTriggerIcon.src =
-          baseUrl +
-          '/assets/img/' +
-          (themeIcons[savedTheme] || 'catppuccin-logo-macchiato.png');
+        syncTriggerChrome(savedTheme);
         updateActiveTheme(savedTheme);
 
         // Toggle dropdown
@@ -196,12 +203,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, '');
             var newHref = baseUrl + '/assets/css/themes/turbo/' + theme + '.css';
             themeLink.href = newHref;
 
-            // Update label, icon, and active state
-            themeLabel.textContent = themeNames[theme] || theme;
-            themeTriggerIcon.src =
-              baseUrl +
-              '/assets/img/' +
-              (themeIcons[theme] || 'catppuccin-logo-macchiato.png');
+            // Update label/tooltip/icon and active state
+            syncTriggerChrome(theme);
             updateActiveTheme(theme);
 
             // Close dropdown

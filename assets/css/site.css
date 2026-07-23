@@ -492,16 +492,21 @@ html:root .theme-dropdown {
 }
 
 html:root .theme-trigger {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md);
+  justify-content: center;
+  gap: 0;
+  /* Compact icon-only control — theme name lives in aria-label/title (#743).
+   * 2.5rem keeps the 40px minimum touch target the mobile e2e enforces. */
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--turbo-text-primary);
   background: var(--turbo-bg-surface);
   border: 1px solid var(--turbo-border-default);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -524,7 +529,8 @@ html:root .theme-trigger-icon {
 }
 
 html:root .theme-label {
-  min-width: 70px;
+  /* Label is visually hidden on the compact trigger; keep rule for specificity. */
+  min-width: 0;
 }
 
 html:root .theme-menu {
@@ -1397,7 +1403,8 @@ html:root .footer-links a:hover {
   }
 
   html:root .theme-trigger {
-    width: 100%;
+    /* Keep the header control icon-only on small screens (#743) */
+    width: 2.5rem;
     justify-content: center;
   }
 

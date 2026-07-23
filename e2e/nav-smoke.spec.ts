@@ -66,6 +66,23 @@ test.describe('Navigation Smoke Tests @smoke', () => {
     await basePage.goto('/');
   });
 
+  test('should render a compact icon-only theme trigger', async ({ basePage }) => {
+    const trigger = basePage.page.getByTestId('theme-trigger');
+    const label = basePage.page.locator('#theme-label');
+
+    await expect(trigger).toBeVisible();
+    await expect(label).toHaveClass(/visually-hidden/);
+
+    const box = await trigger.boundingBox();
+    expect(box, 'theme trigger bounding box').toBeTruthy();
+    // Icon-only control should stay square/compact, not a wide name chip.
+    expect(box!.width).toBeLessThanOrEqual(48);
+    expect(box!.height).toBeLessThanOrEqual(48);
+
+    await expect(trigger).toHaveAttribute('aria-label', /Select theme:/);
+    await expect(trigger).toHaveAttribute('title', /.+/);
+  });
+
   test('should display all navbar links', async ({ basePage }) => {
     await test.step('Verify all navbar links are visible', async () => {
       const links = await basePage.getAllNavLinks();
