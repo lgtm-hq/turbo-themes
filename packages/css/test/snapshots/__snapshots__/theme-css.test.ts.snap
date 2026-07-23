@@ -308,12 +308,12 @@ exports[`CSS Output Snapshots > Theme CSS Variables > matches catppuccin-latte t
 --turbo-bg-surface: #e6e9ef;
 --turbo-bg-overlay: #dce0e8;
 --turbo-text-primary: #4c4f69;
---turbo-text-secondary: #6c6f85;
+--turbo-text-secondary: #616477;
 --turbo-text-inverse: #eff1f5;
 --turbo-brand-primary: #1e66f5;
---turbo-state-info: #04a5e5;
---turbo-state-success: #40a02b;
---turbo-state-warning: #df8e1d;"
+--turbo-brand-primary-text: #fbfbfc;
+--turbo-state-info: #0378a7;
+--turbo-state-success: #40a02b;"
 `;
 
 exports[`CSS Output Snapshots > Theme CSS Variables > matches catppuccin-mocha theme CSS variables snapshot 1`] = `
@@ -324,9 +324,9 @@ exports[`CSS Output Snapshots > Theme CSS Variables > matches catppuccin-mocha t
 --turbo-text-secondary: #a6adc8;
 --turbo-text-inverse: #1e1e2e;
 --turbo-brand-primary: #89b4fa;
+--turbo-brand-primary-text: #1e1e2e;
 --turbo-state-info: #89dceb;
---turbo-state-success: #a6e3a1;
---turbo-state-warning: #f9e2af;"
+--turbo-state-success: #a6e3a1;"
 `;
 
 exports[`CSS Output Snapshots > Theme CSS Variables > matches github-dark theme CSS variables snapshot 1`] = `
@@ -336,10 +336,10 @@ exports[`CSS Output Snapshots > Theme CSS Variables > matches github-dark theme 
 --turbo-text-primary: #f0f6fc;
 --turbo-text-secondary: #9198a1;
 --turbo-text-inverse: #ffffff;
---turbo-brand-primary: #1f6feb;
---turbo-state-info: #4493f8;
---turbo-state-success: #3fb950;
---turbo-state-warning: #d29922;"
+--turbo-brand-primary: #1e6de6;
+--turbo-brand-primary-text: #ffffff;
+--turbo-state-info: #3573c1;
+--turbo-state-success: #3fb950;"
 `;
 
 exports[`CSS Output Snapshots > Theme CSS Variables > matches github-light theme CSS variables snapshot 1`] = `
@@ -350,9 +350,9 @@ exports[`CSS Output Snapshots > Theme CSS Variables > matches github-light theme
 --turbo-text-secondary: #59636e;
 --turbo-text-inverse: #ffffff;
 --turbo-brand-primary: #0969da;
+--turbo-brand-primary-text: #fcfcfc;
 --turbo-state-info: #0969da;
---turbo-state-success: #1a7f37;
---turbo-state-warning: #9a6700;"
+--turbo-state-success: #1a7f37;"
 `;
 
 exports[`CSS Output Snapshots > Token Path Mapping > core mappings structure matches snapshot 1`] = `
@@ -384,6 +384,10 @@ exports[`CSS Output Snapshots > Token Path Mapping > core mappings structure mat
   {
     "cssVar": "brand-primary",
     "tokenPath": "brand.primary",
+  },
+  {
+    "cssVar": "brand-primary-text",
+    "tokenPath": "brand.primaryText",
   },
   {
     "cssVar": "state-info",

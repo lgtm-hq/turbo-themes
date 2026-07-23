@@ -9,15 +9,15 @@ import {
 } from './helpers';
 
 /**
- * Runs an accessibility scan using axe-core and logs violations if found.
+ * Runs a strict WCAG AA accessibility scan using axe-core.
+ * Includes A + AA tags and previously waived rules (contrast, target-size, etc.).
  *
  * @param page - The Playwright page instance to scan.
  * @returns The accessibility scan results.
  */
 async function runAccessibilityScan(page: Page) {
   const accessibilityScanResults = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag21a', 'wcag22a']) // Remove wcag2aa, wcag21aa, wcag22aa to skip contrast requirements
-    .disableRules(['target-size', 'color-contrast', 'link-in-text-block', 'scrollable-region-focusable']) // Disable checks handled by CSS or not critical for theme demos
+    .withTags(['wcag2a', 'wcag21a', 'wcag22a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
     .analyze();
 
   if (accessibilityScanResults.violations.length > 0) {
@@ -44,7 +44,9 @@ test.describe('Accessibility Tests @a11y', () => {
   test.skip(({ browserName }) => browserName === 'webkit', 'Webkit has CSS timing issues with axe-core');
 
   test('should have no accessibility violations on homepage', async ({ homePage }) => {
+    await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
     await homePage.goto();
+    expect(await waitForThemeApplied(homePage.page)).toBe(true);
 
     await test.step('Run axe accessibility scan', async () => {
       const accessibilityScanResults = await runAccessibilityScan(homePage.page);
@@ -52,12 +54,31 @@ test.describe('Accessibility Tests @a11y', () => {
     });
   });
 
-  const themes = ['catppuccin-mocha', 'catppuccin-latte'] as const;
+  /**
+   * Broad theme matrix for AA compliance: light/dark, soft/hard, and major vendors.
+   */
+  const themes = [
+    'catppuccin-mocha',
+    'catppuccin-latte',
+    'dracula',
+    'github-light',
+    'github-dark',
+    'nord',
+    'solarized-light',
+    'solarized-dark',
+    'everforest-light-soft',
+    'gruvbox-dark-soft',
+    'rose-pine-dawn',
+    'tokyo-night-light',
+    'ayu-light',
+    'bulma-light',
+  ] as const;
 
   themes.forEach((theme) => {
     test(`should have no accessibility violations when switching to ${theme} theme`, async ({
       homePage,
     }) => {
+      await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
       await homePage.goto();
 
       await test.step(`Switch to ${theme} theme`, async () => {
@@ -71,31 +92,81 @@ test.describe('Accessibility Tests @a11y', () => {
     });
   });
 
-  test('should have no accessibility violations on components page', async ({ basePage }) => {
-    await basePage.goto('/');
-    await basePage.navigateToPage('components');
+  const aaPages = [
+    { name: 'components', path: '/components/' },
+    { name: 'themes', path: '/themes/' },
+    { name: 'examples', path: '/examples/' },
+    { name: 'docs', path: '/docs/' },
+    { name: 'docs-quick-start', path: '/docs/getting-started/quick-start/' },
+    { name: 'demo', path: '/demo/' },
+  ] as const;
 
-    await test.step('Run axe accessibility scan on components page', async () => {
-      const accessibilityScanResults = await runAccessibilityScan(basePage.page);
+  for (const pageInfo of aaPages) {
+    test(`should have no accessibility violations on ${pageInfo.name} page`, async ({
+      basePage,
+    }) => {
+      await basePage.page.emulateMedia({ reducedMotion: 'reduce' });
+      await basePage.page.goto(pageInfo.path);
+      await basePage.page.waitForLoadState('domcontentloaded');
+
+      await test.step(`Run axe accessibility scan on ${pageInfo.name}`, async () => {
+        const accessibilityScanResults = await runAccessibilityScan(basePage.page);
+        expect(accessibilityScanResults.violations).toHaveLength(0);
+      });
+    });
+  }
+
+  test('should have no accessibility violations with theme selector open', async ({
+    homePage,
+  }) => {
+    await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
+    await homePage.goto();
+
+    await test.step('Open theme dropdown', async () => {
+      await homePage.page.getByTestId('theme-trigger').click();
+      await expect(homePage.page.locator('#theme-menu[role="listbox"]')).toBeVisible();
+    });
+
+    await test.step('Run axe scan with open selector', async () => {
+      const accessibilityScanResults = await runAccessibilityScan(homePage.page);
       expect(accessibilityScanResults.violations).toHaveLength(0);
     });
   });
 
-  test('should have no accessibility violations on themes page', async ({ basePage }) => {
-    await basePage.goto('/');
-    await basePage.navigateToPage('themes');
+  test('should have no accessibility violations with docs search open', async ({ basePage }) => {
+    await basePage.page.emulateMedia({ reducedMotion: 'reduce' });
+    await basePage.page.goto('/docs/');
+    await basePage.page.waitForLoadState('domcontentloaded');
 
-    await test.step('Run axe accessibility scan on themes page', async () => {
+    await test.step('Open search UI', async () => {
+      const searchTrigger = basePage.page.locator('button[aria-label="Search"]').first();
+      await searchTrigger.click();
+      await expect(
+        basePage.page.locator('#search-modal[role="dialog"], #search-menu[role="dialog"]').first()
+      ).toBeVisible({ timeout: 5000 });
+    });
+
+    await test.step('Run axe scan with search open', async () => {
       const accessibilityScanResults = await runAccessibilityScan(basePage.page);
       expect(accessibilityScanResults.violations).toHaveLength(0);
     });
   });
 
   /**
-   * Representative theme sample for showcase scans: light + dark from the
-   * default family plus a high-saturation dark and an independent light theme.
+   * Wide theme sample for showcase contrast + axe AA.
    */
-  const showcaseThemes = ['catppuccin-latte', 'catppuccin-mocha', 'dracula', 'github-light'] as const;
+  const showcaseThemes = [
+    'catppuccin-latte',
+    'catppuccin-mocha',
+    'dracula',
+    'github-light',
+    'github-dark',
+    'solarized-light',
+    'everforest-light-soft',
+    'rose-pine-dawn',
+    'ayu-light',
+    'bulma-light',
+  ] as const;
 
   /** WCAG 2.x AA minimum contrast ratio for normal-size text. */
   const MIN_CONTRAST_NORMAL_TEXT = 4.5;
@@ -327,11 +398,17 @@ test.describe('Accessibility Tests @a11y', () => {
    * `<a class="btn btn-primary">`, making pastel-gradient CTAs unreadable.
    */
   test.describe('btn-primary anchor contrast', () => {
-    // Dark pastel themes only: they are the #741 regression this guards.
-    // Light themes fail for a different, pre-existing reason — the
-    // state.info stop of --gradient-primary does not pair with
-    // text-inverse (#752) — and rejoin this matrix once that lands.
-    const btnThemes = ['catppuccin-frappe'] as const;
+    const btnThemes = [
+      'catppuccin-frappe',
+      'catppuccin-latte',
+      'catppuccin-mocha',
+      'github-light',
+      'github-dark',
+      'dracula',
+      'solarized-light',
+      'rose-pine-dawn',
+      'nord',
+    ] as const;
 
     btnThemes.forEach((theme) => {
       test(`should keep home and examples primary CTA contrast under ${theme}`, async ({
@@ -348,11 +425,11 @@ test.describe('Accessibility Tests @a11y', () => {
           await test.step('Homepage Get started CTA meets AA contrast', async () => {
             const cta = homePage.page.getByTestId('home-cta-get-started');
             await expect(cta).toBeVisible();
-            const ratio = await getContrastRatio(cta);
-            expect(
-              ratio,
-              `home-cta-get-started contrast under ${theme} (got ${ratio.toFixed(2)})`
-            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+            const results = await new AxeBuilder({ page: homePage.page })
+              .include('[data-testid="home-cta-get-started"]')
+              .withRules(['color-contrast'])
+              .analyze();
+            expect(results.violations, JSON.stringify(results.violations)).toHaveLength(0);
           });
 
           await test.step('Examples page primary CTA meets AA contrast', async () => {
@@ -361,11 +438,11 @@ test.describe('Accessibility Tests @a11y', () => {
             expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
             const cta = homePage.page.getByTestId('examples-cta-contribute');
             await expect(cta).toBeVisible();
-            const ratio = await getContrastRatio(cta);
-            expect(
-              ratio,
-              `examples-cta-contribute contrast under ${theme} (got ${ratio.toFixed(2)})`
-            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+            const results = await new AxeBuilder({ page: homePage.page })
+              .include('[data-testid="examples-cta-contribute"]')
+              .withRules(['color-contrast'])
+              .analyze();
+            expect(results.violations, JSON.stringify(results.violations)).toHaveLength(0);
           });
         } finally {
           await homePage.page.unrouteAll({ behavior: 'ignoreErrors' });

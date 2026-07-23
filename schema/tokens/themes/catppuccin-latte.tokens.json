@@ -27,7 +27,7 @@
         "$type": "color"
       },
       "secondary": {
-        "$value": "#6c6f85",
+        "$value": "#616477",
         "$type": "color"
       },
       "inverse": {
@@ -39,11 +39,15 @@
       "primary": {
         "$value": "#1e66f5",
         "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#fbfbfc",
+        "$type": "color"
       }
     },
     "state": {
       "info": {
-        "$value": "#04a5e5",
+        "$value": "#0378a7",
         "$type": "color"
       },
       "success": {
@@ -59,15 +63,19 @@
         "$type": "color"
       },
       "infoText": {
-        "$value": "#000000",
+        "$value": "#fbfbfb",
         "$type": "color"
       },
       "successText": {
-        "$value": "#000000",
+        "$value": "#212222",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#323333",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#eff1f5",
         "$type": "color"
       }
     },
@@ -79,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#1e66f5",
+        "$value": "#1b5cdd",
         "$type": "color"
       }
     },
@@ -102,7 +110,7 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#40a02b",
+          "$value": "#3c9829",
           "$type": "color"
         },
         "h2": {
@@ -110,11 +118,11 @@
           "$type": "color"
         },
         "h3": {
-          "$value": "#209fb5",
+          "$value": "#1d92a7",
           "$type": "color"
         },
         "h4": {
-          "$value": "#df8e1d",
+          "$value": "#ba7618",
           "$type": "color"
         },
         "h5": {
@@ -132,13 +140,13 @@
           "$type": "color"
         },
         "secondary": {
-          "$value": "#6c6f85",
+          "$value": "#616477",
           "$type": "color"
         }
       },
       "link": {
         "default": {
-          "$value": "#1e66f5",
+          "$value": "#1b5cdd",
           "$type": "color"
         }
       },
@@ -148,7 +156,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#8c8fa1",
+          "$value": "#c6c8d0",
           "$type": "color"
         }
       },

@@ -27,7 +27,7 @@
         "$type": "color"
       },
       "secondary": {
-        "$value": "#797593",
+        "$value": "#6d6984",
         "$type": "color"
       },
       "inverse": {
@@ -38,6 +38,10 @@
     "brand": {
       "primary": {
         "$value": "#907aa9",
+        "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#171615",
         "$type": "color"
       }
     },
@@ -59,7 +63,19 @@
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#3f3d3b",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#1e1d1c",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#080707",
+        "$type": "color"
+      },
+      "successText": {
+        "$value": "#faf4ed",
         "$type": "color"
       }
     },
@@ -71,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#907aa9",
+        "$value": "#76658c",
         "$type": "color"
       }
     },
@@ -106,11 +122,11 @@
           "$type": "color"
         },
         "h4": {
-          "$value": "#ea9d34",
+          "$value": "#be7f2a",
           "$type": "color"
         },
         "h5": {
-          "$value": "#d7827e",
+          "$value": "#c67874",
           "$type": "color"
         },
         "h6": {
@@ -124,13 +140,13 @@
           "$type": "color"
         },
         "secondary": {
-          "$value": "#797593",
+          "$value": "#6d6984",
           "$type": "color"
         }
       },
       "link": {
         "default": {
-          "$value": "#907aa9",
+          "$value": "#76658c",
           "$type": "color"
         }
       },
@@ -140,7 +156,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#cecacd",
+          "$value": "#d2d1d2",
           "$type": "color"
         }
       },

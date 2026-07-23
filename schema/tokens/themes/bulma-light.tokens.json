@@ -39,6 +39,10 @@
       "primary": {
         "$value": "#00d1b2",
         "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#1c1c1c",
+        "$type": "color"
       }
     },
     "state": {
@@ -64,6 +68,14 @@
       },
       "warningText": {
         "$value": "#363636",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#1e1e1e",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#1b1b1b",
         "$type": "color"
       }
     },
@@ -98,7 +110,7 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#00d1b2",
+          "$value": "#00a088",
           "$type": "color"
         },
         "h2": {
@@ -110,11 +122,11 @@
           "$type": "color"
         },
         "h4": {
-          "$value": "#48c78e",
+          "$value": "#399f71",
           "$type": "color"
         },
         "h5": {
-          "$value": "#ffe08a",
+          "$value": "#9f8c56",
           "$type": "color"
         },
         "h6": {
@@ -164,7 +176,7 @@
       },
       "codeInline": {
         "fg": {
-          "$value": "#f14668",
+          "$value": "#c23853",
           "$type": "color"
         },
         "bg": {

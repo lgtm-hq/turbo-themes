@@ -132,6 +132,7 @@ export const ayuSynced: ThemePackage = {
           infoText: "#000000",
           successText: "#000000",
           warningText: "#000000",
+          dangerText: "#000000",
         },
         border: {
           default: "#e7eaed",

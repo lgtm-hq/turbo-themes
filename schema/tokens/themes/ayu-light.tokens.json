@@ -27,7 +27,7 @@
         "$type": "color"
       },
       "secondary": {
-        "$value": "#828e9f",
+        "$value": "#656f7c",
         "$type": "color"
       },
       "inverse": {
@@ -38,6 +38,10 @@
     "brand": {
       "primary": {
         "$value": "#f29718",
+        "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#39393a",
         "$type": "color"
       }
     },
@@ -59,15 +63,19 @@
         "$type": "color"
       },
       "infoText": {
-        "$value": "#000000",
+        "$value": "#39393a",
         "$type": "color"
       },
       "successText": {
-        "$value": "#000000",
+        "$value": "#373737",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#343435",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#161617",
         "$type": "color"
       }
     },
@@ -79,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#a37acc",
+        "$value": "#8160a1",
         "$type": "color"
       }
     },
@@ -102,19 +110,19 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#f2a300",
+          "$value": "#c28200",
           "$type": "color"
         },
         "h2": {
-          "$value": "#399ee6",
+          "$value": "#3696db",
           "$type": "color"
         },
         "h3": {
-          "$value": "#55b4d4",
+          "$value": "#4899b4",
           "$type": "color"
         },
         "h4": {
-          "$value": "#86b300",
+          "$value": "#759c00",
           "$type": "color"
         },
         "h5": {
@@ -122,7 +130,7 @@
           "$type": "color"
         },
         "h6": {
-          "$value": "#ff7e33",
+          "$value": "#e3702d",
           "$type": "color"
         }
       },
@@ -132,13 +140,13 @@
           "$type": "color"
         },
         "secondary": {
-          "$value": "#828e9f",
+          "$value": "#656f7c",
           "$type": "color"
         }
       },
       "link": {
         "default": {
-          "$value": "#a37acc",
+          "$value": "#8160a1",
           "$type": "color"
         }
       },

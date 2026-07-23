@@ -39,6 +39,10 @@
       "primary": {
         "$value": "#0969da",
         "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#fcfcfc",
+        "$type": "color"
       }
     },
     "state": {
@@ -56,6 +60,22 @@
       },
       "danger": {
         "$value": "#d1242f",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#f6f6f6",
+        "$type": "color"
+      },
+      "successText": {
+        "$value": "#f8f8f9",
+        "$type": "color"
+      },
+      "warningText": {
+        "$value": "#fdfdfd",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#f4f4f4",
         "$type": "color"
       }
     },

@@ -27,7 +27,7 @@
         "$type": "color"
       },
       "secondary": {
-        "$value": "#6272a4",
+        "$value": "#8995bb",
         "$type": "color"
       },
       "inverse": {
@@ -38,6 +38,10 @@
     "brand": {
       "primary": {
         "$value": "#bd93f9",
+        "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#282a36",
         "$type": "color"
       }
     },
@@ -56,6 +60,22 @@
       },
       "danger": {
         "$value": "#ff5555",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#282a36",
+        "$type": "color"
+      },
+      "successText": {
+        "$value": "#282a36",
+        "$type": "color"
+      },
+      "warningText": {
+        "$value": "#282a36",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#242631",
         "$type": "color"
       }
     },
@@ -119,7 +139,7 @@
           "$type": "color"
         },
         "secondary": {
-          "$value": "#6272a4",
+          "$value": "#8995bb",
           "$type": "color"
         }
       },
@@ -145,7 +165,7 @@
           "$type": "color"
         },
         "fg": {
-          "$value": "#6272a4",
+          "$value": "#7f8db5",
           "$type": "color"
         },
         "bg": {

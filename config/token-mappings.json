@@ -10,6 +10,7 @@
     { "cssVar": "text-secondary", "tokenPath": "text.secondary" },
     { "cssVar": "text-inverse", "tokenPath": "text.inverse" },
     { "cssVar": "brand-primary", "tokenPath": "brand.primary" },
+    { "cssVar": "brand-primary-text", "tokenPath": "brand.primaryText" },
     { "cssVar": "state-info", "tokenPath": "state.info" },
     { "cssVar": "state-success", "tokenPath": "state.success" },
     { "cssVar": "state-warning", "tokenPath": "state.warning" },

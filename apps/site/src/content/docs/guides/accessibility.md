@@ -9,8 +9,11 @@ next: contributing/index
 
 # Accessibility
 
-Turbo Themes is designed with accessibility in mind. This guide covers best practices
-for building accessible themed interfaces.
+Turbo Themes targets **strict WCAG 2.x AA** for theme tokens and the docs site. Unit
+tests gate normal-text pairs at 4.5:1 (including secondary text, links, inline code,
+selection, blockquotes, and state/brand button labels). Headings are gated at the
+large-text AA floor of 3:1. End-to-end axe scans use A + AA tags with contrast,
+target-size, link-in-text-block, and scrollable-region-focusable enabled.
 
 ## Color Contrast
 
@@ -28,7 +31,7 @@ Web Content Accessibility Guidelines (WCAG) define minimum contrast ratios:
 
 ### Built-in Contrast
 
-All Turbo Themes meet WCAG AA standards:
+All Turbo Themes meet WCAG AA for semantic token pairs:
 
 ```css
 /* These combinations are safe */
@@ -39,6 +42,16 @@ body {
 
 .muted {
   color: var(--turbo-text-secondary); /* ✓ 4.5:1+ contrast */
+}
+
+.btn-primary {
+  background: var(--gradient-primary, var(--turbo-brand-primary));
+  color: var(--turbo-brand-primary-text); /* ✓ 4.5:1+ on both gradient stops */
+}
+
+.btn-success {
+  background: var(--turbo-state-success);
+  color: var(--turbo-state-success-text); /* ✓ 4.5:1+ on state fill */
 }
 ```
 

@@ -8,13 +8,23 @@
   justify-content: center;
   gap: var(--space-sm);
   padding: var(--space-md) var(--space-xl);
+  min-height: 44px;
   font-size: 1rem;
   font-weight: 600;
   text-decoration: none;
   border: none;
   border-radius: var(--radius-lg);
-  cursor: pointer;
-  transition: all var(--transition-fast);
+  /* Transform/shadow only — animating color/background during theme swaps
+     produces mid-flight contrast that fails WCAG AA (and axe) scans. */
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
 }
 
 .btn:hover:not(:disabled) {
@@ -37,9 +47,17 @@
   transform: none;
 }
 
-/* Primary */
+/* Primary — gradient fill (falls back to solid brand). Ink uses
+   brand-primary-text, gated AA against both gradient stops in the
+   token normalizer. Include `a.btn-primary` (+ hover/focus) so link CTAs
+   beat global `a`/`a:hover` accent rules that share equal specificity
+   and load later on the docs site. */
+a.btn-primary,
+a.btn-primary:hover,
+a.btn-primary:focus,
+a.btn-primary:focus-visible,
 .btn-primary {
-  color: var(--turbo-text-inverse);
+  color: var(--turbo-brand-primary-text, var(--turbo-text-inverse));
   background: var(--gradient-primary, var(--turbo-brand-primary));
   box-shadow: var(--shadow-md);
 }
@@ -79,7 +97,7 @@
 }
 
 .btn-outline:hover:not(:disabled) {
-  color: var(--turbo-text-inverse);
+  color: var(--turbo-brand-primary-text, var(--turbo-text-inverse));
   background: var(--turbo-brand-primary);
 }
 
@@ -120,9 +138,11 @@
   background: color-mix(in srgb, var(--turbo-state-info) 85%, black);
 }
 
-/* Sizes */
+/* Sizes — keep WCAG 2.2 AA target size (24×24; site chrome uses 44×44) */
 .btn-sm {
   padding: var(--space-sm) var(--space-md);
+  min-height: 44px;
+  min-width: 44px;
   font-size: 0.875rem;
   border-radius: var(--radius-md);
 }
