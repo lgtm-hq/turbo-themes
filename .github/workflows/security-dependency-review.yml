@@ -64,9 +64,9 @@ jobs:
     uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-security-audit.yml@66cad82ead0e5d119928c895c7d7da9c837989e5 # v0.52.3
     with:
       job-name: '🔐 Security Audit'
-      # py-lintro 0.61.0 pinned to immutable digest for reproducibility
+      # py-lintro 0.91.9 pinned to immutable digest for reproducibility
       # yamllint disable-line rule:line-length
-      lintro-image: ghcr.io/lgtm-hq/py-lintro:0.61.0@sha256:95b9fd9d62c3ca1227447467767ec915e78a7eef62282dd18c0b1c02ee4d3887
+      lintro-image: ghcr.io/lgtm-hq/py-lintro:0.91.9@sha256:eefed35bd35169501f93b072b5924896a3cfaa500f3f337aa27e8497a3047a25
       runner-image: ubuntu-24.04
       tooling-ref: '66cad82ead0e5d119928c895c7d7da9c837989e5' # v0.52.3
       egress-policy: block

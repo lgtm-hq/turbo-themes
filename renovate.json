@@ -27,5 +27,17 @@
       "matchPackageNames": ["rspec", "rspec-*", "simplecov", "simplecov-*"],
       "groupName": "ruby-test"
     }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Track the pinned py-lintro GHCR image passed as lintro-image workflow input",
+      "fileMatch": ["^\\.github/workflows/[^/]+\\.ya?ml$"],
+      "matchStrings": [
+        "py-lintro:(?<currentValue>[0-9]+\\.[0-9]+\\.[0-9]+)@(?<currentDigest>sha256:[a-f0-9]+)"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "ghcr.io/lgtm-hq/py-lintro"
+    }
   ]
 }
