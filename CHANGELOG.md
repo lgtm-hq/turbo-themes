@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.2] - 2026-07-23
+
+### 🤖 Internal
+
+- Grant contents:write to publish sbom jobs (unbreaks npm/gem publish) (#772)
+
 ## [0.40.1] - 2026-07-23
 
 ### 🐛 Fixed
