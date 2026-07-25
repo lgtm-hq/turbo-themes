@@ -4,7 +4,15 @@ version = "0.1.0"
 requires-python = ">=3.11"
 
 [dependency-groups]
-dev = ["lintro==0.91.9", "pytest>=9.0,<10.0", "assertpy>=1.1"]
+dev = [
+  "lintro==0.91.9",
+  "pytest>=9.0,<10.0",
+  "assertpy>=1.1",
+  # Formatters/linters lintro drives. Pinned at or above lintro 0.91.9's
+  # minimums so lintro never silently skips them for being too old.
+  "black>=26.3.1",
+  "ruff>=0.15.9",
+]
 
 [tool.black]
 line-length = 88
