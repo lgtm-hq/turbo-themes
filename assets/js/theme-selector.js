@@ -609,9 +609,9 @@ var TurboThemeSelector = (function(exports) {
 			logThemeError(ThemeErrors.STORAGE_UNAVAILABLE("removeItem", error));
 		}
 	}
-	function validateThemeId(themeId, validIds) {
+	function validateThemeId(themeId, validIds, fallback = DEFAULT_THEME) {
 		if (themeId && validIds.has(themeId)) return themeId;
-		return DEFAULT_THEME;
+		return fallback;
 	}
 	function migrateLegacyStorage(windowObj) {
 		for (const legacyKey of LEGACY_STORAGE_KEYS) {
@@ -622,10 +622,10 @@ var TurboThemeSelector = (function(exports) {
 			}
 		}
 	}
-	function getSavedTheme(windowObj, validIds) {
+	function getSavedTheme(windowObj, validIds, fallback = DEFAULT_THEME) {
 		const stored = safeGetItem(windowObj, STORAGE_KEY);
-		if (validIds) return validateThemeId(stored, validIds);
-		return stored || DEFAULT_THEME;
+		if (validIds) return validateThemeId(stored, validIds, fallback);
+		return stored || fallback;
 	}
 	function saveTheme(windowObj, themeId, validIds) {
 		if (validIds && !validIds.has(themeId)) {
@@ -814,13 +814,33 @@ var TurboThemeSelector = (function(exports) {
 	}
 	var mappedThemes = null;
 	var validThemeIds = null;
-	function getThemes() {
+	function resolveAllowedThemeIds(options) {
+		if (!options) return null;
+		const { catalog, themes, vendors } = options;
+		if (catalog) return new Set(catalog.themeIds);
+		if (themes) return new Set(themes);
+		if (vendors) return new Set(createThemeCatalog({ vendors }).themeIds);
+		return null;
+	}
+	function getAllThemes() {
 		if (!mappedThemes) mappedThemes = flavors.map(mapFlavorToUI);
 		return mappedThemes || [];
 	}
-	function getValidThemeIds() {
+	function getAllValidThemeIds() {
 		if (!validThemeIds) validThemeIds = new Set(flavors.map((f) => f.id));
 		return validThemeIds;
+	}
+	function getThemes(options) {
+		const all = getAllThemes();
+		const allowed = resolveAllowedThemeIds(options);
+		if (!allowed) return all;
+		return all.filter((theme) => allowed.has(theme.id));
+	}
+	function getValidThemeIds(options) {
+		const all = getAllValidThemeIds();
+		const allowed = resolveAllowedThemeIds(options);
+		if (!allowed) return all;
+		return new Set([...all].filter((id) => allowed.has(id)));
 	}
 	function resolveTheme(themeId) {
 		const themes = getThemes();
@@ -1278,8 +1298,15 @@ var TurboThemeSelector = (function(exports) {
 			documentObj.removeEventListener("focusin", handler);
 		};
 	}
+	function resolveValidThemes(options) {
+		if (options.validThemes) return options.validThemes;
+		if (options.catalog) return options.catalog.themeIds;
+		if (options.vendors) return createThemeCatalog({ vendors: options.vendors }).themeIds;
+		return VALID_THEMES;
+	}
 	function generateBlockingScript(options = {}) {
-		const { validThemes = VALID_THEMES, defaultTheme = DEFAULT_THEME$1, storageKey = STORAGE_KEY, legacyKeys = LEGACY_STORAGE_KEYS, themeAppearances = THEME_APPEARANCES } = options;
+		const { defaultTheme = DEFAULT_THEME$1, storageKey = STORAGE_KEY, legacyKeys = LEGACY_STORAGE_KEYS, themeAppearances = THEME_APPEARANCES } = options;
+		const validThemes = resolveValidThemes(options);
 		const config = {
 			storageKey: JSON.stringify(storageKey),
 			defaultTheme: JSON.stringify(defaultTheme),
@@ -1338,10 +1365,11 @@ var TurboThemeSelector = (function(exports) {
   }
 })();`;
 	}
-	async function initTheme(documentObj, windowObj) {
+	async function initTheme(documentObj, windowObj, options) {
 		migrateLegacyStorage(windowObj);
 		const initialTheme = windowObj.__INITIAL_THEME__;
-		const savedTheme = getSavedTheme(windowObj, getValidThemeIds());
+		const fallbackTheme = options?.defaultTheme ?? DEFAULT_THEME;
+		const savedTheme = getSavedTheme(windowObj, getValidThemeIds(options), fallbackTheme);
 		if (initialTheme && initialTheme === savedTheme) {
 			if (getCurrentThemeFromClasses(documentObj.documentElement) === savedTheme) {
 				await applyTheme$1(documentObj, savedTheme);
@@ -1350,18 +1378,20 @@ var TurboThemeSelector = (function(exports) {
 		}
 		await applyTheme$1(documentObj, savedTheme);
 	}
-	async function wireFlavorSelector(documentObj, windowObj) {
+	async function wireFlavorSelector(documentObj, windowObj, options) {
 		const abortController = new AbortController();
 		const elements = getDropdownElements(documentObj);
 		if (!elements) return { cleanup: () => abortController.abort() };
 		const { dropdownMenu, selectEl } = elements;
 		const baseUrl = getBaseUrl(documentObj);
-		const themes = getThemes();
+		const themes = getThemes(options);
+		const validThemeIds = getValidThemeIds(options);
+		const fallbackTheme = options?.defaultTheme ?? DEFAULT_THEME;
 		const state = {
 			currentIndex: -1,
 			menuItems: []
 		};
-		const currentThemeId = getSavedTheme(windowObj, getValidThemeIds()) || getCurrentTheme$1(documentObj, DEFAULT_THEME);
+		const currentThemeId = getSavedTheme(windowObj, validThemeIds, fallbackTheme) || getCurrentTheme$1(documentObj, fallbackTheme);
 		const stateManager = createDropdownStateManager(elements, state);
 		const ctx = {
 			documentObj,
@@ -1375,7 +1405,7 @@ var TurboThemeSelector = (function(exports) {
 				await applyTheme(themeId, documentObj, windowObj);
 			}
 		};
-		if (selectEl) wireNativeSelect(ctx, selectEl, themes, DEFAULT_THEME);
+		if (selectEl) wireNativeSelect(ctx, selectEl, themes, fallbackTheme);
 		populateDropdownMenu(ctx, dropdownMenu, themes, THEME_FAMILIES);
 		wireDropdownEventHandlers(documentObj, elements, state, stateManager, abortController);
 		stateManager.updateAriaExpanded(false);

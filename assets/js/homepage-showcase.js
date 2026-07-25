@@ -1001,20 +1001,65 @@ var TurboHomepageShowcase = (function(exports) {
 	var mappedThemes = null;
 	var validThemeIds = null;
 	/**
-	* Gets all themes mapped to UI format.
+	* Resolves the set of allowed theme IDs from selector options.
+	*
+	* Precedence: `catalog` > `themes` > `vendors` > all themes.
+	*
+	* @param options - Optional subset-selecting options.
+	* @returns A set of allowed theme IDs, or `null` when all themes are allowed.
+	*/
+	function resolveAllowedThemeIds(options) {
+		if (!options) return null;
+		const { catalog, themes, vendors } = options;
+		if (catalog) return new Set(catalog.themeIds);
+		if (themes) return new Set(themes);
+		if (vendors) return new Set(createThemeCatalog({ vendors }).themeIds);
+		return null;
+	}
+	/**
+	* Gets the full list of themes mapped to UI format.
 	* Results are cached for performance.
 	*/
-	function getThemes() {
+	function getAllThemes() {
 		if (!mappedThemes) mappedThemes = flavors.map(mapFlavorToUI);
 		return mappedThemes || [];
 	}
 	/**
-	* Gets a Set of all valid theme IDs.
+	* Gets a Set of all valid theme IDs (full catalog).
 	* Results are cached for performance.
 	*/
-	function getValidThemeIds() {
+	function getAllValidThemeIds() {
 		if (!validThemeIds) validThemeIds = new Set(flavors.map((f) => f.id));
 		return validThemeIds;
+	}
+	/**
+	* Gets themes mapped to UI format, optionally filtered to a subset.
+	*
+	* Results are cached for performance; filtering preserves canonical order.
+	*
+	* @param options - Optional subset-selecting options.
+	* @returns The mapped themes, filtered to the resolved allowlist when present.
+	*/
+	function getThemes(options) {
+		const all = getAllThemes();
+		const allowed = resolveAllowedThemeIds(options);
+		if (!allowed) return all;
+		return all.filter((theme) => allowed.has(theme.id));
+	}
+	/**
+	* Gets a Set of valid theme IDs, optionally filtered to a subset.
+	*
+	* The returned set is always intersected with the full catalog so unknown IDs
+	* supplied via `options.themes` cannot leak into the allowlist.
+	*
+	* @param options - Optional subset-selecting options.
+	* @returns The valid theme IDs, filtered to the resolved allowlist when present.
+	*/
+	function getValidThemeIds(options) {
+		const all = getAllValidThemeIds();
+		const allowed = resolveAllowedThemeIds(options);
+		if (!allowed) return all;
+		return new Set([...all].filter((id) => allowed.has(id)));
 	}
 	/**
 	* Resolves a theme by ID, falling back to default if not found.

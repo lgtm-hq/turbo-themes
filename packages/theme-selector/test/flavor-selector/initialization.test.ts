@@ -3,10 +3,12 @@
  */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { themeSets, flavors } from '@lgtm-hq/turbo-themes-core';
 import {
   wireFlavorSelector,
   setupDocumentMocks,
   createMockAbortController,
+  setupKeyboardNavTest,
 } from './test-setup.js';
 
 describe('wireFlavorSelector - initialization', () => {
@@ -54,6 +56,34 @@ describe('wireFlavorSelector - initialization', () => {
     expect(document.createElement).toHaveBeenCalledWith('button');
     expect(document.createElement).toHaveBeenCalledWith('div');
     expect(document.createElement).toHaveBeenCalledWith('span');
+  });
+
+  describe('subset options', () => {
+    it('renders only the themes in themeSets.minimal', async () => {
+      const ctx = setupKeyboardNavTest(mocks);
+      await wireFlavorSelector(document, window, { catalog: themeSets.minimal });
+
+      const rendered = ctx.createdButtons
+        .map((b) => b.getAttribute('data-theme-id') as string)
+        .sort();
+      expect(rendered).toEqual([...themeSets.minimal.themeIds].sort());
+    });
+
+    it('renders all themes when no options are given', async () => {
+      const ctx = setupKeyboardNavTest(mocks);
+      await wireFlavorSelector(document, window);
+
+      expect(ctx.createdButtons).toHaveLength(flavors.length);
+    });
+
+    it('renders only the requested vendor variants', async () => {
+      const ctx = setupKeyboardNavTest(mocks);
+      await wireFlavorSelector(document, window, { vendors: ['catppuccin'] });
+
+      const rendered = ctx.createdButtons.map((b) => b.getAttribute('data-theme-id') as string);
+      expect(rendered.length).toBeGreaterThan(1);
+      expect(rendered.every((id) => id.startsWith('catppuccin'))).toBe(true);
+    });
   });
 
   it('sets up event listeners for theme selector', () => {
