@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.5] - 2026-07-25
+
+### 🐛 Fixed
+
+- Pin showcase spotlight geometry to the viewport (#784)
+
 ## [0.40.4] - 2026-07-25
 
 ### 🔧 Changed
