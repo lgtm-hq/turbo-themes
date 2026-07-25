@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.4] - 2026-07-25
+
+### 🔧 Changed
+
+- Bump pinned postcss and brace-expansion overrides (#785)
+
 ## [0.40.3] - 2026-07-23
 
 ### 🐛 Fixed
