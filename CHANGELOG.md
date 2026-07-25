@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.3] - 2026-07-23
+
+### 🐛 Fixed
+
+- Bump postcss to 8.5.12 for GHSA-6g55-p6wh-862q (#776)
+
 ## [0.40.2] - 2026-07-23
 
 ### 🤖 Internal
