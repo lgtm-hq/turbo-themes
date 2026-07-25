@@ -6,21 +6,19 @@ from theme tokens. Used by ThemeManager.apply_theme_to_css_variables().
 
 from __future__ import annotations
 
-from typing import Dict, Optional
-
-from .models import Tokens
 from .mapping_config import (
-    get_mapping_config,
-    resolve_token_path,
     MappingConfig,
     OptionalGroupConfig,
+    get_mapping_config,
+    resolve_token_path,
 )
+from .models import Tokens
 
 
 def apply_core_mappings(
     tokens: Tokens,
-    config: Optional[MappingConfig] = None,
-) -> Dict[str, str]:
+    config: MappingConfig | None = None,
+) -> dict[str, str]:
     """Apply core token mappings to generate CSS variables.
 
     Args:
@@ -33,7 +31,7 @@ def apply_core_mappings(
     if config is None:
         config = get_mapping_config()
 
-    variables: Dict[str, str] = {}
+    variables: dict[str, str] = {}
     prefix = config.prefix
 
     for mapping in config.core_mappings:
@@ -52,9 +50,9 @@ def apply_core_mappings(
 
 def apply_optional_spacing(
     tokens: Tokens,
-    config: Optional[OptionalGroupConfig] = None,
+    config: OptionalGroupConfig | None = None,
     prefix: str = "turbo",
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """Apply optional spacing tokens to generate CSS variables.
 
     Args:
@@ -65,7 +63,7 @@ def apply_optional_spacing(
     Returns:
         Dictionary of spacing CSS variable names to values.
     """
-    variables: Dict[str, str] = {}
+    variables: dict[str, str] = {}
 
     if not tokens.spacing:
         return variables
@@ -89,9 +87,9 @@ def apply_optional_spacing(
 
 def apply_optional_elevation(
     tokens: Tokens,
-    config: Optional[OptionalGroupConfig] = None,
+    config: OptionalGroupConfig | None = None,
     prefix: str = "turbo",
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """Apply optional elevation tokens to generate CSS variables.
 
     Args:
@@ -102,7 +100,7 @@ def apply_optional_elevation(
     Returns:
         Dictionary of elevation CSS variable names to values.
     """
-    variables: Dict[str, str] = {}
+    variables: dict[str, str] = {}
 
     if not tokens.elevation:
         return variables
@@ -126,9 +124,9 @@ def apply_optional_elevation(
 
 def apply_optional_animation(
     tokens: Tokens,
-    config: Optional[OptionalGroupConfig] = None,
+    config: OptionalGroupConfig | None = None,
     prefix: str = "turbo",
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """Apply optional animation tokens to generate CSS variables.
 
     Args:
@@ -139,7 +137,7 @@ def apply_optional_animation(
     Returns:
         Dictionary of animation CSS variable names to values.
     """
-    variables: Dict[str, str] = {}
+    variables: dict[str, str] = {}
 
     if not tokens.animation:
         return variables
@@ -162,9 +160,9 @@ def apply_optional_animation(
 
 def apply_optional_opacity(
     tokens: Tokens,
-    config: Optional[OptionalGroupConfig] = None,
+    config: OptionalGroupConfig | None = None,
     prefix: str = "turbo",
-) -> Dict[str, str]:
+) -> dict[str, str]:
     """Apply optional opacity tokens to generate CSS variables.
 
     Args:
@@ -175,7 +173,7 @@ def apply_optional_opacity(
     Returns:
         Dictionary of opacity CSS variable names to values.
     """
-    variables: Dict[str, str] = {}
+    variables: dict[str, str] = {}
 
     if not tokens.opacity:
         return variables
@@ -197,7 +195,7 @@ def apply_optional_opacity(
     return variables
 
 
-def generate_css_variables(tokens: Tokens) -> Dict[str, str]:
+def generate_css_variables(tokens: Tokens) -> dict[str, str]:
     """Generate all CSS variables from theme tokens.
 
     This is a convenience function that combines all mapping categories:
@@ -212,7 +210,7 @@ def generate_css_variables(tokens: Tokens) -> Dict[str, str]:
     config = get_mapping_config()
     prefix = config.prefix
 
-    variables: Dict[str, str] = {}
+    variables: dict[str, str] = {}
 
     # Apply all mapping categories
     variables.update(apply_core_mappings(tokens, config))
