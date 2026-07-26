@@ -65,6 +65,11 @@ if [[ ${push_status} -eq ${MERGE_QUEUE_EXIT_CODE} ]]; then
     exit 1
   fi
 
+  # This confirms the PR exists and carries the right version, not that it is
+  # still queued at this instant. That is deliberate: GitHub's own rejection is
+  # the authoritative statement that the branch was queued, and a PR dequeued in
+  # the meantime is still open with the identical v${NEXT_VERSION} bump, so
+  # skipping cannot drop the bump either way.
   QUEUED_HEAD=$(gh pr list \
     --repo "${GITHUB_REPOSITORY}" \
     --head "${RELEASE_BRANCH}" \

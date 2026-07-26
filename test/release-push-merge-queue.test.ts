@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { chmodSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
@@ -60,9 +60,24 @@ function writeGitShim(rejection: string): void {
   );
 }
 
-/** Install a `gh` shim whose `pr list --json headRefName` returns $FAKE_PR_HEAD. */
+/**
+ * Install a `gh` shim that answers only the exact `pr list --json headRefName`
+ * call the script under test makes, echoing $FAKE_PR_HEAD. Any other gh
+ * invocation fails loudly so a new, unstubbed gh call cannot slip through the
+ * verification path unnoticed.
+ */
 function writeGhShim(): void {
-  writeShim('gh', 'printf \'%s\\n\' "${FAKE_PR_HEAD:-}"');
+  writeShim(
+    'gh',
+    [
+      'if [[ "$1" == "pr" && "$2" == "list" && "$*" == *"--json headRefName"* ]]; then',
+      '  printf \'%s\\n\' "${FAKE_PR_HEAD:-}"',
+      '  exit 0',
+      'fi',
+      'echo "unexpected gh invocation: gh $*" >&2',
+      'exit 64',
+    ].join('\n'),
+  );
 }
 
 interface RunResult {
@@ -71,10 +86,18 @@ interface RunResult {
   stderr: string;
 }
 
-function run(script: string, env: Record<string, string> = {}): RunResult {
-  const result = spawnSync('bash', [script], {
+/** Kill a hung script rather than letting the suite stall indefinitely. */
+const SCRIPT_TIMEOUT_MS = 30_000;
+
+/** Run a script under bash with the sandboxed PATH, shims and Actions files. */
+function runScript(
+  script: string,
+  { args = [], env = {} }: { args?: string[]; env?: Record<string, string> } = {},
+): RunResult {
+  const result = spawnSync('bash', [script, ...args], {
     encoding: 'utf8',
     cwd: sandbox,
+    timeout: SCRIPT_TIMEOUT_MS,
     env: {
       ...process.env,
       PATH: `${binDir()}:${process.env.PATH}`,
@@ -91,6 +114,10 @@ function run(script: string, env: Record<string, string> = {}): RunResult {
   };
 }
 
+function run(script: string, env: Record<string, string> = {}): RunResult {
+  return runScript(script, { env });
+}
+
 function readSandboxFile(name: string): string {
   try {
     return readFileSync(join(sandbox, name), 'utf8');
@@ -105,7 +132,7 @@ function attemptCount(): number {
 
 beforeEach(() => {
   sandbox = mkdtempSync(join(tmpdir(), 'merge-queue-'));
-  spawnSync('mkdir', ['-p', binDir()]);
+  mkdirSync(binDir(), { recursive: true });
   writeFileSync(join(sandbox, 'github_output'), '');
   writeFileSync(join(sandbox, 'step_summary'), '');
   writeFileSync(join(sandbox, 'pr-body.md'), 'body');
@@ -119,23 +146,10 @@ afterEach(() => {
 describe('push-with-retry.sh', () => {
   function push(rejection: string, env: Record<string, string> = {}): RunResult {
     writeGitShim(rejection);
-    const result = spawnSync('bash', [PUSH_WITH_RETRY, 'origin', 'release/version-1.2.3'], {
-      encoding: 'utf8',
-      cwd: sandbox,
-      env: {
-        ...process.env,
-        PATH: `${binDir()}:${process.env.PATH}`,
-        ATTEMPT_LOG: join(sandbox, 'attempts.log'),
-        MAX_RETRIES: '3',
-        INITIAL_DELAY: '0',
-        ...env,
-      },
+    return runScript(PUSH_WITH_RETRY, {
+      args: ['origin', 'release/version-1.2.3'],
+      env: { MAX_RETRIES: '3', INITIAL_DELAY: '0', ...env },
     });
-    return {
-      status: result.status ?? -1,
-      stdout: result.stdout ?? '',
-      stderr: result.stderr ?? '',
-    };
   }
 
   test('merge-queue rejection exits 75 on the first attempt without retrying', () => {
@@ -161,16 +175,9 @@ describe('push-with-retry.sh', () => {
     const tokenizedRemote = `https://x-access-token:${fakeSecret}@github.com/o/r.git`;
     writeGitShim(`remote: rejected by ${tokenizedRemote}`);
 
-    const result = spawnSync('bash', [PUSH_WITH_RETRY, tokenizedRemote, 'main'], {
-      encoding: 'utf8',
-      cwd: sandbox,
-      env: {
-        ...process.env,
-        PATH: `${binDir()}:${process.env.PATH}`,
-        ATTEMPT_LOG: join(sandbox, 'attempts.log'),
-        MAX_RETRIES: '1',
-        INITIAL_DELAY: '0',
-      },
+    const result = runScript(PUSH_WITH_RETRY, {
+      args: [tokenizedRemote, 'main'],
+      env: { MAX_RETRIES: '1', INITIAL_DELAY: '0' },
     });
 
     expect(result.status).toBe(1);
@@ -203,6 +210,23 @@ describe('retry-release-branch-push.sh', () => {
     expect(result.stdout).toContain('::notice title=Release branch already in merge queue::');
     expect(readSandboxFile('github_output')).toContain('skipped-merge-queue=true');
     expect(readSandboxFile('github_output')).not.toContain('pull-request-number=');
+  });
+
+  test('fails loudly when the pushed branch does not match the computed version', () => {
+    writeGitShim(MERGE_QUEUE_REJECTION);
+
+    // First guard: fires before the gh query, so a matching FAKE_PR_HEAD must
+    // not be able to rescue a branch/version mismatch.
+    const result = run(RETRY_RELEASE_PUSH, {
+      ...baseEnv,
+      NEXT_VERSION: '9.9.9',
+      PR_BODY_FILE: join(sandbox, 'pr-body.md'),
+      FAKE_PR_HEAD: 'release/version-1.2.3',
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain('does not match');
+    expect(readSandboxFile('github_output')).not.toContain('skipped-merge-queue');
   });
 
   test('fails loudly when the queued PR is for a different version', () => {
@@ -249,19 +273,10 @@ describe('retry-release-branch-push.sh', () => {
   test('requires NEXT_VERSION', () => {
     writeGitShim(MERGE_QUEUE_REJECTION);
 
-    const result = spawnSync('bash', [RETRY_RELEASE_PUSH], {
-      encoding: 'utf8',
-      cwd: sandbox,
-      env: {
-        ...process.env,
-        PATH: `${binDir()}:${process.env.PATH}`,
-        RELEASE_BRANCH: 'release/version-1.2.3',
-        PR_TITLE: 'title',
-        PR_BODY_FILE: join(sandbox, 'pr-body.md'),
-        GH_TOKEN: 'token',
-        GITHUB_REPOSITORY: 'lgtm-hq/turbo-themes',
-        NEXT_VERSION: '',
-      },
+    const result = run(RETRY_RELEASE_PUSH, {
+      ...baseEnv,
+      PR_BODY_FILE: join(sandbox, 'pr-body.md'),
+      NEXT_VERSION: '',
     });
 
     expect(result.status).not.toBe(0);
