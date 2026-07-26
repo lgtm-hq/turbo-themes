@@ -216,11 +216,11 @@ var TurboHomepageShowcase = (function(exports) {
 	/**
 	* Theme flavors indexed by ID for quick lookup
 	*/
-	var themesById = /* @__PURE__ */ Object.fromEntries(flavors.map((flavor) => [flavor.id, flavor]));
+	var themesById = /*#__PURE__*/ Object.fromEntries(flavors.map((flavor) => [flavor.id, flavor]));
 	/**
 	* All available theme packages (grouped by vendor)
 	*/
-	var packages = /* @__PURE__ */ Object.fromEntries(Object.entries(tokens.byVendor).map(([vendorId, vendor]) => [vendorId, {
+	var packages = /*#__PURE__*/ Object.fromEntries(Object.entries(tokens.byVendor).map(([vendorId, vendor]) => [vendorId, {
 		id: vendorId,
 		name: vendor.name,
 		homepage: vendor.homepage,
@@ -229,7 +229,7 @@ var TurboHomepageShowcase = (function(exports) {
 	/**
 	* List of all available theme IDs
 	*/
-	var themeIds = /* @__PURE__ */ flavors.map((f) => f.id);
+	var themeIds = /*#__PURE__*/ flavors.map((f) => f.id);
 	[...new Set(flavors.map((f) => f.vendor))];
 	//#endregion
 	//#region packages/core/dist/themes/generated/metadata.js
@@ -270,7 +270,7 @@ var TurboHomepageShowcase = (function(exports) {
 	var DEFAULT_THEME$1 = "catppuccin-mocha";
 	flavors.map((f) => [f.id, f.label]);
 	/** Appearance (light/dark) for each theme. */
-	var THEME_APPEARANCES = /* @__PURE__ */ Object.fromEntries(flavors.map((f) => [f.id, f.appearance]));
+	var THEME_APPEARANCES = /*#__PURE__*/ Object.fromEntries(flavors.map((f) => [f.id, f.appearance]));
 	/**
 	* Ordered list of vendor IDs controlling display order in dropdowns.
 	* Generated from schema/tokens/_vendors.json — do not edit by hand.
@@ -278,7 +278,7 @@ var TurboHomepageShowcase = (function(exports) {
 	var VENDOR_ORDER = VENDOR_ORDER$1;
 	var _missingFromOrder = Object.keys(packages).filter((id) => !VENDOR_ORDER.includes(id));
 	if (_missingFromOrder.length > 0) console.warn(`[metadata] VENDOR_ORDER is missing vendor IDs present in packages: ${_missingFromOrder.join(", ")}. Append them to schema/tokens/_vendors.json and regenerate metadata.`);
-	var VENDOR_GROUPS = /* @__PURE__ */ VENDOR_ORDER.filter((id) => id in packages).map((id) => {
+	var VENDOR_GROUPS = /*#__PURE__*/ VENDOR_ORDER.filter((id) => id in packages).map((id) => {
 		const pkg = packages[id];
 		return {
 			id,
@@ -287,7 +287,7 @@ var TurboHomepageShowcase = (function(exports) {
 		};
 	});
 	/** O(1) flavor lookup by ID, built once at module evaluation time. */
-	var flavorById = /* @__PURE__ */ new Map(flavors.map((f) => [f.id, f]));
+	var flavorById = /*#__PURE__*/ new Map(flavors.map((f) => [f.id, f]));
 	/** Cache for computed short labels. */
 	var shortLabelCache = /* @__PURE__ */ new Map();
 	/**
