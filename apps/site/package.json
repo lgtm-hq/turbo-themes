@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "node scripts/copy-assets.mjs && astro build && node scripts/post-build.mjs && npx pagefind --site dist --glob '**/*.html' --exclude-selectors '[data-pagefind-ignore]' --exclude-selectors 'nav' --exclude-selectors 'footer'",
+    "build": "node scripts/copy-assets.mjs && astro build && node scripts/assert-scoped-styles.mjs && node scripts/post-build.mjs && npx pagefind --site dist --glob '**/*.html' --exclude-selectors '[data-pagefind-ignore]' --exclude-selectors 'nav' --exclude-selectors 'footer'",
     "preview": "astro preview",
     "astro": "astro"
   },
