@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.12] - 2026-07-26
+
+### 🔧 Changed
+
+- Define an HTML lint policy and re-enable html-validate (#812)
+
 ## [0.40.11] - 2026-07-26
 
 ### 🔧 Changed
