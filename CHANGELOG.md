@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.8] - 2026-07-26
+
+### 🤖 Internal
+
+- Bump py-lintro image to 0.91.48 + track it in Renovate (#779)
+
 ## [0.40.7] - 2026-07-26
 
 ### 🔧 Changed
