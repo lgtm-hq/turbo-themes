@@ -429,11 +429,15 @@ test.describe('Accessibility Tests @a11y', () => {
           await waitForStylesheetLoad(homePage.getThemeCss());
           expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
 
-          await test.step('Homepage Get started CTA meets AA contrast', async () => {
-            const cta = homePage.page.getByTestId('home-cta-get-started');
+          /**
+           * Assert a CTA is AA-legible two ways: axe's own `color-contrast`
+           * rule, and the worst-stop ratio that axe cannot see.
+           */
+          const expectCtaContrast = async (testId: string): Promise<void> => {
+            const cta = homePage.page.getByTestId(testId);
             await expect(cta).toBeVisible();
             const results = await new AxeBuilder({ page: homePage.page })
-              .include('[data-testid="home-cta-get-started"]')
+              .include(`[data-testid="${testId}"]`)
               .withRules(['color-contrast'])
               .analyze();
             expect(results.violations, JSON.stringify(results.violations)).toHaveLength(0);
@@ -441,27 +445,19 @@ test.describe('Accessibility Tests @a11y', () => {
             const ratio = await getContrastRatio(cta);
             expect(
               ratio,
-              `home-cta-get-started worst gradient stop under ${theme} (got ${ratio.toFixed(2)})`
+              `${testId} worst gradient stop under ${theme} (got ${ratio.toFixed(2)})`
             ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+          };
+
+          await test.step('Homepage Get started CTA meets AA contrast', async () => {
+            await expectCtaContrast('home-cta-get-started');
           });
 
           await test.step('Examples page primary CTA meets AA contrast', async () => {
             await homePage.page.goto('/examples/');
             await homePage.page.waitForLoadState('domcontentloaded');
             expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
-            const cta = homePage.page.getByTestId('examples-cta-contribute');
-            await expect(cta).toBeVisible();
-            const results = await new AxeBuilder({ page: homePage.page })
-              .include('[data-testid="examples-cta-contribute"]')
-              .withRules(['color-contrast'])
-              .analyze();
-            expect(results.violations, JSON.stringify(results.violations)).toHaveLength(0);
-
-            const ratio = await getContrastRatio(cta);
-            expect(
-              ratio,
-              `examples-cta-contribute worst gradient stop under ${theme} (got ${ratio.toFixed(2)})`
-            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
+            await expectCtaContrast('examples-cta-contribute');
           });
         } finally {
           await homePage.page.unrouteAll({ behavior: 'ignoreErrors' });

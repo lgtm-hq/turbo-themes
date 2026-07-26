@@ -41,7 +41,7 @@
         "$type": "color"
       },
       "primaryText": {
-        "$value": "#0c0c0c",
+        "$value": "#0b0b0b",
         "$type": "color"
       }
     },

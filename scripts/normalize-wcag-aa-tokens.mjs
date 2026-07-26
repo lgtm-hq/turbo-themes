@@ -17,11 +17,18 @@ import { join } from 'node:path';
 
 const AA_N = 4.75; // headroom above axe/WCAG 4.5 floor (sampling + AA edge cases)
 const AA_L = 3.0;
+// Interior samples taken along `--gradient-primary` when auditing CTA ink.
+const GRADIENT_SAMPLES = 20;
 const DIR = 'schema/tokens/themes';
 const EXTREMES = ['#000000', '#ffffff'];
 
 function hexToRgb(hex) {
-  const c = hex.replace('#', '');
+  const c = String(hex).replace('#', '');
+  // Anything else (8-digit alpha hex, rgb(), a colour name) would parse to NaN
+  // and be written back as a corrupt token, so reject it before it spreads.
+  if (!/^([0-9a-f]{3}|[0-9a-f]{6})$/i.test(c)) {
+    throw new Error(`[normalize-wcag-aa] unsupported color value: ${hex}`);
+  }
   const n = c.length === 3 ? c.split('').map((x) => x + x).join('') : c;
   return [0, 2, 4].map((i) => parseInt(n.slice(i, i + 2), 16));
 }
@@ -54,6 +61,22 @@ function mixToward(hex, target, t) {
   const a = hexToRgb(hex);
   const b = hexToRgb(target);
   return rgbToHex(a.map((v, i) => v + (b[i] - v) * t));
+}
+
+/**
+ * Sample a linear gradient into discrete backgrounds.
+ *
+ * Clearing AA at both stops is NOT sufficient: when the ink's luminance falls
+ * between the two stops' luminances, some interior point of the ramp matches it
+ * and contrast collapses there. gruvbox-light-soft did exactly that — 4.75:1
+ * and 4.79:1 at the ends, 4.46:1 at 60% along. Sampling the ramp is what makes
+ * the audit match what a reader actually sees on the button.
+ */
+function gradientRamp(from, to, steps = GRADIENT_SAMPLES) {
+  if (!to) return [from];
+  const out = [];
+  for (let i = 0; i <= steps; i++) out.push(mixToward(from, to, i / steps));
+  return out;
 }
 
 function isExtreme(hex) {
@@ -155,7 +178,11 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
   const path = join(DIR, file);
   const json = JSON.parse(readFileSync(path, 'utf8'));
   const t = json.tokens;
-  if (!t?.background?.base?.$value) continue;
+  if (!t?.background?.base?.$value) {
+    // Silent skips hide an unnormalized theme; name it so CI logs show which.
+    console.warn(`[normalize-wcag-aa] skipping ${file}: missing tokens.background.base`);
+    continue;
+  }
   const base = t.background.base.$value;
   let changed = false;
 
@@ -272,51 +299,6 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
     t.content.blockquote.fg.$value = neu;
   }
 
-  if (t.brand?.primary?.$value) {
-    // CTA gradient stops: brand.primary → state.info (see packages/css generator)
-    let brand = t.brand.primary.$value;
-    let info = t.state?.info?.$value;
-    const existing = t.brand.primaryText?.$value;
-    const preferred = [
-      existing && !isExtreme(existing) ? existing : null,
-      t.text?.inverse?.$value,
-      t.background?.base?.$value,
-    ];
-    const gradientStops = [brand, info].filter(Boolean);
-    let fg = pickInkOn(gradientStops, preferred, AA_N);
-
-    if (!fg) {
-      // No single ink clears both stops — keep themed ink on brand, then
-      // nudge fills just enough so the gradient end is AA too.
-      fg = pickInkOn([brand], preferred, AA_N) ?? bestEffortInk([brand], preferred);
-      if (ratio(fg, brand) < AA_N) {
-        const next = ensureContrastBg(fg, brand, AA_N);
-        if (next.toLowerCase() !== brand.toLowerCase()) {
-          brand = next;
-          t.brand.primary.$value = brand;
-          changed = true;
-          fixCount++;
-        }
-      }
-      if (info && ratio(fg, info) < AA_N) {
-        const next = ensureContrastBg(fg, info, AA_N);
-        if (next.toLowerCase() !== info.toLowerCase()) {
-          info = next;
-          t.state.info.$value = info;
-          changed = true;
-          fixCount++;
-        }
-      }
-    }
-
-    const old = existing ?? '';
-    setColor(t.brand, 'primaryText', fg);
-    if (old.toLowerCase() !== fg.toLowerCase()) {
-      changed = true;
-      fixCount++;
-    }
-  }
-
   if (t.state) {
     for (const key of ['info', 'success', 'warning', 'danger']) {
       if (!t.state[key]?.$value) continue;
@@ -356,6 +338,87 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
         changed = true;
         fixCount++;
       }
+    }
+  }
+
+  // Runs AFTER the state loop on purpose: that loop may nudge `state.info`,
+  // which is the CTA gradient's end stop. Picking the brand ink first would
+  // audit it against a fill that is then moved out from under it.
+  if (t.brand?.primary?.$value) {
+    // CTA gradient stops: brand.primary → state.info (see packages/css generator)
+    let brand = t.brand.primary.$value;
+    let info = t.state?.info?.$value;
+    const existing = t.brand.primaryText?.$value;
+    const preferred = [
+      existing && !isExtreme(existing) ? existing : null,
+      t.text?.inverse?.$value,
+      t.background?.base?.$value,
+    ];
+    // Audit the whole ramp, not just its ends — see gradientRamp().
+    let fg = pickInkOn(gradientRamp(brand, info), preferred, AA_N);
+
+    if (!fg) {
+      // No single ink clears the ramp — keep themed ink on brand, then nudge
+      // the stops apart from the ink until every sampled point is AA. Nudging
+      // both stops away from the ink also pulls the interior with them, since
+      // each sample is a blend of the two.
+      fg = pickInkOn([brand], preferred, AA_N) ?? bestEffortInk([brand], preferred);
+      if (ratio(fg, brand) < AA_N) {
+        const next = ensureContrastBg(fg, brand, AA_N);
+        if (next.toLowerCase() !== brand.toLowerCase()) {
+          brand = next;
+          t.brand.primary.$value = brand;
+          changed = true;
+          fixCount++;
+        }
+      }
+      if (info && ratio(fg, info) < AA_N) {
+        const next = ensureContrastBg(fg, info, AA_N);
+        if (next.toLowerCase() !== info.toLowerCase()) {
+          info = next;
+          t.state.info.$value = info;
+          changed = true;
+          fixCount++;
+        }
+      }
+      // Endpoint nudging can still leave an interior dip when the ink sits
+      // between the two stops' luminances. Push whichever stop hosts the worst
+      // sample further from the ink until the ramp clears.
+      for (let pass = 0; pass < GRADIENT_SAMPLES && info; pass++) {
+        const ramp = gradientRamp(brand, info);
+        const worst = Math.min(...ramp.map((bg) => ratio(fg, bg)));
+        if (worst >= AA_N) break;
+        const target = ratio(fg, brand) <= ratio(fg, info) ? 'brand' : 'info';
+        const current = target === 'brand' ? brand : info;
+        const next = ensureContrastBg(fg, current, AA_N + 0.25 * (pass + 1));
+        if (next.toLowerCase() === current.toLowerCase()) break;
+        if (target === 'brand') {
+          brand = next;
+          t.brand.primary.$value = brand;
+        } else {
+          info = next;
+          t.state.info.$value = info;
+        }
+        changed = true;
+        fixCount++;
+      }
+    }
+
+    // Never write ink the ramp cannot host. Failing loudly here beats shipping
+    // a token that every downstream artifact would then present as audited.
+    const worstOnRamp = Math.min(...gradientRamp(brand, info).map((bg) => ratio(fg, bg)));
+    if (worstOnRamp < AA_N) {
+      throw new Error(
+        `[normalize-wcag-aa] ${file}: brand.primaryText ${fg} only reaches ` +
+          `${worstOnRamp.toFixed(2)}:1 on the ${brand} → ${info} gradient (needs ${AA_N}:1)`
+      );
+    }
+
+    const old = existing ?? '';
+    setColor(t.brand, 'primaryText', fg);
+    if (old.toLowerCase() !== fg.toLowerCase()) {
+      changed = true;
+      fixCount++;
     }
   }
 

@@ -9,6 +9,43 @@ import { getContrastRatio, turboCoreFile } from './test-utils';
 // `--gradient-primary` blends brand.primary → state.info; ink must clear both stops.
 const WCAG_AA_NORMAL = 4.5;
 
+// Interior samples taken along the ramp; mirrors scripts/normalize-wcag-aa-tokens.mjs.
+const GRADIENT_SAMPLES = 20;
+
+/** Parse a `#rgb`/`#rrggbb` colour into 0-255 channels. */
+function hexToRgb(hex: string): [number, number, number] {
+	const raw = hex.replace('#', '');
+	const full =
+		raw.length === 3
+			? raw
+					.split('')
+					.map((c) => c + c)
+					.join('')
+			: raw;
+	return [0, 2, 4].map((i) => Number.parseInt(full.slice(i, i + 2), 16)) as [number, number, number];
+}
+
+/**
+ * Blend two colours in sRGB, matching how browsers interpolate a
+ * `linear-gradient()` between two opaque stops.
+ *
+ * @param from - Gradient start colour
+ * @param to - Gradient end colour
+ * @param position - Fraction along the ramp, 0..1
+ * @returns The blended colour as `#rrggbb`
+ */
+function mixHex(from: string, to: string, position: number): string {
+	const a = hexToRgb(from);
+	const b = hexToRgb(to);
+	return `#${a
+		.map((channel, i) =>
+			Math.round(channel + (b[i] - channel) * position)
+				.toString(16)
+				.padStart(2, '0'),
+		)
+		.join('')}`;
+}
+
 /**
  * Regression gate for #752. `--turbo-text-on-brand` is the ink for any surface
  * painted with `--gradient-primary`. It resolves per theme to the audited
@@ -58,6 +95,27 @@ describe('Text-on-brand (gradient CTA) contrast', () => {
 				expect(
 					ratio,
 					`${flavor.id}: info-stop contrast ${ratio.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1 (fg ${textColor} on ${info})`,
+				).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
+			});
+
+			it('primary CTA ink meets WCAG AA everywhere along the gradient', () => {
+				// The endpoints are not sufficient. When the ink's luminance falls
+				// between the two stops', an interior point of the ramp matches it and
+				// contrast collapses there — gruvbox-light-soft cleared 4.75:1 and
+				// 4.79:1 at the ends while dipping to 4.46:1 at 60% along.
+				let worst = Number.POSITIVE_INFINITY;
+				let worstAt = 0;
+				for (let i = 0; i <= GRADIENT_SAMPLES; i++) {
+					const position = i / GRADIENT_SAMPLES;
+					const ratio = getContrastRatio(textColor as string, mixHex(brand, info, position));
+					if (ratio < worst) {
+						worst = ratio;
+						worstAt = position;
+					}
+				}
+				expect(
+					worst,
+					`${flavor.id}: worst gradient contrast ${worst.toFixed(2)}:1 < ${WCAG_AA_NORMAL}:1 at ${(worstAt * 100).toFixed(0)}% along ${brand} → ${info} (fg ${textColor})`,
 				).toBeGreaterThanOrEqual(WCAG_AA_NORMAL);
 			});
 		});
