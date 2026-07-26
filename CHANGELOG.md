@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.13] - 2026-07-26
+
+### 🔧 Changed
+
+- Declare supported Node range via engines (#818)
+
 ## [0.40.12] - 2026-07-26
 
 ### 🔧 Changed
