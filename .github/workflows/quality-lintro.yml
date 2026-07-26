@@ -22,9 +22,9 @@ jobs:
     uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-quality-lint.yml@66cad82ead0e5d119928c895c7d7da9c837989e5 # v0.52.3
     with:
       job-name: '🛠️ Lintro Code Quality'
-      # py-lintro 0.91.48 pinned to immutable digest for reproducibility
+      # py-lintro 0.91.49 pinned to immutable digest for reproducibility
       # yamllint disable-line rule:line-length
-      lintro-image: ghcr.io/lgtm-hq/py-lintro:0.91.48@sha256:d536f15578f28801c0362c6da1f008368c2144d5dc64223e17b4b05b7db9b919
+      lintro-image: ghcr.io/lgtm-hq/py-lintro:0.91.49@sha256:268e9a5c3c09998c4e42f59309fe47de74bb1dc8e0a7f6d4e88cf07a7cb1d738
       runner-image: ubuntu-24.04
       tooling-ref: '66cad82ead0e5d119928c895c7d7da9c837989e5' # v0.52.3
       egress-policy: block
