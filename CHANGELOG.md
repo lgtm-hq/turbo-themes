@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.10] - 2026-07-26
+
+### 🔧 Changed
+
+- Update dependency ws to 8.21.0 (minor) [security] (#793)
+
 ## [0.40.9] - 2026-07-26
 
 ### 🔧 Changed
