@@ -13,12 +13,14 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const rootDir = join(__dirname, '..');
+const siteDir = join(rootDir, 'apps', 'site');
+const distDir = join(siteDir, 'dist');
 
 /**
  * Check if dist is already built (has index.html).
  */
 function isSiteBuilt() {
-  return existsSync(join(rootDir, 'apps', 'site', 'dist', 'index.html'));
+  return existsSync(join(distDir, 'index.html'));
 }
 
 try {
@@ -26,7 +28,11 @@ try {
   const skipPrep = process.env.SKIP_PREP === '1' || isSiteBuilt();
 
   if (skipPrep) {
-    console.log('Skipping e2e prep (dist already exists)...');
+    console.log(
+      process.env.SKIP_PREP === '1'
+        ? 'Skipping e2e prep (SKIP_PREP=1)...'
+        : 'Skipping e2e prep (dist already exists)...'
+    );
   } else {
     console.log('Running e2e prep (build + Astro build)...');
     execSync('bun run e2e:prep', {
@@ -43,7 +49,9 @@ try {
     console.error(`Invalid PORT: ${process.env.PORT}. Must be a number between 1 and 65535.`);
     process.exit(1);
   }
-  console.log(`Starting astro preview on http://${host}:${port}...`);
+  // Log the exact directory being served so a stale-serve can be diagnosed
+  // from CI logs instead of inferred from screenshots (#670).
+  console.log(`Serving ${distDir} via astro preview on http://${host}:${port}...`);
   const bunxCmd = process.platform === 'win32' ? 'bunx.cmd' : 'bunx';
   const serverArgs = [
     '--no-install',
@@ -55,7 +63,7 @@ try {
     host,
   ];
   const serverProcess = spawn(bunxCmd, serverArgs, {
-    cwd: join(rootDir, 'apps', 'site'),
+    cwd: siteDir,
     stdio: 'inherit',
   });
   // Handle spawn errors

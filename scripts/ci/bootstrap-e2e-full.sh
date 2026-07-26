@@ -21,4 +21,9 @@ ensure_e2e_ruby
 # too short for a cold e2e:prep, so the webServer then only serves the dist.
 bun run e2e:prep
 
+# Serve exactly what the prep above wrote (same contract as
+# bootstrap-e2e-snapshots.sh, so generated baselines and the verifying run
+# render the identical dist).
+export SKIP_PREP=1
+
 exec bun run e2e:ci "$@"
