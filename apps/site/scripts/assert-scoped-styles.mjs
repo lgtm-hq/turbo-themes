@@ -24,6 +24,14 @@ const assetsDir = resolve(siteDir, 'dist/_astro');
 const CANARY_CLASS = 'turbo-scoped-style-canary';
 
 /**
+ * Scoped form Astro emits for the canary rule, e.g.
+ * `.turbo-scoped-style-canary[data-astro-cid-hhjecba5]{...}`. Matching the class
+ * and its scoping attribute together proves the rule kept its own `astro-cid`,
+ * rather than merely sharing a bundle with some other scoped component.
+ */
+const SCOPED_CANARY = new RegExp(`\\.${CANARY_CLASS}\\[data-astro-cid-`);
+
+/**
  * Collect the contents of every CSS asset emitted by the Astro build.
  *
  * @param {string} dir - Directory holding the built assets.
@@ -64,7 +72,7 @@ if (!carrier) {
   fail(`canary rule ".${CANARY_CLASS}" is absent from all ${assets.length} CSS asset(s)`);
 }
 
-if (!carrier.css.includes('astro-cid')) {
+if (!SCOPED_CANARY.test(carrier.css)) {
   fail(`canary rule survived in ${carrier.name} but lost its astro-cid scoping attribute`);
 }
 
