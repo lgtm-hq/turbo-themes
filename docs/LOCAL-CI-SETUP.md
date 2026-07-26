@@ -14,7 +14,7 @@ bun run ci:full
 # Default CI (same as quick)
 bun run ci
 
-# Run CI in Docker (CI-parity: Ubuntu + Ruby 3.3 + Node 20)
+# Run CI in Docker (CI-parity: Ubuntu + Ruby 3.3 + Node 22)
 bun run ci:docker
 
 # Full CI in Docker (includes Lighthouse --full builds)
