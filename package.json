@@ -40,7 +40,7 @@
       "types": "./dist/tokens/index.d.ts",
       "import": "./dist/tokens/index.js"
     },
-    "./tokens.json": "./dist/tokens.json",
+    "./tokens.json": "./dist/tokens/style-dictionary/tokens.json",
     "./catalog": {
       "types": "./dist/catalog/index.d.ts",
       "import": "./dist/catalog/index.js"
