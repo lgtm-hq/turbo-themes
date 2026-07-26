@@ -76,7 +76,10 @@ describe('External package consumption', () => {
     expect(result.themes).toBeGreaterThan(0);
     expect(result.themeIds).toBe(result.themes);
     expect(result.byVendor).toBeGreaterThan(0);
-    expect(result.hasBrandPrimary).toBe(true);
+    expect(result.sampleId, 'meta.themeIds should expose at least one theme id').toBeTruthy();
+    expect(result.hasBrandPrimary, `theme ${result.sampleId} should expose brand.primary`).toBe(
+      true,
+    );
   });
 
   it('can import /catalog subpath and catalog.json without resolution errors', () => {
