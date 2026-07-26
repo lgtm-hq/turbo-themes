@@ -66,6 +66,10 @@
   border: none;
 }
 
+/* `--gradient-primary` paints a masked 2px border ring, not a text surface —
+   card content sits on `--turbo-bg-surface`, so no ink override applies here.
+   Text painted on this gradient must use `--turbo-text-on-brand`, the
+   AA-audited ink (see buttons.css). */
 .card-featured::before {
   content: '';
   position: absolute;

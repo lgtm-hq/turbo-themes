@@ -48,16 +48,21 @@
 }
 
 /* Primary — gradient fill (falls back to solid brand). Ink uses
-   brand-primary-text, gated AA against both gradient stops in the
-   token normalizer. Include `a.btn-primary` (+ hover/focus) so link CTAs
-   beat global `a`/`a:hover` accent rules that share equal specificity
-   and load later on the docs site. */
+   text-on-brand, the token audited at build time against BOTH
+   `--gradient-primary` stops (brand.primary and state.info) so the label
+   clears AA at either end of the ramp in light and dark themes.
+   Include `a.btn-primary` (+ hover/focus) so link CTAs beat global
+   `a`/`a:hover` accent rules that share equal specificity and load later
+   on the docs site. */
 a.btn-primary,
 a.btn-primary:hover,
 a.btn-primary:focus,
 a.btn-primary:focus-visible,
 .btn-primary {
-  color: var(--turbo-brand-primary-text, var(--turbo-text-inverse));
+  color: var(
+    --turbo-text-on-brand,
+    var(--turbo-brand-primary-text, var(--turbo-text-inverse))
+  );
   background: var(--gradient-primary, var(--turbo-brand-primary));
   box-shadow: var(--shadow-md);
 }

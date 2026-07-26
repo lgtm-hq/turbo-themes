@@ -396,6 +396,13 @@ test.describe('Accessibility Tests @a11y', () => {
   /**
    * Regression for #741: Noir `html:root a` used to paint accent ink on
    * `<a class="btn btn-primary">`, making pastel-gradient CTAs unreadable.
+   *
+   * Regression for #752: the light-theme half of the same failure. `axe`
+   * approximates a gradient background with a single flat colour, so it misses
+   * a CTA that only fails at one end of `--gradient-primary`. `getContrastRatio`
+   * returns the WORST stop, which is what actually caught latte at 2.47:1 —
+   * both assertions run, and the light themes here were scoped out in #746
+   * pending the audited `--turbo-text-on-brand` token.
    */
   test.describe('btn-primary anchor contrast', () => {
     const btnThemes = [
@@ -430,6 +437,12 @@ test.describe('Accessibility Tests @a11y', () => {
               .withRules(['color-contrast'])
               .analyze();
             expect(results.violations, JSON.stringify(results.violations)).toHaveLength(0);
+
+            const ratio = await getContrastRatio(cta);
+            expect(
+              ratio,
+              `home-cta-get-started worst gradient stop under ${theme} (got ${ratio.toFixed(2)})`
+            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
           });
 
           await test.step('Examples page primary CTA meets AA contrast', async () => {
@@ -443,6 +456,12 @@ test.describe('Accessibility Tests @a11y', () => {
               .withRules(['color-contrast'])
               .analyze();
             expect(results.violations, JSON.stringify(results.violations)).toHaveLength(0);
+
+            const ratio = await getContrastRatio(cta);
+            expect(
+              ratio,
+              `examples-cta-contribute worst gradient stop under ${theme} (got ${ratio.toFixed(2)})`
+            ).toBeGreaterThanOrEqual(MIN_CONTRAST_NORMAL_TEXT);
           });
         } finally {
           await homePage.page.unrouteAll({ behavior: 'ignoreErrors' });
