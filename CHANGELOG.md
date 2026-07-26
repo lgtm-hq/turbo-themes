@@ -10,6 +10,15 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.6] - 2026-07-26
+
+### 🔧 Changed
+
+- Update react monorepo (#798)
+- Update dependency postcss to 8.5.22 (patch) (#796)
+- Update ruby:4.0-bookworm docker digest to 0b28d5e (#794)
+- Update dependency cssnano to 7.1.9 (patch) (#795)
+
 ## [0.40.5] - 2026-07-25
 
 ### 🐛 Fixed
