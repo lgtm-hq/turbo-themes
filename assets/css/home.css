@@ -24,18 +24,32 @@
   border: 0;
 }
 
+/* Decorative glow band behind the hero. Height is pinned to the viewport rather
+   than stretched over the whole page (`inset: 0`): the glow layers below offset
+   themselves from this box, so a page-height-dependent box made them slide
+   whenever late content grew the document — the dominant CLS source on the
+   homepage (#781). `contain: layout size` keeps the band out of the surrounding
+   layout entirely. */
 .showcase-spotlight {
   pointer-events: none;
   position: absolute;
-  inset: 0;
+  inset: 0 0 auto;
+  height: 120vh;
   z-index: 0;
   overflow: hidden;
+  contain: layout size;
 }
 
 .showcase-spotlight-left,
 .showcase-spotlight-right {
   position: absolute;
-  top: -20%;
+  /* Viewport-relative, never a percentage of the containing block: a percentage
+     re-resolves as the document grows during load and moves both layers, which
+     registers as layout shift (#781). -32vh keeps the rendered glow within a few
+     pixels of the previous offset at the 1280x800 reference viewport. The
+     horizontal offsets stay percentage-based because the containing block width
+     is fixed by the viewport and does not change while the page loads. */
+  top: -32vh;
   width: 55vw;
   height: 120vh;
   will-change: transform;

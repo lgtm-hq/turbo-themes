@@ -10,6 +10,33 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.7] - 2026-07-26
+
+### 🔧 Changed
+
+- Update dependency qs to 6.15.3 (patch) (#797)
+
+## [0.40.6] - 2026-07-26
+
+### 🔧 Changed
+
+- Update react monorepo (#798)
+- Update dependency postcss to 8.5.22 (patch) (#796)
+- Update ruby:4.0-bookworm docker digest to 0b28d5e (#794)
+- Update dependency cssnano to 7.1.9 (patch) (#795)
+
+## [0.40.5] - 2026-07-25
+
+### 🐛 Fixed
+
+- Pin showcase spotlight geometry to the viewport (#784)
+
+## [0.40.4] - 2026-07-25
+
+### 🔧 Changed
+
+- Bump pinned postcss and brace-expansion overrides (#785)
+
 ## [0.40.3] - 2026-07-23
 
 ### 🐛 Fixed
