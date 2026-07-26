@@ -46,7 +46,7 @@ body {
 
 .btn-primary {
   background: var(--gradient-primary, var(--turbo-brand-primary));
-  color: var(--turbo-brand-primary-text); /* ✓ 4.5:1+ on both gradient stops */
+  color: var(--turbo-text-on-brand); /* ✓ 4.5:1+ on both gradient stops */
 }
 
 .btn-success {
