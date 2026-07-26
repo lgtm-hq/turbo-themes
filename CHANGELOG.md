@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.11] - 2026-07-26
+
+### 🔧 Changed
+
+- Update dependency vite to 8.0.16 (patch) [security] (#792)
+
 ## [0.40.10] - 2026-07-26
 
 ### 🔧 Changed
