@@ -129,8 +129,8 @@ tools:
   #   because Prettier is this repo's authoritative HTML formatter and emits
   #   `<meta charset="utf-8" />` and `<!doctype html>`. The defaults of both
   #   rules contradict that output, so leaving them at default would make
-  #   `lintro fmt` and `lintro chk` permanently disagree. Formatting authority
-  #   stays with Prettier; html-validate keeps the correctness rules.
+  #   `bun run lint:fix` and `bun run lint` permanently disagree. Formatting
+  #   authority stays with Prettier; html-validate keeps the correctness rules.
   # - Every other `html-validate:recommended` rule is left at its default and
   #   the sources were fixed instead: duplicate attributes, implicit button
   #   types, a missing password `autocomplete`, and an inline style.
