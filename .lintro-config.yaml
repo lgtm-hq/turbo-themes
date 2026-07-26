@@ -106,6 +106,37 @@ tools:
   bandit:
     enabled: true
 
+  # html-validate - HTML linting (rules in .htmlvalidate.json)
+  #
+  # Scope: the hand-authored `.html` documents under `examples/` plus the two
+  # CI report templates in `scripts/ci/templates/`. Vue single-file components
+  # are out of scope.
+  #
+  # Why Vue SFCs are out of scope: html-validate parses `.vue` files as raw
+  # HTML, so every SFC feature reads as a defect — `<Card>` is reported as an
+  # invalid element name and a lowercase violation, and `<slot />` / `<div />`
+  # as illegal self-closing tags. Making them pass would need a Vue-aware
+  # transform that the pinned py-lintro image does not ship. Vue templates are
+  # already checked by `@vue/compiler-sfc` during `bun run build`, so nothing
+  # goes unchecked. lintro always hands html-validate the discovered `.vue`
+  # files, so the exclusion is declared where html-validate itself resolves it:
+  # `examples/vue/src/.htmlvalidate.json` and
+  # `examples/stackblitz/vue/src/.htmlvalidate.json` set `root: true` with an
+  # empty rule set, which stops config inheritance for those directories.
+  #
+  # Rule policy (see .htmlvalidate.json):
+  # - `void-style` is set to `selfclosing`, and `doctype-style` to `lowercase`,
+  #   because Prettier is this repo's authoritative HTML formatter and emits
+  #   `<meta charset="utf-8" />` and `<!doctype html>`. The defaults of both
+  #   rules contradict that output, so leaving them at default would make
+  #   `bun run lint:fix` and `bun run lint` permanently disagree. Formatting
+  #   authority stays with Prettier; html-validate keeps the correctness rules.
+  # - Every other `html-validate:recommended` rule is left at its default and
+  #   the sources were fixed instead: duplicate attributes, implicit button
+  #   types, a missing password `autocomplete`, and an inline style.
+  html_validate:
+    enabled: true
+
   # Hadolint - Dockerfile linter (defaults above or .hadolint.yaml)
   hadolint:
     enabled: true

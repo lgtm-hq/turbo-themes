@@ -71,11 +71,11 @@
           <h5 class="card-title mb-0">Buttons</h5>
         </div>
         <div class="card-body">
-          <button class="btn btn-primary">Primary</button>
-          <button class="btn btn-success">Success</button>
-          <button class="btn btn-danger">Danger</button>
-          <button class="btn btn-warning">Warning</button>
-          <button class="btn btn-info">Info</button>
+          <button type="button" class="btn btn-primary">Primary</button>
+          <button type="button" class="btn btn-success">Success</button>
+          <button type="button" class="btn btn-danger">Danger</button>
+          <button type="button" class="btn btn-warning">Warning</button>
+          <button type="button" class="btn btn-info">Info</button>
         </div>
       </div>
 
@@ -107,7 +107,12 @@
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" />
+            <input
+              type="password"
+              autocomplete="current-password"
+              class="form-control"
+              id="password"
+            />
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>

@@ -17,3 +17,10 @@ python/.venv/**
 
 # Tailwind example uses @tailwind directives not recognized by standard Stylelint
 examples/tailwind/**
+
+# Sass sources. stylelint-config-standard is a plain-CSS preset and the default
+# PostCSS parser cannot read Sass syntax (// comments, @use, !default), so these
+# only ever produced parse errors. Linting them needs the postcss-scss custom
+# syntax plus a Sass-aware preset; tracked as its own change.
+**/*.scss
+**/*.sass

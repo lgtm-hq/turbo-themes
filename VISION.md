@@ -97,7 +97,7 @@ All theme data originates here. Everything else is generated or derived.
 ```
 TypeScript Tokens (packages/core/)
          │
-         ├──→ JSON (dist/tokens.json) ──→ Any platform can consume
+         ├──→ JSON (dist/tokens/style-dictionary/tokens.json) ──→ Any platform can consume
          │
          ├──→ CSS Package (packages/css/)
          │         └── turbo.css, turbo-core.css, themes/*.css
@@ -218,7 +218,8 @@ interface ThemeTokens {
 ### Adding a New Platform
 
 1. Create generator in `generators/<platform>/`
-2. Generator reads from `dist/tokens.json` or compiled TypeScript
+2. Generator reads from `dist/tokens/style-dictionary/tokens.json` or compiled
+   TypeScript
 3. Output platform-idiomatic code to `<platform>/` directory
 4. Provide idiomatic theme accessor (hook, object, environment, etc.)
 5. Document usage thoroughly

@@ -6,12 +6,13 @@ and handling theme switching.
 
 from __future__ import annotations
 
-from typing import Any
 import json
 from dataclasses import dataclass
-from .themes import THEMES
-from .models import Tokens, ThemeValue
+from typing import Any
+
 from .css_variables import generate_css_variables
+from .models import ThemeValue, Tokens
+from .themes import THEMES
 
 
 @dataclass

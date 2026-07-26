@@ -18,6 +18,10 @@ const SIZE_BUDGETS: Record<string, number> = {
   // Slim picker metadata (~174 bytes/theme; 40 themes ≈ 7.0KB as of the
   // Kanagawa pack); 8KB leaves headroom for the remaining theme packs.
   'dist/catalog.json': 8_192,
+  // Full token payload behind the `@lgtm-hq/turbo-themes/tokens.json` export
+  // (~3KB/theme; 43 themes ≈ 128KB as of the Ayu pack). Also guards that the
+  // file the export maps to actually exists after a build (#810).
+  'dist/tokens/style-dictionary/tokens.json': 180_224, // 176KB
 };
 
 // CSS output size budgets

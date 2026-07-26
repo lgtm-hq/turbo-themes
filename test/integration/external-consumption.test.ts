@@ -67,6 +67,21 @@ describe('External package consumption', () => {
     expect(result.themeIds).toBeGreaterThan(0);
   });
 
+  it('can import tokens.json subpath without resolution errors', () => {
+    const testFile = join(testDir!, 'test-tokens-json.mjs');
+    copyFileSync(join(fixturesDir, 'test-tokens-json.mjs'), testFile);
+
+    const output = execFileSync('node', [testFile], { encoding: 'utf-8' });
+    const result = JSON.parse(output.trim());
+    expect(result.themes).toBeGreaterThan(0);
+    expect(result.themeIds).toBe(result.themes);
+    expect(result.byVendor).toBeGreaterThan(0);
+    expect(result.sampleId, 'meta.themeIds should expose at least one theme id').toBeTruthy();
+    expect(result.hasBrandPrimary, `theme ${result.sampleId} should expose brand.primary`).toBe(
+      true,
+    );
+  });
+
   it('can import /catalog subpath and catalog.json without resolution errors', () => {
     const testFile = join(testDir!, 'test-catalog.mjs');
     copyFileSync(join(fixturesDir, 'test-catalog.mjs'), testFile);

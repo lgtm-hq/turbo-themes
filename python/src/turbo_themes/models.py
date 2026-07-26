@@ -8,9 +8,8 @@ Replaces the complex quicktype-generated types with a simpler implementation.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any
 
 
 class Appearance(Enum):
@@ -28,7 +27,7 @@ class TokenNamespace:
         tokens.text.primary
     """
 
-    def __init__(self, data: Dict[str, Any]) -> None:
+    def __init__(self, data: dict[str, Any]) -> None:
         self._data = data
         for key, value in data.items():
             if isinstance(value, dict):
@@ -43,7 +42,7 @@ class TokenNamespace:
         # Return None for missing attributes instead of raising
         return None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert back to dictionary.
 
         Returns:
@@ -62,7 +61,7 @@ class Tokens:
         tokens.state.info
     """
 
-    _data: Dict[str, Any] = field(repr=False)
+    _data: dict[str, Any] = field(repr=False)
 
     # Core token categories (always present)
     accent: TokenNamespace = field(init=False)
@@ -75,11 +74,11 @@ class Tokens:
     typography: TokenNamespace = field(init=False)
 
     # Optional token categories
-    animation: Optional[TokenNamespace] = field(init=False, default=None)
-    components: Optional[TokenNamespace] = field(init=False, default=None)
-    elevation: Optional[TokenNamespace] = field(init=False, default=None)
-    opacity: Optional[TokenNamespace] = field(init=False, default=None)
-    spacing: Optional[TokenNamespace] = field(init=False, default=None)
+    animation: TokenNamespace | None = field(init=False, default=None)
+    components: TokenNamespace | None = field(init=False, default=None)
+    elevation: TokenNamespace | None = field(init=False, default=None)
+    opacity: TokenNamespace | None = field(init=False, default=None)
+    spacing: TokenNamespace | None = field(init=False, default=None)
 
     def __post_init__(self) -> None:
         """Initialize token namespaces from data dict."""
@@ -90,7 +89,7 @@ class Tokens:
                 setattr(self, key, value)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Tokens:
+    def from_dict(cls, data: dict[str, Any]) -> Tokens:
         """Create Tokens from a dictionary.
 
         Args:
@@ -101,7 +100,7 @@ class Tokens:
         """
         return cls(_data=data)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert back to dictionary.
 
         Returns:
@@ -119,11 +118,11 @@ class ThemeValue:
     vendor: str
     appearance: Appearance
     tokens: Tokens
-    description: Optional[str] = None
-    icon_url: Optional[str] = None
+    description: str | None = None
+    icon_url: str | None = None
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> ThemeValue:
+    def from_dict(cls, data: dict[str, Any]) -> ThemeValue:
         """Create ThemeValue from a dictionary.
 
         Args:
@@ -142,7 +141,7 @@ class ThemeValue:
             icon_url=data.get("iconUrl"),
         )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert back to dictionary.
 
         Returns:
@@ -171,7 +170,7 @@ class ByVendorValue:
     themes: list[str]
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> ByVendorValue:
+    def from_dict(cls, data: dict[str, Any]) -> ByVendorValue:
         """Create ByVendorValue from a dictionary.
 
         Args:
@@ -198,7 +197,7 @@ class Meta:
     dark_themes: int = 0
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> Meta:
+    def from_dict(cls, data: dict[str, Any]) -> Meta:
         """Create Meta from a dictionary.
 
         Args:
@@ -220,16 +219,16 @@ class Meta:
 class TurboThemes:
     """Root container for all themes and metadata."""
 
-    themes: Dict[str, ThemeValue]
-    by_vendor: Optional[Dict[str, ByVendorValue]] = None
-    meta: Optional[Meta] = None
-    schema: Optional[str] = None
-    version: Optional[str] = None
-    description: Optional[str] = None
-    generated: Optional[str] = None
+    themes: dict[str, ThemeValue]
+    by_vendor: dict[str, ByVendorValue] | None = None
+    meta: Meta | None = None
+    schema: str | None = None
+    version: str | None = None
+    description: str | None = None
+    generated: str | None = None
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> TurboThemes:
+    def from_dict(cls, data: dict[str, Any]) -> TurboThemes:
         """Create TurboThemes from a dictionary.
 
         Args:
@@ -267,7 +266,7 @@ class TurboThemes:
         )
 
 
-def turbo_themes_from_dict(data: Dict[str, Any]) -> TurboThemes:
+def turbo_themes_from_dict(data: dict[str, Any]) -> TurboThemes:
     """Create TurboThemes from a dictionary.
 
     Compatibility function matching quicktype output.
@@ -286,8 +285,8 @@ __all__ = [
     "ByVendorValue",
     "Meta",
     "ThemeValue",
-    "Tokens",
     "TokenNamespace",
+    "Tokens",
     "TurboThemes",
     "turbo_themes_from_dict",
 ]

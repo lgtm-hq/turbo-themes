@@ -25,14 +25,14 @@
       true,
       {
         "ignoreProperties": [
-          "text-size-adjust",
-          "mask",
-          "mask-composite",
-          "mask-image",
-          "mask-size",
-          "mask-position",
-          "background-clip",
-          "backdrop-filter"
+          "/^(-\\w+-)?text-size-adjust$/",
+          "/^(-\\w+-)?mask$/",
+          "/^(-\\w+-)?mask-composite$/",
+          "/^(-\\w+-)?mask-image$/",
+          "/^(-\\w+-)?mask-size$/",
+          "/^(-\\w+-)?mask-position$/",
+          "/^(-\\w+-)?background-clip$/",
+          "/^(-\\w+-)?backdrop-filter$/"
         ]
       }
     ],
