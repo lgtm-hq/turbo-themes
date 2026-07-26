@@ -7,11 +7,11 @@ from assertpy import assert_that
 
 from turbo_themes.manager import (
     ThemeManager,
+    cycle_theme,
+    get_current_theme,
     get_theme_manager,
     reset_theme_manager,
     set_theme,
-    get_current_theme,
-    cycle_theme,
 )
 
 

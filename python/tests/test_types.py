@@ -7,11 +7,11 @@ from assertpy import assert_that
 
 from turbo_themes.models import (
     Appearance,
-    TokenNamespace,
-    Tokens,
-    ThemeValue,
     ByVendorValue,
     Meta,
+    ThemeValue,
+    TokenNamespace,
+    Tokens,
     TurboThemes,
     turbo_themes_from_dict,
 )

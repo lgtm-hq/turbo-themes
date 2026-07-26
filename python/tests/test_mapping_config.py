@@ -8,13 +8,13 @@ from assertpy import assert_that
 
 from turbo_themes.mapping_config import (
     CoreMapping,
-    OptionalGroupConfig,
     MappingConfig,
-    load_mapping_config,
-    get_mapping_config,
-    resolve_token_path,
+    OptionalGroupConfig,
     build_token_getter,
     get_core_mappings_as_tuples,
+    get_mapping_config,
+    load_mapping_config,
+    resolve_token_path,
 )
 from turbo_themes.themes import get_theme
 
