@@ -9,6 +9,11 @@
 #                        because the release branch is already queued for
 #                        merging (#817). That is a benign outcome, not a
 #                        failure — every other outcome still fails loudly.
+#                        Defence in depth: the workflow already keeps this step
+#                        from running on the skip path (the retry step exits 0,
+#                        so its outcome is 'success'). This guard exists so the
+#                        classification cannot be turned into a red run by a
+#                        later change to that step condition.
 
 set -euo pipefail
 
