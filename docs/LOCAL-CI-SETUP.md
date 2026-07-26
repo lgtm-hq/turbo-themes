@@ -135,7 +135,7 @@ bundle install
 ### CI Environment
 
 - Ubuntu 24.04
-- Node.js 18/20/22
+- Node.js 22/24
 - Ruby 3.3/3.4
 - GitHub Actions
 
