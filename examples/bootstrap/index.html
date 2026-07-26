@@ -133,8 +133,7 @@
             -->
             <select
               id="theme-selector"
-              class="form-select form-select-sm"
-              style="width: auto"
+              class="form-select form-select-sm w-auto"
               aria-label="Select theme"
             ></select>
           </label>
@@ -150,12 +149,12 @@
         </div>
         <div class="card-body">
           <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-primary">Primary</button>
-            <button class="btn btn-success">Success</button>
-            <button class="btn btn-danger">Danger</button>
-            <button class="btn btn-warning">Warning</button>
-            <button class="btn btn-info">Info</button>
-            <button class="btn btn-secondary">Secondary</button>
+            <button type="button" class="btn btn-primary">Primary</button>
+            <button type="button" class="btn btn-success">Success</button>
+            <button type="button" class="btn btn-danger">Danger</button>
+            <button type="button" class="btn btn-warning">Warning</button>
+            <button type="button" class="btn btn-info">Info</button>
+            <button type="button" class="btn btn-secondary">Secondary</button>
           </div>
         </div>
       </section>
@@ -244,6 +243,7 @@
               <label for="inputPassword" class="form-label">Password</label>
               <input
                 type="password"
+                autocomplete="current-password"
                 class="form-control"
                 id="inputPassword"
                 placeholder="Password"
