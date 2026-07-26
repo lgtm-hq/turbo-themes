@@ -1,9 +1,19 @@
 import fs from 'node:fs';
+import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
 import { flavors } from '../../packages/core/src/tokens/index';
-import { getContrastRatio, turboCoreFile } from './test-utils';
+import { getContrastRatio, projectRoot } from './test-utils';
+
+// The shipped core stylesheet, as authored by packages/css `generateCoreCss`.
+//
+// Deliberately NOT `assets/css/turbo-core.css`: that path has two producers —
+// style-dictionary (`build:tokens`, token vars only) and this file copied over
+// it by `copy-adapters.mjs`. `scripts/local/build.sh` runs the copy in step 4
+// and then re-runs style-dictionary in step 4.5, so the design-system tokens
+// are clobbered and a check there passes locally but fails in CI.
+const packagedCoreCss = path.join(projectRoot, 'packages', 'css', 'dist', 'turbo-core.css');
 
 // Strict WCAG AA normal-text gate for primary CTA labels (4.5:1).
 // `--gradient-primary` blends brand.primary → state.info; ink must clear both stops.
@@ -54,8 +64,8 @@ function mixHex(from: string, to: string, position: number): string {
  * every theme, in both polarities, rather than only the brand-primary stop.
  */
 describe('Text-on-brand (gradient CTA) contrast', () => {
-	it('exposes --turbo-text-on-brand in the generated core CSS', () => {
-		const core = fs.readFileSync(turboCoreFile, 'utf8');
+	it('ships --turbo-text-on-brand in the packaged core CSS', () => {
+		const core = fs.readFileSync(packagedCoreCss, 'utf8');
 		expect(core).toContain('--turbo-text-on-brand:');
 		// It must alias the audited per-theme token, not a hard-coded colour,
 		// or it would stop tracking theme swaps.
