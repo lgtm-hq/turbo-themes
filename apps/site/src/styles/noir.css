@@ -180,9 +180,8 @@ html:root .logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-<<<<<<< HEAD
-=======
-  border-radius: 0;
+  /* #742: brand and nav must not shrink into each other. `border-radius: 0`
+     was dropped here deliberately — theme radii come from site.css now. */
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -190,7 +189,6 @@ html:root .logo {
 html:root .nav {
   flex-shrink: 0;
   min-width: 0;
->>>>>>> origin/main
 }
 
 html:root .logo:hover {
