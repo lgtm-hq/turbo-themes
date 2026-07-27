@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.17] - 2026-07-27
+
+### 🐛 Fixed
+
+- Remove stale ws vulnerability suppression (#834)
+
 ## [0.40.16] - 2026-07-27
 
 ### 🐛 Fixed
