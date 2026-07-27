@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.14] - 2026-07-27
+
+### 🔧 Changed
+
+- Lock file maintenance (#826)
+
 ## [0.40.13] - 2026-07-26
 
 ### 🔧 Changed
