@@ -246,10 +246,16 @@ html[data-design='noir'] .header .nav-dropdown-trigger:hover {
   text-decoration: none;
 }
 
-/* Match site.css active pill — theme brand, not fixed Noir mauve */
+/*
+ * The Noir header is fixed dark chrome (#0a0a0b), so the active pill keeps
+ * Noir ink like the sibling rules above. Light themes' --turbo-brand-primary
+ * is tuned for a light page background and lands at ~3.4-3.7:1 here, which
+ * fails AA (axe flags a[data-testid="nav-home"] under catppuccin-latte,
+ * github-light/dark, everforest-light-soft, rose-pine-dawn, tokyo-night-light).
+ */
 html[data-design='noir'] .header .nav-link.active {
-  color: var(--turbo-brand-primary);
-  background: color-mix(in srgb, var(--turbo-brand-primary) 15%, transparent);
+  color: var(--noir-accent);
+  background: transparent;
 }
 
 html:root .menu-toggle {
