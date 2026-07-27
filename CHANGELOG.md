@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.0] - 2026-07-27
+
+### ✨ Added
+
+- Strict WCAG AA contrast and widened axe coverage (#774)
+
 ## [0.40.17] - 2026-07-27
 
 ### 🐛 Fixed
