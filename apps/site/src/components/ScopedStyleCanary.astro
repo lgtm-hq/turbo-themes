@@ -1,0 +1,21 @@
+---
+/**
+ * Canary component guarding Astro scoped-style delivery (issue #761).
+ *
+ * Renders no markup. Its only job is to contribute one distinctively named
+ * scoped rule to the build so `scripts/assert-scoped-styles.mjs` can prove that
+ * Astro `<style>` blocks still survive the site build pipeline. If a future
+ * PostCSS/PurgeCSS/bundler change silently strips scoped CSS again, the build
+ * fails loudly instead of shipping unstyled pages.
+ *
+ * Do not remove, rename, or add markup to this component without updating the
+ * assertion script.
+ */
+---
+
+<style>
+  /* Canary rule: no element carries this class, so it has no visual effect. */
+  .turbo-scoped-style-canary {
+    outline: 0 solid transparent;
+  }
+</style>
