@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.40.16] - 2026-07-27
+
+### 🐛 Fixed
+
+- Stop Home nav staying active and overlapping the brand (#747)
+
 ## [0.40.15] - 2026-07-27
 
 ### 🤖 Internal
