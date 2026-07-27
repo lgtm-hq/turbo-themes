@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.5] - 2026-07-27
+
+### 🔧 Changed
+
+- Update dependency devalue to 5.8.2 (patch) (#847)
+
 ## [0.41.4] - 2026-07-27
 
 ### 🔧 Changed
