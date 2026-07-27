@@ -14,6 +14,7 @@
   text-decoration: none;
   border: none;
   border-radius: var(--radius-lg);
+  cursor: pointer;
   /* Transform/shadow only — animating color/background during theme swaps
      produces mid-flight contrast that fails WCAG AA (and axe) scans. */
   transition:

@@ -9,6 +9,14 @@ import {
 } from './helpers';
 
 /**
+ * Theme the site boots with (`BaseLayout.astro`). Passing it to
+ * `waitForThemeApplied` makes the guard assert the theme stylesheet has
+ * actually painted; without an id the helper only checks that
+ * `--turbo-bg-base` is non-empty.
+ */
+const DEFAULT_THEME = 'catppuccin-mocha';
+
+/**
  * Runs a strict WCAG AA accessibility scan using axe-core.
  * Includes A + AA tags and previously waived rules (contrast, target-size, etc.).
  *
@@ -46,7 +54,7 @@ test.describe('Accessibility Tests @a11y', () => {
   test('should have no accessibility violations on homepage', async ({ homePage }) => {
     await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
     await homePage.goto();
-    expect(await waitForThemeApplied(homePage.page)).toBe(true);
+    expect(await waitForThemeApplied(homePage.page, DEFAULT_THEME)).toBe(true);
 
     await test.step('Run axe accessibility scan', async () => {
       const accessibilityScanResults = await runAccessibilityScan(homePage.page);
@@ -108,6 +116,9 @@ test.describe('Accessibility Tests @a11y', () => {
       await basePage.page.emulateMedia({ reducedMotion: 'reduce' });
       await basePage.page.goto(pageInfo.path);
       await basePage.page.waitForLoadState('domcontentloaded');
+      // `#turbo-theme-css` is a separate <link>, so without this the scan can
+      // sample pre-theme colors and report phantom contrast violations.
+      expect(await waitForThemeApplied(basePage.page, DEFAULT_THEME)).toBe(true);
 
       await test.step(`Run axe accessibility scan on ${pageInfo.name}`, async () => {
         const accessibilityScanResults = await runAccessibilityScan(basePage.page);

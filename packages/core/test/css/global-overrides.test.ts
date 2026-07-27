@@ -147,6 +147,14 @@ describe('cssGlobalOverrides', () => {
     expect(css).toContain("[data-theme='github-dark']");
   });
 
+  it('gives keyboard-focusable code regions a visible focus ring', () => {
+    const css = cssGlobalOverrides();
+    expect(css).toContain('pre:focus-visible');
+    expect(css).toContain('.highlight pre:focus-visible');
+    expect(css).toContain('pre.highlight:focus-visible');
+    expect(css).toContain('outline: 2px solid var(--turbo-brand-primary, currentColor)');
+  });
+
   it('contains select theme styling', () => {
     const css = cssGlobalOverrides();
     expect(css).toContain('.select.is-theme select');

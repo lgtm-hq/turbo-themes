@@ -188,6 +188,7 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
 
   const bump = (label, oldVal, neu) => {
     if (oldVal.toLowerCase() !== neu.toLowerCase()) {
+      console.log(`[normalize-wcag-aa] ${file}: ${label} ${oldVal} -> ${neu}`);
       changed = true;
       fixCount++;
     }
@@ -332,6 +333,17 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
           }
         }
       }
+      // Same rule as the brand ramp below: never write ink the fill cannot
+      // host. Both nudge attempts can leave `ratio(fg, bg) < AA_N` (e.g.
+      // `ensureContrastBg` returns `bg` unchanged because the fill is already
+      // at an extreme), which would ship a token that merely looks audited.
+      if (ratio(fg, bg) < AA_N) {
+        throw new Error(
+          `[normalize-wcag-aa] ${file}: state.${textKey} ${fg} only reaches ` +
+            `${ratio(fg, bg).toFixed(2)}:1 on state.${key} ${bg} (needs ${AA_N}:1)`
+        );
+      }
+
       const old = existing ?? '';
       setColor(t.state, textKey, fg);
       if (old.toLowerCase() !== fg.toLowerCase()) {
@@ -417,6 +429,27 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.tokens.json'))) {
     const old = existing ?? '';
     setColor(t.brand, 'primaryText', fg);
     if (old.toLowerCase() !== fg.toLowerCase()) {
+      changed = true;
+      fixCount++;
+    }
+
+    // The ramp work above can move `state.info`, but `state.infoText` was
+    // picked against the pre-nudge fill. Re-audit it so info/infoText cannot
+    // silently drop below AA while the brand assertion still passes.
+    const finalInfo = t.state?.info?.$value;
+    const infoInk = t.state?.infoText?.$value;
+    if (finalInfo && infoInk && ratio(infoInk, finalInfo) < AA_N) {
+      const repicked =
+        pickInkOn([finalInfo], [infoInk, t.text?.inverse?.$value, t.text?.primary?.$value], AA_N) ??
+        bestEffortInk([finalInfo], EXTREMES);
+      if (ratio(repicked, finalInfo) < AA_N) {
+        throw new Error(
+          `[normalize-wcag-aa] ${file}: state.infoText cannot reach ${AA_N}:1 on the ` +
+            `post-gradient state.info ${finalInfo} (best ${repicked} = ` +
+            `${ratio(repicked, finalInfo).toFixed(2)}:1)`
+        );
+      }
+      setColor(t.state, 'infoText', repicked);
       changed = true;
       fixCount++;
     }

@@ -97,9 +97,8 @@ html[data-design='noir'] body {
   background-color: var(--noir-bg-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition:
-    background-color var(--transition-slow),
-    color var(--transition-slow);
+  /* No color/background transition: theme swaps would otherwise animate
+     through a mid-flight blend that fails WCAG AA under axe. */
 }
 
 html[data-design='noir'] h1,
@@ -158,9 +157,7 @@ html:root .header {
   background: var(--noir-bg-base);
   backdrop-filter: none;
   border-bottom: 1px solid var(--noir-border-section);
-  transition:
-    background-color var(--transition-slow),
-    border-color var(--transition-slow);
+  transition: border-color var(--transition-slow);
 }
 
 html:root .header-content {
@@ -245,9 +242,7 @@ html[data-design='noir'] .header .nav-dropdown-trigger {
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition:
-    color var(--transition-fast),
-    background-color var(--transition-fast);
+  /* No color/background transition — see the body rule above. */
 }
 
 html[data-design='noir'] .header .nav-link:hover,
@@ -266,7 +261,7 @@ html[data-design='noir'] .header .nav-dropdown-trigger:hover {
  */
 html[data-design='noir'] .header .nav-link.active {
   color: var(--noir-accent);
-  background: transparent;
+  background: color-mix(in srgb, var(--noir-accent) 14%, transparent);
 }
 
 html:root .menu-toggle {
@@ -397,7 +392,6 @@ html[data-design='noir'] .footer .footer-links a {
   color: var(--noir-text-secondary);
   font-size: 0.875rem;
   text-decoration: none;
-  transition: color var(--transition-fast);
 }
 
 html[data-design='noir'] .footer .footer-col a:hover,

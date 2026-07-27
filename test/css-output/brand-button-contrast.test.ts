@@ -25,6 +25,12 @@ const GRADIENT_SAMPLES = 20;
 /** Parse a `#rgb`/`#rrggbb` colour into 0-255 channels. */
 function hexToRgb(hex: string): [number, number, number] {
 	const raw = hex.replace('#', '');
+	// Mirrors the guard in scripts/normalize-wcag-aa-tokens.mjs: an 8-digit
+	// alpha hex or a non-hex value would parse to NaN channels and make every
+	// downstream assertion vacuously pass instead of failing loudly.
+	if (!/^([0-9a-f]{3}|[0-9a-f]{6})$/i.test(raw)) {
+		throw new Error(`unsupported color value: ${hex}`);
+	}
 	const full =
 		raw.length === 3
 			? raw
@@ -77,7 +83,9 @@ describe('Text-on-brand (gradient CTA) contrast', () => {
 		expect(appearances.has('light')).toBe(true);
 		expect(appearances.has('dark')).toBe(true);
 		// Guard against the matrix silently collapsing to a handful of themes.
-		expect(flavors.length).toBeGreaterThanOrEqual(37);
+		// Keep in step with the flavor count documented in
+		// test/integration/bundle-size.test.ts.
+		expect(flavors.length).toBeGreaterThanOrEqual(43);
 	});
 
 	for (const flavor of flavors) {
