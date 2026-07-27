@@ -193,15 +193,16 @@ html:root .nav {
 
 /*
  * Phone layout: let the brand wrap to two lines again. #742/#747 added
- * `flex-shrink: 0` + `white-space: nowrap` to stop the brand and nav
- * overlapping on desktop; at 375px that same rule pushed the theme
- * selector off the right edge of the viewport. Relax it below the 768px
- * breakpoint only — desktop keeps the no-shrink brand.
+ * `flex-shrink: 0` + `white-space: nowrap` (here and in site.css) to stop
+ * the brand and nav overlapping on desktop; at 375px that same rule kept
+ * the brand on one line and pushed the theme selector off the right edge
+ * of the viewport. Relax it below the 768px breakpoint only — desktop
+ * keeps the no-shrink brand. Mirrored in assets/css/noir.css, which is
+ * the copy BaseLayout actually links.
  */
 @media (max-width: 767px) {
   html:root .logo {
     flex-shrink: 1;
-    min-width: 0;
     white-space: normal;
   }
 }

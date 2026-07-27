@@ -198,6 +198,22 @@ html:root .logo-text {
 }
 
 /*
+ * Phone layout: let the brand wrap to two lines again. site.css pins
+ * `.logo` to `flex-shrink: 0` + `white-space: nowrap` (#742/#747) so the
+ * brand and nav cannot overlap on desktop; at 375px that keeps the brand
+ * on one line and pushes the theme selector off the right edge of the
+ * viewport. Noir chrome loads after site.css, so relaxing it here below
+ * the 768px breakpoint restores the wrapped phone brand while desktop
+ * keeps the no-shrink rule.
+ */
+@media (max-width: 767px) {
+  html:root .logo {
+    flex-shrink: 1;
+    white-space: normal;
+  }
+}
+
+/*
  * Do not set `display` here — site.css owns desktop flex + the mobile
  * `display: none` / `.open` drawer. Noir loads after site.css; an
  * unconditional `display: flex` kept the mobile menu permanently open
