@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.2] - 2026-07-27
+
+### 🔧 Changed
+
+- Update dependency postcss to 8.5.23 (patch) (#841)
+
 ## [0.41.1] - 2026-07-27
 
 ### 🐛 Fixed
