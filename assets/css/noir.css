@@ -164,7 +164,7 @@ html:root .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1.25rem;
+  gap: 1rem;
   padding: 0.875rem 1.5rem;
   max-width: var(--container-wide, 1440px);
   margin: 0 auto;
@@ -180,31 +180,6 @@ html:root .logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  /* #742: brand and nav must not shrink into each other. `border-radius: 0`
-     was dropped here deliberately — theme radii come from site.css now. */
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-html:root .nav {
-  flex-shrink: 0;
-  min-width: 0;
-}
-
-/*
- * Phone layout: let the brand wrap to two lines again. #742/#747 added
- * `flex-shrink: 0` + `white-space: nowrap` (here and in site.css) to stop
- * the brand and nav overlapping on desktop; at 375px that same rule kept
- * the brand on one line and pushed the theme selector off the right edge
- * of the viewport. Relax it below the 768px breakpoint only — desktop
- * keeps the no-shrink brand. Mirrored in assets/css/noir.css, which is
- * the copy BaseLayout actually links.
- */
-@media (max-width: 767px) {
-  html:root .logo {
-    flex-shrink: 1;
-    white-space: normal;
-  }
 }
 
 html:root .logo:hover {
@@ -220,6 +195,22 @@ html:root .logo-icon {
 
 html:root .logo-text {
   text-transform: none;
+}
+
+/*
+ * Phone layout: let the brand wrap to two lines again. site.css pins
+ * `.logo` to `flex-shrink: 0` + `white-space: nowrap` (#742/#747) so the
+ * brand and nav cannot overlap on desktop; at 375px that keeps the brand
+ * on one line and pushes the theme selector off the right edge of the
+ * viewport. Noir chrome loads after site.css, so relaxing it here below
+ * the 768px breakpoint restores the wrapped phone brand while desktop
+ * keeps the no-shrink rule.
+ */
+@media (max-width: 767px) {
+  html:root .logo {
+    flex-shrink: 1;
+    white-space: normal;
+  }
 }
 
 /*

@@ -48,7 +48,9 @@ export const rosePineSynced: ThemePackage = {
           success: "#286983",
           warning: "#ea9d34",
           danger: "#b4637a",
+          infoText: "#000000",
           warningText: "#000000",
+          dangerText: "#000000",
         },
         border: {
           default: "#dfdad9",
@@ -132,6 +134,7 @@ export const rosePineSynced: ThemePackage = {
           success: "#31748f",
           warning: "#f6c177",
           danger: "#eb6f92",
+          successText: "#ffffff",
         },
         border: {
           default: "#403d52",
@@ -215,6 +218,7 @@ export const rosePineSynced: ThemePackage = {
           success: "#3e8fb0",
           warning: "#f6c177",
           danger: "#eb6f92",
+          successText: "#000000",
         },
         border: {
           default: "#44415a",

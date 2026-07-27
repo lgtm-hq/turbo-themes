@@ -17,6 +17,10 @@
   border-radius: var(--radius-full);
 }
 
+/* `--gradient-primary` is a bare fill here — the value bar never hosts text, so
+   it needs no ink. Labels live in `.progress-wrapper label` on the page
+   background. Text painted on this gradient must use `--turbo-text-on-brand`,
+   the AA-audited ink (see buttons.css). */
 .progress::-webkit-progress-value {
   background: var(--gradient-primary, var(--turbo-brand-primary));
   border-radius: var(--radius-full);
