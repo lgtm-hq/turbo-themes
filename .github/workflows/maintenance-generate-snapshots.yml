@@ -3,6 +3,11 @@
 # (harden-runner block + same allowlist, playwright install --with-deps, apt Ruby
 # via bootstrap-e2e-snapshots.sh). Audit-mode / setup-env / install-without-deps
 # previously produced byte-stable baselines that still failed e2e (#708).
+#
+# Stale-serve guard (#670): e2e/served-build-freshness.spec.ts is tagged @visual,
+# so it runs inside this job's --grep @visual pass and fails it when the served
+# page's theme set differs from the tokens.json the prep build produced. Upload
+# is gated on that success, so a stale render can never become a baseline.
 name: Maintenance - Generate E2E Snapshots
 
 on:
@@ -90,6 +95,8 @@ jobs:
         run: ./scripts/ci/bootstrap-e2e-snapshots.sh
 
       - name: Upload Linux snapshots
+        # Never publish baselines from a run whose freshness guard failed (#670).
+        if: success()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: e2e-snapshots-linux
