@@ -191,6 +191,21 @@ html:root .nav {
   min-width: 0;
 }
 
+/*
+ * Phone layout: let the brand wrap to two lines again. #742/#747 added
+ * `flex-shrink: 0` + `white-space: nowrap` to stop the brand and nav
+ * overlapping on desktop; at 375px that same rule pushed the theme
+ * selector off the right edge of the viewport. Relax it below the 768px
+ * breakpoint only — desktop keeps the no-shrink brand.
+ */
+@media (max-width: 767px) {
+  html:root .logo {
+    flex-shrink: 1;
+    min-width: 0;
+    white-space: normal;
+  }
+}
+
 html:root .logo:hover {
   color: var(--turbo-brand-primary, var(--noir-accent));
   text-decoration: none;
