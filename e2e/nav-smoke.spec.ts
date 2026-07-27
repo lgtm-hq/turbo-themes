@@ -125,28 +125,41 @@ test.describe('Navigation Smoke Tests @smoke', () => {
     }
   });
 
-  test('should not overlap the brand with the first nav pill', async ({ basePage }) => {
-    await basePage.page.setViewportSize({ width: 2000, height: 900 });
-    await basePage.goto('/');
+  // #742 reproduced at constrained desktop widths — wide enough that the full
+  // nav is still rendered (above the 768px mobile-menu breakpoint), narrow
+  // enough that the brand used to be squeezed under the first nav pill. A very
+  // wide viewport has slack to spare and cannot catch the regression.
+  const overlapWidths = [1280, 1024, 900];
 
-    const brand = basePage.page.getByTestId('navbar-brand');
-    const homeLink = basePage.getNavLink('home');
-    await expect(brand).toBeVisible();
-    await expect(homeLink).toBeVisible();
+  for (const width of overlapWidths) {
+    test(`should not overlap the brand with the first nav pill at ${width}px`, async ({
+      basePage,
+    }) => {
+      await basePage.page.setViewportSize({ width, height: 900 });
+      await basePage.goto('/');
 
-    const brandBox = await brand.boundingBox();
-    const homeBox = await homeLink.boundingBox();
-    expect(brandBox, 'brand bounding box').toBeTruthy();
-    expect(homeBox, 'home nav bounding box').toBeTruthy();
+      const brand = basePage.page.getByTestId('navbar-brand');
+      const homeLink = basePage.getNavLink('home');
+      await expect(brand).toBeVisible();
+      await expect(homeLink).toBeVisible();
 
-    const overlaps =
-      brandBox!.x < homeBox!.x + homeBox!.width &&
-      brandBox!.x + brandBox!.width > homeBox!.x &&
-      brandBox!.y < homeBox!.y + homeBox!.height &&
-      brandBox!.y + brandBox!.height > homeBox!.y;
+      const brandBox = await brand.boundingBox();
+      const homeBox = await homeLink.boundingBox();
+      expect(brandBox, 'brand bounding box').toBeTruthy();
+      expect(homeBox, 'home nav bounding box').toBeTruthy();
 
-    expect(overlaps, 'brand and Home nav pill must not intersect').toBe(false);
-  });
+      const overlaps =
+        brandBox!.x < homeBox!.x + homeBox!.width &&
+        brandBox!.x + brandBox!.width > homeBox!.x &&
+        brandBox!.y < homeBox!.y + homeBox!.height &&
+        brandBox!.y + brandBox!.height > homeBox!.y;
+
+      expect(
+        overlaps,
+        `brand and Home nav pill must not intersect at ${width}px`
+      ).toBe(false);
+    });
+  }
 
   test('should navigate back to Home page', async ({ basePage }) => {
     await test.step('First navigate to Components', async () => {
