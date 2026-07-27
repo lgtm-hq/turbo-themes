@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.6] - 2026-07-27
+
+### 🔧 Changed
+
+- Update dependency flatted to 3.4.3 (patch) (#848)
+
 ## [0.41.5] - 2026-07-27
 
 ### 🔧 Changed
