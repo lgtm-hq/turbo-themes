@@ -244,6 +244,7 @@ html:root .header-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--space-lg);
   padding: var(--space-md) var(--space-lg);
   max-width: var(--container-wide);
   margin: 0 auto;
@@ -257,6 +258,8 @@ html:root .logo {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 html:root .logo:hover {
@@ -277,6 +280,8 @@ html:root .nav {
   display: flex;
   align-items: center;
   gap: var(--space-md);
+  flex-shrink: 0;
+  min-width: 0;
 }
 
 html:root .nav-links {
