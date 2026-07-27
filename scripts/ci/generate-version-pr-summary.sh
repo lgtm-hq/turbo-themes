@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 # Generate a GitHub Step Summary for the Release Version PR workflow.
-# Expected env vars: BUMP_NEEDED, NEXT_VERSION, PUSH_FAILED, PUSH_RETRY_TRIGGERED
+# Expected env vars: BUMP_NEEDED, NEXT_VERSION, PUSH_FAILED, PUSH_RETRY_TRIGGERED,
+# SKIPPED_MERGE_QUEUE
 set -euo pipefail
 
 {
   echo "## Release Version PR Status"
   if [ "${BUMP_NEEDED:-}" = "true" ]; then
-    if [ "${PUSH_FAILED:-}" = "true" ]; then
+    if [ "${SKIPPED_MERGE_QUEUE:-}" = "true" ]; then
+      echo "⏭️ **Skipped** — release branch for v${NEXT_VERSION} is already in the merge queue."
+      echo ""
+      echo "The queued PR already carries this version bump, so the push was not needed."
+      echo "Merging it triggers a fresh run that recomputes the next version."
+    elif [ "${PUSH_FAILED:-}" = "true" ]; then
       echo "❌ **Push failed** — release branch for v${NEXT_VERSION} could not be pushed."
       echo ""
       echo "Both the primary push attempt and the transient-error retry failed."

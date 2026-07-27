@@ -25,6 +25,12 @@ export function hexToRgb(hex: string): [number, number, number] {
   const shortMatch = SHORT_HEX.exec(hex);
   if (shortMatch) {
     const [, r, g, b] = shortMatch;
+    // Capture groups type as `string | undefined`, and interpolating an
+    // `undefined` here would yield `parseInt('undefinedundefined')` — a silent
+    // NaN channel rather than a rejected colour. Take the throw path instead.
+    if (r === undefined || g === undefined || b === undefined) {
+      throw new Error(`Invalid hex color: "${hex}"`);
+    }
     return [
       Number.parseInt(`${r}${r}`, 16),
       Number.parseInt(`${g}${g}`, 16),
@@ -35,6 +41,9 @@ export function hexToRgb(hex: string): [number, number, number] {
   const longMatch = LONG_HEX.exec(hex);
   if (longMatch) {
     const [, r, g, b] = longMatch;
+    if (r === undefined || g === undefined || b === undefined) {
+      throw new Error(`Invalid hex color: "${hex}"`);
+    }
     return [Number.parseInt(r, 16), Number.parseInt(g, 16), Number.parseInt(b, 16)];
   }
 

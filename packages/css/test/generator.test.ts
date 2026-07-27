@@ -207,6 +207,28 @@ describe('generateCoreCss', () => {
 
     expect(css).not.toContain('data-theme');
   });
+
+  // Regression for #752. Asserted against the generator rather than a built
+  // file: `assets/css/turbo-core.css` has two producers (style-dictionary and
+  // this generator, via copy-adapters) and whichever ran last wins, so a
+  // file-based check passes or fails depending on the build entrypoint.
+  it('should expose --turbo-text-on-brand for gradient surfaces', () => {
+    const css = generateCoreCss(mockFlavor);
+
+    expect(css).toContain('--turbo-text-on-brand:');
+    // Must alias the per-theme token the normalizer audits against both
+    // --gradient-primary stops, not a hard-coded colour, or it would stop
+    // tracking theme swaps.
+    expect(css).toMatch(/--turbo-text-on-brand:\s*var\(--turbo-brand-primary-text/);
+  });
+
+  it('should pair --gradient-primary with its audited ink', () => {
+    const css = generateCoreCss(mockFlavor);
+
+    // The ink token is only meaningful next to the gradient it is audited for.
+    expect(css).toContain('--gradient-primary:');
+    expect(css).toContain('--turbo-text-on-brand:');
+  });
 });
 
 describe('generateCssVarsFromTokens - optional tokens', () => {

@@ -60,7 +60,7 @@ export function contrastRatio(fg, bg) {
 
 /**
  * Compute per-state text color overrides where the default inverse text
- * does not meet WCAG AA large-text contrast (3:1) against the state
+ * does not meet WCAG AA normal-text contrast (4.5:1) against the state
  * background color.
  *
  * @param {Record<string, string>} stateColors - e.g. { info, success, warning, danger }
@@ -70,21 +70,21 @@ export function contrastRatio(fg, bg) {
  */
 export function stateTextOverrides(stateColors, inverse, textPrimary) {
   const overrides = {};
-  const WCAG_AA_LARGE = 3.0;
+  const WCAG_AA_NORMAL = 4.5;
   for (const [key, bg] of Object.entries(stateColors)) {
     const invCR = contrastRatio(inverse, bg);
-    if (invCR >= WCAG_AA_LARGE) continue;
+    if (invCR >= WCAG_AA_NORMAL) continue;
     const candidates = [
       { color: textPrimary, cr: contrastRatio(textPrimary, bg) },
       { color: '#ffffff', cr: contrastRatio('#ffffff', bg) },
       { color: '#000000', cr: contrastRatio('#000000', bg) },
     ];
     candidates.sort((a, b) => b.cr - a.cr);
-    if (candidates[0].cr >= WCAG_AA_LARGE) {
+    if (candidates[0].cr >= WCAG_AA_NORMAL) {
       overrides[`${key}Text`] = candidates[0].color;
     } else {
       console.warn(
-        `[a11y] ${key}: no candidate meets WCAG AA Large (${WCAG_AA_LARGE}:1) on ${bg} — best: ${candidates[0].color} (${candidates[0].cr.toFixed(2)}:1)`,
+        `[a11y] ${key}: no candidate meets WCAG AA (${WCAG_AA_NORMAL}:1) on ${bg} — best: ${candidates[0].color} (${candidates[0].cr.toFixed(2)}:1)`,
       );
     }
   }

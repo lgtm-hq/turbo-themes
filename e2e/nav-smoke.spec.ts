@@ -105,6 +105,62 @@ test.describe('Navigation Smoke Tests @smoke', () => {
     await testNavigation(basePage, 'themes', /\/themes\/?$/, ['home', 'components']);
   });
 
+  test('should keep exactly one active nav link per section page', async ({
+    basePage,
+  }) => {
+    const pages: Array<{ path: string; expected: 'home' | 'themes' | 'examples' }> = [
+      { path: '/', expected: 'home' },
+      { path: '/themes/', expected: 'themes' },
+      { path: '/examples/', expected: 'examples' },
+    ];
+
+    for (const { path, expected } of pages) {
+      await test.step(`${path}: exactly one active nav link matching ${expected}`, async () => {
+        await basePage.goto(path);
+        const activeLinks = basePage.page.locator('nav a.nav-link.active');
+        await expect(activeLinks).toHaveCount(1);
+        await expect(basePage.getNavLink(expected)).toHaveClass(/active/);
+        await expect(activeLinks.first()).toHaveAttribute('aria-current', 'page');
+      });
+    }
+  });
+
+  // #742 reproduced at constrained desktop widths — wide enough that the full
+  // nav is still rendered (above the 768px mobile-menu breakpoint), narrow
+  // enough that the brand used to be squeezed under the first nav pill. A very
+  // wide viewport has slack to spare and cannot catch the regression.
+  const overlapWidths = [1280, 1024, 900];
+
+  for (const width of overlapWidths) {
+    test(`should not overlap the brand with the first nav pill at ${width}px`, async ({
+      basePage,
+    }) => {
+      await basePage.page.setViewportSize({ width, height: 900 });
+      await basePage.goto('/');
+
+      const brand = basePage.page.getByTestId('navbar-brand');
+      const homeLink = basePage.getNavLink('home');
+      await expect(brand).toBeVisible();
+      await expect(homeLink).toBeVisible();
+
+      const brandBox = await brand.boundingBox();
+      const homeBox = await homeLink.boundingBox();
+      expect(brandBox, 'brand bounding box').toBeTruthy();
+      expect(homeBox, 'home nav bounding box').toBeTruthy();
+
+      const overlaps =
+        brandBox!.x < homeBox!.x + homeBox!.width &&
+        brandBox!.x + brandBox!.width > homeBox!.x &&
+        brandBox!.y < homeBox!.y + homeBox!.height &&
+        brandBox!.y + brandBox!.height > homeBox!.y;
+
+      expect(
+        overlaps,
+        `brand and Home nav pill must not intersect at ${width}px`
+      ).toBe(false);
+    });
+  }
+
   test('should navigate back to Home page', async ({ basePage }) => {
     await test.step('First navigate to Components', async () => {
       await basePage.navigateToPage('components');
