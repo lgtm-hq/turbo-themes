@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.1] - 2026-07-27
+
+### 🐛 Fixed
+
+- Stop inherited PurgeCSS config from stripping Astro scoped styles (#825)
+
 ## [0.41.0] - 2026-07-27
 
 ### ✨ Added
