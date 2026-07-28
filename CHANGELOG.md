@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.10] - 2026-07-28
+
+### 🔧 Changed
+
+- Update dependency uuid to 14.0.1 (patch) (#857)
+
 ## [0.41.9] - 2026-07-28
 
 ### 🔧 Changed
