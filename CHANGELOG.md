@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.7] - 2026-07-28
+
+### 🔧 Changed
+
+- Update dependency picomatch to 4.0.5 (patch) (#851)
+
 ## [0.41.6] - 2026-07-27
 
 ### 🔧 Changed
