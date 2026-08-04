@@ -23,5 +23,5 @@ export default defineConfig({
       '@lgtm-hq/turbo-themes-core/themes/types': resolve(__dirname, '../../core/dist/themes/types.js'),
     },
   },
-  plugins: [dts({ rollupTypes: true })],
+  plugins: [dts({ bundleTypes: true })],
 });

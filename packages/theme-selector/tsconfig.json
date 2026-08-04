@@ -7,7 +7,6 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "baseUrl": ".",
     "paths": {
       "@lgtm-hq/turbo-themes-core": ["../core/src/index.ts"],
       "@lgtm-hq/turbo-themes-core/*": ["../core/src/*"]

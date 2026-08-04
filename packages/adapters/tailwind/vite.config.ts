@@ -24,5 +24,5 @@ export default defineConfig({
       '@lgtm-hq/turbo-themes-core': resolve(__dirname, '../../core/dist/index.js'),
     },
   },
-  plugins: [dts({ rollupTypes: true })],
+  plugins: [dts({ bundleTypes: true })],
 });

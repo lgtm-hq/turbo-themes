@@ -16,7 +16,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
     "paths": {
       "@lgtm-hq/turbo-themes": ["../../packages/core/dist"],
       "@lgtm-hq/turbo-themes-core/*": ["../../packages/core/dist/*"]
