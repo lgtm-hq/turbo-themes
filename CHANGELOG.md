@@ -10,6 +10,20 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.14] - 2026-08-04
+
+### 🐛 Fixed
+
+- Update dependency astro to 7.1.6 (patch) (#878)
+
+### 🔧 Changed
+
+- Pin dependency typescript to 5.9.3 (#880)
+
+### 🤖 Internal
+
+- Run typedoc against typescript 5.9 via isolated docs env (#876)
+
 ## [0.41.13] - 2026-08-04
 
 ### 🔧 Changed
