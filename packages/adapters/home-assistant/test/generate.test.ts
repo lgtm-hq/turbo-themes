@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import yaml from 'js-yaml';
+import { load } from 'js-yaml';
 import { flavors } from '@lgtm-hq/turbo-themes-core';
 import { generateHomeAssistantThemes } from '../src/emitter.js';
 import { REQUIRED_KEYS } from '../src/mapping.js';
 import { AUTO_THEME_PAIRINGS } from '../src/pairings.js';
 
 const output = generateHomeAssistantThemes();
-const parsed = yaml.load(output) as Record<string, Record<string, unknown>>;
+const parsed = load(output) as Record<string, Record<string, unknown>>;
 
 describe('generateHomeAssistantThemes', () => {
   it('starts with the generated-file header', () => {
