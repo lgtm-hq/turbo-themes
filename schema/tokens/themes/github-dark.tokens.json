@@ -37,13 +37,17 @@
     },
     "brand": {
       "primary": {
-        "$value": "#1f6feb",
+        "$value": "#1e6de6",
+        "$type": "color"
+      },
+      "primaryText": {
+        "$value": "#ffffff",
         "$type": "color"
       }
     },
     "state": {
       "info": {
-        "$value": "#4493f8",
+        "$value": "#3573c1",
         "$type": "color"
       },
       "success": {
@@ -59,11 +63,19 @@
         "$type": "color"
       },
       "successText": {
-        "$value": "#000000",
+        "$value": "#0d1117",
         "$type": "color"
       },
       "warningText": {
-        "$value": "#000000",
+        "$value": "#0d1117",
+        "$type": "color"
+      },
+      "infoText": {
+        "$value": "#fdfeff",
+        "$type": "color"
+      },
+      "dangerText": {
+        "$value": "#0d1117",
         "$type": "color"
       }
     },

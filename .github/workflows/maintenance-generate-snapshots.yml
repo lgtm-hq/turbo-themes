@@ -3,6 +3,11 @@
 # (harden-runner block + same allowlist, playwright install --with-deps, apt Ruby
 # via bootstrap-e2e-snapshots.sh). Audit-mode / setup-env / install-without-deps
 # previously produced byte-stable baselines that still failed e2e (#708).
+#
+# Stale-serve guard (#670): e2e/served-build-freshness.spec.ts is tagged @visual,
+# so it runs inside this job's --grep @visual pass and fails it when the served
+# page's theme set differs from the tokens.json the prep build produced. Upload
+# is gated on that success, so a stale render can never become a baseline.
 name: Maintenance - Generate E2E Snapshots
 
 on:
@@ -62,7 +67,7 @@ jobs:
             rubygems-downloads.global.ssl.fastly.net:443
 
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           ref: ${{ inputs.branch }}
 
@@ -70,7 +75,7 @@ jobs:
       # (Node + Bun + frozen install + playwright --with-deps), not setup-env
       # (which pulls Ruby via setup-ruby / Python / uv and different packages).
       - name: Setup Node.js
-        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version: '${{ env.NODE_VERSION }}'
 
@@ -90,6 +95,8 @@ jobs:
         run: ./scripts/ci/bootstrap-e2e-snapshots.sh
 
       - name: Upload Linux snapshots
+        # Never publish baselines from a run whose freshness guard failed (#670).
+        if: success()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: e2e-snapshots-linux

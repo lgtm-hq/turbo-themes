@@ -306,6 +306,14 @@ const DESIGN_SYSTEM_TOKENS = `
   /* Gradients (theme-aware) */
   --gradient-primary: linear-gradient(135deg, var(--turbo-brand-primary), var(--turbo-state-info));
   --gradient-surface: linear-gradient(180deg, var(--turbo-bg-surface), var(--turbo-bg-base));
+
+  /* Ink for text painted on --gradient-primary. Resolves per theme because the
+     substituted custom properties are themed; brand-primary-text is audited at
+     build time (scripts/normalize-wcag-aa-tokens.mjs) against BOTH gradient
+     stops (brand.primary and state.info), so it clears AA at either end of the
+     ramp in light and dark themes alike. text-inverse is only a fallback for
+     consumers on a theme build that predates the audited token. */
+  --turbo-text-on-brand: var(--turbo-brand-primary-text, var(--turbo-text-inverse));
 `;
 
 /**

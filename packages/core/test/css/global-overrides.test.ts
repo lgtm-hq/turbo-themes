@@ -140,9 +140,19 @@ describe('cssGlobalOverrides', () => {
 
   it('contains accessibility contrast fixes', () => {
     const css = cssGlobalOverrides();
-    expect(css).toContain("/* Accessibility contrast fixes (Axe) */");
+    expect(css).toContain('/* Accessibility contrast fixes (Axe / WCAG AA) */');
     expect(css).toContain("[data-flavor='catppuccin-latte']");
+    expect(css).toContain("[data-theme='catppuccin-latte']");
     expect(css).toContain("[data-flavor='github-dark']");
+    expect(css).toContain("[data-theme='github-dark']");
+  });
+
+  it('gives keyboard-focusable code regions a visible focus ring', () => {
+    const css = cssGlobalOverrides();
+    expect(css).toContain('pre:focus-visible');
+    expect(css).toContain('.highlight pre:focus-visible');
+    expect(css).toContain('pre.highlight:focus-visible');
+    expect(css).toContain('outline: 2px solid var(--turbo-brand-primary, currentColor)');
   });
 
   it('contains select theme styling', () => {

@@ -32,9 +32,13 @@ env:
 
 jobs:
   # Matrix build legs via the lgtm-ci build-artifact reusable (lgtm-ci#520).
-  # Org ruleset contexts: build / 🏗️ Build & Quality Checks (20) and (22).
-  # Matrix mode appends -<node-version> to the artifact name, so the legs
-  # upload js-dist-20 / js-dist-22; downstream consumers download js-dist-22.
+  # Org ruleset context: build / 🏗️ Build & Quality Checks. Matrix mode
+  # appends -<node-version> to the artifact name, so the leg uploads
+  # js-dist-22, which is what downstream consumers download.
+  #
+  # Node 20 was dropped in #813: it is end-of-life, README and CONTRIBUTING
+  # already advertise Node 22+, every other workflow pins 22 or 24, and
+  # html-validate (enabled in #787) requires Node ^22.22.0 || >= 24.8.0.
   # The node-22-only reporting side effects of the old matrix job (Codecov,
   # coverage comment/badges, Pages coverage-html, SBOM artifact) are not
   # expressible through the reusable's inputs and live in the reporting job.
@@ -43,7 +47,7 @@ jobs:
     uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-build-artifact.yml@ee8484ca71db3a2c2c33da6128bbf2330fcd7c88 # v0.59.2
     with:
       job-name: '🏗️ Build & Quality Checks'
-      node-version-matrix: '["20","22"]'
+      node-version-matrix: '["22"]'
       build-command: ./scripts/ci/bootstrap-build-quick.sh
       artifact-name: js-dist
       artifact-path: dist
@@ -115,7 +119,7 @@ jobs:
             uploader.codecov.io:443
             uploads.github.com:443
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           fetch-depth: ${{ env.CHECKOUT_FETCH_DEPTH }}
 
@@ -145,7 +149,7 @@ jobs:
         run: ./scripts/ci/verify-generated-tokens.sh
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@75cd11691c0faa626561e295848008c8a7dddffe # v5.5.4
+        uses: codecov/codecov-action@0fb7174895f61a3b6b78fc075e0cd60383518dac # v5.5.5
         if: ${{ !env.ACT }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -238,7 +242,7 @@ jobs:
             release-assets.githubusercontent.com:443
 
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           fetch-depth: ${{ env.CHECKOUT_FETCH_DEPTH }}
 
@@ -283,7 +287,7 @@ jobs:
             storage.googleapis.com:443
 
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           fetch-depth: ${{ env.CHECKOUT_FETCH_DEPTH }}
 

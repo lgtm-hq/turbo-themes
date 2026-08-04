@@ -16,5 +16,9 @@ ensure_e2e_ruby
 
 bun run e2e:prep
 
+# The webServer must serve exactly what the prep above wrote. SKIP_PREP=1 makes
+# that explicit instead of relying on e2e-serve.mjs's "dist/index.html exists"
+# heuristic, which silently decides between rebuilding and serving (#670).
+export SKIP_PREP=1
 export UPDATE_SNAPSHOTS=1
 exec bun run e2e --update-snapshots --grep @visual

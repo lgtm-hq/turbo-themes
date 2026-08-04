@@ -52,10 +52,3 @@ reason = "vite 8.0.12 — fix in 8.0.16; dev/build-time only, blocked until vite
 id = "GHSA-v6wh-96g9-6wx3"
 ignoreUntil = 2026-10-04
 reason = "vite 8.0.12 — fix in 8.0.16; dev/build-time only, blocked until vitest/tooling support vite 8.0.16+"
-
-# --- ws: advisory lists no fixed version in the 8.x line ---
-
-[[IgnoredVulns]]
-id = "GHSA-96hv-2xvq-fx4p"
-ignoreUntil = 2026-10-04
-reason = "ws@8.20.1 — advisory fix listed only for the 5.x line; no patched 8.x release yet"

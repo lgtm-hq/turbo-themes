@@ -54,23 +54,34 @@ body {
   color: var(--turbo-text-secondary);
 }
 
-.btn-primary {
+.badge {
   background: var(--turbo-brand-primary);
   color: var(--turbo-text-inverse);
 }
 ```
 
+> `--turbo-text-inverse` is only audited against solid fills. For text on a brand
+> **gradient**, use [`--turbo-text-on-brand`](#brand-variables) instead.
+
 ## Brand Variables
 
-| Variable                | Description                | Example Value |
-| ----------------------- | -------------------------- | ------------- |
-| `--turbo-brand-primary` | Primary brand/accent color | `#89b4fa`     |
+| Variable                     | Description                                     | Example Value |
+| ---------------------------- | ----------------------------------------------- | ------------- |
+| `--turbo-brand-primary`      | Primary brand/accent color                      | `#89b4fa`     |
+| `--turbo-brand-primary-text` | Ink audited for WCAG AA on the brand fill       | `#1e1e2e`     |
+| `--turbo-text-on-brand`      | Ink audited for WCAG AA on `--gradient-primary` | `#1e1e2e`     |
+
+`--turbo-text-on-brand` is the ink to use for text painted on a brand gradient. Unlike
+`--turbo-text-inverse`, it is contrast-checked at build time against **both**
+`--gradient-primary` stops (`--turbo-brand-primary` and `--turbo-state-info`), so labels
+stay AA-legible at either end of the ramp in light and dark themes alike.
 
 ### Usage
 
 ```css
 .btn-primary {
-  background-color: var(--turbo-brand-primary);
+  background: var(--gradient-primary, var(--turbo-brand-primary));
+  color: var(--turbo-text-on-brand);
 }
 
 a {

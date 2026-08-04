@@ -10,6 +10,145 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.12] - 2026-07-28
+
+### 🔧 Changed
+
+- Update npm-vitest to 4.1.10 (patch) (#861)
+
+## [0.41.11] - 2026-07-28
+
+### 🔧 Changed
+
+- Update dependency ws to 8.21.1 (patch) (#859)
+
+## [0.41.10] - 2026-07-28
+
+### 🔧 Changed
+
+- Update dependency uuid to 14.0.1 (patch) (#857)
+
+## [0.41.9] - 2026-07-28
+
+### 🔧 Changed
+
+- Update dependency sharp to 0.35.3 (patch) (#855)
+
+## [0.41.8] - 2026-07-28
+
+### 🔧 Changed
+
+- Update dependency ruby to 4.0.6 (patch) (#853)
+- Update dependency picomatch to 4.0.5 (patch) (#851)
+
+## [0.41.7] - 2026-07-28
+
+### 🔧 Changed
+
+- Update dependency picomatch to 4.0.5 (patch) (#851)
+
+## [0.41.6] - 2026-07-27
+
+### 🔧 Changed
+
+- Update dependency flatted to 3.4.3 (patch) (#848)
+
+## [0.41.5] - 2026-07-27
+
+### 🔧 Changed
+
+- Update dependency devalue to 5.8.2 (patch) (#847)
+
+## [0.41.4] - 2026-07-27
+
+### 🔧 Changed
+
+- Update dependency concurrently to 9.2.4 (patch) (#845)
+
+## [0.41.3] - 2026-07-27
+
+### 🔧 Changed
+
+- Pin dependencies (#843)
+
+## [0.41.2] - 2026-07-27
+
+### 🔧 Changed
+
+- Update dependency postcss to 8.5.23 (patch) (#841)
+
+## [0.41.1] - 2026-07-27
+
+### 🐛 Fixed
+
+- Stop inherited PurgeCSS config from stripping Astro scoped styles (#825)
+
+## [0.41.0] - 2026-07-27
+
+### ✨ Added
+
+- Strict WCAG AA contrast and widened axe coverage (#774)
+
+## [0.40.17] - 2026-07-27
+
+### 🐛 Fixed
+
+- Remove stale ws vulnerability suppression (#834)
+
+## [0.40.16] - 2026-07-27
+
+### 🐛 Fixed
+
+- Stop Home nav staying active and overlapping the brand (#747)
+
+## [0.40.15] - 2026-07-27
+
+### 🤖 Internal
+
+- Fail snapshot generation when the served site is stale (#824)
+
+## [0.40.14] - 2026-07-27
+
+### 🔧 Changed
+
+- Lock file maintenance (#826)
+
+## [0.40.13] - 2026-07-26
+
+### 🔧 Changed
+
+- Declare supported Node range via engines (#818)
+
+## [0.40.12] - 2026-07-26
+
+### 🔧 Changed
+
+- Define an HTML lint policy and re-enable html-validate (#812)
+
+## [0.40.11] - 2026-07-26
+
+### 🔧 Changed
+
+- Update dependency vite to 8.0.16 (patch) [security] (#792)
+
+## [0.40.10] - 2026-07-26
+
+### 🔧 Changed
+
+- Update dependency ws to 8.21.0 (minor) [security] (#793)
+
+## [0.40.9] - 2026-07-26
+
+### 🔧 Changed
+
+- Lock file maintenance (#803)
+
+## [0.40.8] - 2026-07-26
+
+### 🤖 Internal
+
+- Bump py-lintro image to 0.91.48 + track it in Renovate (#779)
+
 ## [0.40.7] - 2026-07-26
 
 ### 🔧 Changed

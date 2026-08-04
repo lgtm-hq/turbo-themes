@@ -181,6 +181,10 @@ const config = defineConfig({
         port: 4173,
         reuseExistingServer: !process.env.CI,
         timeout: 120 * 1000, // 2 minutes for build + serve
+        // Surface which directory is served and whether the prep build was
+        // skipped; without this the server's stdout is discarded and stale
+        // renders are untraceable after the fact (#670).
+        stdout: 'pipe',
       },
 
   // Screenshot and snapshot settings
