@@ -24,7 +24,8 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 - Update dependency yaml to 2.9.0 (minor) (#800)
 - Update dependency @axe-core/playwright to 4.12.1 (minor) (#863)
 - Update dependency postcss to 8.5.25 (patch) (#867)
-- Update security patches: style-dictionary 5.4.4, brace-expansion 5.0.9, fast-uri 3.1.5, postcss 8.5.23 (#864)
+- Update security patches: style-dictionary 5.4.4, brace-expansion 5.0.9, fast-uri
+  3.1.5, postcss 8.5.23 (#864)
 
 ## [0.41.12] - 2026-07-28
 
