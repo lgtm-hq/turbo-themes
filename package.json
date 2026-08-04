@@ -240,7 +240,7 @@
   "overrides": {
     "ajv": "8.20.0",
     "devalue": "5.8.2",
-    "flatted": "3.4.3",
+    "flatted": "3.4.4",
     "picomatch": "4.0.5",
     "yaml": "2.9.0",
     "qs": "6.15.3",
