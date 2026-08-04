@@ -119,7 +119,7 @@ jobs:
             uploader.codecov.io:443
             uploads.github.com:443
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: ${{ env.CHECKOUT_FETCH_DEPTH }}
 
@@ -149,7 +149,7 @@ jobs:
         run: ./scripts/ci/verify-generated-tokens.sh
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@75cd11691c0faa626561e295848008c8a7dddffe # v5.5.4
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         if: ${{ !env.ACT }}
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -160,7 +160,7 @@ jobs:
           verbose: true
 
       - name: Upload coverage HTML for Pages
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: github.ref == 'refs/heads/main' && !env.ACT
         with:
           name: coverage-html
@@ -185,7 +185,7 @@ jobs:
         run: npm run coverage:badges
 
       - name: Upload coverage badges
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always() && !env.ACT
         with:
           name: coverage-badges
@@ -194,7 +194,7 @@ jobs:
           overwrite: true
 
       - name: Upload built site artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always() && !env.ACT
         with:
           name: site-build
@@ -208,7 +208,7 @@ jobs:
         run: ./scripts/ci/generate-sbom.sh
 
       - name: Upload SBOM artifact
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: always() && !env.ACT
         with:
           name: sbom-cyclonedx
@@ -242,7 +242,7 @@ jobs:
             release-assets.githubusercontent.com:443
 
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: ${{ env.CHECKOUT_FETCH_DEPTH }}
 
@@ -287,7 +287,7 @@ jobs:
             storage.googleapis.com:443
 
       - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: ${{ env.CHECKOUT_FETCH_DEPTH }}
 
@@ -298,7 +298,7 @@ jobs:
           skip-ruby: 'true'
 
       - name: Download built JS artifacts
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           # Matrix mode of reusable-build-artifact appends -<node-version>.
           name: js-dist-22
