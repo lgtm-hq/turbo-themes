@@ -174,7 +174,7 @@
     "@isaacs/brace-expansion": "5.0.1",
     "ajv": "8.20.0",
     "astro": "7.1.6",
-    "basic-ftp": "6.0.2",
+    "basic-ftp": "6.2.0",
     "brace-expansion": "5.0.9",
     "devalue": "5.8.2",
     "esbuild": "0.28.1",
@@ -904,7 +904,7 @@
 
     "basic-auth": ["basic-auth@2.0.1", "", { "dependencies": { "safe-buffer": "5.1.2" } }, "sha512-NF+epuEdnUYVlGuhaxbbq+dvJttwLnGY+YixlXlME5KpQ5W3CnXA5cVTneY3SPbPDRkcjMbifrwmFYcClgOZeg=="],
 
-    "basic-ftp": ["basic-ftp@6.0.2", "", {}, "sha512-R6+2Z0XWky9zW2iGyUC8OYG91rwSU+zWS1Iiai9lC31vC1nuHOUbBMeOG5yv5+oZOqnqKvggVkE+UbAoJWWuAg=="],
+    "basic-ftp": ["basic-ftp@6.2.0", "", {}, "sha512-H8eLjhoYPbOI717FLP8fGE7XInkMI7Ucj/ft0fp1avABtSiV5Bb2kYzScnOqlvJZs/KJZypr9Mp5zJmhaPFAEg=="],
 
     "body-parser": ["body-parser@1.20.6", "", { "dependencies": { "bytes": "~3.1.2", "content-type": "~1.0.5", "debug": "2.6.9", "depd": "2.0.0", "destroy": "~1.2.0", "http-errors": "~2.0.1", "iconv-lite": "~0.4.24", "on-finished": "~2.4.1", "qs": "~6.15.1", "raw-body": "~2.5.3", "type-is": "~1.6.18", "unpipe": "~1.0.0" } }, "sha512-p5tAzS57i5MV9fZFDj9LeIiTZEufbSe2eDozP+ElheSUq1m74CRq1jI4mYNDdVs9vQztXFLuk/Gd6BWTdwRJ5g=="],
 
