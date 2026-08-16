@@ -10,7 +10,7 @@
         "@fullhuman/postcss-purgecss": "8.0.0",
         "@lhci/cli": "0.15.1",
         "@playwright/test": "1.59.1",
-        "@primer/primitives": "11.7.1",
+        "@primer/primitives": "11.10.0",
         "@radix-ui/colors": "3.0.0",
         "@rose-pine/palette": "4.0.1",
         "@testing-library/react": "16.3.2",
@@ -608,7 +608,7 @@
 
     "@popperjs/core": ["@popperjs/core@2.11.8", "", {}, "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A=="],
 
-    "@primer/primitives": ["@primer/primitives@11.7.1", "", {}, "sha512-+ch43fCGwMHe22AOvgVEg9UTCbqU3XevnnMzxk7J+jajPA0GouIJPrLFLN00uV7Fp6ZxqTj3F3vxigumEIg6Kw=="],
+    "@primer/primitives": ["@primer/primitives@11.10.0", "", {}, "sha512-ihZxIst4Izry284StKFjpbYvX6R/IBFTLu+qiuAmR93PsKF2hdjoabhSYwKI8iCxOUx94jVP55bI3NoY7STjYQ=="],
 
     "@puppeteer/browsers": ["@puppeteer/browsers@2.13.2", "", { "dependencies": { "debug": "^4.4.3", "extract-zip": "^2.0.1", "progress": "^2.0.3", "proxy-agent": "^6.5.0", "semver": "^7.7.4", "tar-fs": "^3.1.1", "yargs": "^17.7.2" }, "bin": { "browsers": "lib/cjs/main-cli.js" } }, "sha512-5EUZSUIc37H6aIXyWO0Z4y8NlF8NnjgmqeQgOGiswAU7pY0HOo16ho4+alIWmSfdZnjqBRawMsP3I5YqLSn6kw=="],
 
@@ -1540,7 +1540,7 @@
 
     "mute-stream": ["mute-stream@0.0.7", "", {}, "sha512-r65nCZhrbXXb6dXOACihYApHw2Q6pV0M3V0PSxd74N0+D8nzAdEAITq2oAjA1jVnKI+tGvEBUpqiMh0+rW6zDQ=="],
 
-    "nanoid": ["nanoid@3.3.16", "", { "bin": { "nanoid": "bin/nanoid.cjs" } }, "sha512-bzlKTyNJ7+LdGIIwy8ijFpIqEQIvafahV7eYykJ8Cvh42EdJeODoJ6gUJXpQJvej1BddH8OqTXZNE/KfbWAu8Q=="],
+    "nanoid": ["nanoid@3.3.18", "", { "bin": { "nanoid": "bin/nanoid.cjs" } }, "sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w=="],
 
     "negotiator": ["negotiator@0.6.4", "", {}, "sha512-myRT3DiWPHqho5PrJaIRyaMv2kgYf0mUVgBNOYMuCH5Ki1yEiQaf/ZJuQ62nvpc44wL5WDbTX7yGJi1Neevw8w=="],
 
