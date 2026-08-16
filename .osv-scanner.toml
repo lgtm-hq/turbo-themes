@@ -52,3 +52,10 @@ reason = "vite 8.0.12 — fix in 8.0.16; dev/build-time only, blocked until vite
 id = "GHSA-v6wh-96g9-6wx3"
 ignoreUntil = 2026-10-04
 reason = "vite 8.0.12 — fix in 8.0.16; dev/build-time only, blocked until vitest/tooling support vite 8.0.16+"
+
+# --- extract-zip: no fixed release exists (all versions <= 2.0.1 affected) ---
+
+[[IgnoredVulns]]
+id = "GHSA-jmr9-qjv8-65gv"
+ignoreUntil = 2026-10-04
+reason = "extract-zip@2.0.1 — no fixed release; dev-only transitive via @puppeteer/browsers (Lighthouse CI), only extracts trusted Chrome-for-Testing archives"
