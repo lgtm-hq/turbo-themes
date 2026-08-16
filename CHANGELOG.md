@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.18] - 2026-08-16
+
+### 🔧 Changed
+
+- Update dependency esbuild to 0.28.2 (patch) (#891)
+- Update dependency cssnano to 8.0.5 (patch) (#890)
+
 ## [0.41.17] - 2026-08-16
 
 ### 🔧 Changed
