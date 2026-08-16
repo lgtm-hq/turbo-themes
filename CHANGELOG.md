@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.16] - 2026-08-16
+
+### 🔧 Changed
+
+- Update docker/dockerfile:1 docker digest to ecfaec9 (#886)
+
 ## [0.41.15] - 2026-08-16
 
 ### 🔧 Changed
