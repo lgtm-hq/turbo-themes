@@ -171,8 +171,13 @@ export async function takeScreenshotWithMultipleHighlights(
       );
     }
 
-    // Wait briefly to ensure highlights are rendered
-    await page.waitForTimeout(50);
+    // Wait for one frame to ensure rendering is complete
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) => {
+          requestAnimationFrame(() => resolve());
+        })
+    );
 
     // Take screenshot
     await page.screenshot({
