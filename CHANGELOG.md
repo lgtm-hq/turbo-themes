@@ -10,6 +10,37 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.14] - 2026-08-04
+
+### 🐛 Fixed
+
+- Update dependency astro to 7.1.6 (patch) (#878)
+
+### 🔧 Changed
+
+- Pin dependency typescript to 5.9.3 (#880)
+
+### 🤖 Internal
+
+- Run typedoc against typescript 5.9 via isolated docs env (#876)
+
+## [0.41.13] - 2026-08-04
+
+### 🔧 Changed
+
+- Update react monorepo (#873)
+- Update dependency minimatch to 10.2.6 (patch) (#872)
+- Update all major dependencies (major) (#802)
+- Migrate Renovate config (#807)
+- Update dependency js-yaml to 4.3.1 (patch) (#871)
+- Update dependency flatted to 3.4.4 (patch) (#870)
+- Update github-actions (#801)
+- Update dependency yaml to 2.9.0 (minor) (#800)
+- Update dependency @axe-core/playwright to 4.12.1 (minor) (#863)
+- Update dependency postcss to 8.5.25 (patch) (#867)
+- Update security patches: style-dictionary 5.4.4, brace-expansion 5.0.9, fast-uri
+  3.1.5, postcss 8.5.23 (#864)
+
 ## [0.41.12] - 2026-07-28
 
 ### 🔧 Changed
