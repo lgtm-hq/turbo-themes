@@ -10,6 +10,25 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.41.17] - 2026-08-16
+
+### 🔧 Changed
+
+- Update github-actions (#877)
+- Update ruby:4.0-bookworm docker digest to b0bd137 (#888)
+
+## [0.41.16] - 2026-08-16
+
+### 🔧 Changed
+
+- Update docker/dockerfile:1 docker digest to ecfaec9 (#886)
+
+## [0.41.15] - 2026-08-16
+
+### 🔧 Changed
+
+- Update dependency @primer/primitives to 11.10.0 (minor) (#799)
+
 ## [0.41.14] - 2026-08-04
 
 ### 🐛 Fixed
