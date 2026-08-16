@@ -152,7 +152,7 @@ export async function takeScreenshotWithMultipleHighlights(
     for (let i = 0; i < elements.length; i++) {
       const color = highlightColors[i % highlightColors.length];
       await elements[i].evaluate(
-        (el, highlightColor, index) => {
+        (el, { highlightColor, index }) => {
           const box = el.getBoundingClientRect();
           const highlight = document.createElement('div');
           highlight.style.position = 'absolute';
@@ -167,8 +167,7 @@ export async function takeScreenshotWithMultipleHighlights(
           highlight.setAttribute('data-test-highlight', `true-${index}`);
           document.body.appendChild(highlight);
         },
-        color,
-        i
+        { highlightColor: color, index: i }
       );
     }
 
