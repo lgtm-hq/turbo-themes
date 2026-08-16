@@ -19,7 +19,7 @@ export const githubSynced: ThemePackage = {
   },
   source: {
     package: "@primer/primitives",
-    version: "11.7.1",
+    version: "11.10.0",
     repository: "https://github.com/primer/primitives",
   },
   flavors: [
