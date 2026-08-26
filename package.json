@@ -214,7 +214,7 @@
     "ajv-formats": "3.0.1",
     "ayu": "9.0.0",
     "bulma": "1.0.4",
-    "concurrently": "10.0.4",
+    "concurrently": "10.0.5",
     "cssnano": "8.0.5",
     "happy-dom": "20.9.0",
     "html-validate": "11.5.6",
