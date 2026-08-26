@@ -311,7 +311,8 @@ PR opened/updated
   ├── quality-ci-main.yml
   ├── quality-e2e.yml
   ├── reporting-lighthouse-ci.yml
-  └── quality-semantic-pr-title.yml
+  ├── quality-semantic-pr-title.yml
+  └── ai-review.yml (same-repo PRs only; forks skip)
 ```
 
 ### Main Branch Validation (Parallel)
@@ -372,6 +373,9 @@ Workflows use concurrency groups to prevent multiple runs:
 - `pages-coverage` - Coverage deployment (no concurrency)
 - `publish-${{ github.ref }}` - Publish per tag
 - `semantic-release` - One semantic release at a time
+- `ai-review-${{ github.repository }}-${{ github.event.pull_request.number || github.ref }}`
+  — reusable AI Review per consuming-repo PR (`cancel-in-progress: true`;
+  same-repo PRs only)
 
 **cancel-in-progress:** Most workflows cancel in-progress runs when new commits arrive,
 except:
