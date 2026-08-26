@@ -17,6 +17,7 @@ turbo-themes, their triggers, and purposes.
 | quality-theme-sync              | ✅          |             | ✅           |           |        |              |
 | quality-semantic-pr-title       |             |             | ✅           |           |        |              |
 | quality-validate-action-pinning | ✅          |             | ✅           |           |        |              |
+| ai-review                       |             |             | ✅           |           |        |              |
 | deploy-pages                    |             |             |              |           | ✅     | ✅           |
 | release-version-pr              | ✅          |             |              |           | ✅     |              |
 | release-publish-pr              |             | ✅ v*.*.\*  |              |           | ✅     |              |
@@ -65,6 +66,14 @@ turbo-themes, their triggers, and purposes.
 
 **Triggers:** Pull requests (all), Merge queue, Manual  
 **Purpose:** Ensures all GitHub Actions use SHA pinning
+
+#### ai-review.yml
+
+**Triggers:** Pull requests  
+**Purpose:** Org AI review via `lgtm-ci` `reusable-ai-review.yml` (`lintro-review[bot]`)
+
+The introducing PR does not run this workflow (GitHub evaluates `pull_request`
+YAML from the base ref). The AI Review check appears on later PRs.
 
 ### Security
 

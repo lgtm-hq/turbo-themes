@@ -1,0 +1,55 @@
+# SPDX-License-Identifier: MIT
+---
+name: AI Review
+
+# Consumer of lgtm-ci reusable-ai-review.yml (lgtm-ci#893). Reviews PRs with
+# a pinned published lintro and posts as lintro-review[bot].
+#
+# Provider, model, transport, and spend ceiling come from repository
+# Actions variables (LINTRO_AI_PROVIDER / LINTRO_AI_MODEL /
+# LINTRO_AI_TRANSPORT / LINTRO_AI_MAX_COST_USD). Swap providers by
+# changing those variables; no workflow edit needed.
+#
+# INCOMPLETE coverage-at-HEAD always reddens the check (reusable default).
+# A changes-requested verdict does not fail the check (blocking: false).
+#
+# CI caveat: pull_request workflows run from the BASE ref. The PR that
+# introduces this file will not execute it. Proof is the AI Review check
+# on a subsequent PR, or a later workflow_dispatch if one is added.
+
+on:
+  pull_request:
+
+concurrency:
+  # Per-PR group so overlapping pushes cancel the superseded HEAD
+  # instead of racing on review-state artifacts (lgtm-ci#893).
+  group: >-
+    ai-review-${{ github.repository }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  ai-review:
+    # Same-repo PRs only: fork PRs have no secrets and the reusable
+    # skips them anyway; the gate keeps the check from even starting.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    # yamllint disable-line rule:line-length
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-ai-review.yml@62737ac1e3e0a25bd138d2d77d80ae03fb9741c5 # v0.67.0
+    permissions:
+      # Checkout + PR diff. Posting uses the lintro-review App token
+      # minted inside the reusable, not this job grant. actions: read
+      # lets the reusable list/download prior review-state artifacts.
+      contents: read
+      pull-requests: read
+      actions: read
+    secrets:
+      LINTRO_REVIEW_APP_ID: ${{ secrets.LINTRO_REVIEW_APP_ID }}
+      LINTRO_REVIEW_APP_PRIVATE_KEY: ${{ secrets.LINTRO_REVIEW_APP_PRIVATE_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      CODEX_API_KEY: ${{ secrets.CODEX_API_KEY }}
+      CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+    with:
+      tooling-ref: '62737ac1e3e0a25bd138d2d77d80ae03fb9741c5' # v0.67.0
