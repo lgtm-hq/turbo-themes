@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.42.2] - 2026-08-26
+
+### 🔧 Changed
+
+- Update dependency basic-ftp to 6.2.0 (minor) (#882)
+- Update ruby:4.0-bookworm docker digest to b4aa709 (#902)
+
 ## [0.42.1] - 2026-08-26
 
 ### 🔧 Changed
