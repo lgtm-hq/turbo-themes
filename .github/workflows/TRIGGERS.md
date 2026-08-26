@@ -17,6 +17,7 @@ turbo-themes, their triggers, and purposes.
 | quality-theme-sync              | ✅          |             | ✅           |           |        |              |
 | quality-semantic-pr-title       |             |             | ✅           |           |        |              |
 | quality-validate-action-pinning | ✅          |             | ✅           |           |        |              |
+| ai-review                       |             |             | ✅           |           |        |              |
 | deploy-pages                    |             |             |              |           | ✅     | ✅           |
 | release-version-pr              | ✅          |             |              |           | ✅     |              |
 | release-publish-pr              |             | ✅ v*.*.\*  |              |           | ✅     |              |
@@ -65,6 +66,14 @@ turbo-themes, their triggers, and purposes.
 
 **Triggers:** Pull requests (all), Merge queue, Manual  
 **Purpose:** Ensures all GitHub Actions use SHA pinning
+
+#### ai-review.yml
+
+**Triggers:** Pull requests  
+**Purpose:** Org AI review via `lgtm-ci` `reusable-ai-review.yml` (`lintro-review[bot]`)
+
+The introducing PR does not run this workflow (GitHub evaluates `pull_request`
+YAML from the base ref). The AI Review check appears on later PRs.
 
 ### Security
 
@@ -302,7 +311,8 @@ PR opened/updated
   ├── quality-ci-main.yml
   ├── quality-e2e.yml
   ├── reporting-lighthouse-ci.yml
-  └── quality-semantic-pr-title.yml
+  ├── quality-semantic-pr-title.yml
+  └── ai-review.yml (same-repo PRs only; forks skip)
 ```
 
 ### Main Branch Validation (Parallel)
@@ -363,6 +373,9 @@ Workflows use concurrency groups to prevent multiple runs:
 - `pages-coverage` - Coverage deployment (no concurrency)
 - `publish-${{ github.ref }}` - Publish per tag
 - `semantic-release` - One semantic release at a time
+- `ai-review-${{ github.repository }}-${{ github.event.pull_request.number || github.ref }}`
+  — reusable AI Review per consuming-repo PR (`cancel-in-progress: true`;
+  same-repo PRs only)
 
 **cancel-in-progress:** Most workflows cancel in-progress runs when new commits arrive,
 except:
