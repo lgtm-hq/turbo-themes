@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.42.0] - 2026-08-26
+
+### ✨ Added
+
+- Add org AI review via lgtm-ci reusable
+
 ## [0.41.20] - 2026-08-16
 
 ### 🔧 Changed
