@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.42.4] - 2026-08-26
+
+### 🔧 Changed
+
+- Update dependency fast-uri to 3.1.6 (patch) (#908)
+- Update dependency cssnano to 8.0.8 (patch) (#907)
+
 ## [0.42.3] - 2026-08-26
 
 ### 🔧 Changed
