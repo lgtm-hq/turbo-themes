@@ -5,27 +5,21 @@ name: AI Review
 # Consumer of lgtm-ci reusable-ai-review.yml (lgtm-ci#893). Reviews PRs with
 # a pinned published lintro and posts as lintro-review[bot].
 #
-# Provider, model, transport, and spend ceiling come from repository
-# Actions variables (LINTRO_AI_PROVIDER / LINTRO_AI_MODEL /
-# LINTRO_AI_TRANSPORT / LINTRO_AI_MAX_COST_USD). Swap providers by
-# changing those variables; no workflow edit needed.
+# Provider and transport resolve inside the reusable
+# (input → vars.LINTRO_AI_*). Model and max-cost are input-only on the
+# reusable (v0.67.0), so this caller forwards the repository variables.
 #
-# INCOMPLETE coverage-at-HEAD always reddens the check (reusable default).
-# A changes-requested verdict does not fail the check (blocking: false).
+# Per-PR concurrency and INCOMPLETE coverage-at-HEAD gating live in the
+# reusable. Do not repeat that concurrency group here: the same group
+# with cancel-in-progress would let the called workflow cancel the caller.
 #
 # CI caveat: pull_request workflows run from the BASE ref. The PR that
 # introduces this file will not execute it. Proof is the AI Review check
-# on a subsequent PR, or a later workflow_dispatch if one is added.
+# on a subsequent PR.
 
 on:
   pull_request:
-
-concurrency:
-  # Per-PR group so overlapping pushes cancel the superseded HEAD
-  # instead of racing on review-state artifacts (lgtm-ci#893).
-  group: >-
-    ai-review-${{ github.repository }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions: {}
 
@@ -53,3 +47,5 @@ jobs:
       CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
     with:
       tooling-ref: '62737ac1e3e0a25bd138d2d77d80ae03fb9741c5' # v0.67.0
+      model: ${{ vars.LINTRO_AI_MODEL }}
+      max-cost-usd: ${{ vars.LINTRO_AI_MAX_COST_USD }}
