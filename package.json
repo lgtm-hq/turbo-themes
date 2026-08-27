@@ -221,7 +221,7 @@
     "http-server": "14.1.1",
     "husky": "9.1.7",
     "js-yaml": "4.3.1",
-    "lightningcss": "1.32.0",
+    "lightningcss": "1.33.0",
     "lint-staged": "17.3.0",
     "oxfmt": "0.60.0",
     "oxlint": "1.75.0",
