@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.42.5] - 2026-08-27
+
+### 🔧 Changed
+
+- Update dependency @types/react-dom to 19.2.5 (patch) (#910)
+
 ## [0.42.4] - 2026-08-26
 
 ### 🔧 Changed
