@@ -10,6 +10,50 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.42.5] - 2026-08-27
+
+### 🔧 Changed
+
+- Update dependency @types/react-dom to 19.2.5 (patch) (#910)
+
+## [0.42.4] - 2026-08-26
+
+### 🔧 Changed
+
+- Update dependency fast-uri to 3.1.6 (patch) (#908)
+- Update dependency cssnano to 8.0.8 (patch) (#907)
+
+## [0.42.3] - 2026-08-26
+
+### 🔧 Changed
+
+- Update dependency devalue to 5.9.1 (minor) (#883)
+
+## [0.42.2] - 2026-08-26
+
+### 🔧 Changed
+
+- Update dependency basic-ftp to 6.2.0 (minor) (#882)
+- Update ruby:4.0-bookworm docker digest to b4aa709 (#902)
+
+## [0.42.1] - 2026-08-26
+
+### 🔧 Changed
+
+- Update dependency @playwright/test to 1.62.1 (minor) (#881)
+
+## [0.42.0] - 2026-08-26
+
+### ✨ Added
+
+- Add org AI review via lgtm-ci reusable
+
+## [0.41.20] - 2026-08-16
+
+### 🔧 Changed
+
+- Update dependency ws to 8.21.3 (patch) (#896)
+
 ## [0.41.19] - 2026-08-16
 
 ### 🔧 Changed

@@ -4,8 +4,8 @@ var TurboThemeSelector = (function(exports) {
 	var tokens = {
 		$schema: "https://design-tokens.org/schema.json",
 		$description: "Turbo Themes - Flat tokens for 43 themes",
-		$version: "0.41.19",
-		$generated: "39b7daf9b6aebb22326abf375039936cae348e8a2a8c8745d0c983b89b981ebc",
+		$version: "0.42.5",
+		$generated: "3dc872b81f2beb8c82fb01ecde75f946175f74859aac4edf03011d5fc6bd4076",
 		meta: {
 			"themeIds": [
 				"ayu-dark",
