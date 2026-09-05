@@ -220,7 +220,7 @@
     "html-validate": "11.5.6",
     "http-server": "14.1.1",
     "husky": "9.1.7",
-    "js-yaml": "4.3.1",
+    "js-yaml": "4.3.2",
     "lightningcss": "1.33.0",
     "lint-staged": "17.3.0",
     "oxfmt": "0.60.0",
@@ -261,7 +261,7 @@
     "postcss": "8.5.26",
     "ws": "8.21.3",
     "shell-quote": "1.9.0",
-    "js-yaml": "4.3.1",
+    "js-yaml": "4.3.2",
     "fast-uri": "3.1.7",
     "sharp": "0.35.3"
   }
