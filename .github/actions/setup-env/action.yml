@@ -45,7 +45,7 @@ runs:
 
     - name: Setup Ruby
       if: inputs.skip-ruby != 'true'
-      uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1.321.0
+      uses: ruby/setup-ruby@984c0c890880bbf811283d6f09c4607c62d210a4 # v1.323.0
       with:
         ruby-version: ${{ inputs.ruby-version }}
         bundler-cache: true
@@ -61,7 +61,7 @@ runs:
       run: ./scripts/ci/install-ruby-deps.sh
 
     - name: Install uv
-      uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+      uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
       with:
         enable-cache: true
 
