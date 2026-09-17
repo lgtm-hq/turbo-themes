@@ -30,7 +30,7 @@
         "html-validate": "11.15.0",
         "http-server": "14.1.1",
         "husky": "9.1.7",
-        "js-yaml": "5.4.1",
+        "js-yaml": "5.4.2",
         "lightningcss": "1.33.0",
         "lint-staged": "17.5.0",
         "oxfmt": "0.67.0",
@@ -184,7 +184,7 @@
     "follow-redirects": "1.16.0",
     "h3": "2.0.0",
     "happy-dom": "20.14.0",
-    "js-yaml": "5.4.1",
+    "js-yaml": "5.4.2",
     "lodash": "4.18.1",
     "lodash-es": "4.18.1",
     "minimatch": "10.2.6",
@@ -1377,7 +1377,7 @@
 
     "js-tokens": ["js-tokens@10.0.0", "", {}, "sha512-lM/UBzQmfJRo9ABXbPWemivdCW8V2G8FHaHdypQaIy523snUjog0W71ayWXTjiR+ixeMyVHN2XcpnTd/liPg/Q=="],
 
-    "js-yaml": ["js-yaml@5.4.1", "", { "dependencies": { "argparse": "^2.0.1" }, "bin": { "js-yaml": "bin/js-yaml.mjs" } }, "sha512-28R/k+NAjeuf7+CKlTxWZVExJGwVVLwY06DgEnOMz2gEpfNkDcD7QvyiVPT0xy0XXhU8vHsd4Ot42OOPdJG7dQ=="],
+    "js-yaml": ["js-yaml@5.4.2", "", { "dependencies": { "argparse": "^2.0.1" }, "bin": { "js-yaml": "bin/js-yaml.mjs" } }, "sha512-m+aqu+LwO1O6sIopafj8HUVl5aawITwZQe/yHpMCKjaWBaA/d07B/QdMb3529REftiU+RMMHL3Vlsw3hON7vWg=="],
 
     "json-parse-even-better-errors": ["json-parse-even-better-errors@2.3.1", "", {}, "sha512-xyFwyhro/JEof6Ghe2iz2NcXoj2sloNsWr/XsERDK/oiPCfaNhl5ONfp+jQdAZRQQ0IJWNzH9zIZF7li91kh2w=="],
 
