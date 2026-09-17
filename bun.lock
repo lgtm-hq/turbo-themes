@@ -26,7 +26,7 @@
         "bulma": "1.0.4",
         "concurrently": "10.0.5",
         "cssnano": "9.0.4",
-        "happy-dom": "20.14.0",
+        "happy-dom": "20.14.5",
         "html-validate": "11.15.0",
         "http-server": "14.1.1",
         "husky": "9.1.7",
@@ -165,7 +165,7 @@
         "@lgtm-hq/turbo-themes-core": "workspace:*",
       },
       "devDependencies": {
-        "happy-dom": "20.14.0",
+        "happy-dom": "20.14.5",
         "typescript": "7.0.2",
         "vitest": "5.0.0",
       },
@@ -183,7 +183,7 @@
     "flatted": "3.4.4",
     "follow-redirects": "1.16.0",
     "h3": "2.0.0",
-    "happy-dom": "20.14.0",
+    "happy-dom": "20.14.5",
     "js-yaml": "5.4.2",
     "lodash": "4.18.1",
     "lodash-es": "4.18.1",
@@ -1251,7 +1251,7 @@
 
     "h3": ["h3@2.0.0", "", {}, "sha512-3INyyEir2VkWXD3auY+uUL/mqrgYX5ejRdUjtjyd4AOZcoijIyvf6PkBPsn+NFGE5rks2nCcMIOLZGTxpp/A7w=="],
 
-    "happy-dom": ["happy-dom@20.14.0", "", { "dependencies": { "@types/node": ">=20.0.0", "@types/whatwg-mimetype": "^3.0.2", "@types/ws": "^8.18.1", "buffer-image-size": "^0.6.4", "entities": "^7.0.1", "whatwg-mimetype": "^3.0.0", "ws": "^8.21.0" } }, "sha512-4bRh1KzRvKDnFNTlLhzT1RZTpkKhQbQDl9j+7GXszWsvuspYdo29k6OHRf4PwiM6oLb8r/pMWeYiJjkfod5AvQ=="],
+    "happy-dom": ["happy-dom@20.14.5", "", { "dependencies": { "@types/node": ">=20.0.0", "@types/whatwg-mimetype": "^3.0.2", "@types/ws": "^8.18.1", "buffer-image-size": "^0.6.4", "entities": "^7.0.1", "whatwg-mimetype": "^3.0.0", "ws": "^8.21.0" } }, "sha512-x/RzkpWO40bTjIoT30iQtt64FLLmH/iRcUCN2X//bLx7H3ifkdfPXyqsro/OYtqzIAhiLMMA7mmiOR9C3NOKjQ=="],
 
     "has-flag": ["has-flag@5.0.1", "", {}, "sha512-CsNUt5x9LUdx6hnk/E2SZLsDyvfqANZSUq4+D3D8RzDJ2M+HDTIkF60ibS1vHaK55vzgiZw1bEPFG9yH7l33wA=="],
 
