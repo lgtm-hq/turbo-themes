@@ -25,7 +25,7 @@
         "ayu": "9.0.0",
         "bulma": "1.0.4",
         "concurrently": "10.0.5",
-        "cssnano": "9.0.4",
+        "cssnano": "9.0.5",
         "happy-dom": "20.14.5",
         "html-validate": "11.16.0",
         "http-server": "14.1.1",
@@ -1027,7 +1027,7 @@
 
     "cssesc": ["cssesc@3.0.0", "", { "bin": { "cssesc": "bin/cssesc" } }, "sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg=="],
 
-    "cssnano": ["cssnano@9.0.4", "", { "dependencies": { "cssnano-preset-default": "^9.0.4" }, "peerDependencies": { "postcss": "^8.5.28" } }, "sha512-CdXjUnePN8UmFySZ65Oh83DUf/z/VV+yRc86PlMUA4JBJizXiwelynZvfLji+gY/Z94xH+RrCT48wZyqSJdhuw=="],
+    "cssnano": ["cssnano@9.0.5", "", { "dependencies": { "cssnano-preset-default": "^9.0.5" }, "peerDependencies": { "postcss": "^8.5.28" } }, "sha512-D25KanNkgIIcJnFvbm1xinel2YWULKjOao+4pv1m2qCR6KPRxOWh4yRQboxhwVVtifwdVa3cVnSL651sAvHQoA=="],
 
     "cssnano-preset-default": ["cssnano-preset-default@9.0.5", "", { "dependencies": { "browserslist": "^4.29.0", "cssnano-utils": "^7.0.3", "postcss-calc": "^11.2.0", "postcss-colormin": "^9.0.3", "postcss-convert-values": "^9.0.3", "postcss-discard-comments": "^9.0.3", "postcss-discard-duplicates": "^9.0.3", "postcss-discard-empty": "^9.0.3", "postcss-discard-overridden": "^9.0.3", "postcss-merge-longhand": "^9.0.4", "postcss-merge-rules": "^9.0.4", "postcss-minify-font-values": "^9.0.3", "postcss-minify-gradients": "^9.0.3", "postcss-minify-params": "^9.0.3", "postcss-minify-selectors": "^9.0.4", "postcss-normalize-charset": "^9.0.3", "postcss-normalize-display-values": "^9.0.3", "postcss-normalize-positions": "^9.0.3", "postcss-normalize-repeat-style": "^9.0.3", "postcss-normalize-string": "^9.0.3", "postcss-normalize-timing-functions": "^9.0.3", "postcss-normalize-unicode": "^9.0.3", "postcss-normalize-url": "^9.0.3", "postcss-normalize-whitespace": "^9.0.3", "postcss-ordered-values": "^9.0.3", "postcss-reduce-initial": "^9.0.3", "postcss-reduce-transforms": "^9.0.3", "postcss-svgo": "^9.0.3", "postcss-unique-selectors": "^9.0.3" }, "peerDependencies": { "postcss": "^8.5.28" } }, "sha512-psQHWcVYCig5PlA+Ni+l9EFB6ow7RX2CR1rGM5TBsjfP/pFZEyCUK62zZqYBFeR1s4XEQ19qvxlxYkKDERuAoQ=="],
 
