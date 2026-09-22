@@ -10,6 +10,52 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.12] - 2026-09-22
+
+### 🐛 Fixed
+
+- Update dependency astro to 7.3.3 (patch) (#1048)
+- Update dependency astro to 7.3.2 (patch) (#1033)
+
+### 🔧 Changed
+
+- Update dependency @types/node to 26.6.2 (patch) (#1058)
+- Update dependency devalue to 5.9.4 (patch) (#1056)
+- Update dependency style-dictionary to 5.5.4 (patch) (#1054)
+- Update dependency typedoc-plugin-markdown to 4.13.1 (patch) (#1055)
+- Update renovatebot/github-action action to v46.3.2 (patch) (#1053)
+- Update ruby:4.0-bookworm docker digest to 119a36c (#1051)
+- Update dependency cssnano to 9.0.5 (patch) (#1050)
+- Update dependency lgtm-hq/lgtm-ci to v0.74.6 (patch) (#1049)
+- Lock file maintenance (#1047)
+- Update dependency html-validate to 11.16.0 (minor) (#1044)
+- Update dependency @types/node to 26.6.1 (minor) (#1043)
+- Update dependency oxlint to 1.83.0 (minor) (#1045)
+- Update github-actions (#1017)
+- Update react monorepo to 19.3.0 (minor) (#1038)
+- Update dependency oxfmt to 0.68.0 (minor) (#1039)
+- Update dependency lgtm-hq/lgtm-ci to v0.74.5 (patch) (#1037)
+- Update npm-vitest to 5.0.1 (patch) (#1042)
+- Update dependency fast-uri to 4.1.5 (patch) (#1041)
+- Update dependency brace-expansion to 5.0.12 (patch) (#1040)
+- Update dependency vite to 8.3.0 (minor) (#1036)
+- Update dependency oxlint to 1.82.0 (minor) (#1035)
+- Update dependency lgtm-hq/lgtm-ci to v0.74.4 (minor) (#1034)
+- Update dependency yaml to 2.9.1 (patch) (#1032)
+- Update dependency sass to 1.104.1 (patch) (#1031)
+- Update dependency ruby to 4.0.7 (patch) (#1030)
+- Update dependency happy-dom to 20.14.5 (patch) (#1024)
+- Update dependency lint-staged to 17.5.1 (patch) (#1029)
+- Update dependency js-yaml to 5.4.2 (patch) (#1025)
+- Update dependency cssnano to 9.0.4 (patch) (#1023)
+- Update dependency @types/node to 26.5.1 (minor) (#1018)
+- Update dependency html-validate to 11.15.0 (minor) (#1019)
+- Update dependency oxfmt to 0.67.0 (minor) (#1020)
+
+### 🤖 Internal
+
+- Bump dead py-lintro image pin to 0.163.0 (#1027)
+
 ## [0.44.11] - 2026-09-09
 
 ### 🔧 Changed
