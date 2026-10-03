@@ -383,6 +383,26 @@ describe('check-bun-version-sync.sh', () => {
       expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
     });
 
+    test.each([
+      ['3<<EOF', 'RUN 3<<EOF cat', 'EOF'],
+      ['2<<-EOF', 'RUN 2<<-EOF cat', '\tEOF'],
+    ])('a file-descriptor heredoc (%s) body is skipped', (_label, runLine, endLine) => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [runLine, `\tCOPY --from=${BAD} ${COPY_BUN}`, endLine, `COPY --from=${GOOD} ${COPY_BUN}`].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(output).toContain('Dockerfile oven/bun references: 1\n');
+      expect(status).toBe(0);
+    });
+
+    test('a file-descriptor heredoc body cannot count as the bun source', () => {
+      const dir = fixture('bun@1.4.2', ['RUN 3<<EOF cat', `COPY --from=${GOOD} ${COPY_BUN}`, 'EOF'].join('\n'));
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('no oven/bun image reference found');
+    });
+
     test('an unterminated heredoc fails closed', () => {
       const dir = fixture(
         'bun@1.4.2',

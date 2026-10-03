@@ -41,14 +41,18 @@ fi
 # - backslash continuations are joined
 # - heredoc bodies of RUN/COPY/ADD are skipped up to their delimiter line.
 #   Like BuildKit, the line is split into shell words with quotes kept, and
-#   only a word that itself starts with << opens a heredoc (<<EOF, <<-EOF,
+#   only a word that itself starts with << (optionally after a file
+#   descriptor, e.g. 3<<EOF) opens a heredoc (<<EOF, <<-EOF,
 #   <<"EOF", <<'EOF'). Quoted text such as '<<EOF', cat<<EOF and <<<
 #   herestrings are not heredocs. An unterminated heredoc is reported with an
 #   "#UNTERMINATED-HEREDOC" marker line so the caller can fail closed.
 logical_lines() {
   awk '
-    function consider_word(word,    delim) {
+    function consider_word(word,    delim, op) {
+      # Optional file descriptor prefix, as in BuildKit: 3<<EOF, 2<<-EOF
+      sub(/^[0-9]+/, "", word)
       if (word !~ /^<<-?/ || word ~ /^<<</) return
+      op = word
       delim = word
       sub(/^<<-?/, "", delim)
       if (delim ~ /</) return
@@ -56,7 +60,7 @@ logical_lines() {
       if (delim == "") return
       nq++
       hd_delim[nq] = delim
-      hd_dash[nq] = (substr(word, 3, 1) == "-")
+      hd_dash[nq] = (substr(op, 3, 1) == "-")
     }
     function queue_heredocs(s,    n, i, c, word, inword, sq, dq, esc) {
       n = length(s)
