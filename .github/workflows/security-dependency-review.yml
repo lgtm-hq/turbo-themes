@@ -66,7 +66,7 @@ jobs:
       job-name: '🔐 Security Audit'
       # py-lintro 0.163.0 pinned to immutable digest for reproducibility
       # yamllint disable-line rule:line-length
-      lintro-image: ghcr.io/lgtm-hq/py-lintro:0.163.0@sha256:1f341ff811e4083bebd19e641ec52bfa5e8d101f4659f0e3054be3f5a0cffb81
+      lintro-image: ghcr.io/lgtm-hq/py-lintro:0.171.1@sha256:5a2eb31d28a7d903374f1383882bd874c3ac8cb533f91b10ed1230eb3a4fd0f1
       runner-image: ubuntu-24.04
       tooling-ref: 'd32388495d571a0ee13383bacc732765bf4e9e7d'  # v0.74.6
       egress-policy: block
