@@ -75,6 +75,19 @@ describe('check-bun-version-sync.sh', () => {
     expect(output).toContain('pinned by digest');
   });
 
+  test.each([
+    ['a non-semver tag', `oven/bun:latest@${DIGEST}`],
+    ['a major.minor-only tag', `oven/bun:1.4-debian@${DIGEST}`],
+    ['a truncated digest', 'oven/bun:1.4.2-debian@sha256:abc123'],
+  ])('fails with a clear error for %s', (_label, imageRef) => {
+    const dir = fixture('bun@1.4.2', `COPY --from=${imageRef} /usr/local/bin/bun /usr/local/bin/bun`);
+    const { status, output } = runCheck(dir);
+    expect(status).toBe(1);
+    expect(output).toContain(`Unrecognised Dockerfile oven/bun reference: ${imageRef}`);
+    expect(output).toContain('Expected oven/bun:<semver>[-variant]@sha256:<digest>');
+    expect(output).not.toContain('Bun version mismatch');
+  });
+
   test('fails when package.json has no bun packageManager', () => {
     const dir = fixture(
       null,

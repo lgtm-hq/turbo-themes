@@ -35,9 +35,6 @@ if [[ -z "$image_ref" ]]; then
   exit 1
 fi
 
-# oven/bun:1.4.2-debian@sha256:... -> 1.4.2
-docker_version=$(sed -E 's#^oven/bun:([0-9]+\.[0-9]+\.[0-9]+).*#\1#' <<<"$image_ref")
-
 echo "🔍 Checking bun version sync"
 echo "  package.json packageManager: bun@$expected"
 echo "  Dockerfile image:            $image_ref"
@@ -46,6 +43,17 @@ if [[ "$image_ref" != *"@sha256:"* ]]; then
   echo "❌ Dockerfile oven/bun image must be pinned by digest (@sha256:...)"
   exit 1
 fi
+
+# Expected form: oven/bun:<semver>[-variant]@sha256:<64 hex>
+# e.g. oven/bun:1.4.2-debian@sha256:4f6e...
+image_re='^oven/bun:([0-9]+\.[0-9]+\.[0-9]+)(-[A-Za-z0-9._-]+)?@sha256:[0-9a-f]{64}$'
+if [[ ! "$image_ref" =~ $image_re ]]; then
+  echo "❌ Unrecognised Dockerfile oven/bun reference: $image_ref"
+  echo "   Expected oven/bun:<semver>[-variant]@sha256:<digest>," \
+    "e.g. oven/bun:1.4.2-debian@sha256:<64 hex chars>."
+  exit 1
+fi
+docker_version="${BASH_REMATCH[1]}"
 
 if [[ "$docker_version" != "$expected" ]]; then
   echo "❌ Bun version mismatch: Dockerfile uses $docker_version, package.json pins $expected"
