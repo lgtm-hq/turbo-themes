@@ -39,27 +39,46 @@ fi
 # - CRLF and leading whitespace are tolerated
 # - comment lines (including parser directives) are dropped
 # - backslash continuations are joined
-# - heredoc bodies of RUN/COPY/ADD (<<EOF, <<-EOF, <<"EOF", <<'EOF') are
-#   skipped up to their delimiter line; <<< herestrings are not heredocs
+# - heredoc bodies of RUN/COPY/ADD are skipped up to their delimiter line.
+#   Like BuildKit, the line is split into shell words with quotes kept, and
+#   only a word that itself starts with << opens a heredoc (<<EOF, <<-EOF,
+#   <<"EOF", <<'EOF'). Quoted text such as '<<EOF', cat<<EOF and <<<
+#   herestrings are not heredocs. An unterminated heredoc is reported with an
+#   "#UNTERMINATED-HEREDOC" marker line so the caller can fail closed.
 logical_lines() {
   awk '
-    function queue_heredocs(s,    rest, pre, tok, delim) {
-      rest = s
-      while (match(rest, hd_re)) {
-        pre = (RSTART > 1) ? substr(rest, RSTART - 1, 1) : ""
-        tok = substr(rest, RSTART, RLENGTH)
-        rest = substr(rest, RSTART + RLENGTH)
-        if (pre == "<") continue
-        delim = tok
-        sub(/^<<-?/, "", delim)
-        gsub(q_re, "", delim)
-        nq++
-        hd_delim[nq] = delim
-        hd_dash[nq] = (substr(tok, 3, 1) == "-")
+    function consider_word(word,    delim) {
+      if (word !~ /^<<-?/ || word ~ /^<<</) return
+      delim = word
+      sub(/^<<-?/, "", delim)
+      if (delim ~ /</) return
+      gsub(q_re, "", delim)
+      if (delim == "") return
+      nq++
+      hd_delim[nq] = delim
+      hd_dash[nq] = (substr(word, 3, 1) == "-")
+    }
+    function queue_heredocs(s,    n, i, c, word, inword, sq, dq, esc) {
+      n = length(s)
+      word = ""; inword = 0; sq = 0; dq = 0; esc = 0
+      for (i = 1; i <= n + 1; i++) {
+        c = (i <= n) ? substr(s, i, 1) : " "
+        if (!sq && !dq && !esc && (c == " " || c == "\t")) {
+          if (inword) consider_word(word)
+          word = ""; inword = 0
+          continue
+        }
+        inword = 1
+        word = word c
+        if (sq) { if (c == "\047") sq = 0; continue }
+        if (esc) { esc = 0; continue }
+        if (c == "\\") { esc = 1; continue }
+        if (dq) { if (c == "\"") dq = 0; continue }
+        if (c == "\047") sq = 1
+        else if (c == "\"") dq = 1
       }
     }
     BEGIN {
-      hd_re = "<<-?[\"\047]?[A-Za-z_][A-Za-z0-9_]*[\"\047]?"
       q_re = "[\"\047]"
       nq = 0
       qi = 1
@@ -87,7 +106,10 @@ logical_lines() {
       print full
       if (tolower(full) ~ /^[[:space:]]*(run|copy|add)[[:space:]]/) queue_heredocs(full)
     }
-    END { if (buf != "") print buf }
+    END {
+      if (buf != "") print buf
+      if (nq > 0) print "#UNTERMINATED-HEREDOC " hd_delim[qi]
+    }
   ' "$1"
 }
 
@@ -160,6 +182,10 @@ while IFS= read -r line; do
   tokens=()
   read -r -a tokens <<<"$line" || true
   [[ ${#tokens[@]} -gt 0 ]] || continue
+  if [[ "${tokens[0]}" == "#UNTERMINATED-HEREDOC" ]]; then
+    fail "Unterminated heredoc (delimiter '${tokens[1]:-}') in $DOCKERFILE; the lines after it cannot be checked."
+    continue
+  fi
   keyword=$(lower "${tokens[0]}")
   i=1
 
@@ -228,12 +254,6 @@ echo "🔍 Checking bun version sync"
 echo "  package.json packageManager: bun@$expected"
 echo "  Dockerfile oven/bun references: ${#ref_val[@]}"
 
-if ((sources == 0 && errors == 0)); then
-  echo "❌ Error: no oven/bun image reference found in $DOCKERFILE"
-  echo "   Expected FROM or COPY --from=oven/bun:<semver>[-variant]@sha256:<digest>."
-  exit 1
-fi
-
 # Expected form: oven/bun:<semver>[-variant]@sha256:<64 hex>
 # e.g. oven/bun:1.4.2-debian@sha256:4f6e...
 image_re='^oven/bun:([0-9]+\.[0-9]+\.[0-9]+)(-[A-Za-z0-9._-]+)?@sha256:[0-9a-f]{64}$'
@@ -260,6 +280,13 @@ for ((n = 0; n < ${#ref_val[@]}; n++)); do
     echo "   Update the oven/bun tag and digest in Dockerfile to match packageManager."
   fi
 done
+
+# Every reference found above has been validated; separately, at least one
+# must actually be a bun source (FROM / COPY|ADD --from= / RUN --mount from=).
+if ((sources == 0)); then
+  fail "Error: no oven/bun image reference found in a FROM, COPY/ADD --from= or RUN --mount from= instruction in $DOCKERFILE"
+  echo "   Expected FROM or COPY --from=oven/bun:<semver>[-variant]@sha256:<digest>."
+fi
 
 if ((errors > 0)); then
   echo "❌ $errors invalid oven/bun reference(s) in $DOCKERFILE"

@@ -151,7 +151,12 @@ describe('check-bun-version-sync.sh', () => {
           '\n',
         ),
       );
-      expect(runCheck(dir).status).toBe(1);
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile oven/bun references: 2\n');
+      expect(output).toContain(`- ${BAD}  [FROM]`);
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+      expect(output).toContain('1 invalid oven/bun reference(s)');
     });
 
     test('follows backslash line continuations', () => {
@@ -259,6 +264,46 @@ describe('check-bun-version-sync.sh', () => {
       expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
     });
 
+    test('follows a RUN --mount from= stage alias to a mismatched bun FROM', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [
+          `FROM ${BAD} AS bun-cache`,
+          'FROM debian:bookworm',
+          `COPY --from=${GOOD} ${COPY_BUN}`,
+          'RUN --mount=type=bind,from=bun-cache,target=/b true',
+        ].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain("[RUN --mount from (via stage 'bun-cache')]");
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+    });
+
+    test('checks ADD --from= like COPY --from=', () => {
+      const bad = fixture('bun@1.4.2', `ADD --from=${BAD} ${COPY_BUN}`);
+      const badRun = runCheck(bad);
+      expect(badRun.status).toBe(1);
+      expect(badRun.output).toContain('[ADD --from]');
+      expect(badRun.output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+      const unpinned = fixture('bun@1.4.2', `ADD --from=oven/bun:1.4.2-debian ${COPY_BUN}`);
+      const unpinnedRun = runCheck(unpinned);
+      expect(unpinnedRun.status).toBe(1);
+      expect(unpinnedRun.output).toContain('pinned by digest');
+      const ok = fixture('bun@1.4.2', `ADD --from=${GOOD} ${COPY_BUN}`);
+      expect(runCheck(ok).status).toBe(0);
+    });
+
+    test('an ARG-only reference is validated and still requires a bun source', () => {
+      const dir = fixture('bun@1.4.2', `ARG BUN_IMAGE=${BAD}`);
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain(`- ${BAD}  [ARG value]`);
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+      expect(output).toContain('no oven/bun image reference found in a FROM, COPY/ADD --from= or RUN --mount from=');
+      expect(output).toContain('2 invalid oven/bun reference(s)');
+    });
+
     test('checks oven/bun values in ARG defaults', () => {
       const ok = fixture('bun@1.4.2', [`ARG BUN_IMAGE=${GOOD}`, `COPY --from=${GOOD} ${COPY_BUN}`].join('\n'));
       expect(runCheck(ok).status).toBe(0);
@@ -318,6 +363,34 @@ describe('check-bun-version-sync.sh', () => {
       const { status, output } = runCheck(dir);
       expect(status).toBe(1);
       expect(output).toContain('Dockerfile oven/bun references: 1\n');
+    });
+
+    test.each([
+      ['a single-quoted <<EOF', "RUN echo '<<EOF'"],
+      ['a double-quoted <<EOF', 'RUN echo "<<EOF"'],
+      ['<<EOF attached to a word', 'RUN cat<<EOF'],
+      ['<<EOF inside a longer quoted string', `RUN sh -c 'cat <<EOF'`],
+    ])('%s is not a heredoc and cannot hide later instructions', (_label, runLine) => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`COPY --from=${GOOD} ${COPY_BUN}`, runLine, `COPY --from=${BAD} /usr/local/bin/bun /opt/bun`, 'EOF'].join(
+          '\n',
+        ),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile oven/bun references: 2\n');
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+    });
+
+    test('an unterminated heredoc fails closed', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`COPY --from=${GOOD} ${COPY_BUN}`, 'RUN <<EOF', `COPY --from=${BAD} /usr/local/bin/bun /opt/bun`].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain("Unterminated heredoc (delimiter 'EOF')");
     });
 
     test('a <<< herestring is not treated as a heredoc', () => {
