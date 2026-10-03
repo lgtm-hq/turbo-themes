@@ -23,7 +23,6 @@ turbo-themes, their triggers, and purposes.
 | release-publish-pr              |             | ✅ v*.*.\*  |              |           | ✅     |              |
 | publish-npm-test                |             |             |              |           | ✅     |              |
 | release-auto-tag                |             |             |              |           | ✅     |              |
-| maintenance-renovate            |             |             |              | ✅ Daily  |        |              |
 | maintenance-auto-bump-refs      |             |             |              | ✅ Weekly |        |              |
 | pr-labeler                      |             |             | ✅           |           |        |              |
 | pr-auto-assign                  |             |             | ✅ (opened)  |           |        |              |
@@ -249,13 +248,6 @@ publish testing
 **Use case:** Testing publish process with pre-release tags
 
 ### Maintenance
-
-#### maintenance-renovate.yml
-
-**Triggers:** Daily schedule  
-**Purpose:** Renovate Bot configuration validation
-
-**Schedule:** Every day at 02:00 UTC
 
 #### maintenance-auto-bump-refs.yml
 

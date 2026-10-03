@@ -46,10 +46,6 @@ Following py-lintro standards:
 - `pr-labeler.yml` - Automatic label assignment based on changed files
 - `pr-auto-assign.yml` - Automatic CODEOWNER assignment to new PRs
 
-### Maintenance
-
-- `maintenance-renovate.yml` - Automated dependency updates
-
 ## 📋 Workflow Index
 
 ### 🔒 Security Workflows
@@ -94,12 +90,6 @@ Following py-lintro standards:
 | -------------------- | ---------------------------------------------------------------- | ------------------ |
 | `pr-labeler.yml`     | **PR - Auto Label**<br/>Apply labels based on changed file paths | Pull Request       |
 | `pr-auto-assign.yml` | **PR - Auto Assign**<br/>Assign random CODEOWNER to new PRs     | Pull Request (new) |
-
-### 🔧 Maintenance Workflows
-
-| Workflow       | Purpose                                                                  | Trigger                  |
-| -------------- | ------------------------------------------------------------------------ | ------------------------ |
-| `renovate.yml` | **Maintenance - Renovate Dependencies**<br/>Automated dependency updates | Schedule (daily), Manual |
 
 ## 🎯 Workflow Naming Convention
 
@@ -179,15 +169,6 @@ jobs:
 10. Generate SBOM
 
 **Matrix Testing:** Node 20/22 × Ruby 3.3/3.4
-
-### Renovate (`renovate.yml`)
-
-**Auto-merge Rules:**
-
-- Patch updates for npm packages
-- GitHub Actions with digest pinning
-
-**Schedule:** Daily at 22:00 UTC
 
 ### Pages Deployment (`deploy-pages.yml`)
 
