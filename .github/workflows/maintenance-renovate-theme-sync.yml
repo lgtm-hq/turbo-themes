@@ -33,7 +33,7 @@ jobs:
       (contains(github.head_ref, 'primer-primitives') ||
        contains(github.head_ref, 'catppuccin-palette') ||
        contains(github.head_ref, 'rose-pine-palette'))
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 10
     permissions:
       contents: write
