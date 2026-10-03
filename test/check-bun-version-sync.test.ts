@@ -33,7 +33,7 @@ describe('check-bun-version-sync.sh', () => {
 
   test('passes for the repository Dockerfile and package.json', () => {
     const { status, output } = runCheck();
-    expect(output).toContain('matches packageManager');
+    expect(output).toContain('match packageManager bun@');
     expect(status).toBe(0);
   });
 
@@ -86,6 +86,101 @@ describe('check-bun-version-sync.sh', () => {
     expect(output).toContain(`Unrecognised Dockerfile oven/bun reference: ${imageRef}`);
     expect(output).toContain('Expected oven/bun:<semver>[-variant]@sha256:<digest>');
     expect(output).not.toContain('Bun version mismatch');
+  });
+
+  describe('parses only active Dockerfile instructions and checks every reference', () => {
+    const GOOD = `oven/bun:1.4.2-debian@${DIGEST}`;
+    const BAD = `oven/bun:1.3.11-debian@${DIGEST}`;
+
+    test('a matching reference in a comment does not mask a mismatched COPY', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`# Pinned: COPY --from=${GOOD}`, `COPY --from=${BAD} /usr/local/bin/bun /usr/local/bin/bun`].join(
+          '\n',
+        ),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+      expect(output).toContain('Dockerfile oven/bun references: 1\n');
+    });
+
+    test('an indented comment is ignored', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`   # old: ${BAD}`, `COPY --from=${GOOD} /usr/local/bin/bun /usr/local/bin/bun`].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(0);
+      expect(output).toContain('Dockerfile oven/bun references: 1\n');
+    });
+
+    test('fails when one of several references is mismatched', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [
+          `COPY --from=${GOOD} /usr/local/bin/bun /usr/local/bin/bun`,
+          `COPY --from=${BAD} /usr/local/bin/bun /opt/bun`,
+        ].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile oven/bun references: 2\n');
+      expect(output).toContain('1 invalid oven/bun reference(s)');
+    });
+
+    test('checks FROM stages as well as COPY --from', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [
+          `FROM ${GOOD} AS bun`,
+          'FROM debian:bookworm',
+          `COPY --from=${BAD} /usr/local/bin/bun /usr/local/bin/bun`,
+        ].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile oven/bun references: 2\n');
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+    });
+
+    test('a mismatched FROM stage fails even when COPY matches', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`FROM ${BAD} AS bun`, 'FROM debian:bookworm', `COPY --from=${GOOD} /usr/local/bin/bun /usr/local/bin/bun`].join(
+          '\n',
+        ),
+      );
+      expect(runCheck(dir).status).toBe(1);
+    });
+
+    test('follows backslash line continuations', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        ['COPY \\', `  --from=${BAD} \\`, '  /usr/local/bin/bun /usr/local/bin/bun'].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+    });
+
+    test('tolerates CRLF line endings and a docker.io/ prefix', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`COPY --from=docker.io/${GOOD} /usr/local/bin/bun /usr/local/bin/bun`, 'RUN true'].join('\r\n'),
+      );
+      expect(runCheck(dir).status).toBe(0);
+    });
+
+    test('rejects a tagless oven/bun stage', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        ['FROM oven/bun AS bun', `COPY --from=${GOOD} /usr/local/bin/bun /usr/local/bin/bun`].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('pinned by digest');
+    });
   });
 
   test('fails when package.json has no bun packageManager', () => {
