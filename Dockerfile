@@ -77,22 +77,15 @@ RUN NODESOURCE_SCRIPT="/tmp/setup_node.sh" \
   && rm -rf /var/lib/apt/lists/*
 SHELL ["/bin/sh", "-c"]
 
-# Install Bun (preferred package manager/runtime) — pinned version.
-# Keep in lockstep with "packageManager" in package.json (the CI source of truth).
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN BUN_VERSION="1.4.2" \
-  && BUN_SHA256="36368faef7527875d5ffa52e53cd48021741f2a83eb6208a8dd64068d422a913" \
-  && curl -fsSL "https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-x64.zip" -o /tmp/bun.zip \
-  && echo "${BUN_SHA256}  /tmp/bun.zip" | sha256sum -c - \
-  && unzip -q /tmp/bun.zip -d /tmp/bun \
-  && mv /tmp/bun/bun-linux-x64/bun /usr/local/bin/bun \
-  && ln -s /usr/local/bin/bun /usr/local/bin/bunx \
-  && chmod +x /usr/local/bin/bun \
-  && rm -rf /tmp/bun /tmp/bun.zip
-SHELL ["/bin/sh", "-c"]
+# Install Bun (preferred package manager/runtime) from the official multi-arch
+# glibc image, pinned by version and digest. Renovate bumps this together with
+# "packageManager" in package.json (grouped as "bun"), and
+# scripts/ci/check-bun-version-sync.sh fails CI if the two versions drift.
+COPY --from=oven/bun:1.4.2-debian@sha256:4f6e31d1a54d6a3dd312daef655fc998101b5043d52e12592ac293ef04b9bc73 /usr/local/bin/bun /usr/local/bin/bun
 
-# Ensure Bundler version matches Gemfile.lock (2.3.26)
-RUN gem install bundler:2.3.26
+# Add the bunx alias and ensure Bundler version matches Gemfile.lock (2.3.26)
+RUN ln -s /usr/local/bin/bun /usr/local/bin/bunx \
+  && gem install bundler:2.3.26
 
 WORKDIR /work
 

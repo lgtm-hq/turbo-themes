@@ -28,6 +28,11 @@
       "groupName": "ruby-test"
     },
     {
+      "description": "Bump bun everywhere in one PR: package.json packageManager (CI pin) and the Dockerfile oven/bun image",
+      "matchPackageNames": ["bun", "oven/bun"],
+      "groupName": "bun"
+    },
+    {
       "description": "Keep tools/docs typescript pinned to 5.9 for typedoc's compiler API (see #875)",
       "matchFileNames": ["tools/docs/**"],
       "matchPackageNames": ["typescript"],

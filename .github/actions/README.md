@@ -55,8 +55,9 @@ Bun is pinned once, in the root `package.json`:
 ```
 
 Both composite actions and every workflow that calls `oven-sh/setup-bun` directly read
-it via `bun-version-file: package.json`. The `Dockerfile` keeps its own checksummed pin,
-which must be bumped in lockstep. Renovate tracks the field and uses it when it
+it via `bun-version-file: package.json`. The `Dockerfile` copies bun from
+`oven/bun:<version>-debian@sha256:<digest>`; Renovate bumps it in the same grouped `bun`
+PR, and `scripts/ci/check-bun-version-sync.sh` fails CI if the two drift. Renovate tracks the field and uses it when it
 regenerates `bun.lock`, so CI and lockfile maintenance always use the same bun. Do not
 hard-code `bun-version` in workflows; pass the `bun-version` input only for deliberate,
 temporary experiments.
