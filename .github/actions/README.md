@@ -65,12 +65,15 @@ The `Dockerfile` must contain exactly one bun source, an unquoted
 
 line whose `<semver>` matches `packageManager`. Renovate bumps that image in
 the same grouped `bun` PR. `scripts/ci/check-bun-version-sync.sh` enforces
-the contract with a line scan, not a Dockerfile parser: any other `oven/bun`
-or `/bun:` mention (quoted, registry-prefixed, `FROM`, `ADD`, `RUN --mount`,
-`ARG`, `ENV`) fails, as does a `FROM` / `COPY --from` / `ADD --from` /
-`--mount from=` operand that uses `$`. Comment lines that start with `#` are
-ignored. A previous parser still missed quoted `--from`, registry prefixes,
-`RUN --mount from=`, and `FROM "oven/bun:<tag>" AS bun` plus `COPY --from=bun`.
+the contract with a line scan, not a Dockerfile parser. Any other `oven/bun`
+mention (quoted, backslash-split, registry-prefixed, `FROM`, `ADD`,
+`RUN --mount`, `ARG`, `ENV`) fails. So does a `FROM` / `COPY --from` /
+`ADD --from` / `--mount from=` operand that is empty or uses `$`, quotes, or
+backslashes. Backslash continuations are joined first; `# escape=` is
+rejected. `PATH=/opt/bun:$PATH` and other non-image `/bun:` paths are not
+treated as image refs. The scan catches image drift. It does not catch
+deliberate non-image installs (`ADD` of a release URL, `curl | sh`,
+`npm i -g bun`, or a bun image under another namespace with no tag).
 
 Do not hard-code `bun-version` in workflows; pass the `bun-version` input only for
 deliberate, temporary experiments.

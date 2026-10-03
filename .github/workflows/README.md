@@ -137,7 +137,9 @@ Bun is pinned once via `"packageManager"` in the root `package.json`. `setup-env
 The Dockerfile must use exactly one unquoted
 `COPY --from=oven/bun:<semver>[-<variant>]@sha256:<64 hex>` line matching that
 pin; `scripts/ci/check-bun-version-sync.sh` rejects any other bun image
-reference.
+reference, including quote/backslash smuggling and continued `FROM` lines.
+It does not catch non-image installs (`ADD` of a release URL, `curl | sh`,
+`npm i -g bun`).
 
 ### Permissions
 

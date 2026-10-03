@@ -137,4 +137,53 @@ describe('check-bun-version-sync.sh', () => {
     expect(output).toContain('matches packageManager bun@1.4.2');
     expect(status).toBe(0);
   });
+
+  test.each([
+    [
+      'FROM continuation $BASE',
+      ['ARG O=oven', 'ARG N=bun', 'ARG BASE=${O}/${N}:1.3.11', 'FROM \\', '  $BASE AS b'].join('\n'),
+      'variable expansion',
+    ],
+    ['FROM --platform continuation', ['FROM --platform=linux/amd64 \\', '  $I AS b'].join('\n'), 'variable expansion'],
+    ['mid-name continuation', ['FROM oven/b\\', 'un:1.3.11 AS b'].join('\n'), 'disallowed bun image reference'],
+    ['oven/""bun', 'FROM oven/""bun:1.3.11-debian AS b', 'disallowed bun image reference'],
+    ['"oven"/"bun"', 'FROM "oven"/"bun":1.3.11 AS b', 'disallowed bun image reference'],
+    ['oven/b\\un', 'FROM oven/b\\un:1.3.11 AS b', 'disallowed bun image reference'],
+    ['quoted COPY --from', `COPY --from=oven/b""un:1.3.11-debian ${COPY_BUN}`, 'disallowed bun image reference'],
+    [
+      'quoted --mount from=',
+      "RUN --mount=type=bind,from=oven/b''un:1.3.11,target=/b true",
+      'disallowed bun image reference',
+    ],
+  ])('fails on %s', (_label, decoy, needle) => {
+    const dir = fixture('bun@1.4.2', [GOOD_COPY, decoy].join('\n'));
+    const { status, output } = runCheck(dir);
+    expect(status).toBe(1);
+    expect(output).toContain(needle);
+    expect(output).toContain(ALLOWED_FORM);
+  });
+
+  test.each([
+    ['# escape= parser directive', ['# escape=`', 'FROM debian:bookworm', GOOD_COPY].join('\n'), "parser directive 'escape'"],
+    ['file ending mid-continuation', ['FROM debian:bookworm', GOOD_COPY, 'RUN echo \\'].join('\n'), 'ends inside a line continuation'],
+  ])('fails on %s', (_label, dockerfile, needle) => {
+    const dir = fixture('bun@1.4.2', dockerfile);
+    const { status, output } = runCheck(dir);
+    expect(status).toBe(1);
+    expect(output).toContain(needle);
+  });
+
+  test.each([
+    ['ENV PATH=/root/.bun/bin', 'ENV PATH=/root/.bun/bin:$PATH'],
+    ['ENV PATH=/opt/bun:$PATH', 'ENV PATH=/opt/bun:$PATH'],
+    ['cache mount on /root/.bun', 'RUN --mount=type=cache,target=/root/.bun/install/cache bun install'],
+    ['COPY --from=builder', 'FROM debian:bookworm AS builder\nCOPY --from=builder /app /app'],
+    ['heredoc RUN', 'RUN <<EOT\nbun --version\nEOT'],
+  ])('ignores non-image %s', (_label, extra) => {
+    const dir = fixture('bun@1.4.2', [GOOD_COPY, extra].join('\n'));
+    const { status, output } = runCheck(dir);
+    expect(output).toContain('Dockerfile bun sources: 1\n');
+    expect(output).toContain('matches packageManager bun@1.4.2');
+    expect(status).toBe(0);
+  });
 });
