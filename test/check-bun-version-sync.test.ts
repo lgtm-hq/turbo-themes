@@ -183,6 +183,22 @@ describe('check-bun-version-sync.sh', () => {
     });
   });
 
+  test.each([
+    ['package.json', 'Dockerfile'],
+    ['Dockerfile', 'package.json'],
+  ])('fails when %s is missing entirely', (missing, present) => {
+    const dir = mkdtempSync(join(tmpdir(), 'bun-sync-'));
+    tempDirs.push(dir);
+    const contents: Record<string, string> = {
+      'package.json': '{ "packageManager": "bun@1.4.2" }\n',
+      Dockerfile: `COPY --from=oven/bun:1.4.2-debian@${DIGEST} /usr/local/bin/bun /usr/local/bin/bun\n`,
+    };
+    writeFileSync(join(dir, present), contents[present]);
+    const { status, output } = runCheck(dir);
+    expect(status).toBe(1);
+    expect(output).toContain(`${join(dir, missing)} not found`);
+  });
+
   test('fails when package.json has no bun packageManager', () => {
     const dir = fixture(
       null,
