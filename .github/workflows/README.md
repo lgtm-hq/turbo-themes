@@ -121,6 +121,16 @@ Most workflows use the `setup-env` composite action:
     ruby-version: '3.4.7'
 ```
 
+Bun is pinned once via `"packageManager"` in the root `package.json`. `setup-env`,
+`setup-bun`, and every direct `oven-sh/setup-bun` step read it with
+`bun-version-file: package.json`; do not hard-code `bun-version` in workflows.
+The Dockerfile must use exactly one unquoted
+`COPY --from=oven/bun:<semver>[-<variant>]@sha256:<64 hex>` line matching that
+pin; `scripts/ci/check-bun-version-sync.sh` rejects any other bun image
+reference, including quote/backslash smuggling and continued `FROM` lines.
+It does not catch non-image installs (`ADD` of a release URL, `curl | sh`,
+`npm i -g bun`).
+
 ### Permissions
 
 All workflows follow the principle of least privilege:

@@ -77,21 +77,16 @@ RUN NODESOURCE_SCRIPT="/tmp/setup_node.sh" \
   && rm -rf /var/lib/apt/lists/*
 SHELL ["/bin/sh", "-c"]
 
-# Install Bun (preferred package manager/runtime) — pinned version
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN BUN_VERSION="1.3.11" \
-  && BUN_SHA256="8611ba935af886f05a6f38740a15160326c15e5d5d07adef966130b4493607ed" \
-  && curl -fsSL "https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-x64.zip" -o /tmp/bun.zip \
-  && echo "${BUN_SHA256}  /tmp/bun.zip" | sha256sum -c - \
-  && unzip -q /tmp/bun.zip -d /tmp/bun \
-  && mv /tmp/bun/bun-linux-x64/bun /usr/local/bin/bun \
-  && ln -s /usr/local/bin/bun /usr/local/bin/bunx \
-  && chmod +x /usr/local/bin/bun \
-  && rm -rf /tmp/bun /tmp/bun.zip
-SHELL ["/bin/sh", "-c"]
+# Install Bun (preferred package manager/runtime) from the official multi-arch
+# glibc image. The required CI sync check allows exactly one unquoted
+#   COPY --from=oven/bun:<semver>[-<variant>]@sha256:<64 hex>
+# line whose <semver> matches package.json packageManager. Renovate bumps
+# both in the grouped "bun" PR. Do not add another oven/bun or /bun: reference.
+COPY --from=oven/bun:1.4.2-debian@sha256:4f6e31d1a54d6a3dd312daef655fc998101b5043d52e12592ac293ef04b9bc73 /usr/local/bin/bun /usr/local/bin/bun
 
-# Ensure Bundler version matches Gemfile.lock (2.3.26)
-RUN gem install bundler:2.3.26
+# Add the bunx alias and ensure Bundler version matches Gemfile.lock (2.3.26)
+RUN ln -s /usr/local/bin/bun /usr/local/bin/bunx \
+  && gem install bundler:2.3.26
 
 WORKDIR /work
 

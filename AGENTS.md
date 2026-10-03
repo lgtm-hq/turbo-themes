@@ -12,8 +12,10 @@ the source of truth. Notes below are non-obvious caveats for this environment.
 
 ### Toolchain (already installed in the snapshot)
 
-- **Bun** is the primary package manager/runtime (matches the pinned version in
-  `Dockerfile`). Node 22 is also present as a fallback.
+- **Bun** is the primary package manager/runtime (pinned via `packageManager` in
+  `package.json`). The `Dockerfile` must have exactly one unquoted
+  `COPY --from=oven/bun:<semver>[-<variant>]@sha256:<64 hex>` line matching that pin.
+  Node 22 is also present as a fallback.
 - **uv** is required for `bun run lint` (`uv run lintro`) and is on `PATH`. Both `bun`
   and `uv` are added near the top of `~/.bashrc`.
 - Ruby and Swift are **not** installed; the gem (`bundle`/`rake`) and Swift Package

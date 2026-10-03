@@ -28,6 +28,12 @@
       "groupName": "ruby-test"
     },
     {
+      "description": "Bump bun everywhere in one PR: package.json packageManager (CI pin) and the Dockerfile oven/bun image. Hold both for 3 days so the npm release and oven/bun image land together (npm already waits via npm:unpublishSafe).",
+      "matchPackageNames": ["bun", "oven/bun"],
+      "groupName": "bun",
+      "minimumReleaseAge": "3 days"
+    },
+    {
       "description": "Keep tools/docs typescript pinned to 5.9 for typedoc's compiler API (see #875)",
       "matchFileNames": ["tools/docs/**"],
       "matchPackageNames": ["typescript"],

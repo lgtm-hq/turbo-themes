@@ -6,15 +6,18 @@ This directory contains reusable composite actions for the turbo-themes project.
 
 ### `setup-env`
 
-Set up Node.js and Ruby with dependency caching.
+Set up Bun, Node.js, Ruby, and Python (uv) with dependency caching.
 
 **Purpose:** Reduce duplication across workflows by providing a standardized environment
 setup.
 
 **Inputs:**
 
+- `bun-version` (optional): Bun version override. Leave empty (default) to use the
+  `packageManager` pin in the root `package.json`
 - `node-version` (optional): Node.js version to use (default: `22`)
-- `ruby-version` (optional): Ruby version to use (default: `3.3`)
+- `ruby-version` (optional): Ruby version to use (default: `3.4.7`)
+- `skip-ruby` (optional): Skip Ruby setup (default: `false`)
 
 **Usage:**
 
@@ -23,14 +26,57 @@ setup.
   uses: ./.github/actions/setup-env
   with:
     node-version: '22'
-    ruby-version: '3.3'
+    ruby-version: '3.4.7'
 ```
 
 **What it does:**
 
-1. Sets up Node.js with npm cache
-2. Sets up Ruby with bundler cache
-3. Installs Node.js dependencies with `npm ci`
+1. Sets up Bun at the version pinned in `package.json` (`packageManager`)
+2. Sets up Node.js and, unless `skip-ruby` is set, Ruby (with bundler cache)
+3. Installs uv and Python, then the CI dependencies
+4. Installs Node.js dependencies with `bun install --frozen-lockfile` (with retry)
+
+### `setup-bun`
+
+Install Bun and project dependencies only.
+
+**Inputs:**
+
+- `bun-version` (optional): Bun version override. Leave empty (default) to use the
+  `packageManager` pin in the root `package.json`
+- `frozen-lockfile` (optional): Fail if `bun.lock` needs an update (default: `true`)
+
+### Bun version pin
+
+Bun is pinned once, in the root `package.json`:
+
+```json
+"packageManager": "bun@1.4.2"
+```
+
+Both composite actions and every workflow that calls `oven-sh/setup-bun` directly read
+it via `bun-version-file: package.json`. Renovate also reads the `packageManager` field
+as the bun constraint when it regenerates `bun.lock`, so CI and lockfile maintenance
+always use the same bun.
+
+The `Dockerfile` must contain exactly one bun source, an unquoted
+
+`COPY --from=oven/bun:<semver>[-<variant>]@sha256:<64 hex>`
+
+line whose `<semver>` matches `packageManager`. Renovate bumps that image in
+the same grouped `bun` PR. `scripts/ci/check-bun-version-sync.sh` enforces
+the contract with a line scan, not a Dockerfile parser. Any other `oven/bun`
+mention (quoted, backslash-split, registry-prefixed, `FROM`, `ADD`,
+`RUN --mount`, `ARG`, `ENV`) fails. So does a `FROM` / `COPY --from` /
+`ADD --from` / `--mount from=` operand that is empty or uses `$`, quotes, or
+backslashes. Backslash continuations are joined first; `# escape=` is
+rejected. `PATH=/opt/bun:$PATH` and other non-image `/bun:` paths are not
+treated as image refs. The scan catches image drift. It does not catch
+deliberate non-image installs (`ADD` of a release URL, `curl | sh`,
+`npm i -g bun`, or a bun image under another namespace with no tag).
+
+Do not hard-code `bun-version` in workflows; pass the `bun-version` input only for
+deliberate, temporary experiments.
 
 ---
 
