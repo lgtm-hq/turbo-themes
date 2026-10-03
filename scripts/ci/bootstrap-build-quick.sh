@@ -12,7 +12,7 @@ ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 # Bun version comes from "packageManager" in the root package.json, the single
 # pin shared with setup-env/setup-bun and the Dockerfile (see #1060).
-BUN_PIN=$(sed -n 's/.*"packageManager": *"bun@\([^"]*\)".*/\1/p' "${ROOT_DIR}/package.json" | head -1)
+BUN_PIN=$(sed -n 's/.*"packageManager": *"bun@\([^"+]*\)[^"]*".*/\1/p' "${ROOT_DIR}/package.json" | head -1)
 if [[ -z "${BUN_PIN}" ]]; then
   echo "❌ No \"packageManager\": \"bun@<version>\" in ${ROOT_DIR}/package.json"
   exit 1

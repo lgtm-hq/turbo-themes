@@ -45,6 +45,16 @@ describe('check-bun-version-sync.sh', () => {
     expect(runCheck(dir).status).toBe(0);
   });
 
+  test('ignores a corepack-style hash suffix on packageManager', () => {
+    const dir = fixture(
+      `bun@1.4.2+sha512.${'b'.repeat(16)}`,
+      `COPY --from=oven/bun:1.4.2-debian@${DIGEST} /usr/local/bin/bun /usr/local/bin/bun`,
+    );
+    const { status, output } = runCheck(dir);
+    expect(output).toContain('packageManager: bun@1.4.2\n');
+    expect(status).toBe(0);
+  });
+
   test('fails when the Dockerfile version drifts from packageManager', () => {
     const dir = fixture(
       'bun@1.4.2',

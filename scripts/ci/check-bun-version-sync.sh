@@ -23,7 +23,7 @@ for file in "$PACKAGE_JSON" "$DOCKERFILE"; do
   fi
 done
 
-expected=$(sed -n 's/.*"packageManager": *"bun@\([^"]*\)".*/\1/p' "$PACKAGE_JSON" | head -1)
+expected=$(sed -n 's/.*"packageManager": *"bun@\([^"+]*\)[^"]*".*/\1/p' "$PACKAGE_JSON" | head -1)
 if [[ -z "$expected" ]]; then
   echo "❌ Error: no \"packageManager\": \"bun@<version>\" in $PACKAGE_JSON"
   exit 1
