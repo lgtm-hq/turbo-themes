@@ -59,9 +59,18 @@ it via `bun-version-file: package.json`. Renovate also reads the `packageManager
 as the bun constraint when it regenerates `bun.lock`, so CI and lockfile maintenance
 always use the same bun.
 
-The `Dockerfile` copies bun from `oven/bun:<version>-debian@sha256:<digest>`. Renovate
-bumps that image in the same grouped `bun` PR as `packageManager`, and
-`scripts/ci/check-bun-version-sync.sh` fails CI if the two drift.
+The `Dockerfile` must contain exactly one bun source, an unquoted
+
+`COPY --from=oven/bun:<semver>[-<variant>]@sha256:<64 hex>`
+
+line whose `<semver>` matches `packageManager`. Renovate bumps that image in
+the same grouped `bun` PR. `scripts/ci/check-bun-version-sync.sh` enforces
+the contract with a line scan, not a Dockerfile parser: any other `oven/bun`
+or `/bun:` mention (quoted, registry-prefixed, `FROM`, `ADD`, `RUN --mount`,
+`ARG`, `ENV`) fails, as does a `FROM` / `COPY --from` / `ADD --from` /
+`--mount from=` operand that uses `$`. Comment lines that start with `#` are
+ignored. A previous parser still missed quoted `--from`, registry prefixes,
+`RUN --mount from=`, and `FROM "oven/bun:<tag>" AS bun` plus `COPY --from=bun`.
 
 Do not hard-code `bun-version` in workflows; pass the `bun-version` input only for
 deliberate, temporary experiments.

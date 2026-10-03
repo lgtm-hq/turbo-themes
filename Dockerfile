@@ -78,10 +78,10 @@ RUN NODESOURCE_SCRIPT="/tmp/setup_node.sh" \
 SHELL ["/bin/sh", "-c"]
 
 # Install Bun (preferred package manager/runtime) from the official multi-arch
-# glibc image, pinned by version and digest. Renovate bumps this together with
-# "packageManager" in package.json (grouped as "bun"), and
-# scripts/ci/check-bun-version-sync.sh (run by the required CI build) fails if
-# the two versions drift.
+# glibc image. The required CI sync check allows exactly one unquoted
+#   COPY --from=oven/bun:<semver>[-<variant>]@sha256:<64 hex>
+# line whose <semver> matches package.json packageManager. Renovate bumps
+# both in the grouped "bun" PR. Do not add another oven/bun or /bun: reference.
 COPY --from=oven/bun:1.4.2-debian@sha256:4f6e31d1a54d6a3dd312daef655fc998101b5043d52e12592ac293ef04b9bc73 /usr/local/bin/bun /usr/local/bin/bun
 
 # Add the bunx alias and ensure Bundler version matches Gemfile.lock (2.3.26)
