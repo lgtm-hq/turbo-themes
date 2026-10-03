@@ -183,6 +183,154 @@ describe('check-bun-version-sync.sh', () => {
     });
   });
 
+  describe('resolves stages and fails closed on unvalidatable operands', () => {
+    const GOOD = `oven/bun:1.4.2-debian@${DIGEST}`;
+    const BAD = `oven/bun:1.3.11-debian@${DIGEST}`;
+    const COPY_BUN = '/usr/local/bin/bun /usr/local/bin/bun';
+
+    test('an ARG-built FROM cannot hide behind a separate matching literal ref', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [
+          'ARG ORG=oven',
+          'ARG IMAGE=bun',
+          `FROM \${ORG}/\${IMAGE}:1.3.11-debian@${DIGEST} AS bun`,
+          'FROM debian:bookworm',
+          `COPY --from=${GOOD} ${COPY_BUN}`,
+          'COPY --from=bun /usr/local/bin/bun /opt/bun',
+        ].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain("Cannot validate FROM operand '${ORG}/${IMAGE}:1.3.11-debian@");
+      expect(output).toContain('it uses variable expansion');
+    });
+
+    test('a COPY --from operand using a variable fails closed', () => {
+      const dir = fixture('bun@1.4.2', ['ARG STAGE=bun', `COPY --from=\${STAGE} ${COPY_BUN}`].join('\n'));
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain("Cannot validate COPY --from operand '${STAGE}'");
+    });
+
+    test('a literal oven/bun ref with a variable tag fails closed', () => {
+      const dir = fixture('bun@1.4.2', `COPY --from=oven/bun:\${BUN_VERSION} ${COPY_BUN}`);
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('it uses variable expansion');
+    });
+
+    test('follows a COPY --from stage alias to a mismatched bun FROM', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`FROM ${BAD} AS BunSrc`, 'FROM debian:bookworm', `COPY --from=bunsrc ${COPY_BUN}`].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain("via stage 'bunsrc'");
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+    });
+
+    test('a COPY --from stage alias to a matching bun FROM passes', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`FROM ${GOOD} AS bunsrc`, 'FROM debian:bookworm', `COPY --from=bunsrc ${COPY_BUN}`].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(output).toContain("via stage 'bunsrc'");
+      expect(status).toBe(0);
+    });
+
+    test('follows a numeric COPY --from stage index', () => {
+      // fixture() adds "FROM debian:bookworm" as stage 0, so the bun FROM is stage 1
+      const dir = fixture('bun@1.4.2', [`FROM ${BAD}`, 'FROM debian:bookworm', `COPY --from=1 ${COPY_BUN}`].join('\n'));
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain("via stage '1'");
+    });
+
+    test('checks RUN --mount from= operands', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [`COPY --from=${GOOD} ${COPY_BUN}`, `RUN --mount=type=bind,from=${BAD},target=/b true`].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+    });
+
+    test('checks oven/bun values in ARG defaults', () => {
+      const ok = fixture('bun@1.4.2', [`ARG BUN_IMAGE=${GOOD}`, `COPY --from=${GOOD} ${COPY_BUN}`].join('\n'));
+      expect(runCheck(ok).status).toBe(0);
+      const bad = fixture('bun@1.4.2', [`ARG BUN_IMAGE=${BAD}`, `COPY --from=${GOOD} ${COPY_BUN}`].join('\n'));
+      expect(runCheck(bad).status).toBe(1);
+    });
+  });
+
+  describe('skips heredoc bodies', () => {
+    const GOOD = `oven/bun:1.4.2-debian@${DIGEST}`;
+    const BAD = `oven/bun:1.3.11-debian@${DIGEST}`;
+    const COPY_BUN = '/usr/local/bin/bun /usr/local/bin/bun';
+
+    test('a mismatched reference inside a RUN heredoc is not a false positive', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        ['RUN <<EOF', `echo "FROM ${BAD}"`, `COPY --from=${BAD} x y`, 'EOF', `COPY --from=${GOOD} ${COPY_BUN}`].join(
+          '\n',
+        ),
+      );
+      const { status, output } = runCheck(dir);
+      expect(output).toContain('Dockerfile oven/bun references: 1\n');
+      expect(status).toBe(0);
+    });
+
+    test('a matching COPY only inside a heredoc does not satisfy the check', () => {
+      const dir = fixture('bun@1.4.2', ['RUN <<EOF', `COPY --from=${GOOD} ${COPY_BUN}`, 'EOF'].join('\n'));
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('no oven/bun image reference');
+    });
+
+    test('ends <<- and quoted heredocs at their delimiter, then checks later instructions', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        [
+          `RUN <<-"END" cat > /tmp/a`,
+          `\tFROM ${GOOD}`,
+          '\tEND',
+          `COPY <<'DATA' /tmp/b`,
+          `${GOOD}`,
+          'DATA',
+          `COPY --from=${BAD} ${COPY_BUN}`,
+        ].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile oven/bun references: 1\n');
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+    });
+
+    test('handles two heredocs on one RUN', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        ['RUN <<A <<B', `echo ${GOOD}`, 'A', `echo ${GOOD}`, 'B', `COPY --from=${BAD} ${COPY_BUN}`].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile oven/bun references: 1\n');
+    });
+
+    test('a <<< herestring is not treated as a heredoc', () => {
+      const dir = fixture(
+        'bun@1.4.2',
+        ['RUN cat <<<"EOF"', `COPY --from=${BAD} ${COPY_BUN}`, 'EOF'].join('\n'),
+      );
+      const { status, output } = runCheck(dir);
+      expect(status).toBe(1);
+      expect(output).toContain('Dockerfile uses 1.3.11, package.json pins 1.4.2');
+    });
+  });
+
   test.each([
     ['package.json', 'Dockerfile'],
     ['Dockerfile', 'package.json'],
