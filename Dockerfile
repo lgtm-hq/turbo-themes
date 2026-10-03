@@ -77,10 +77,11 @@ RUN NODESOURCE_SCRIPT="/tmp/setup_node.sh" \
   && rm -rf /var/lib/apt/lists/*
 SHELL ["/bin/sh", "-c"]
 
-# Install Bun (preferred package manager/runtime) — pinned version
+# Install Bun (preferred package manager/runtime) — pinned version.
+# Keep in lockstep with "packageManager" in package.json (the CI source of truth).
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN BUN_VERSION="1.3.11" \
-  && BUN_SHA256="8611ba935af886f05a6f38740a15160326c15e5d5d07adef966130b4493607ed" \
+RUN BUN_VERSION="1.4.2" \
+  && BUN_SHA256="36368faef7527875d5ffa52e53cd48021741f2a83eb6208a8dd64068d422a913" \
   && curl -fsSL "https://github.com/oven-sh/bun/releases/download/bun-v${BUN_VERSION}/bun-linux-x64.zip" -o /tmp/bun.zip \
   && echo "${BUN_SHA256}  /tmp/bun.zip" | sha256sum -c - \
   && unzip -q /tmp/bun.zip -d /tmp/bun \

@@ -26,14 +26,15 @@ setup.
   uses: ./.github/actions/setup-env
   with:
     node-version: '22'
-    ruby-version: '3.3'
+    ruby-version: '3.4.7'
 ```
 
 **What it does:**
 
 1. Sets up Bun at the version pinned in `package.json` (`packageManager`)
-2. Sets up Node.js and Ruby (with bundler cache)
-3. Installs Node.js dependencies with `bun install --frozen-lockfile`
+2. Sets up Node.js and, unless `skip-ruby` is set, Ruby (with bundler cache)
+3. Installs uv and Python, then the CI dependencies
+4. Installs Node.js dependencies with `bun install --frozen-lockfile` (with retry)
 
 ### `setup-bun`
 
@@ -54,7 +55,8 @@ Bun is pinned once, in the root `package.json`:
 ```
 
 Both composite actions and every workflow that calls `oven-sh/setup-bun` directly read
-it via `bun-version-file: package.json`. Renovate tracks the field and uses it when it
+it via `bun-version-file: package.json`. The `Dockerfile` keeps its own checksummed pin,
+which must be bumped in lockstep. Renovate tracks the field and uses it when it
 regenerates `bun.lock`, so CI and lockfile maintenance always use the same bun. Do not
 hard-code `bun-version` in workflows; pass the `bun-version` input only for deliberate,
 temporary experiments.
