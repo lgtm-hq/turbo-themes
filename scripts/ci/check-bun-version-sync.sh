@@ -21,6 +21,8 @@
 #
 # Rules:
 # - Exactly one line matching the allowed form above.
+# - The remainder of that line is still scanned: a second oven/bun or /bun:
+#   token, or a --from= / --mount from= operand with $, fails.
 # - Any other non-comment line containing oven/bun or /bun: (case
 #   insensitive, any registry prefix, quoted or not) fails. That includes
 #   FROM, ADD, RUN --mount, ARG and ENV.
@@ -145,6 +147,12 @@ while IFS= read -r line || [[ -n "$line" ]]; do
       echo "   Update the oven/bun tag and digest in Dockerfile to match packageManager."
       allowed_hint
     fi
+    rest=$(sed -E 's/^COPY --from=oven\/bun:[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9._-]+)?@sha256:[0-9a-f]{64}//' <<<"$line")
+    if has_bun_image_token "$rest"; then
+      fail "Line $lineno: disallowed extra bun image reference on the allowed COPY line: $line"
+      allowed_hint
+    fi
+    check_variable_operands "$line" "$lineno"
     continue
   fi
 

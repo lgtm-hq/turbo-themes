@@ -76,6 +76,14 @@ describe('check-bun-version-sync.sh', () => {
     expect(output).toContain(ALLOWED_FORM);
   });
 
+  test('fails when the allowed COPY line also has a second --from=oven/bun', () => {
+    const dir = fixture('bun@1.4.2', `COPY --from=${GOOD} --from=${BAD} ${COPY_BUN}`);
+    const { status, output } = runCheck(dir);
+    expect(status).toBe(1);
+    expect(output).toContain('disallowed extra bun image reference on the allowed COPY line');
+    expect(output).toContain(ALLOWED_FORM);
+  });
+
   test('fails when the Dockerfile has two allowed bun sources', () => {
     const dir = fixture('bun@1.4.2', [GOOD_COPY, `COPY --from=oven/bun:1.4.2@${DIGEST} /opt/bun /opt/bun`].join('\n'));
     const { status, output } = runCheck(dir);
@@ -110,6 +118,13 @@ describe('check-bun-version-sync.sh', () => {
     expect(status).toBe(1);
     expect(output).toContain('variable expansion');
     expect(output).toContain(ALLOWED_FORM);
+  });
+
+  test('fails when package.json has no bun packageManager', () => {
+    const dir = fixture(null, GOOD_COPY);
+    const { status, output } = runCheck(dir);
+    expect(status).toBe(1);
+    expect(output).toContain('no "packageManager"');
   });
 
   test('ignores comment lines that mention oven/bun', () => {
