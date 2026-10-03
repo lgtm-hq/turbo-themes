@@ -6,15 +6,18 @@ This directory contains reusable composite actions for the turbo-themes project.
 
 ### `setup-env`
 
-Set up Node.js and Ruby with dependency caching.
+Set up Bun, Node.js, Ruby, and Python (uv) with dependency caching.
 
 **Purpose:** Reduce duplication across workflows by providing a standardized environment
 setup.
 
 **Inputs:**
 
+- `bun-version` (optional): Bun version override. Leave empty (default) to use the
+  `packageManager` pin in the root `package.json`
 - `node-version` (optional): Node.js version to use (default: `22`)
-- `ruby-version` (optional): Ruby version to use (default: `3.3`)
+- `ruby-version` (optional): Ruby version to use (default: `3.4.7`)
+- `skip-ruby` (optional): Skip Ruby setup (default: `false`)
 
 **Usage:**
 
@@ -28,9 +31,33 @@ setup.
 
 **What it does:**
 
-1. Sets up Node.js with npm cache
-2. Sets up Ruby with bundler cache
-3. Installs Node.js dependencies with `npm ci`
+1. Sets up Bun at the version pinned in `package.json` (`packageManager`)
+2. Sets up Node.js and Ruby (with bundler cache)
+3. Installs Node.js dependencies with `bun install --frozen-lockfile`
+
+### `setup-bun`
+
+Install Bun and project dependencies only.
+
+**Inputs:**
+
+- `bun-version` (optional): Bun version override. Leave empty (default) to use the
+  `packageManager` pin in the root `package.json`
+- `frozen-lockfile` (optional): Fail if `bun.lock` needs an update (default: `true`)
+
+### Bun version pin
+
+Bun is pinned once, in the root `package.json`:
+
+```json
+"packageManager": "bun@1.4.2"
+```
+
+Both composite actions and every workflow that calls `oven-sh/setup-bun` directly read
+it via `bun-version-file: package.json`. Renovate tracks the field and uses it when it
+regenerates `bun.lock`, so CI and lockfile maintenance always use the same bun. Do not
+hard-code `bun-version` in workflows; pass the `bun-version` input only for deliberate,
+temporary experiments.
 
 ---
 

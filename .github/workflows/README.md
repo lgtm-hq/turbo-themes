@@ -131,6 +131,10 @@ Most workflows use the `setup-env` composite action:
     ruby-version: '3.4.7'
 ```
 
+Bun is pinned once via `"packageManager"` in the root `package.json`. `setup-env`,
+`setup-bun`, and every direct `oven-sh/setup-bun` step read it with
+`bun-version-file: package.json`; do not hard-code `bun-version` in workflows.
+
 ### Permissions
 
 All workflows follow the principle of least privilege:
