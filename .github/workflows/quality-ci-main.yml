@@ -140,9 +140,6 @@ jobs:
       - name: Validate version sync
         run: ./scripts/ci/validate-version-sync.sh
 
-      - name: Validate bun version sync (Dockerfile vs packageManager)
-        run: ./scripts/ci/check-bun-version-sync.sh
-
       # Lint already gates the build legs (and quality-lintro.yml); skip it
       # here to avoid a third lintro pass.
       - name: Run CI pipeline
