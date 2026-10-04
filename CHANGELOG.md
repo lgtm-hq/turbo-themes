@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.13] - 2026-10-04
+
+### 🐛 Fixed
+
+- Bump vite to ^6.4.3 in stackblitz templates (#1084)
+
 ## [0.44.12] - 2026-10-04
 
 ### 🐛 Fixed
