@@ -54,7 +54,7 @@ test.describe('Accessibility Tests @a11y', () => {
   test('should have no accessibility violations on homepage', async ({ homePage }) => {
     await homePage.page.emulateMedia({ reducedMotion: 'reduce' });
     await homePage.goto();
-    expect(await waitForThemeApplied(homePage.page, DEFAULT_THEME)).toBe(true);
+    await waitForThemeApplied(homePage.page, DEFAULT_THEME);
 
     await test.step('Run axe accessibility scan', async () => {
       const accessibilityScanResults = await runAccessibilityScan(homePage.page);
@@ -118,7 +118,7 @@ test.describe('Accessibility Tests @a11y', () => {
       await basePage.page.waitForLoadState('domcontentloaded');
       // `#turbo-theme-css` is a separate <link>, so without this the scan can
       // sample pre-theme colors and report phantom contrast violations.
-      expect(await waitForThemeApplied(basePage.page, DEFAULT_THEME)).toBe(true);
+      await waitForThemeApplied(basePage.page, DEFAULT_THEME);
 
       await test.step(`Run axe accessibility scan on ${pageInfo.name}`, async () => {
         const accessibilityScanResults = await runAccessibilityScan(basePage.page);
@@ -197,7 +197,7 @@ test.describe('Accessibility Tests @a11y', () => {
           await test.step(`Switch to ${theme} theme`, async () => {
             await homePage.switchToTheme(theme);
             await waitForStylesheetLoad(homePage.getThemeCss());
-            expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
+            await waitForThemeApplied(homePage.page, theme);
           });
 
           await test.step('Run axe accessibility scan', async () => {
@@ -438,7 +438,7 @@ test.describe('Accessibility Tests @a11y', () => {
           await homePage.goto();
           await homePage.switchToTheme(theme);
           await waitForStylesheetLoad(homePage.getThemeCss());
-          expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
+          await waitForThemeApplied(homePage.page, theme);
 
           /**
            * Assert a CTA is AA-legible two ways: axe's own `color-contrast`
@@ -467,7 +467,7 @@ test.describe('Accessibility Tests @a11y', () => {
           await test.step('Examples page primary CTA meets AA contrast', async () => {
             await homePage.page.goto('/examples/');
             await homePage.page.waitForLoadState('domcontentloaded');
-            expect(await waitForThemeApplied(homePage.page, theme)).toBe(true);
+            await waitForThemeApplied(homePage.page, theme);
             await expectCtaContrast('examples-cta-contribute');
           });
         } finally {

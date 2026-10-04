@@ -1,6 +1,6 @@
 import type { Locator } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { escapeCssAttributeSelector } from '../helpers';
+import { escapeCssAttributeSelector, waitForThemeApplied } from '../helpers';
 import { BasePage } from './BasePage';
 
 /**
@@ -20,6 +20,7 @@ export class HomePage extends BasePage {
   async switchToTheme(themeId: string): Promise<void> {
     await this.selectTheme(themeId);
     await this.expectThemeApplied(themeId);
+    await waitForThemeApplied(this.page, themeId);
   }
 
   /**
