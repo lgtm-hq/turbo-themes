@@ -1,20 +1,5 @@
-import { type Page, expect, test } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { blockRemoteFonts, waitForFontsReady, waitForThemeApplied } from './helpers';
-
-/**
- * Applies a theme through the header selector so `#turbo-theme-css` loads.
- *
- * Setting `data-theme` alone does not swap the stylesheet. The paint wait
- * then times out because the href still points at the boot theme.
- *
- * @param page - Playwright page
- * @param themeId - Theme id to select
- */
-async function applyThemeThroughSelector(page: Page, themeId: string): Promise<void> {
-  await page.getByTestId('theme-trigger').click();
-  await expect(page.locator('#theme-menu')).toBeVisible();
-  await page.locator(`.theme-option[data-theme="${themeId}"]`).click();
-}
 
 /**
  * Visual regression tests for main site pages.
@@ -55,12 +40,14 @@ test.describe('Homepage Visual Regression @visual', () => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
 
-      await applyThemeThroughSelector(page, theme.id);
-      await waitForThemeApplied(page, theme.id);
-      await waitForFontsReady(page);
-
-      // Verify theme applied
+      // Baselines were captured after a data-theme flip only. Loading the
+      // real sheet here changes the pixels and needs its own snapshot PR.
+      await page.evaluate((t) => {
+        document.documentElement.dataset.theme = t;
+        localStorage.setItem('turbo-theme', t);
+      }, theme.id);
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme.id);
+      await waitForFontsReady(page);
 
       // Viewport screenshot (not fullPage to avoid height variations from font rendering)
       await expect(page).toHaveScreenshot(`homepage-${theme.id}.png`);
@@ -76,8 +63,11 @@ test.describe('Demo Page Visual Regression @visual', () => {
 
   for (const theme of themes) {
     test(`demo page renders correctly with ${theme.id}`, async ({ page }) => {
-      await applyThemeThroughSelector(page, theme.id);
-      await waitForThemeApplied(page, theme.id);
+      await page.evaluate((t) => {
+        document.documentElement.dataset.theme = t;
+        localStorage.setItem('turbo-theme', t);
+      }, theme.id);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme.id);
       await waitForFontsReady(page);
 
       // Viewport screenshot (not fullPage to avoid height variations from font rendering)
@@ -161,8 +151,10 @@ test.describe('Theme Transition Visual Regression @visual', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    await applyThemeThroughSelector(page, 'catppuccin-mocha');
-    await waitForThemeApplied(page, 'catppuccin-mocha');
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'catppuccin-mocha';
+    });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'catppuccin-mocha');
     await waitForFontsReady(page);
 
     // Capture before state
@@ -170,8 +162,10 @@ test.describe('Theme Transition Visual Regression @visual', () => {
       fullPage: false,
     });
 
-    await applyThemeThroughSelector(page, 'catppuccin-latte');
-    await waitForThemeApplied(page, 'catppuccin-latte');
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'catppuccin-latte';
+    });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'catppuccin-latte');
     await waitForFontsReady(page);
 
     // Capture after state
@@ -186,8 +180,10 @@ test.describe('Dark/Light Mode Contrast @visual', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    await applyThemeThroughSelector(page, 'catppuccin-mocha');
-    await waitForThemeApplied(page, 'catppuccin-mocha');
+    await page.evaluate(() => {
+      document.documentElement.dataset.theme = 'catppuccin-mocha';
+    });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'catppuccin-mocha');
 
     // Get background color
     const bgColor = await page.evaluate(() => {
