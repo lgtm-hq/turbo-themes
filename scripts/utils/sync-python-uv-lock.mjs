@@ -28,15 +28,25 @@ const EDITABLE_TURBO_THEMES_VERSION =
  *
  * @param {string} lockText Raw uv.lock contents.
  * @param {string} version Semantic version to write.
- * @returns {{ updated: string, changed: boolean }}
+ * @returns {{ updated: string, matched: boolean, changed: boolean }}
  */
 export function rewriteEditableUvLockVersion(lockText, version) {
+  const matched = EDITABLE_TURBO_THEMES_VERSION.test(lockText);
+  if (!matched) {
+    return {
+      updated: lockText,
+      matched: false,
+      changed: false,
+    };
+  }
+
   const updated = lockText.replace(
     EDITABLE_TURBO_THEMES_VERSION,
     `$1${version}$2`,
   );
   return {
     updated,
+    matched: true,
     changed: updated !== lockText,
   };
 }
@@ -44,30 +54,35 @@ export function rewriteEditableUvLockVersion(lockText, version) {
 /**
  * Update python/uv.lock after pyproject.toml has been rewritten.
  *
+ * Throws when the lockfile is missing or has no editable turbo-themes
+ * entry, so a release bump cannot leave a stale or unreadable lock.
+ *
  * @param {object} options Sync options.
  * @param {string} options.pythonDir Absolute path to the python/ package.
  * @param {string} options.version Version already written to pyproject.toml.
  * @param {(msg: string) => void} [options.log]
- * @param {(msg: string) => void} [options.warn]
- * @returns {'updated' | 'unchanged' | 'missing'}
+ * @returns {'updated' | 'unchanged'}
  */
 export function syncPythonUvLock({
   pythonDir,
   version,
   log = console.log,
-  warn = console.warn,
 }) {
   const lockfilePath = path.join(pythonDir, 'uv.lock');
   if (!fs.existsSync(lockfilePath)) {
-    warn('⚠️  python/uv.lock not found, skipping lockfile update');
-    return 'missing';
+    throw new Error(`python/uv.lock not found at ${lockfilePath}`);
   }
 
   const lockfile = fs.readFileSync(lockfilePath, 'utf8');
-  const { updated, changed } = rewriteEditableUvLockVersion(
+  const { updated, matched, changed } = rewriteEditableUvLockVersion(
     lockfile,
     version,
   );
+  if (!matched) {
+    throw new Error(
+      'python/uv.lock has no editable turbo-themes package entry',
+    );
+  }
   if (!changed) {
     return 'unchanged';
   }

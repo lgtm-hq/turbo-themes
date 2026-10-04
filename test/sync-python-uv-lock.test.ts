@@ -60,10 +60,18 @@ function withoutEditableVersion(text: string): string {
   );
 }
 
+function otherThan(current: string): string {
+  return current === '0.0.0-test' ? '0.0.1-test' : '0.0.0-test';
+}
+
 describe('rewriteEditableUvLockVersion', () => {
   it('updates the editable turbo-themes version and leaves other entries untouched', () => {
-    const { updated, changed } = rewriteEditableUvLockVersion(FIXTURE, '0.44.12');
+    const { updated, changed, matched } = rewriteEditableUvLockVersion(
+      FIXTURE,
+      '0.44.12',
+    );
 
+    expect(matched).toBe(true);
     expect(changed).toBe(true);
     expect(editableTurboThemesVersion(updated)).toBe('0.44.12');
     expect(otherPackageVersions(updated)).toEqual(otherPackageVersions(FIXTURE));
@@ -72,19 +80,41 @@ describe('rewriteEditableUvLockVersion', () => {
   });
 
   it('updates only the editable turbo-themes entry in the committed lockfile', () => {
-    const { updated, changed } = rewriteEditableUvLockVersion(REAL_LOCK, '0.99.0');
+    const current = editableTurboThemesVersion(REAL_LOCK);
+    expect(current).toBeDefined();
+    const target = otherThan(current as string);
+    const { updated, changed, matched } = rewriteEditableUvLockVersion(
+      REAL_LOCK,
+      target,
+    );
 
+    expect(matched).toBe(true);
     expect(changed).toBe(true);
-    expect(editableTurboThemesVersion(updated)).toBe('0.99.0');
+    expect(editableTurboThemesVersion(updated)).toBe(target);
     expect(otherPackageVersions(updated)).toEqual(otherPackageVersions(REAL_LOCK));
     expect(withoutEditableVersion(updated)).toBe(withoutEditableVersion(REAL_LOCK));
   });
 
   it('reports no change when the version is already current', () => {
-    const { updated, changed } = rewriteEditableUvLockVersion(FIXTURE, '0.44.11');
+    const { updated, changed, matched } = rewriteEditableUvLockVersion(
+      FIXTURE,
+      '0.44.11',
+    );
 
+    expect(matched).toBe(true);
     expect(changed).toBe(false);
     expect(updated).toBe(FIXTURE);
+  });
+
+  it('reports unmatched when the editable entry is missing', () => {
+    const { updated, changed, matched } = rewriteEditableUvLockVersion(
+      'name = "assertpy"\nversion = "1.1"\n',
+      '0.44.12',
+    );
+
+    expect(matched).toBe(false);
+    expect(changed).toBe(false);
+    expect(updated).toBe('name = "assertpy"\nversion = "1.1"\n');
   });
 });
 
@@ -113,7 +143,6 @@ describe('syncPythonUvLock', () => {
       log: (msg: string) => {
         logs.push(msg);
       },
-      warn: () => undefined,
     });
 
     const next = readFileSync(join(pythonDir, 'uv.lock'), 'utf8');
@@ -131,24 +160,34 @@ describe('syncPythonUvLock', () => {
       pythonDir,
       version: '0.44.11',
       log: () => undefined,
-      warn: () => undefined,
     });
 
     expect(result).toBe('unchanged');
     expect(readFileSync(join(pythonDir, 'uv.lock'), 'utf8')).toBe(FIXTURE);
   });
 
-  it('skips when the lockfile is missing', () => {
+  it('throws when the lockfile is missing', () => {
     sandbox = mkdtempSync(join(tmpdir(), 'uv-lock-sync-'));
     mkdirSync(join(sandbox, 'empty'), { recursive: true });
 
-    const result = syncPythonUvLock({
-      pythonDir: join(sandbox, 'empty'),
-      version: '0.44.12',
-      log: () => undefined,
-      warn: () => undefined,
-    });
+    expect(() =>
+      syncPythonUvLock({
+        pythonDir: join(sandbox, 'empty'),
+        version: '0.44.12',
+        log: () => undefined,
+      }),
+    ).toThrow(/python\/uv.lock not found/);
+  });
 
-    expect(result).toBe('missing');
+  it('throws when the editable entry is missing', () => {
+    const pythonDir = writeLock('name = "assertpy"\nversion = "1.1"\n');
+
+    expect(() =>
+      syncPythonUvLock({
+        pythonDir,
+        version: '0.44.12',
+        log: () => undefined,
+      }),
+    ).toThrow(/no editable turbo-themes package entry/);
   });
 });

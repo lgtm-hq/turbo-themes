@@ -52,11 +52,16 @@ extract_python_init_version() {
 # Extract the editable turbo-themes package version from uv.lock
 extract_uvlock_version() {
   awk '
-    $0 == "name = \"turbo-themes\"" { found = 1; next }
-    found && $0 ~ /^version = "/ {
-      if (match($0, /"[^"]+"/)) {
-        print substr($0, RSTART + 1, RLENGTH - 2)
-      }
+    $0 == "name = \"turbo-themes\"" { in_pkg = 1; ver = ""; next }
+    in_pkg && $0 == "[[package]]" { in_pkg = 0; next }
+    in_pkg && $0 ~ /^version = "/ {
+      ver = $0
+      sub(/^version = "/, "", ver)
+      sub(/"$/, "", ver)
+      next
+    }
+    in_pkg && $0 == "source = { editable = \".\" }" && ver != "" {
+      print ver
       exit
     }
   ' "$1"
@@ -100,7 +105,12 @@ check_version "$ROOT_DIR/package.json" extract_npm_version "npm (package.json)"
 check_version "$ROOT_DIR/lib/turbo-themes/version.rb" extract_ruby_version "Ruby (version.rb)"
 check_version "$ROOT_DIR/Gemfile.lock" extract_gemlock_version "Ruby (Gemfile.lock)"
 check_version "$ROOT_DIR/python/pyproject.toml" extract_python_toml_version "Python (pyproject.toml)"
-check_version "$ROOT_DIR/python/uv.lock" extract_uvlock_version "Python (uv.lock)"
+if [[ ! -f "$ROOT_DIR/python/uv.lock" ]]; then
+  echo "❌ Python (uv.lock): file not found"
+  ERRORS=$((ERRORS + 1))
+else
+  check_version "$ROOT_DIR/python/uv.lock" extract_uvlock_version "Python (uv.lock)"
+fi
 check_version "$ROOT_DIR/python/src/turbo_themes/__init__.py" extract_python_init_version "Python (__init__.py)"
 check_version "$ROOT_DIR/swift/Sources/TurboThemes/Version.swift" extract_swift_version "Swift (Version.swift)"
 
