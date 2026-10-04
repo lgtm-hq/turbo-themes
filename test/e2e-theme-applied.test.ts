@@ -116,6 +116,13 @@ describe('inspectThemeApplication', () => {
     expect(status.missing).toEqual([]);
   });
 
+  it('rejects when the stylesheet has not finished loading', () => {
+    installThemeDom({ themeId: 'bulma-light', sheetLoaded: false });
+    const status = inspectThemeApplication('bulma-light');
+    expect(status.ok).toBe(false);
+    expect(status.missing.some((reason) => reason.includes('sheet is not loaded'))).toBe(true);
+  });
+
   it('rejects a mid-swap where the swatch still has the previous background', () => {
     installThemeDom({
       themeId: 'bulma-light',
