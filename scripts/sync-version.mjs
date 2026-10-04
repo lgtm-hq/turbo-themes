@@ -10,6 +10,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { syncPythonUvLock } from './utils/sync-python-uv-lock.mjs';
 import { validateVersion } from './utils/validation.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -108,6 +109,14 @@ replaceInFile(
   `version = "${version}"`,
   'python/pyproject.toml'
 );
+
+// Keep python/uv.lock's editable package version in lockstep with pyproject.
+// `uv lock` is not used: it re-resolves and can churn unrelated pins.
+syncPythonUvLock({
+  pythonDir: path.join(root, 'python'),
+  version,
+  log,
+});
 
 // Python __version__
 const pyInit = path.join(root, 'python', 'src', 'turbo_themes', '__init__.py');
