@@ -19,7 +19,6 @@ export class HomePage extends BasePage {
    */
   async switchToTheme(themeId: string): Promise<void> {
     await this.selectTheme(themeId);
-    await this.expectThemeApplied(themeId);
     await waitForThemeApplied(this.page, themeId);
   }
 

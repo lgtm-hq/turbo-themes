@@ -1,5 +1,20 @@
-import { expect, test } from '@playwright/test';
+import { type Page, expect, test } from '@playwright/test';
 import { blockRemoteFonts, waitForFontsReady, waitForThemeApplied } from './helpers';
+
+/**
+ * Applies a theme through the header selector so `#turbo-theme-css` loads.
+ *
+ * Setting `data-theme` alone does not swap the stylesheet. The paint wait
+ * then times out because the href still points at the boot theme.
+ *
+ * @param page - Playwright page
+ * @param themeId - Theme id to select
+ */
+async function applyThemeThroughSelector(page: Page, themeId: string): Promise<void> {
+  await page.getByTestId('theme-trigger').click();
+  await expect(page.locator('#theme-menu')).toBeVisible();
+  await page.locator(`.theme-option[data-theme="${themeId}"]`).click();
+}
 
 /**
  * Visual regression tests for main site pages.
@@ -40,13 +55,7 @@ test.describe('Homepage Visual Regression @visual', () => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
 
-      // Apply theme
-      await page.evaluate((t) => {
-        document.documentElement.dataset.theme = t;
-        localStorage.setItem('turbo-theme', t);
-      }, theme.id);
-
-      // Wait for theme CSS to be applied (replaces arbitrary waitForTimeout)
+      await applyThemeThroughSelector(page, theme.id);
       await waitForThemeApplied(page, theme.id);
       await waitForFontsReady(page);
 
@@ -67,13 +76,7 @@ test.describe('Demo Page Visual Regression @visual', () => {
 
   for (const theme of themes) {
     test(`demo page renders correctly with ${theme.id}`, async ({ page }) => {
-      // Apply theme
-      await page.evaluate((t) => {
-        document.documentElement.dataset.theme = t;
-        localStorage.setItem('turbo-theme', t);
-      }, theme.id);
-
-      // Wait for theme CSS to be applied
+      await applyThemeThroughSelector(page, theme.id);
       await waitForThemeApplied(page, theme.id);
       await waitForFontsReady(page);
 
@@ -158,10 +161,7 @@ test.describe('Theme Transition Visual Regression @visual', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    // Start with dark theme
-    await page.evaluate(() => {
-      document.documentElement.dataset.theme = 'catppuccin-mocha';
-    });
+    await applyThemeThroughSelector(page, 'catppuccin-mocha');
     await waitForThemeApplied(page, 'catppuccin-mocha');
     await waitForFontsReady(page);
 
@@ -170,12 +170,7 @@ test.describe('Theme Transition Visual Regression @visual', () => {
       fullPage: false,
     });
 
-    // Switch to light theme
-    await page.evaluate(() => {
-      document.documentElement.dataset.theme = 'catppuccin-latte';
-    });
-
-    // Wait for theme to be applied
+    await applyThemeThroughSelector(page, 'catppuccin-latte');
     await waitForThemeApplied(page, 'catppuccin-latte');
     await waitForFontsReady(page);
 
@@ -191,9 +186,7 @@ test.describe('Dark/Light Mode Contrast @visual', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    await page.evaluate(() => {
-      document.documentElement.dataset.theme = 'catppuccin-mocha';
-    });
+    await applyThemeThroughSelector(page, 'catppuccin-mocha');
     await waitForThemeApplied(page, 'catppuccin-mocha');
 
     // Get background color
