@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.14] - 2026-10-04
+
+### 🐛 Fixed
+
+- Stop ignoring examples/\*\* so example manifests are tracked (#1087)
+
 ## [0.44.13] - 2026-10-04
 
 ### 🐛 Fixed
