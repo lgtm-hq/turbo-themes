@@ -10,6 +10,16 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.16] - 2026-10-12
+
+### 🐛 Fixed
+
+- Resolve OSV advisories breaking main CI (#1099)
+
+### 🔧 Changed
+
+- Update dependency esbuild to 0.28.1 (patch) [security] (#1089)
+
 ## [0.44.15] - 2026-10-05
 
 ### 🔧 Changed
