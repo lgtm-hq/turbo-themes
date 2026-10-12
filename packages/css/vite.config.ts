@@ -37,5 +37,5 @@ export default defineConfig({
       },
     ],
   },
-  plugins: [dts({ bundleTypes: true })],
+  plugins: [dts()],
 });
