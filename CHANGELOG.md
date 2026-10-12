@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.18] - 2026-10-12
+
+### 🔧 Changed
+
+- Pin dependencies (#1102)
+
 ## [0.44.17] - 2026-10-12
 
 ### 🔧 Changed
