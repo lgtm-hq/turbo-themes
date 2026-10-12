@@ -13,7 +13,7 @@
     "turbo-themes": "latest"
   },
   "devDependencies": {
-    "sass": "^1.69.0",
+    "sass": "1.105.1",
     "vite": "^6.4.3"
   }
 }
