@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.23] - 2026-10-12
+
+### 🔧 Changed
+
+- Update dependency @types/node to 26.6.4 (patch) (#1110)
+- Update ruby:4.0-bookworm docker digest to 7671dc1 (#1109)
+
 ## [0.44.22] - 2026-10-12
 
 ### 🔧 Changed
