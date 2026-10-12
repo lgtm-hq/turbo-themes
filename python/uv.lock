@@ -590,7 +590,7 @@ wheels = [
 
 [[package]]
 name = "turbo-themes"
-version = "0.44.21"
+version = "0.44.22"
 source = { editable = "." }
 dependencies = [
     { name = "python-dateutil" },
