@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.22] - 2026-10-12
+
+### 🔧 Changed
+
+- Update dependency fast-uri to 4.2.1 (minor) (#1057)
+
 ## [0.44.21] - 2026-10-12
 
 ### 🔧 Changed
