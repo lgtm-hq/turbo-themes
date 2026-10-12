@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.21] - 2026-10-12
+
+### 🔧 Changed
+
+- Update github-actions (#1059)
+
 ## [0.44.20] - 2026-10-12
 
 ### 🔧 Changed
