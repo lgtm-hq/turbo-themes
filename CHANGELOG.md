@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.29] - 2026-10-13
+
+### 🔧 Changed
+
+- Update dependency happy-dom to 20.14.6 (patch) (#1126)
+- Update dependency html-validate to 11.16.2 (patch) (#1127)
+
 ## [0.44.28] - 2026-10-13
 
 ### 🔧 Changed
