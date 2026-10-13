@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.28] - 2026-10-13
+
+### 🔧 Changed
+
+- Update dependency follow-redirects to 1.16.1 (patch) (#1124)
+- Update dependency fast-uri to 4.2.2 (patch) (#1122)
+
 ## [0.44.27] - 2026-10-13
 
 ### 🔧 Changed
