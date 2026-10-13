@@ -47,6 +47,65 @@ function toSnakeCase(name) {
   return name.replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, '');
 }
 
+const PYTHON_KEYWORDS = new Set([
+  'false',
+  'none',
+  'true',
+  'and',
+  'as',
+  'assert',
+  'async',
+  'await',
+  'break',
+  'class',
+  'continue',
+  'def',
+  'del',
+  'elif',
+  'else',
+  'except',
+  'finally',
+  'for',
+  'from',
+  'global',
+  'if',
+  'import',
+  'in',
+  'is',
+  'lambda',
+  'nonlocal',
+  'not',
+  'or',
+  'pass',
+  'raise',
+  'return',
+  'try',
+  'while',
+  'with',
+  'yield',
+]);
+
+/**
+ * Convert a schema property name to a valid Python identifier.
+ */
+function toPythonIdentifier(name) {
+  let identifier = toSnakeCase(name.replace(/^\$+/, '')).replace(/[^a-zA-Z0-9_]/g, '_');
+
+  if (!identifier) {
+    identifier = 'value';
+  }
+
+  if (/^\d/.test(identifier)) {
+    identifier = `field_${identifier}`;
+  }
+
+  if (PYTHON_KEYWORDS.has(identifier)) {
+    identifier = `${identifier}_`;
+  }
+
+  return identifier;
+}
+
 /**
  * Convert a JSON Schema type to Python type hint.
  */
@@ -109,7 +168,7 @@ function generateDataclass(name, schema, defs) {
   const optionalFields = [];
 
   for (const [propName, propSchema] of Object.entries(properties)) {
-    const pyName = toSnakeCase(propName);
+    const pyName = toPythonIdentifier(propName);
     const isRequired = required.has(propName);
 
     if (isRequired) {

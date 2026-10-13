@@ -11,7 +11,7 @@ import {
 } from './apply-theme.js';
 import { applyTheme as applyThemeById } from './integration.js';
 import { THEME_FAMILIES } from './constants.js';
-import { getThemes, getValidThemeIds } from './theme-resolver.js';
+import { getThemes, getValidThemeIds, type ThemeSelectorOptions } from './theme-resolver.js';
 import { createDropdownStateManager, type DropdownState } from './dropdown/state.js';
 import { wireDropdownEventHandlers } from './dropdown/events.js';
 import { populateDropdownMenu, wireNativeSelect, getDropdownElements } from './dropdown/ui.js';
@@ -28,15 +28,26 @@ declare global {
 }
 
 /**
- * Initializes theme system
+ * Initializes theme system.
+ *
+ * @param documentObj - The document to apply the theme to.
+ * @param windowObj - The window providing storage and initial-theme hints.
+ * @param options - Optional subset-selecting options. The persisted theme is
+ *   validated against the resolved allowlist and falls back to
+ *   `options.defaultTheme` (or the package default) when disallowed.
  */
-export async function initTheme(documentObj: Document, windowObj: Window): Promise<void> {
+export async function initTheme(
+  documentObj: Document,
+  windowObj: Window,
+  options?: ThemeSelectorOptions
+): Promise<void> {
   // Migrate legacy storage keys
   migrateLegacyStorage(windowObj);
 
   // Check if theme was already applied by blocking script
   const initialTheme = windowObj.__INITIAL_THEME__;
-  const savedTheme = getSavedTheme(windowObj, getValidThemeIds());
+  const fallbackTheme = options?.defaultTheme ?? DEFAULT_THEME;
+  const savedTheme = getSavedTheme(windowObj, getValidThemeIds(options), fallbackTheme);
 
   // If blocking script already applied theme and it matches saved, synchronize UI and return
   if (initialTheme && initialTheme === savedTheme) {
@@ -57,7 +68,8 @@ export async function initTheme(documentObj: Document, windowObj: Window): Promi
  */
 export async function wireFlavorSelector(
   documentObj: Document,
-  windowObj: Window
+  windowObj: Window,
+  options?: ThemeSelectorOptions
 ): Promise<{ cleanup: () => void }> {
   const abortController = new AbortController();
 
@@ -69,7 +81,9 @@ export async function wireFlavorSelector(
 
   const { dropdownMenu, selectEl } = elements;
   const baseUrl = getBaseUrl(documentObj);
-  const themes = getThemes();
+  const themes = getThemes(options);
+  const validThemeIds = getValidThemeIds(options);
+  const fallbackTheme = options?.defaultTheme ?? DEFAULT_THEME;
 
   // Initialize state
   const state: DropdownState = {
@@ -79,8 +93,8 @@ export async function wireFlavorSelector(
 
   // Get current theme (validated against available themes)
   const currentThemeId =
-    getSavedTheme(windowObj, getValidThemeIds()) ||
-    getCurrentThemeFromDocument(documentObj, DEFAULT_THEME);
+    getSavedTheme(windowObj, validThemeIds, fallbackTheme) ||
+    getCurrentThemeFromDocument(documentObj, fallbackTheme);
 
   // Create state manager (needs elements and state)
   const stateManager = createDropdownStateManager(elements, state);
@@ -95,13 +109,15 @@ export async function wireFlavorSelector(
     menuItems: state.menuItems,
     closeDropdown: stateManager.closeDropdown,
     onThemeSelect: async (themeId: string) => {
+      // Menu items come from the subset, so the integration API's
+      // full-catalog validation and persistence remain correct here.
       await applyThemeById(themeId, documentObj, windowObj);
     },
   };
 
   // Wire native select if present
   if (selectEl) {
-    wireNativeSelect(ctx, selectEl, themes, DEFAULT_THEME);
+    wireNativeSelect(ctx, selectEl, themes, fallbackTheme);
   }
 
   // Populate dropdown menu
@@ -145,6 +161,7 @@ export { generateBlockingScript, type BlockingScriptOptions } from './blocking-s
 
 // Re-export types
 export type { ThemeMode, ThemeAppearance, ThemeFamily } from './types.js';
+export type { ThemeSelectorOptions } from './theme-resolver.js';
 
 // Auto-initialize on DOMContentLoaded
 if (typeof document !== 'undefined' && typeof window !== 'undefined') {

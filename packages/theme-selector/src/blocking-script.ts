@@ -15,13 +15,29 @@
  * <Fragment set:html={`<script>${blockingScript}</script>`} />
  */
 
-import { DEFAULT_THEME, THEME_APPEARANCES, VALID_THEMES } from '@lgtm-hq/turbo-themes-core';
+import {
+  DEFAULT_THEME,
+  THEME_APPEARANCES,
+  VALID_THEMES,
+  createThemeCatalog,
+  type ThemeCatalog,
+} from '@lgtm-hq/turbo-themes-core';
 import type { ThemeAppearance } from './appearance.js';
 import { CSS_LINK_ID, STORAGE_KEY, LEGACY_STORAGE_KEYS } from './constants.js';
 
 export interface BlockingScriptOptions {
-  /** Valid theme IDs to accept. Defaults to VALID_THEMES from core. */
+  /**
+   * Valid theme IDs to accept. When omitted, the allowlist is resolved from
+   * `catalog`, then `vendors`, and finally VALID_THEMES from core.
+   */
   validThemes?: readonly string[];
+  /** Vendors whose variants form the allowlist. Ignored when `validThemes` is set. */
+  vendors?: readonly string[];
+  /**
+   * A pre-built catalog (e.g. from `createThemeCatalog`/`themeSets`) whose
+   * `themeIds` form the allowlist. Ignored when `validThemes` is set.
+   */
+  catalog?: ThemeCatalog;
   /** Fallback theme when no preference is stored. Defaults to DEFAULT_THEME from core. */
   defaultTheme?: string;
   /** localStorage key for the active theme. Defaults to STORAGE_KEY from core. */
@@ -30,6 +46,18 @@ export interface BlockingScriptOptions {
   legacyKeys?: readonly string[];
   /** Light/dark mapping per theme ID. Defaults to THEME_APPEARANCES from core. */
   themeAppearances?: Readonly<Record<string, ThemeAppearance>>;
+}
+
+/**
+ * Resolves the allowlist for the blocking script.
+ *
+ * Precedence: explicit `validThemes` > `catalog` > `vendors` > VALID_THEMES.
+ */
+function resolveValidThemes(options: BlockingScriptOptions): readonly string[] {
+  if (options.validThemes) return options.validThemes;
+  if (options.catalog) return options.catalog.themeIds;
+  if (options.vendors) return createThemeCatalog({ vendors: options.vendors }).themeIds;
+  return VALID_THEMES;
 }
 
 /**
@@ -46,12 +74,12 @@ export interface BlockingScriptOptions {
  */
 export function generateBlockingScript(options: BlockingScriptOptions = {}): string {
   const {
-    validThemes = VALID_THEMES,
     defaultTheme = DEFAULT_THEME,
     storageKey = STORAGE_KEY,
     legacyKeys = LEGACY_STORAGE_KEYS,
     themeAppearances = THEME_APPEARANCES,
   } = options;
+  const validThemes = resolveValidThemes(options);
 
   const config = {
     storageKey: JSON.stringify(storageKey),
