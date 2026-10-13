@@ -252,7 +252,7 @@
     "picomatch": "4.0.7",
     "yaml": "2.9.1",
     "qs": "6.16.0",
-    "basic-ftp": "6.2.1",
+    "basic-ftp": "6.2.3",
     "uuid": "14.0.2",
     "follow-redirects": "1.16.0",
     "astro": "7.3.3",
