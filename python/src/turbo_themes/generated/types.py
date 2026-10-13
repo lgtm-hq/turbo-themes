@@ -182,7 +182,7 @@ class Spacing:
 class Elevation:
     """Generated dataclass for Elevation."""
 
-    none: str
+    none_: str
     sm: str
     md: str
     lg: str
@@ -192,7 +192,7 @@ class Elevation:
     def from_dict(cls, data: Dict[str, Any]) -> "Elevation":
         """Create Elevation from dictionary."""
         return cls(
-            none=data["none"],
+            none_=data["none"],
             sm=data["sm"],
             md=data["md"],
             lg=data["lg"],
@@ -634,7 +634,7 @@ class ThemeValue:
     vendor: str
     appearance: Any
     tokens: Tokens
-    $description: Optional[str] = None
+    description: Optional[str] = None
     icon_url: Optional[str] = None
 
     @classmethod
@@ -646,7 +646,7 @@ class ThemeValue:
             vendor=data["vendor"],
             appearance=data["appearance"],
             tokens=Tokens.from_dict(data["tokens"]),
-            $description=data.get("$description"),
+            description=data.get("$description"),
             icon_url=data.get("iconUrl"),
         )
 
@@ -655,10 +655,10 @@ class TurboThemesOutput:
     """Generated dataclass for TurboThemesOutput."""
 
     themes: Dict[str, ThemeValue]
-    $schema: Optional[str] = None
-    $description: Optional[str] = None
-    $version: Optional[str] = None
-    $generated: Optional[str] = None
+    schema: Optional[str] = None
+    description: Optional[str] = None
+    version: Optional[str] = None
+    generated: Optional[str] = None
     meta: Optional[Meta] = None
     by_vendor: Optional[Dict[str, Vendor]] = None
 
@@ -667,10 +667,10 @@ class TurboThemesOutput:
         """Create TurboThemesOutput from dictionary."""
         return cls(
             themes=data["themes"],
-            $schema=data.get("$schema"),
-            $description=data.get("$description"),
-            $version=data.get("$version"),
-            $generated=data.get("$generated"),
+            schema=data.get("$schema"),
+            description=data.get("$description"),
+            version=data.get("$version"),
+            generated=data.get("$generated"),
             meta=Meta.from_dict(data["meta"]) if "meta" in data else None,
             by_vendor=data.get("byVendor"),
         )
