@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.26] - 2026-10-13
+
+### 🔧 Changed
+
+- Update dependency @vitejs/plugin-vue to 6.0.10 (patch) (#1119)
+
 ## [0.44.25] - 2026-10-13
 
 ### 🔧 Changed
