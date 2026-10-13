@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.24] - 2026-10-13
+
+### 🔧 Changed
+
+- Update dependency basic-ftp to 6.2.3 (patch) (#1114)
+- Update dependency @types/node to 26.6.5 (patch) (#1113)
+
 ## [0.44.23] - 2026-10-12
 
 ### 🔧 Changed
