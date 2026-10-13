@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.27] - 2026-10-13
+
+### 🔧 Changed
+
+- Update dependency esbuild to 0.28.2 (patch) (#1120)
+
 ## [0.44.26] - 2026-10-13
 
 ### 🔧 Changed
