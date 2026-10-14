@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.37] - 2026-10-14
+
+### 🔧 Changed
+
+- Update dependency autoprefixer to 10.6.1 (minor) (#1141)
+
 ## [0.44.36] - 2026-10-14
 
 ### 🔧 Changed
