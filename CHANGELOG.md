@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.33] - 2026-10-14
+
+### 🐛 Fixed
+
+- Update dependency vue to 3.5.43 (patch) (#1138)
+
 ## [0.44.32] - 2026-10-14
 
 ### 🔧 Changed
