@@ -26,9 +26,9 @@ jobs:
       # publish-allowlisted actions (lgtm-ci#518).
       publish-results: true
       egress-policy: block
-      # Since lgtm-ci v0.69.4 (which dropped the egress-preset and
-      # allowed-endpoints-mode compat inputs, lgtm-ci#551) this list is fed
-      # straight to the harden-runner pre hook with no preset resolution.
+      # lgtm-ci v0.77 re-added egress-preset (default scorecard) with
+      # allowed-endpoints-mode replace (default), so this non-empty list is
+      # used alone by the harden-runner pre hook, as before.
       # It covers the reusable's default baseline plus the
       # StepSecurity/sigstore/OSSF hosts this job needs for publish.
       allowed-endpoints: >
