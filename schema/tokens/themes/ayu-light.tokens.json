@@ -55,7 +55,7 @@
         "$type": "color"
       },
       "warning": {
-        "$value": "#ff7e33",
+        "$value": "#fa8532",
         "$type": "color"
       },
       "danger": {
@@ -71,7 +71,7 @@
         "$type": "color"
       },
       "warningText": {
-        "$value": "#343435",
+        "$value": "#373737",
         "$type": "color"
       },
       "dangerText": {
@@ -110,11 +110,11 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#c28200",
+          "$value": "#be8500",
           "$type": "color"
         },
         "h2": {
-          "$value": "#3696db",
+          "$value": "#2099d6",
           "$type": "color"
         },
         "h3": {
@@ -130,7 +130,7 @@
           "$type": "color"
         },
         "h6": {
-          "$value": "#e3702d",
+          "$value": "#dc752c",
           "$type": "color"
         }
       },
@@ -156,7 +156,7 @@
           "$type": "color"
         },
         "bg": {
-          "$value": "#e5e9ed",
+          "$value": "#e4e7eb",
           "$type": "color"
         }
       },

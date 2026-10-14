@@ -221,7 +221,7 @@
     "@vitest/coverage-v8": "5.0.3",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
-    "ayu": "9.0.0",
+    "ayu": "9.1.0",
     "bulma": "1.0.4",
     "concurrently": "10.0.6",
     "cssnano": "9.0.5",

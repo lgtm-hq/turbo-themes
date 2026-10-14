@@ -55,7 +55,7 @@
         "$type": "color"
       },
       "warning": {
-        "$value": "#ffad66",
+        "$value": "#ffa659",
         "$type": "color"
       },
       "danger": {
@@ -87,7 +87,7 @@
     },
     "accent": {
       "link": {
-        "$value": "#ffd173",
+        "$value": "#ffcd66",
         "$type": "color"
       }
     },
@@ -110,7 +110,7 @@
     "content": {
       "heading": {
         "h1": {
-          "$value": "#ffd173",
+          "$value": "#ffcd66",
           "$type": "color"
         },
         "h2": {
@@ -130,7 +130,7 @@
           "$type": "color"
         },
         "h6": {
-          "$value": "#ffad66",
+          "$value": "#ffa659",
           "$type": "color"
         }
       },
@@ -146,7 +146,7 @@
       },
       "link": {
         "default": {
-          "$value": "#ffd173",
+          "$value": "#ffcd66",
           "$type": "color"
         }
       },
