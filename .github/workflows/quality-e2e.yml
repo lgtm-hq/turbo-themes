@@ -46,6 +46,9 @@ jobs:
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-comment
+      # Distinct per call: three calls share one run, and v0.76+ otherwise
+      # writes each results.v1 doc to playwright-results-<run_id>.
+      results-artifact-name: playwright-e2e-results
       timeout-minutes: 30
       tooling-ref: 'b777111fb3aaa6f09589fb029f0094a05dd76003' # v0.77.7
       egress-policy: block
@@ -94,6 +97,7 @@ jobs:
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-smoke-comment
+      results-artifact-name: playwright-smoke-results
       timeout-minutes: 15
       tooling-ref: 'b777111fb3aaa6f09589fb029f0094a05dd76003' # v0.77.7
       egress-policy: block
@@ -136,6 +140,7 @@ jobs:
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-a11y-comment
+      results-artifact-name: playwright-a11y-results
       timeout-minutes: 15
       tooling-ref: 'b777111fb3aaa6f09589fb029f0094a05dd76003' # v0.77.7
       egress-policy: block
