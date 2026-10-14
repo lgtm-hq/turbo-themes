@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.30] - 2026-10-14
+
+### 🔧 Changed
+
+- Update dependency js-yaml to 5.4.3 (patch) (#1129)
+- Update dependency smol-toml to 1.9.1 (patch) (#1130)
+
 ## [0.44.29] - 2026-10-13
 
 ### 🔧 Changed
