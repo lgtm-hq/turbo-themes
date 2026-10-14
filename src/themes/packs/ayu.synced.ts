@@ -19,7 +19,7 @@ export const ayuSynced: ThemePackage = {
   },
   source: {
     package: "ayu",
-    version: "9.0.0",
+    version: "9.1.0",
     repository: "https://github.com/ayu-theme/ayu-colors",
   },
   flavors: [
@@ -36,7 +36,7 @@ export const ayuSynced: ThemePackage = {
         },
         text: {
           primary: "#bfbdb6",
-          secondary: "#5b6876",
+          secondary: "#5a6378",
           inverse: "#0d1017",
         },
         brand: {
@@ -75,7 +75,7 @@ export const ayuSynced: ThemePackage = {
           },
           body: {
             primary: "#bfbdb6",
-            secondary: "#5b6876",
+            secondary: "#5a6378",
           },
           link: {
             default: "#ffb454",
@@ -127,7 +127,7 @@ export const ayuSynced: ThemePackage = {
         state: {
           info: "#55b4d4",
           success: "#86b300",
-          warning: "#ff7e33",
+          warning: "#fa8532",
           danger: "#e65050",
           infoText: "#000000",
           successText: "#000000",
@@ -152,12 +152,12 @@ export const ayuSynced: ThemePackage = {
         },
         content: {
           heading: {
-            h1: "#f2a300",
-            h2: "#399ee6",
+            h1: "#eba400",
+            h2: "#22a4e6",
             h3: "#55b4d4",
             h4: "#86b300",
             h5: "#a37acc",
-            h6: "#ff7e33",
+            h6: "#fa8532",
           },
           body: {
             primary: "#5c6166",
@@ -168,7 +168,7 @@ export const ayuSynced: ThemePackage = {
           },
           selection: {
             fg: "#5c6166",
-            bg: "#e5e9ed",
+            bg: "#e4e7eb",
           },
           blockquote: {
             border: "#e7eaed",
@@ -213,14 +213,14 @@ export const ayuSynced: ThemePackage = {
         state: {
           info: "#5ccfe6",
           success: "#d5ff80",
-          warning: "#ffad66",
+          warning: "#ffa659",
           danger: "#ff6666",
         },
         border: {
           default: "#171b24",
         },
         accent: {
-          link: "#ffd173",
+          link: "#ffcd66",
         },
         typography: {
           fonts: {
@@ -234,19 +234,19 @@ export const ayuSynced: ThemePackage = {
         },
         content: {
           heading: {
-            h1: "#ffd173",
+            h1: "#ffcd66",
             h2: "#73d0ff",
             h3: "#5ccfe6",
             h4: "#d5ff80",
             h5: "#dfbfff",
-            h6: "#ffad66",
+            h6: "#ffa659",
           },
           body: {
             primary: "#cccac2",
             secondary: "#707a8c",
           },
           link: {
-            default: "#ffd173",
+            default: "#ffcd66",
           },
           selection: {
             fg: "#cccac2",

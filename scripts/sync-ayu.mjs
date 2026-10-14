@@ -28,13 +28,19 @@ const ayuVersion = ayuPackageJson.version;
 /**
  * Normalize an ayu Color to a solid #RRGGBB hex string.
  * Prefer blended-on-background for translucent colors so CSS tokens stay opaque.
- * @param {{ hex: (type?: 'rgb' | 'rgba' | 'blend') => string } | undefined} color
+ * @param {{ hex: (type?: 'rgb' | 'rgba' | 'blend') => string, getAlpha?: () => number, blend?: (bg: object) => object } | undefined} color
  * @param {string} [fallback]
+ * @param {object} [bg] ayu Color the translucent color sits on (ayu >= 9.1)
  * @returns {string | undefined}
  */
-function ayuHex(color, fallback) {
+function ayuHex(color, fallback, bg) {
   if (!color || typeof color.hex !== 'function') return fallback;
-  // Prefer blend for alpha colors; fall back to rgb (strips alpha) then raw hex
+  // ayu >= 9.1 (culori) ignores hex('blend') and returns #rrggbbaa for
+  // translucent colors, so composite onto the same surface 9.0 blended over.
+  if (bg && typeof color.blend === 'function' && color.getAlpha?.() < 1) {
+    return ayuHex(color.blend(bg), fallback);
+  }
+  // ayu 9.0: prefer blend for alpha colors; fall back to rgb (strips alpha) then raw hex
   const blended = color.hex('blend');
   if (typeof blended === 'string' && /^#[0-9a-fA-F]{6}$/.test(blended)) return blended;
   const rgb = color.hex('rgb');
@@ -51,9 +57,10 @@ function ayuHex(color, fallback) {
  * @param {string} bg
  * @param {string[]} candidates
  * @param {{ hex: (type?: 'rgb' | 'rgba' | 'blend') => string, darken: (n: number) => any, brighten: (n: number) => any } | undefined} sourceColor
+ * @param {object} [sourceBg] ayu Color sourceColor sits on, for translucent colors
  * @returns {string}
  */
-function ensureReadable(preferred, bg, candidates = [], sourceColor = undefined) {
+function ensureReadable(preferred, bg, candidates = [], sourceColor = undefined, sourceBg = undefined) {
   const WCAG_AA_LARGE = 3.0;
   if (contrastRatio(preferred, bg) >= WCAG_AA_LARGE) return preferred;
   for (const c of candidates) {
@@ -61,9 +68,9 @@ function ensureReadable(preferred, bg, candidates = [], sourceColor = undefined)
   }
   if (sourceColor && typeof sourceColor.darken === 'function') {
     for (let step = 0.25; step <= 3; step += 0.25) {
-      const darkened = ayuHex(sourceColor.darken(step));
+      const darkened = ayuHex(sourceColor.darken(step), undefined, sourceBg);
       if (darkened && contrastRatio(darkened, bg) >= WCAG_AA_LARGE) return darkened;
-      const brightened = ayuHex(sourceColor.brighten(step));
+      const brightened = ayuHex(sourceColor.brighten(step), undefined, sourceBg);
       if (brightened && contrastRatio(brightened, bg) >= WCAG_AA_LARGE) return brightened;
     }
   }
@@ -77,37 +84,39 @@ function buildTokens(variant) {
   // - state.danger ← common.error (syntax.error does not exist in ayu v9)
   // - state.warning/success/accent.link ← syntax.keyword/string/func
   const bgBase = ayuHex(variant.ui.bg, '#111111');
-  const bgSurface = ayuHex(variant.ui.panel.bg, bgBase);
+  const bgSurface = ayuHex(variant.ui.panel.bg, bgBase, variant.ui.bg);
   // Prefer ui.line for overlay when it elevates above base. Mirage's ui.line is
   // darker than base (same token as border), which would invert elevation — fall
   // back to selection.active (lighter panel/surface tone) in that case.
-  const lineCandidate = ayuHex(variant.ui.line, bgSurface);
-  const elevatedCandidate = ayuHex(variant.ui.selection?.active, bgSurface);
+  const lineCandidate = ayuHex(variant.ui.line, bgSurface, variant.ui.bg);
+  const elevatedCandidate = ayuHex(variant.ui.selection?.active, bgSurface, variant.ui.bg);
   const isDarkBase = getLuminance(bgBase) < 0.5;
   const bgOverlay =
     isDarkBase && getLuminance(lineCandidate) < getLuminance(bgBase)
       ? elevatedCandidate
       : lineCandidate;
-  const textPrimary = ayuHex(variant.editor.fg, '#ffffff');
+  const textPrimary = ayuHex(variant.editor.fg, '#ffffff', variant.editor.bg);
   const textSecondary = ensureReadable(
-    ayuHex(variant.ui.fg, textPrimary),
+    ayuHex(variant.ui.fg, textPrimary, variant.ui.bg),
     bgBase,
-    [ayuHex(variant.syntax.comment), textPrimary],
+    [ayuHex(variant.syntax.comment, undefined, variant.editor.bg), textPrimary],
     variant.ui.fg,
+    variant.ui.bg,
   );
-  const brandPrimary = ayuHex(variant.common.accent.tint, textPrimary);
-  const stateInfo = ayuHex(variant.syntax.tag, brandPrimary);
-  const stateSuccess = ayuHex(variant.syntax.string, '#22c55e');
-  const stateWarning = ayuHex(variant.syntax.keyword, '#facc15');
-  const stateDanger = ayuHex(variant.common.error, '#ef4444');
+  const brandPrimary = ayuHex(variant.common.accent.tint, textPrimary, variant.ui.bg);
+  const stateInfo = ayuHex(variant.syntax.tag, brandPrimary, variant.editor.bg);
+  const stateSuccess = ayuHex(variant.syntax.string, '#22c55e', variant.editor.bg);
+  const stateWarning = ayuHex(variant.syntax.keyword, '#facc15', variant.editor.bg);
+  const stateDanger = ayuHex(variant.common.error, '#ef4444', variant.ui.bg);
   const accentLink = ensureReadable(
-    ayuHex(variant.syntax.func, brandPrimary),
+    ayuHex(variant.syntax.func, brandPrimary, variant.editor.bg),
     bgBase,
-    [ayuHex(variant.syntax.constant), ayuHex(variant.common.accent.on), brandPrimary],
+    [ayuHex(variant.syntax.constant, undefined, variant.editor.bg), ayuHex(variant.common.accent.on, undefined, variant.ui.bg), brandPrimary],
     variant.syntax.func,
+    variant.editor.bg,
   );
-  const selectionBg = ayuHex(variant.ui.selection.active, bgSurface);
-  const borderDefault = ayuHex(variant.ui.line, '#e5e7eb');
+  const selectionBg = ayuHex(variant.ui.selection.active, bgSurface, variant.ui.bg);
+  const borderDefault = ayuHex(variant.ui.line, '#e5e7eb', variant.ui.bg);
 
   return {
     background: { base: bgBase, surface: bgSurface, overlay: bgOverlay },
@@ -143,12 +152,12 @@ function buildTokens(variant) {
     },
     content: {
       heading: {
-        h1: ayuHex(variant.syntax.func, textPrimary),
-        h2: ayuHex(variant.syntax.entity, textPrimary),
-        h3: ayuHex(variant.syntax.tag, textPrimary),
-        h4: ayuHex(variant.syntax.string, textPrimary),
-        h5: ayuHex(variant.syntax.constant, textPrimary),
-        h6: ayuHex(variant.syntax.keyword, textPrimary),
+        h1: ayuHex(variant.syntax.func, textPrimary, variant.editor.bg),
+        h2: ayuHex(variant.syntax.entity, textPrimary, variant.editor.bg),
+        h3: ayuHex(variant.syntax.tag, textPrimary, variant.editor.bg),
+        h4: ayuHex(variant.syntax.string, textPrimary, variant.editor.bg),
+        h5: ayuHex(variant.syntax.constant, textPrimary, variant.editor.bg),
+        h6: ayuHex(variant.syntax.keyword, textPrimary, variant.editor.bg),
       },
       body: { primary: textPrimary, secondary: textSecondary },
       link: { default: accentLink },
