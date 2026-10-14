@@ -170,6 +170,14 @@ tools:
   vue-tsc:
     enabled: false
 
+  # astro-check - disabled: astro >=7.3.4 refuses to run `astro check` under
+  # TypeScript 7 (repo is on TS 7.0.2). Before that it was a no-op here:
+  # @astrojs/check is not installed, so astro printed an install prompt and
+  # exited 0 without checking any .astro file. Type-checking Astro files on
+  # TS 7.1+ needs @astrojs/ts-content-mapper (follow-up).
+  astro-check:
+    enabled: false
+
   # OSV-Scanner - Multi-ecosystem dependency vulnerability scanner
   # Scans lockfiles (bun.lock, package-lock.json) against the OSV database
   # Config and suppressions in .osv-scanner.toml
