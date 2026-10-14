@@ -38,7 +38,7 @@ jobs:
   # Org ruleset context: e2e / 🎭 E2E Tests
   e2e:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@d32388495d571a0ee13383bacc732765bf4e9e7d  # v0.74.6
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@b777111fb3aaa6f09589fb029f0094a05dd76003  # v0.77.7
     with:
       job-name: '🎭 E2E Tests'
       test-command: ./scripts/ci/bootstrap-e2e-full.sh
@@ -46,8 +46,11 @@ jobs:
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-comment
+      # Distinct per call: three calls share one run, and v0.76+ otherwise
+      # writes each results.v1 doc to playwright-results-<run_id>.
+      results-artifact-name: playwright-e2e-results
       timeout-minutes: 30
-      tooling-ref: 'd32388495d571a0ee13383bacc732765bf4e9e7d'  # v0.74.6
+      tooling-ref: 'b777111fb3aaa6f09589fb029f0094a05dd76003' # v0.77.7
       egress-policy: block
       allowed-endpoints: >-
         github.com:443
@@ -83,7 +86,7 @@ jobs:
   # Org ruleset context: smoke / 🔥 E2E Smoke Tests
   smoke:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@d32388495d571a0ee13383bacc732765bf4e9e7d  # v0.74.6
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@b777111fb3aaa6f09589fb029f0094a05dd76003  # v0.77.7
     with:
       job-name: '🔥 E2E Smoke Tests'
       test-command: >-
@@ -94,8 +97,9 @@ jobs:
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-smoke-comment
+      results-artifact-name: playwright-smoke-results
       timeout-minutes: 15
-      tooling-ref: 'd32388495d571a0ee13383bacc732765bf4e9e7d'  # v0.74.6
+      tooling-ref: 'b777111fb3aaa6f09589fb029f0094a05dd76003' # v0.77.7
       egress-policy: block
       allowed-endpoints: >-
         github.com:443
@@ -125,7 +129,7 @@ jobs:
   # Org ruleset context: a11y / ♿ E2E Accessibility Tests
   a11y:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@d32388495d571a0ee13383bacc732765bf4e9e7d  # v0.74.6
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@b777111fb3aaa6f09589fb029f0094a05dd76003  # v0.77.7
     with:
       job-name: '♿ E2E Accessibility Tests'
       test-command: >-
@@ -136,8 +140,9 @@ jobs:
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-a11y-comment
+      results-artifact-name: playwright-a11y-results
       timeout-minutes: 15
-      tooling-ref: 'd32388495d571a0ee13383bacc732765bf4e9e7d'  # v0.74.6
+      tooling-ref: 'b777111fb3aaa6f09589fb029f0094a05dd76003' # v0.77.7
       egress-policy: block
       allowed-endpoints: >-
         github.com:443
