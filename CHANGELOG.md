@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.45] - 2026-10-14
+
+### 🔧 Changed
+
+- Update dependency shell-quote to 1.12.0 (minor) (#1161)
+
 ## [0.44.44] - 2026-10-14
 
 ### 🔧 Changed
