@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.42] - 2026-10-14
+
+### 🔧 Changed
+
+- Update dependency oxfmt to 0.72.0 (minor) (#1156)
+
 ## [0.44.41] - 2026-10-14
 
 ### 🔧 Changed
