@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.38] - 2026-10-14
+
+### 🔧 Changed
+
+- Update dependency ayu to 9.1.0 (minor) (#1142)
+
 ## [0.44.37] - 2026-10-14
 
 ### 🔧 Changed
