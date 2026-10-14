@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.46] - 2026-10-14
+
+### 🔧 Changed
+
+- Update dependency style-dictionary to 5.6.1 (minor) (#1165)
+
 ## [0.44.45] - 2026-10-14
 
 ### 🔧 Changed
