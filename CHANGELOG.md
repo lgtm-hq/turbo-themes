@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.48] - 2026-10-15
+
+### 🔧 Changed
+
+- Update dependency typescript to 5.9.3 (minor) (#1170)
+
 ## [0.44.47] - 2026-10-14
 
 ### 🔧 Changed
