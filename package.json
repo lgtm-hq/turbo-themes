@@ -218,7 +218,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@typescript/typescript6": "6.0.2",
-    "@vitest/coverage-v8": "5.0.3",
+    "@vitest/coverage-v8": "5.0.4",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "ayu": "9.1.0",
@@ -244,7 +244,7 @@
     "typescript": "7.0.2",
     "vite": "8.3.4",
     "vite-plugin-dts": "5.1.2",
-    "vitest": "5.0.3"
+    "vitest": "5.0.4"
   },
   "overrides": {
     "ajv": "8.20.0",
