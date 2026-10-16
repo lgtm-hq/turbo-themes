@@ -30,7 +30,7 @@ jobs:
     name: 🏷️ Auto Create Release Tag
     # Uses trust-and-skip pattern: version PR already validated code quality
     # Skips quality, build, and lighthouse jobs to avoid duplication
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 10
     permissions:
       contents: write
