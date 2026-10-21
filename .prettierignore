@@ -38,6 +38,6 @@ apps/site/.astro/
 *.cjs
 .lgtm-ci-tooling
 
-# GitHub workflows/actions: keep Renovate-managed pin comments and egress
-# allowlists as written (actionlint and yamllint lint them via Lintro)
+# GitHub workflows/actions: avoid reformat churn on Renovate-managed pins and
+# egress allowlists (actionlint lints them via Lintro; .yamllint skips them)
 .github/
