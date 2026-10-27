@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.55] - 2026-10-27
+
+### 🔧 Changed
+
+- Update lgtm-hq/lgtm-ci to v0.78.1 (#1197)
+
 ## [0.44.54] - 2026-10-27
 
 ### 🤖 Internal
