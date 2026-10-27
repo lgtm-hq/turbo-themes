@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.53] - 2026-10-27
+
+### 🤖 Internal
+
+- Temporarily switch harden-runner egress to audit (#1193)
+
 ## [0.44.52] - 2026-10-15
 
 ### 🔧 Changed
