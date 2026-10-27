@@ -37,7 +37,7 @@ jobs:
         uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
         with:
           # Match quality-e2e.yml full-suite egress (block + allowlist), not audit.
-          egress-policy: block
+          egress-policy: audit # TEMP: lgtm-hq/lgtm-ci#1207
           allowed-endpoints: >-
             github.com:443
             api.github.com:443

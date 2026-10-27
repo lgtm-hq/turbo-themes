@@ -1,6 +1,11 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 
-import { escapeRegex } from '../helpers';
+import { escapeRegex, waitForThemeApplied } from '../helpers';
+
+interface ThemeSelectionOptions {
+  /** Disable only when testing selection with unavailable theme CSS. */
+  waitForStylesheet?: boolean;
+}
 
 /**
  * Base page object with common navigation and theme functionality.
@@ -162,7 +167,7 @@ export class BasePage {
   /**
    * Select a theme from the dropdown menu.
    */
-  async selectTheme(themeId: string): Promise<void> {
+  async selectTheme(themeId: string, options: ThemeSelectionOptions = {}): Promise<void> {
     // Click the theme trigger to open the dropdown
     const themeTrigger = this.getThemeTrigger();
     await themeTrigger.click();
@@ -176,13 +181,16 @@ export class BasePage {
     await themeOption.click();
 
     // Wait for theme to be applied before returning
-    await this.expectThemeApplied(themeId);
+    await this.expectThemeApplied(themeId, options);
   }
 
   /**
    * Verify the current theme is applied.
    */
-  async expectThemeApplied(themeId: string): Promise<void> {
+  async expectThemeApplied(
+    themeId: string,
+    { waitForStylesheet = true }: ThemeSelectionOptions = {},
+  ): Promise<void> {
     // Check data-theme attribute
     const escapedThemeId = escapeRegex(themeId);
     await expect(this.page.locator('html')).toHaveAttribute(
@@ -201,10 +209,14 @@ export class BasePage {
       )
       .toBe(themeId);
 
-    // Check that theme CSS is loaded
+    // The href changes before the stylesheet loads. Wait for its tokens to
+    // paint so audits cannot cache old foreground colors during the swap.
     const themeCss = this.page.locator('#turbo-theme-css');
     // Safe: escapedThemeId is sanitized via escapeRegex()
     await expect(themeCss).toHaveAttribute('href', new RegExp(`${escapedThemeId}\\.css`)); // nosemgrep: detect-non-literal-regexp
+    if (waitForStylesheet) {
+      expect(await waitForThemeApplied(this.page, themeId)).toBe(true);
+    }
   }
 
   /**
