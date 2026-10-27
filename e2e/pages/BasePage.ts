@@ -2,6 +2,11 @@ import { type Locator, type Page, expect } from '@playwright/test';
 
 import { escapeRegex, waitForThemeApplied } from '../helpers';
 
+interface ThemeSelectionOptions {
+  /** Disable only when testing selection with unavailable theme CSS. */
+  waitForStylesheet?: boolean;
+}
+
 /**
  * Base page object with common navigation and theme functionality.
  * All page objects should extend this class.
@@ -162,7 +167,7 @@ export class BasePage {
   /**
    * Select a theme from the dropdown menu.
    */
-  async selectTheme(themeId: string): Promise<void> {
+  async selectTheme(themeId: string, options: ThemeSelectionOptions = {}): Promise<void> {
     // Click the theme trigger to open the dropdown
     const themeTrigger = this.getThemeTrigger();
     await themeTrigger.click();
@@ -176,13 +181,16 @@ export class BasePage {
     await themeOption.click();
 
     // Wait for theme to be applied before returning
-    await this.expectThemeApplied(themeId);
+    await this.expectThemeApplied(themeId, options);
   }
 
   /**
    * Verify the current theme is applied.
    */
-  async expectThemeApplied(themeId: string): Promise<void> {
+  async expectThemeApplied(
+    themeId: string,
+    { waitForStylesheet = true }: ThemeSelectionOptions = {},
+  ): Promise<void> {
     // Check data-theme attribute
     const escapedThemeId = escapeRegex(themeId);
     await expect(this.page.locator('html')).toHaveAttribute(
@@ -206,7 +214,9 @@ export class BasePage {
     const themeCss = this.page.locator('#turbo-theme-css');
     // Safe: escapedThemeId is sanitized via escapeRegex()
     await expect(themeCss).toHaveAttribute('href', new RegExp(`${escapedThemeId}\\.css`)); // nosemgrep: detect-non-literal-regexp
-    expect(await waitForThemeApplied(this.page, themeId)).toBe(true);
+    if (waitForStylesheet) {
+      expect(await waitForThemeApplied(this.page, themeId)).toBe(true);
+    }
   }
 
   /**

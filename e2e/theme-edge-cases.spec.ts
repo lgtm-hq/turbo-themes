@@ -633,7 +633,7 @@ test.describe('Theme Edge Cases', () => {
       try {
         // Theme switching should still work (localStorage and DOM updates)
         // even if CSS file can't be loaded
-        await homePage.selectTheme('catppuccin-latte');
+        await homePage.selectTheme('catppuccin-latte', { waitForStylesheet: false });
 
         // Verify theme data-theme attribute is updated (this doesn't require network)
         await expect(homePage.page.locator('html')).toHaveAttribute(
@@ -667,7 +667,7 @@ test.describe('Theme Edge Cases', () => {
       try {
         // Theme switching should still update DOM and localStorage
         // even if CSS file fails to load
-        await homePage.selectTheme('catppuccin-latte');
+        await homePage.selectTheme('catppuccin-latte', { waitForStylesheet: false });
 
         // Verify theme data-theme attribute is updated
         await expect(homePage.page.locator('html')).toHaveAttribute(
@@ -715,19 +715,19 @@ test.describe('Theme Edge Cases', () => {
       try {
         await test.step('Switch theme despite CSS load timeout', async () => {
           // Theme switching should still work for DOM and localStorage
-          await homePage.selectTheme('catppuccin-mocha');
+          await homePage.selectTheme('catppuccin-latte', { waitForStylesheet: false });
 
           // Verify theme data-theme attribute is updated immediately
           await expect(homePage.page.locator('html')).toHaveAttribute(
             'data-theme',
-            'catppuccin-mocha'
+            'catppuccin-latte'
           );
 
           // Verify localStorage is updated
           const storedTheme = await homePage.page.evaluate(() =>
             localStorage.getItem('turbo-theme')
           );
-          expect(storedTheme).toBe('catppuccin-mocha');
+          expect(storedTheme).toBe('catppuccin-latte');
         });
       } finally {
         await removeThemeCSSInterception(homePage.page);
