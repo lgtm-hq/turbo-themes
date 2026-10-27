@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.56] - 2026-10-27
+
+### 🐛 Fixed
+
+- Repair qs security override and lock (#1200)
+
 ## [0.44.55] - 2026-10-27
 
 ### 🔧 Changed
