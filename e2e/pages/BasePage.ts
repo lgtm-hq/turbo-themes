@@ -1,6 +1,6 @@
 import { type Locator, type Page, expect } from '@playwright/test';
 
-import { escapeRegex } from '../helpers';
+import { escapeRegex, waitForThemeApplied } from '../helpers';
 
 /**
  * Base page object with common navigation and theme functionality.
@@ -201,10 +201,12 @@ export class BasePage {
       )
       .toBe(themeId);
 
-    // Check that theme CSS is loaded
+    // The href changes before the stylesheet loads. Wait for its tokens to
+    // paint so audits cannot cache old foreground colors during the swap.
     const themeCss = this.page.locator('#turbo-theme-css');
     // Safe: escapedThemeId is sanitized via escapeRegex()
     await expect(themeCss).toHaveAttribute('href', new RegExp(`${escapedThemeId}\\.css`)); // nosemgrep: detect-non-literal-regexp
+    expect(await waitForThemeApplied(this.page, themeId)).toBe(true);
   }
 
   /**
