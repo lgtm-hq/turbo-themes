@@ -25,7 +25,7 @@ jobs:
       # Re-enabled at v0.52.4: the reusable job now contains only
       # publish-allowlisted actions (lgtm-ci#518).
       publish-results: true
-      egress-policy: block
+      egress-policy: audit # TEMP: lgtm-hq/lgtm-ci#1207
       # lgtm-ci v0.77 re-added egress-preset (default scorecard) with
       # allowed-endpoints-mode replace (default), so this non-empty list is
       # used alone by the harden-runner pre hook, as before.
