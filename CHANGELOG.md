@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.54] - 2026-10-27
+
+### 🤖 Internal
+
+- Cover remaining reusable calls with audit egress (#1195)
+
 ## [0.44.53] - 2026-10-27
 
 ### 🤖 Internal
