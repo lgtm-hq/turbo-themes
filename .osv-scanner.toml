@@ -1,7 +1,12 @@
 # OSV-Scanner Configuration
 # https://google.github.io/osv-scanner/configuration/
 #
-# No active suppressions. The extract-zip dependency was removed.
+# The extract-zip dependency was removed.
 # The braces advisory GHSA-vfj7-8cjw-p6xm was withdrawn on 2026-10-23
 # because it is not practically exploitable; braces 3.0.3 remains installed.
 # https://osv.dev/vulnerability/GHSA-vfj7-8cjw-p6xm
+
+[[IgnoredVulns]]
+id = "GHSA-gcqx-w48m-w2h4"
+ignoreUntil = 2027-01-27
+reason = """deepmerge@4.3.1 (transitive via @bundled-es-modules/deepmerge@4.3.2 <- style-dictionary@5.6.1, a devDependency; bun.lock). No patched version is available as of 2026-10-29: the advisory lists first_patched_version = none, npm latest deepmerge is 4.3.1, and latest style-dictionary@5.7.1 still depends on @bundled-es-modules/deepmerge ^4.3.2, which requires deepmerge ^4.3.1. Usage: build-time only, for merging the repository-authored Style Dictionary configuration and registered transforms/formats in scripts/build-style-dictionary.mjs; token sources are generated from checked-in schema/tokens files. Exploitability requires attacker-controlled objects reaching mergeObject(). No runtime request or user-supplied object reaches this build tool, and deepmerge is not shipped as a runtime dependency of the generated theme library or static site. A contributor able to alter build configuration already controls executable build scripts; builds of untrusted changes must remain isolated from secrets and write credentials. Accept this build-only risk until a patched dependency is available; re-evaluate by the expiry date. Tracking: https://github.com/advisories/GHSA-gcqx-w48m-w2h4."""
