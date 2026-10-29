@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.58] - 2026-10-29
+
+### 🐛 Fixed
+
+- Lint authored CSS and Sass consistently (#1206)
+
 ## [0.44.57] - 2026-10-29
 
 ### 🐛 Fixed
