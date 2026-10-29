@@ -1090,9 +1090,10 @@ input[type='file']::file-selector-button:hover {
   background-color: var(--theme-surface-0, $theme-surface-0) !important;
   border-bottom: 1px solid
     var(--theme-border, var(--theme-table-border, $theme-table-border)) !important;
+
   // Override Bulma's navbar color variables
-  --bulma-navbar-background-color: var(--theme-surface-0, $theme-surface-0);
-  --bulma-navbar-item-color: var(--theme-text, $theme-text);
+  --bulma-navbar-background-color: var(--theme-surface-0, #{$theme-surface-0});
+  --bulma-navbar-item-color: var(--theme-text, #{$theme-text});
   --bulma-navbar-item-hover-background-l-delta: 0.05;
   --bulma-navbar-item-active-background-l-delta: 0.1;
 }
@@ -1100,6 +1101,7 @@ input[type='file']::file-selector-button:hover {
 .navbar-item,
 .navbar-link {
   color: var(--theme-text, $theme-text) !important;
+
   // Override Bulma's computed navbar item colors
   --bulma-navbar-item-color-l: var(--bulma-text-l);
 }
@@ -1108,6 +1110,7 @@ input[type='file']::file-selector-button:hover {
 .navbar-link.is-active {
   color: var(--theme-link, $theme-link) !important;
   background-color: transparent !important;
+
   // Override Bulma's active state variables
   --bulma-navbar-item-color-l: var(--bulma-link-l);
 }
@@ -1121,8 +1124,9 @@ input[type='file']::file-selector-button:hover {
   border-top: 1px solid
     var(--theme-border, var(--theme-table-border, $theme-table-border)) !important;
   box-shadow: 0 4px 6px rgba(10, 10, 10, 0.1);
+
   // Override Bulma's dropdown background
-  --bulma-navbar-dropdown-background-color: var(--theme-surface-1, $theme-surface-1);
+  --bulma-navbar-dropdown-background-color: var(--theme-surface-1, #{$theme-surface-1});
 }
 
 .navbar-dropdown .navbar-item {

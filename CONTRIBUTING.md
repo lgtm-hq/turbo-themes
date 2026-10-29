@@ -103,3 +103,18 @@ All commands work with both `bun run` and `npm run`.
 
 - Use the templates under `.github/ISSUE_TEMPLATE/`
 - Security issues: do not open public issues; see `SECURITY.md`
+
+### Stylesheet linting
+
+Run `bun install --frozen-lockfile` before `uv run lintro chk` so Stylelint can resolve
+the pinned local presets. `bun run stylelint` runs the same configuration directly over
+CSS and Sass sources.
+
+The root configuration extends `stylelint-config-standard`; Sass files use
+`stylelint-config-standard-scss` and `postcss-scss`. Tailwind directives are recognized
+explicitly, while other unknown CSS at-rules remain errors. Generated build output, Sass
+theme entries, and copied site assets are ignored; authored Sass and Tailwind examples
+are linted. The legacy flavor picker in `src/scss/custom/_overrides.scss` may use one ID
+per selector because these selectors target existing JavaScript/HTML hooks. Other styles
+retain the zero-ID policy. The Sass preset replaces the CSS unknown-at-rule rule with
+its Sass-aware counterpart.

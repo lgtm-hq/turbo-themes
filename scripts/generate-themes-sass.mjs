@@ -29,7 +29,7 @@ const { generateBulmaUse, hexToHsl } = bulmaMod;
 
 // Convert HSL object to Sass HSL function call
 function hslToSass(hsl) {
-  return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+  return `hsl(${hsl.h}deg, ${hsl.s}%, ${hsl.l}%)`;
 }
 
 // Generate a properly formatted CSS font-family list from an array
@@ -315,7 +315,7 @@ ${googleFontImports}${fontFaceDeclarations}
   --theme-h4: ${tokens.content.heading.h4};
   --theme-h5: ${tokens.content.heading.h5};
   --theme-h6: ${tokens.content.heading.h6};
-  --theme-link: hsl(${linkHsl.h}, ${linkHsl.s}%, ${linkHsl.l}%);
+  --theme-link: ${hslToSass(linkHsl)};
   --theme-blockquote-border: ${tokens.content.blockquote.border};
   --theme-blockquote-fg: ${tokens.content.blockquote.fg};
   --theme-blockquote-bg: ${tokens.content.blockquote.bg};
@@ -331,11 +331,11 @@ ${googleFontImports}${fontFaceDeclarations}
   --syntax-fg: ${tokens.content.codeInline.fg};
   --syntax-bg: ${tokens.content.codeInline.bg};
   --syntax-keyword: ${tokens.brand.primary};
-  --syntax-string: hsl(${successHsl.h}, ${successHsl.s}%, ${successHsl.l}%);
-  --syntax-number: hsl(${warningHsl.h}, ${warningHsl.s}%, ${warningHsl.l}%);
+  --syntax-string: ${hslToSass(successHsl)};
+  --syntax-number: ${hslToSass(warningHsl)};
   --syntax-comment: ${tokens.text.secondary};
-  --syntax-title: hsl(${infoHsl.h}, ${infoHsl.s}%, ${infoHsl.l}%);
-  --syntax-attr: hsl(${linkHsl.h}, ${linkHsl.s}%, ${linkHsl.l}%);
+  --syntax-title: ${hslToSass(infoHsl)};
+  --syntax-attr: ${hslToSass(linkHsl)};
   --theme-surface-0: ${tokens.background.base};
   --theme-surface-1: ${tokens.background.surface};
   --theme-surface-2: ${tokens.background.overlay};
