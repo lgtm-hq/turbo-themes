@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.57] - 2026-10-29
+
+### 🐛 Fixed
+
+- Resolve deepmerge advisory GHSA-gcqx-w48m-w2h4 (#1203)
+
 ## [0.44.56] - 2026-10-27
 
 ### 🐛 Fixed
