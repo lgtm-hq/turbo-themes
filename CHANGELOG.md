@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.65] - 2026-10-29
+
+### 🔧 Changed
+
+- Update dependency browserslist to 4.29.5 (patch) (#1228)
+
 ## [0.44.64] - 2026-10-29
 
 ### 🔧 Changed
