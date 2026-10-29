@@ -36,7 +36,7 @@ input[type='file']::file-selector-button:hover {
   color: $theme-selection-fg;
 }
 
-::-moz-selection {
+::selection {
   background: $theme-selection-bg;
   color: $theme-selection-fg;
 }

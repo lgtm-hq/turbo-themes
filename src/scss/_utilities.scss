@@ -139,7 +139,7 @@
     0 0 0 1px rgba(10, 10, 10, 0.02);
 
   .card-header {
-    @if $color-name != null {
+    @if $color-name {
       background-color: theme-color($color-name, 'light');
       border-bottom-color: theme-color($color-name);
     } @else {
@@ -221,7 +221,7 @@
 /// @param {String} $direction - Gradient direction [default: 'to right']
 /// @return {String} CSS gradient value
 @function theme-gradient($start-color, $end-color: null, $direction: 'to right') {
-  @if $end-color == null {
+  @if not $end-color {
     $end-color: bulma-fn.bulmaLighten($start-color, 10%);
   }
 
@@ -236,15 +236,19 @@
 @function bulma-color-luminance($color) {
   @return bulma-fn.bulmaColorLuminance($color);
 }
+
 @function bulma-find-color-invert($color) {
   @return bulma-fn.bulmaFindColorInvert($color);
 }
+
 @function bulma-rgba($color, $alpha) {
   @return bulma-fn.bulmaRgba($color, $alpha);
 }
+
 @function bulma-darken($color, $amount) {
   @return bulma-fn.bulmaDarken($color, $amount);
 }
+
 @function bulma-lighten($color, $amount) {
   @return bulma-fn.bulmaLighten($color, $amount);
 }

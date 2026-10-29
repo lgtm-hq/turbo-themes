@@ -12,7 +12,7 @@ html {
   font-family:
     system-ui,
     -apple-system,
-    Segoe UI,
+    'Segoe UI',
     Roboto,
     Helvetica,
     Arial,
@@ -37,7 +37,7 @@ h3,
 h4,
 h5,
 h6 {
-  margin: 0 0 0.5em 0;
+  margin: 0 0 0.5em;
   font-weight: 600;
   line-height: 1.125;
 }
@@ -45,18 +45,23 @@ h6 {
 h1 {
   font-size: 2em;
 }
+
 h2 {
   font-size: 1.75em;
 }
+
 h3 {
   font-size: 1.5em;
 }
+
 h4 {
   font-size: 1.25em;
 }
+
 h5 {
   font-size: 1.125em;
 }
+
 h6 {
   font-size: 1em;
 }
@@ -151,6 +156,7 @@ h6 {
 .is-hidden {
   display: none !important;
 }
+
 .is-invisible {
   visibility: hidden !important;
 }

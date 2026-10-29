@@ -65,6 +65,6 @@
     color-scheme: #{theme-get($theme-name, appearance)};
 
     // Include syntax highlighting for this theme
-    @include syntax-highlighting();
+    @include syntax-highlighting;
   }
 }

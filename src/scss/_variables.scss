@@ -11,12 +11,12 @@
 
 // Override Bulma's initial variables with our theme system
 // These will be overridden by theme-specific values
-$primary: hsl(220, 91%, 54%) !default;
-$link: hsl(217, 91%, 60%) !default;
-$info: hsl(204, 94%, 64%) !default;
-$success: hsl(142, 71%, 45%) !default;
-$warning: hsl(38, 92%, 50%) !default;
-$danger: hsl(0, 84%, 60%) !default;
+$primary: hsl(220deg, 91%, 54%) !default;
+$link: hsl(217deg, 91%, 60%) !default;
+$info: hsl(204deg, 94%, 64%) !default;
+$success: hsl(142deg, 71%, 45%) !default;
+$warning: hsl(38deg, 92%, 50%) !default;
+$danger: hsl(0deg, 84%, 60%) !default;
 
 // Theme-specific variables (will be overridden per theme)
 $theme-font-sans: (
@@ -31,9 +31,7 @@ $theme-font-sans: (
   'Apple Color Emoji',
   'Segoe UI Emoji'
 ) !default;
-
 $theme-border: #9ca0b0 !default;
-
 $theme-font-mono: (
   'JetBrains Mono',
   ui-monospace,
