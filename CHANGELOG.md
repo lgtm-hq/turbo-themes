@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.67] - 2026-10-29
+
+### 🔧 Changed
+
+- Update dependency ruby to 4.0.9 (patch) (#1232)
+
 ## [0.44.66] - 2026-10-29
 
 ### 🔧 Changed
