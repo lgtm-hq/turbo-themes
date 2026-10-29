@@ -30,7 +30,7 @@ jobs:
       github.event.workflow_run.head_branch == 'main' &&
       github.event.workflow_run.head_repository.full_name == github.repository) ||
       github.event_name == 'workflow_dispatch'
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-deploy-site-with-reports.yml@614c5ad1fc91d742baed959643bdd1f261a71210  # v0.79.1
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-deploy-site-with-reports.yml@8f0fd9339df5d30a529aa572ceb51345b8be33a0 # v0.79.2
     with:
       # No tooling-ref: unset tracks the workflow pin above (lgtm-ci v0.76
       # migration item 5); the old v0.69.4 override ran old scripts.
@@ -48,7 +48,7 @@ jobs:
       # Explicit opt-in: path-triggered workflows (Examples, Multi-Language Coverage)
       # may not run for every main commit; fall back to latest artifacts on main.
       fallback-ref: main
-      egress-policy: audit # TEMP: lgtm-hq/lgtm-ci#1207
+      egress-policy: block
       timeout-minutes: 15
       # Full build allowlist: lgtm-ci bun/npm defaults + monorepo Ruby/Python/Astral
       # endpoints (setup-env legacy). Passed as a complete list because a non-empty
