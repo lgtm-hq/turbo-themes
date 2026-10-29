@@ -10,6 +10,16 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.71] - 2026-10-29
+
+### 🐛 Fixed
+
+- Update dependency vue to 3.5.44 (patch) (#1243)
+
+### 🔧 Changed
+
+- Update react monorepo to 19.3.1 (patch) (#1241)
+
 ## [0.44.70] - 2026-10-29
 
 ### 🔧 Changed
