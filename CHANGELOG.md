@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.64] - 2026-10-29
+
+### 🔧 Changed
+
+- Update dependency follow-redirects to 1.16.2 (patch) (#1225)
+- Update dependency browserslist to 4.29.4 (patch) (#1223)
+
 ## [0.44.63] - 2026-10-29
 
 ### 🔧 Changed
