@@ -38,7 +38,7 @@ jobs:
   # Org ruleset context: e2e / 🎭 E2E Tests
   e2e:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@229e00aaa727ecd88de5ab3711b07f701c4aae21  # v0.79.0
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@614c5ad1fc91d742baed959643bdd1f261a71210  # v0.79.1
     with:
       job-name: '🎭 E2E Tests'
       test-command: ./scripts/ci/bootstrap-e2e-full.sh
@@ -50,7 +50,7 @@ jobs:
       # writes each results.v1 doc to playwright-results-<run_id>.
       results-artifact-name: playwright-e2e-results
       timeout-minutes: 30
-      tooling-ref: '229e00aaa727ecd88de5ab3711b07f701c4aae21' # v0.79.0
+      tooling-ref: '614c5ad1fc91d742baed959643bdd1f261a71210' # v0.79.1
       egress-policy: audit # TEMP: lgtm-hq/lgtm-ci#1207
       allowed-endpoints: >-
         github.com:443
@@ -86,7 +86,7 @@ jobs:
   # Org ruleset context: smoke / 🔥 E2E Smoke Tests
   smoke:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@229e00aaa727ecd88de5ab3711b07f701c4aae21  # v0.79.0
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@614c5ad1fc91d742baed959643bdd1f261a71210  # v0.79.1
     with:
       job-name: '🔥 E2E Smoke Tests'
       test-command: >-
@@ -99,7 +99,7 @@ jobs:
       comment-marker: playwright-e2e-smoke-comment
       results-artifact-name: playwright-smoke-results
       timeout-minutes: 15
-      tooling-ref: '229e00aaa727ecd88de5ab3711b07f701c4aae21' # v0.79.0
+      tooling-ref: '614c5ad1fc91d742baed959643bdd1f261a71210' # v0.79.1
       egress-policy: audit # TEMP: lgtm-hq/lgtm-ci#1207
       allowed-endpoints: >-
         github.com:443
@@ -129,7 +129,7 @@ jobs:
   # Org ruleset context: a11y / ♿ E2E Accessibility Tests
   a11y:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@229e00aaa727ecd88de5ab3711b07f701c4aae21  # v0.79.0
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-test-e2e-playwright.yml@614c5ad1fc91d742baed959643bdd1f261a71210  # v0.79.1
     with:
       job-name: '♿ E2E Accessibility Tests'
       test-command: >-
@@ -142,7 +142,7 @@ jobs:
       comment-marker: playwright-e2e-a11y-comment
       results-artifact-name: playwright-a11y-results
       timeout-minutes: 15
-      tooling-ref: '229e00aaa727ecd88de5ab3711b07f701c4aae21' # v0.79.0
+      tooling-ref: '614c5ad1fc91d742baed959643bdd1f261a71210' # v0.79.1
       egress-policy: audit # TEMP: lgtm-hq/lgtm-ci#1207
       allowed-endpoints: >-
         github.com:443
