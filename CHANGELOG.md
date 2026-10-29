@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.61] - 2026-10-29
+
+### 🔧 Changed
+
+- Update npm-vite (#1214)
+
 ## [0.44.60] - 2026-10-29
 
 ### 🔧 Changed

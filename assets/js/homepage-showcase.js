@@ -1,12 +1,11 @@
 var TurboHomepageShowcase = (function(exports) {
 	Object.defineProperty(exports, Symbol.toStringTag, { value: "Module" });
-	//#endregion
-	//#region packages/core/dist/tokens/index.js
+	// packages/core/dist/tokens/index.js
 	var tokens = {
 		$schema: "https://design-tokens.org/schema.json",
 		$description: "Turbo Themes - Flat tokens for 43 themes",
-		$version: "0.44.60",
-		$generated: "08c70ae7d6e92d1f3e576f33fa9a4555b4085d5ac0f672f1323d028c71e97e62",
+		$version: "0.44.61",
+		$generated: "b43d54ab3cb31ef8fc892fc70c861f199a5785cbf39d47f8b64ab041a1f79d90",
 		meta: {
 			"themeIds": [
 				"ayu-dark",
@@ -231,8 +230,7 @@ var TurboHomepageShowcase = (function(exports) {
 	*/
 	var themeIds = /*#__PURE__*/ flavors.map((f) => f.id);
 	[...new Set(flavors.map((f) => f.vendor))];
-	//#endregion
-	//#region packages/core/dist/themes/generated/metadata.js
+	// packages/core/dist/themes/generated/metadata.js
 	/**
 	* Ordered list of vendor IDs controlling display order in dropdowns.
 	* Source: schema/tokens/_vendors.json
@@ -254,8 +252,7 @@ var TurboHomepageShowcase = (function(exports) {
 		"ayu",
 		"turbo"
 	];
-	//#endregion
-	//#region packages/core/dist/themes/metadata.js
+	// packages/core/dist/themes/metadata.js
 	/**
 	* Consolidated theme metadata derived from tokens.json.
 	*
@@ -324,8 +321,7 @@ var TurboHomepageShowcase = (function(exports) {
 		return result;
 	}
 	flavors.map((f) => [f.id, getShortLabel(f.id)]);
-	//#endregion
-	//#region packages/core/dist/catalog/create.js
+	// packages/core/dist/catalog/create.js
 	/**
 	* Consumer theme curation API.
 	*
@@ -383,8 +379,7 @@ var TurboHomepageShowcase = (function(exports) {
 			})).filter((group) => group.themeIds.length > 0)
 		};
 	}
-	//#endregion
-	//#region packages/core/dist/catalog/sets.js
+	// packages/core/dist/catalog/sets.js
 	/**
 	* Named theme presets built on top of {@link createThemeCatalog}.
 	*
@@ -407,8 +402,7 @@ var TurboHomepageShowcase = (function(exports) {
 		vendors: [],
 		include: MINIMAL_THEME_IDS
 	}), createThemeCatalog({ appearances: ["dark"] }), createThemeCatalog({ appearances: ["light"] });
-	//#endregion
-	//#region packages/theme-selector/src/appearance.ts
+	// packages/theme-selector/src/appearance.ts
 	/**
 	* Theme appearance (light/dark) resolution for DOM attributes.
 	*/
@@ -421,8 +415,7 @@ var TurboHomepageShowcase = (function(exports) {
 	function resolveThemeAppearance(themeId, appearances = THEME_APPEARANCES) {
 		return appearances[themeId] ?? "dark";
 	}
-	//#endregion
-	//#region packages/theme-selector/src/generated/theme-maps.ts
+	// packages/theme-selector/src/generated/theme-maps.ts
 	/** Family display metadata keyed by ThemeFamily. */
 	var THEME_FAMILIES$1 = {
 		"catppuccin": {
@@ -598,8 +591,7 @@ var TurboHomepageShowcase = (function(exports) {
 		"tokyo-night-light": "Clean daylight palette inspired by Tokyo mornings.",
 		"tokyo-night-storm": "Stormy variant with richer contrast and depth."
 	};
-	//#endregion
-	//#region packages/theme-selector/src/constants.ts
+	// packages/theme-selector/src/constants.ts
 	/**
 	* Constants for theme selector component
 	*/
@@ -624,8 +616,7 @@ var TurboHomepageShowcase = (function(exports) {
 	};
 	/** Family display metadata — generated from schema/tokens/_vendors.json. */
 	var THEME_FAMILIES = THEME_FAMILIES$1;
-	//#endregion
-	//#region packages/theme-selector/src/errors.ts
+	// packages/theme-selector/src/errors.ts
 	/**
 	* Centralized error handling for Turbo Themes.
 	*
@@ -731,8 +722,7 @@ var TurboHomepageShowcase = (function(exports) {
 		} else if (themeError.context) console.warn(prefixedMessage, themeError.context);
 		else console.warn(prefixedMessage);
 	}
-	//#endregion
-	//#region packages/theme-selector/src/theme-loader.ts
+	// packages/theme-selector/src/theme-loader.ts
 	/**
 	* Theme CSS loading utilities
 	*/
@@ -927,8 +917,7 @@ var TurboHomepageShowcase = (function(exports) {
 		removeStaleThemeLinks(doc, theme.id);
 		return true;
 	}
-	//#endregion
-	//#region packages/theme-selector/src/dropdown/helpers.ts
+	// packages/theme-selector/src/dropdown/helpers.ts
 	/**
 	* Dropdown helper functions
 	*/
@@ -940,8 +929,7 @@ var TurboHomepageShowcase = (function(exports) {
 		else item.classList.remove("is-active");
 		item.setAttribute("aria-checked", String(isActive));
 	}
-	//#endregion
-	//#region packages/theme-selector/src/theme-mapper.ts
+	// packages/theme-selector/src/theme-mapper.ts
 	/**
 	* Gets the theme family from vendor name
 	*/
@@ -991,8 +979,7 @@ var TurboHomepageShowcase = (function(exports) {
 			colors: extractPreviewColors(flavor.tokens)
 		};
 	}
-	//#endregion
-	//#region packages/theme-selector/src/theme-resolver.ts
+	// packages/theme-selector/src/theme-resolver.ts
 	/**
 	* Theme resolution utilities - centralized theme lookup and validation.
 	*
@@ -1042,8 +1029,7 @@ var TurboHomepageShowcase = (function(exports) {
 		if (id.length > 100) return false;
 		return /^[a-zA-Z0-9_-]+$/.test(id);
 	}
-	//#endregion
-	//#region packages/theme-selector/src/apply-theme.ts
+	// packages/theme-selector/src/apply-theme.ts
 	/**
 	* Theme application logic
 	*/
@@ -1091,8 +1077,7 @@ var TurboHomepageShowcase = (function(exports) {
 	function getCurrentTheme$1(doc, defaultTheme) {
 		return getCurrentThemeFromClasses(doc.documentElement) || defaultTheme;
 	}
-	//#endregion
-	//#region packages/theme-selector/src/storage.ts
+	// packages/theme-selector/src/storage.ts
 	/**
 	* Storage utilities for theme persistence
 	*/
@@ -1126,8 +1111,7 @@ var TurboHomepageShowcase = (function(exports) {
 		}
 		return safeSetItem(windowObj, STORAGE_KEY, themeId);
 	}
-	//#endregion
-	//#region packages/theme-selector/src/integration.ts
+	// packages/theme-selector/src/integration.ts
 	/**
 	* Public integration API for driving theming from outside the package.
 	*
@@ -1233,8 +1217,7 @@ var TurboHomepageShowcase = (function(exports) {
 		documentObj.addEventListener(THEME_CHANGE_EVENT, handler);
 		return () => documentObj.removeEventListener(THEME_CHANGE_EVENT, handler);
 	}
-	//#endregion
-	//#region packages/theme-selector/src/lazy-css.ts
+	// packages/theme-selector/src/lazy-css.ts
 	/**
 	* Lazy theme-CSS loading helpers for showcase-style pages.
 	*
@@ -1343,8 +1326,7 @@ var TurboHomepageShowcase = (function(exports) {
 			documentObj.removeEventListener("focusin", handler);
 		};
 	}
-	//#endregion
-	//#region assets/js/homepage-showcase.ts
+	// assets/js/homepage-showcase.ts
 	/**
 	* Homepage showcase interactions.
 	*
@@ -1947,7 +1929,6 @@ var TurboHomepageShowcase = (function(exports) {
 	if (typeof document !== "undefined" && typeof window !== "undefined") document.addEventListener("DOMContentLoaded", () => {
 		initShowcase();
 	});
-	//#endregion
 	exports.DEFAULT_THEME_ICON = DEFAULT_THEME_ICON;
 	exports.MAX_TILT_DEGREES = MAX_TILT_DEGREES;
 	exports.PROGRESS_TARGET = PROGRESS_TARGET;
