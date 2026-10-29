@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.66] - 2026-10-29
+
+### 🔧 Changed
+
+- Update dependency postcss-selector-parser to 7.1.7 (patch) (#1230)
+
 ## [0.44.65] - 2026-10-29
 
 ### 🔧 Changed
