@@ -82,7 +82,7 @@ SHELL ["/bin/sh", "-c"]
 #   COPY --from=oven/bun:<semver>[-<variant>]@sha256:<64 hex>
 # line whose <semver> matches package.json packageManager. Renovate bumps
 # both in the grouped "bun" PR. Do not add another oven/bun or /bun: reference.
-COPY --from=oven/bun:1.4.3-debian@sha256:923bedb355f7746666659f71e724998159a5c8c54bd1cb1030e1975a0698415b /usr/local/bin/bun /usr/local/bin/bun
+COPY --from=oven/bun:1.4.4-debian@sha256:93d5032fe06d163427822dc1598f420363759bb18155c9cc90eb1be05a64a19e /usr/local/bin/bun /usr/local/bin/bun
 
 # Add the bunx alias and ensure Bundler version matches Gemfile.lock (2.3.26)
 RUN ln -s /usr/local/bin/bun /usr/local/bin/bunx \
