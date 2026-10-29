@@ -107,6 +107,8 @@
     "**/coverage/**/*",
     "assets/css/themes/**/*",
     "apps/site/assets/**/*",
-    "apps/site/public/**/*"
+    "apps/site/public/**/*",
+    "src/scss/_themes.scss",
+    "src/scss/theme-*.scss"
   ]
 }

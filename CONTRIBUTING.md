@@ -112,9 +112,9 @@ CSS and Sass sources.
 
 The root configuration extends `stylelint-config-standard`; Sass files use
 `stylelint-config-standard-scss` and `postcss-scss`. Tailwind directives are recognized
-explicitly, while other unknown CSS at-rules remain errors. Generated build output and
-copied site assets are ignored; authored Sass and Tailwind examples are linted. The
-legacy flavor picker in `src/scss/custom/_overrides.scss` may use one ID per selector
-because these selectors target existing JavaScript/HTML hooks. Other styles retain the
-zero-ID policy. The Sass preset replaces the CSS unknown-at-rule rule with its
-Sass-aware counterpart.
+explicitly, while other unknown CSS at-rules remain errors. Generated build output, Sass
+theme entries, and copied site assets are ignored; authored Sass and Tailwind examples
+are linted. The legacy flavor picker in `src/scss/custom/_overrides.scss` may use one ID
+per selector because these selectors target existing JavaScript/HTML hooks. Other styles
+retain the zero-ID policy. The Sass preset replaces the CSS unknown-at-rule rule with
+its Sass-aware counterpart.
