@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.59] - 2026-10-29
+
+### 🔧 Changed
+
+- Update dependency cssnano to 9.9.0 (minor) (#1183)
+
 ## [0.44.58] - 2026-10-29
 
 ### 🐛 Fixed
