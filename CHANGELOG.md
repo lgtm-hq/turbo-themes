@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.76] - 2026-10-30
+
+### 🔧 Changed
+
+- Update dependency js-yaml to 5.5.0 (minor) (#1254)
+
 ## [0.44.75] - 2026-10-30
 
 ### 🔧 Changed
