@@ -250,7 +250,7 @@
   },
   "overrides": {
     "ajv": "8.20.0",
-    "devalue": "5.9.4",
+    "devalue": "6.0.3",
     "flatted": "3.4.4",
     "picomatch": "4.0.7",
     "yaml": "2.9.1",
@@ -260,7 +260,7 @@
     "follow-redirects": "1.16.2",
     "astro": "7.3.8",
     "smol-toml": "1.9.1",
-    "path-to-regexp": "8.4.2",
+    "path-to-regexp": "9.0.0",
     "@isaacs/brace-expansion": "5.0.1",
     "minimatch": "10.2.6",
     "brace-expansion": "5.0.12",
