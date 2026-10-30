@@ -76,7 +76,14 @@ node --test scripts/ci/verify-stackblitz.test.mjs
 node scripts/ci/verify-stackblitz-build.mjs examples/stackblitz/react
 ```
 
-The second command requires a completed template build. This asset smoke check is not a
-browser compatibility matrix. Vite 6 and all existing browser build targets remain
-unchanged (`esnext` for Bootstrap/React/Vue, Vite's default for Tailwind); the Node
-requirement describes tooling, not browser support.
+The second command requires a completed template build. The four templates use Vite 8.
+Bootstrap, React and Vue retain their explicit `esnext` build target. Tailwind
+explicitly preserves the former Vite 6.4.5 default target (`es2020`, `edge88`,
+`firefox78`, `chrome87`, `safari14`) rather than adopting Vite 8's newer default browser
+baseline. The target list comes from Vite 6.4.5's
+[upstream constants](https://github.com/vitejs/vite/blob/83ab40b53969349d5c4ed259313fff367bb86827/packages/vite/src/node/constants.ts#L79-L85).
+
+These settings preserve the configured build targets, not every aspect of Vite 6's
+output: Vite 8 changes the bundler and default CSS minifier. The asset smoke check is
+not a browser compatibility matrix or a guarantee of support for every listed browser;
+the Node requirement describes tooling, not browser support.
