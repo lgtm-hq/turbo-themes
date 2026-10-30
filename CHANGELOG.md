@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.81] - 2026-10-30
+
+### 🔧 Changed
+
+- Update dependency typedoc-plugin-markdown to 4.14.1 (minor) (#1264)
+
 ## [0.44.80] - 2026-10-30
 
 ### 🔧 Changed
