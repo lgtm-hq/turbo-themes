@@ -28,9 +28,9 @@ For more complete examples with tests and additional features, see the
 | Feature       | StackBlitz Templates | Main Examples         |
 | ------------- | -------------------- | --------------------- |
 | File count    | Minimal (3-7 files)  | Complete (10+ files)  |
-| Tests         | None                 | Full Playwright tests |
+| Tests         | CI build/asset smoke | Full Playwright tests |
 | Documentation | Inline comments      | Separate README       |
-| Dependencies  | Latest from npm      | Pinned versions       |
+| Dependencies  | Pinned theme, ranges | Pinned versions       |
 | Build config  | Simplified           | Production-ready      |
 
 ## Usage
@@ -42,8 +42,41 @@ For more complete examples with tests and additional features, see the
 
 ## Local Development
 
+The four Vite templates require **Node.js >=22.12.0** (matching the published package)
+and Bun. CI uses Node 22 and the repository's pinned Bun version. They are standalone
+consumers of the published `@lgtm-hq/turbo-themes` package, not root-workspace examples;
+no root install or local package build is needed.
+
 ```bash
-cd examples/stackblitz/react  # or any template
-npm install
-npm run dev
+cd examples/stackblitz/react  # or bootstrap, tailwind, vue
+bun install
+bun run dev
+bun run build
 ```
+
+CSS is imported through the package's public `css/core`, `css/base` (React/Vue) and
+`css/themes-all` exports. Vite emits those styles into the production assets; switching
+`data-theme` selects bundled CSS without requesting `/node_modules/` at runtime. The Vue
+build retains `vue-tsc` before Vite, using the same 2.2.12 version as the main Vue
+example with TypeScript 5.9.3.
+
+The templates intentionally retain their existing standalone, unlocked install contract:
+there are no committed template lockfiles, and remaining semver ranges can resolve new
+transitive versions. The scoped theme package is pinned; this is not a claim that the
+entire transitive graph is frozen. Do not use the root workspace lockfile as a
+substitute for these consumers' installs.
+
+`quality-examples.yml` installs and builds all four exact StackBlitz directories from
+the checked-out PR source in isolated directories, then checks that built HTML loads
+emitted CSS with token values for every offered theme. Run the same focused contract
+check locally from the repository root:
+
+```bash
+node --test scripts/ci/verify-stackblitz.test.mjs
+node scripts/ci/verify-stackblitz-build.mjs examples/stackblitz/react
+```
+
+The second command requires a completed template build. This asset smoke check is not a
+browser compatibility matrix. Vite 6 and all existing browser build targets remain
+unchanged (`esnext` for Bootstrap/React/Vue, Vite's default for Tailwind); the Node
+requirement describes tooling, not browser support.

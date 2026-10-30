@@ -8,13 +8,9 @@ function useTheme() {
   });
 
   useEffect(() => {
-    // Validate theme before using in URL to prevent XSS
+    // Only apply a theme from the bundled selector set.
     if (!isValidTheme(theme)) return;
 
-    const link = document.getElementById('theme-css') as HTMLLinkElement;
-    if (link) {
-      link.href = `/node_modules/turbo-themes/css/themes/turbo/${theme}.css`;
-    }
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('turbo-theme', theme);
   }, [theme]);
