@@ -1,6 +1,6 @@
 [project]
 name = "turbo-themes"
-version = "0.44.77"
+version = "0.44.78"
 description = "Universal design tokens and themes for Python applications"
 readme = "README.md"
 authors = [{ name = "Turbo Coder" }]
