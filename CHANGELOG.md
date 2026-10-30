@@ -10,6 +10,16 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.72] - 2026-10-30
+
+### 🔧 Changed
+
+- Update dependency sass to 1.106.1 (minor) (#1244)
+
+### 🤖 Internal
+
+- Reconcile CODEOWNER reviewer and assignee postconditions (#1248)
+
 ## [0.44.71] - 2026-10-29
 
 ### 🐛 Fixed
