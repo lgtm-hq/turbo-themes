@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.73] - 2026-10-30
+
+### 🐛 Fixed
+
+- Restore standalone StackBlitz builds (#1249)
+
 ## [0.44.72] - 2026-10-30
 
 ### 🔧 Changed
