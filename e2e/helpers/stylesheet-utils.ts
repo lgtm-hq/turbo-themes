@@ -3,7 +3,7 @@
  * Helpers for waiting on CSS stylesheet loading and theme application.
  */
 
-import { type Locator, type Page } from '@playwright/test';
+import { type Locator } from '@playwright/test';
 
 /**
  * Waits for a stylesheet link element to be fully loaded.
@@ -51,55 +51,4 @@ export async function waitForStylesheetLoad(locator: Locator, timeoutMs = 8000):
   }
 }
 
-/**
- * Waits for a theme to be fully applied by checking CSS custom properties.
- * More reliable than waitForTimeout as it confirms actual CSS application.
- *
- * @param page - The Playwright page instance
- * @param themeId - The theme ID to wait for (optional, just verifies CSS vars exist)
- * @param timeoutMs - Maximum time to wait (default: 5000ms)
- */
-export async function waitForThemeApplied(page: Page, themeId?: string, timeoutMs = 5000): Promise<void> {
-  await page.waitForFunction(
-    (expectedTheme) => {
-      const style = getComputedStyle(document.documentElement);
-      const bgBase = style.getPropertyValue('--turbo-bg-base');
-      // Check that CSS variables are populated (non-empty)
-      if (!bgBase || bgBase.trim() === '') {
-        return false;
-      }
-      if (!expectedTheme) {
-        return true;
-      }
-      if (document.documentElement.dataset.theme !== expectedTheme) {
-        return false;
-      }
-
-      // Href can update before the sheet's custom properties paint. Read the
-      // expected brand from the active theme stylesheet and wait until the
-      // computed value matches (avoids mid-swap / transition contrast flakes).
-      const link = document.querySelector('#turbo-theme-css') as HTMLLinkElement | null;
-      if (!link?.href?.includes(`${expectedTheme}.css`) || !link.sheet) {
-        return false;
-      }
-      let expectedBrand = '';
-      for (const rule of Array.from(link.sheet.cssRules)) {
-        if (!(rule instanceof CSSStyleRule)) continue;
-        const value = rule.style.getPropertyValue('--turbo-brand-primary').trim();
-        if (value) {
-          expectedBrand = value;
-          break;
-        }
-      }
-      if (!expectedBrand) {
-        return false;
-      }
-      const actualBrand = style.getPropertyValue('--turbo-brand-primary').trim();
-      return actualBrand === expectedBrand;
-    },
-    themeId,
-    { timeout: timeoutMs }
-  ).catch(() => {
-    // Swallow timeout - CSS may still be loading, test will continue
-  });
-}
+export { waitForThemeApplied } from './theme-applied';

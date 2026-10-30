@@ -40,18 +40,14 @@ test.describe('Homepage Visual Regression @visual', () => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
 
-      // Apply theme
+      // Baselines were captured after a data-theme flip only. Loading the
+      // real sheet here changes the pixels and needs its own snapshot PR.
       await page.evaluate((t) => {
         document.documentElement.dataset.theme = t;
         localStorage.setItem('turbo-theme', t);
       }, theme.id);
-
-      // Wait for theme CSS to be applied (replaces arbitrary waitForTimeout)
-      await waitForThemeApplied(page, theme.id);
-      await waitForFontsReady(page);
-
-      // Verify theme applied
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme.id);
+      await waitForFontsReady(page);
 
       // Viewport screenshot (not fullPage to avoid height variations from font rendering)
       await expect(page).toHaveScreenshot(`homepage-${theme.id}.png`);
@@ -67,14 +63,11 @@ test.describe('Demo Page Visual Regression @visual', () => {
 
   for (const theme of themes) {
     test(`demo page renders correctly with ${theme.id}`, async ({ page }) => {
-      // Apply theme
       await page.evaluate((t) => {
         document.documentElement.dataset.theme = t;
         localStorage.setItem('turbo-theme', t);
       }, theme.id);
-
-      // Wait for theme CSS to be applied
-      await waitForThemeApplied(page, theme.id);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme.id);
       await waitForFontsReady(page);
 
       // Viewport screenshot (not fullPage to avoid height variations from font rendering)
@@ -158,11 +151,10 @@ test.describe('Theme Transition Visual Regression @visual', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    // Start with dark theme
     await page.evaluate(() => {
       document.documentElement.dataset.theme = 'catppuccin-mocha';
     });
-    await waitForThemeApplied(page, 'catppuccin-mocha');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'catppuccin-mocha');
     await waitForFontsReady(page);
 
     // Capture before state
@@ -170,13 +162,10 @@ test.describe('Theme Transition Visual Regression @visual', () => {
       fullPage: false,
     });
 
-    // Switch to light theme
     await page.evaluate(() => {
       document.documentElement.dataset.theme = 'catppuccin-latte';
     });
-
-    // Wait for theme to be applied
-    await waitForThemeApplied(page, 'catppuccin-latte');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'catppuccin-latte');
     await waitForFontsReady(page);
 
     // Capture after state
@@ -194,7 +183,7 @@ test.describe('Dark/Light Mode Contrast @visual', () => {
     await page.evaluate(() => {
       document.documentElement.dataset.theme = 'catppuccin-mocha';
     });
-    await waitForThemeApplied(page, 'catppuccin-mocha');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'catppuccin-mocha');
 
     // Get background color
     const bgColor = await page.evaluate(() => {
