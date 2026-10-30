@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.75] - 2026-10-30
+
+### 🔧 Changed
+
+- Update dependency html-validate to 11.17.0 (minor) (#1252)
+
 ## [0.44.74] - 2026-10-30
 
 ### 🔧 Changed
