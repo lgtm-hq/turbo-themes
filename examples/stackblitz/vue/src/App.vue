@@ -54,13 +54,9 @@ function isValidTheme(themeId: string): themeId is (typeof THEMES)[number]["id"]
 const theme = ref<string>(DEFAULT_THEME);
 
 function applyTheme(themeId: string) {
-  // Validate theme before using in URL to prevent XSS
+  // Only apply a theme from the bundled selector set.
   if (!isValidTheme(themeId)) return;
 
-  const link = document.getElementById("theme-css") as HTMLLinkElement;
-  if (link) {
-    link.href = `/node_modules/turbo-themes/css/themes/turbo/${themeId}.css`;
-  }
   document.documentElement.setAttribute("data-theme", themeId);
   localStorage.setItem("turbo-theme", themeId);
 }

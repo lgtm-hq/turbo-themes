@@ -1,3 +1,6 @@
+import '@lgtm-hq/turbo-themes/css/core';
+import '@lgtm-hq/turbo-themes/css/themes-all';
+
 const THEMES = [
   { id: 'bulma-dark', isLight: false },
   { id: 'bulma-light', isLight: true },
@@ -45,7 +48,6 @@ const LIGHT_THEMES = THEMES.filter((t) => t.isLight).map((t) => t.id);
 const DEFAULT_THEME = 'catppuccin-mocha';
 
 const selector = document.getElementById('theme-selector');
-const themeLink = document.getElementById('theme-css');
 const currentThemeDisplay = document.getElementById('current-theme');
 
 function isValidTheme(theme) {
@@ -54,9 +56,6 @@ function isValidTheme(theme) {
 
 function applyTheme(theme) {
   const safeTheme = isValidTheme(theme) ? theme : DEFAULT_THEME;
-  if (themeLink) {
-    themeLink.href = `/node_modules/turbo-themes/css/themes/turbo/${safeTheme}.css`;
-  }
   document.documentElement.setAttribute('data-theme', safeTheme);
   document.documentElement.setAttribute(
     'data-bs-theme',
