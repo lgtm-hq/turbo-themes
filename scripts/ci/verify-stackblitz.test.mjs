@@ -33,6 +33,17 @@ for (const template of templates) {
   });
 }
 
+test('Tailwind preserves the Vite 6.4.5 default build target', () => {
+  const config = read('examples/stackblitz/tailwind/vite.config.js');
+  assert.match(config, /export default defineConfig\(/);
+  const target = config.match(/target:\s*\[([^\]]+)\]/);
+  assert.ok(target, 'Tailwind must explicitly retain its previous build target');
+  assert.deepEqual(
+    [...target[1].matchAll(/'([^']+)'/g)].map((match) => match[1]),
+    ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14']
+  );
+});
+
 test('Vue keeps the workspace-compatible typecheck before Vite', () => {
   const vue = JSON.parse(read('examples/stackblitz/vue/package.json'));
   const workspace = JSON.parse(read('examples/vue/package.json'));
