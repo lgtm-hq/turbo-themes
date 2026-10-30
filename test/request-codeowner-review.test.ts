@@ -156,6 +156,27 @@ test('fails closed on a malformed final read after successful writes', () => {
   expect(result.stderr).toContain('Cannot verify CODEOWNER postconditions');
 });
 
+test('another user never satisfies either CODEOWNER postcondition or gets removed', () => {
+  const other = [{ login: 'OtherUser' }];
+  const result = run({ requested_reviewers: other, assignees: other });
+  expect(result.status, result.stderr).toBe(0);
+  expect(calls().filter((args) => args.includes('POST'))).toHaveLength(2);
+  const saved = JSON.parse(readFileSync(join(sandbox, 'state.json'), 'utf8'));
+  expect(saved.requested_reviewers).toEqual([...other, ...owner]);
+  expect(saved.assignees).toEqual([...other, ...owner]);
+});
+
+test.each(['reviewers', 'assignees'])('another user cannot reconcile ineffective %s mutation', (field) => {
+  const other = [{ login: 'OtherUser' }];
+  const state = field === 'reviewers'
+    ? { requested_reviewers: other, assignees: owner }
+    : { requested_reviewers: owner, assignees: other };
+  const result = run({ ...state, noEffect: field });
+  expect(result.status).not.toBe(0);
+  expect(result.stderr).toContain('postconditions unmet');
+  expect(calls().filter((args) => args.includes('POST'))).toHaveLength(1);
+});
+
 test('no owner is a no-op', () => {
   writeFileSync(join(sandbox, '.github/CODEOWNERS'), '# no catch-all owner\n/src/ @Someone\n');
   expect(run().status).toBe(0);
