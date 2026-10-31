@@ -47,7 +47,7 @@ jobs:
   build:
     name: 🔨 Build npm Package
     needs: [sbom]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 20
     permissions:
       contents: read
@@ -134,7 +134,7 @@ jobs:
     name: 📦 Publish to npm
     needs: [build]
     # Must use GitHub-hosted runner for npm provenance attestation (sigstore)
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 10
     permissions:
       contents: read

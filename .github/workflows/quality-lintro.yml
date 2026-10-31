@@ -25,7 +25,7 @@ jobs:
       # py-lintro 0.163.0 pinned to immutable digest for reproducibility
       # yamllint disable-line rule:line-length
       lintro-image: ghcr.io/lgtm-hq/py-lintro:0.173.1@sha256:116e60912a8c7a2002349ef096cfa93644314492751746aacdd5ef228c74306f
-      runner-image: ubuntu-24.04
+      runner-image: ubuntu-26.04
       tooling-ref: '8f0fd9339df5d30a529aa572ceb51345b8be33a0' # v0.79.2
       egress-policy: block
       egress-preset: quality
@@ -44,7 +44,7 @@ jobs:
     uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-publish-quality-summary.yml@8f0fd9339df5d30a529aa572ceb51345b8be33a0 # v0.79.2
     with:
       exit-code: ${{ needs.quality.outputs.exit-code }}
-      runner-image: ubuntu-24.04
+      runner-image: ubuntu-26.04
       tooling-ref: '8f0fd9339df5d30a529aa572ceb51345b8be33a0' # v0.79.2
       egress-policy: block
       egress-preset: github-minimal
