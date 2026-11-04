@@ -17,6 +17,7 @@
     "playwright-report/**",
     "lighthouse-reports/**",
     ".bin/**",
-    ".lintro/**"
+    ".lintro/**",
+    ".github/**"
   ]
 }
