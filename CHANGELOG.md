@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.82] - 2026-11-04
+
+### 🔧 Changed
+
+- Update dependency minimatch to 11.0.1 (major) [security] (#1271)
+
 ## [0.44.81] - 2026-10-30
 
 ### 🔧 Changed
