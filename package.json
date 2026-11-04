@@ -145,7 +145,7 @@
     "generate:swift": "bun run build:tokens && bun run generate:types:swift",
     "build:css": "vite build --config vite.css.config.js --mode css",
     "build:themes": "bun run generate:css",
-    "docs:api": "bun install --cwd tools/docs --frozen-lockfile && cd tools/docs && bunx typedoc --options ../../typedoc.json",
+    "docs:api": "bun run test:docs && cd tools/docs && bunx typedoc --options ../../typedoc.json",
     "build:js": "bun run build:packages && bun run build:js:dev && bun run build:js:prod",
     "build:js:dev": "vite build --config vite.js.config.js --mode development && JS_BUILD_TARGET=homepage-showcase vite build --config vite.js.config.js --mode development",
     "build:js:prod": "vite build --config vite.js.config.js --mode production && JS_BUILD_TARGET=homepage-showcase vite build --config vite.js.config.js --mode production",
@@ -158,7 +158,8 @@
     "build:ci:site": "bun run build:core && cd apps/site && bun install && bun run build",
     "build:gem": "./scripts/build-gem.sh",
     "build:all": "bun run build && bun run build:gem",
-    "test": "bun run test:packages && vitest run --coverage",
+    "test": "bun run test:packages && bun run test:docs && vitest run --coverage",
+    "test:docs": "bun install --cwd tools/docs --frozen-lockfile && node --test tools/docs/test/minimatch-compat.test.mjs",
     "test:packages": "concurrently -n core,selector,css -c blue,green,yellow \"cd packages/core && bun run test\" \"cd packages/theme-selector && bun run test\" \"cd packages/css && bun run test\"",
     "test:packages:seq": "cd packages/core && bun run test && cd ../theme-selector && bun run test && cd ../css && bun run test",
     "lint": "uv run lintro check",
@@ -262,7 +263,10 @@
     "smol-toml": "1.9.1",
     "path-to-regexp": "8.4.2",
     "@isaacs/brace-expansion": "5.0.1",
-    "minimatch": "10.2.6",
+    "minimatch": "11.0.2",
+    "@bundled-es-modules/glob": {
+      "glob": "14.0.3"
+    },
     "brace-expansion": "5.0.12",
     "tmp": "0.2.7",
     "esbuild": "0.28.2",
@@ -276,6 +280,9 @@
     "fast-uri": "4.2.3",
     "sharp": "0.35.5",
     "puppeteer-core": "25.16.0"
+  },
+  "patchedDependencies": {
+    "glob@7.2.3": "patches/glob@7.2.3.patch"
   },
   "bin": {
     "turbo-themes": "./bin/turbo-themes.js"

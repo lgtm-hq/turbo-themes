@@ -17,3 +17,10 @@ widht = "widht"
 heigth = "heigth"
 # Expected result of stripping accents from "thème".
 thme = "thme"
+
+[type.glob7-patch]
+extend-glob = ["glob@7.2.3.patch"]
+
+[type.glob7-patch.extend-identifiers]
+# Upstream glob 7.2.3 uses pn for a negated pattern; preserve patch context.
+pn = "pn"

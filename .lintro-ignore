@@ -66,8 +66,7 @@ assets/js/*.min.js
 assets/js/theme-selector.js
 assets/js/homepage-showcase.js
 
-# GitHub metadata and policies handled externally
-.github/**
+# Policy metadata handled externally
 .allstar/**
 
 # lgtm-ci tooling sparse checkout (created inside reusable workflow jobs)

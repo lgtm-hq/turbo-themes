@@ -37,3 +37,7 @@ apps/site/.astro/
 *.mjs
 *.cjs
 .lgtm-ci-tooling
+
+# GitHub workflows/actions: avoid reformat churn on Renovate-managed pins and
+# egress allowlists (actionlint lints them via Lintro; .yamllint skips them)
+.github/
