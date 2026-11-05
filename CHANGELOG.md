@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.85] - 2026-11-05
+
+### 🐛 Fixed
+
+- Update dependency astro to 7.4.4 (minor) (#1268)
+
 ## [0.44.84] - 2026-11-05
 
 ### 🔧 Changed
