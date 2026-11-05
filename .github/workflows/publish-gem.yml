@@ -47,7 +47,7 @@ jobs:
   build:
     name: 🔨 Build Gem Package
     needs: [sbom]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 20
     permissions:
       contents: read
@@ -140,7 +140,7 @@ jobs:
   publish:
     name: 📦 Publish to RubyGems
     needs: [build]
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 10
     permissions:
       contents: read
