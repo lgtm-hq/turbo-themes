@@ -10,6 +10,17 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.87] - 2026-11-05
+
+### 🐛 Fixed
+
+- Update dependency @lgtm-hq/turbo-themes to 0.44.81 (patch) (#1288)
+
+### 🔧 Changed
+
+- Update dependency ws to 8.22.1 (patch) (#1286)
+- Update github-actions (#1172)
+
 ## [0.44.86] - 2026-11-05
 
 ### 🔧 Changed
