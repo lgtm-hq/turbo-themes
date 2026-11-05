@@ -12,6 +12,10 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/ci/download-with-retry.sh
+source "${SCRIPT_DIR}/download-with-retry.sh"
+
 INSTALL_DIR="${INSTALL_DIR:-./.bin}"
 HADOLINT_VERSION="${HADOLINT_VERSION:-2.14.0}"
 
@@ -52,11 +56,11 @@ TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "${TMP_DIR}"' EXIT
 
 echo "  Downloading hadolint from ${URL}..."
-curl -sSfL "${URL}" -o "${TMP_DIR}/${BIN_NAME}"
+download_with_retry "${URL}" "${TMP_DIR}/${BIN_NAME}"
 
 CHECKSUM_URL="${URL}.sha256"
 echo "  Downloading checksum from ${CHECKSUM_URL}..."
-curl -sSfL "${CHECKSUM_URL}" -o "${TMP_DIR}/${BIN_NAME}.sha256"
+download_with_retry "${CHECKSUM_URL}" "${TMP_DIR}/${BIN_NAME}.sha256"
 
 echo "  Verifying checksum..."
 EXPECTED_CHECKSUM="$(cut -d' ' -f1 "${TMP_DIR}/${BIN_NAME}.sha256")"

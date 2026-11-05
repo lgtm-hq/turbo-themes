@@ -43,8 +43,11 @@ UV_TARBALL="uv-x86_64-unknown-linux-gnu.tar.gz"
 if ! command -v uv >/dev/null 2>&1; then
   echo "Installing uv ${UV_VERSION}..."
   tmpdir="$(mktemp -d)"
-  curl -LsSf -o "${tmpdir}/${UV_TARBALL}" \
-    "https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/${UV_TARBALL}"
+  # shellcheck source=scripts/ci/download-with-retry.sh
+  source "${SCRIPT_DIR}/download-with-retry.sh"
+  download_with_retry \
+    "https://github.com/astral-sh/uv/releases/download/${UV_VERSION}/${UV_TARBALL}" \
+    "${tmpdir}/${UV_TARBALL}"
   echo "${UV_SHA256}  ${tmpdir}/${UV_TARBALL}" | sha256sum -c -
   tar -xzf "${tmpdir}/${UV_TARBALL}" -C "${tmpdir}"
   mkdir -p "${HOME}/.local/bin"
