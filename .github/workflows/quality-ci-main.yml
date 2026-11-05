@@ -84,7 +84,7 @@ jobs:
   # Pages artifacts, and the repo SBOM artifact. Not a required context.
   reporting:
     name: 📊 Coverage & Reporting
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 45
     permissions:
       contents: read
@@ -217,7 +217,7 @@ jobs:
 
   drift:
     name: 🧬 Verify Generated Artifacts
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 20
     permissions:
       contents: read
@@ -257,7 +257,7 @@ jobs:
 
   examples:
     name: 📦 Validate Examples
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 15
     permissions:
       contents: read
