@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.83] - 2026-11-05
+
+### 🔧 Changed
+
+- Update dependency @types/node to 26.6.6 (patch) (#1277)
+- Update dependency @axe-core/playwright to 4.14.0 (minor) (#1246)
+
 ## [0.44.82] - 2026-11-04
 
 ### 🔧 Changed
