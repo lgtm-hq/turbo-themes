@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "vue": "^3.4.0",
-    "@lgtm-hq/turbo-themes": "0.44.72"
+    "@lgtm-hq/turbo-themes": "0.44.81"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "6.0.10",
