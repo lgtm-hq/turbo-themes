@@ -65,7 +65,7 @@ describe('security-sensitive glob dependencies', () => {
     const glob = rimrafRequire('glob');
     const globRequire = createRequire(rimrafRequire.resolve('glob'));
     expect(rimrafRequire('glob/package.json').version).toBe('7.2.3');
-    expect(globRequire('minimatch/package.json').version).toBe('11.0.2');
+    expect(globRequire('minimatch/package.json').version).toBe('11.0.4');
 
     const root = mkdtempSync(join(process.env.TMPDIR || tmpdir(), 'legacy-glob-'));
     try {

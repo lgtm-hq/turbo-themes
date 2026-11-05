@@ -263,7 +263,7 @@
     "smol-toml": "1.9.1",
     "path-to-regexp": "8.4.2",
     "@isaacs/brace-expansion": "5.0.1",
-    "minimatch": "11.0.2",
+    "minimatch": "11.0.4",
     "@bundled-es-modules/glob": {
       "glob": "14.0.3"
     },
