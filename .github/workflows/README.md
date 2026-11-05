@@ -118,7 +118,7 @@ Most workflows use the `setup-env` composite action:
   uses: ./.github/actions/setup-env
   with:
     node-version: '22'
-    ruby-version: '3.4.7'
+    ruby-version: '3.4.12'
 ```
 
 Bun is pinned once via `"packageManager"` in the root `package.json`. `setup-env`,

@@ -16,7 +16,7 @@ setup.
 - `bun-version` (optional): Bun version override. Leave empty (default) to use the
   `packageManager` pin in the root `package.json`
 - `node-version` (optional): Node.js version to use (default: `22`)
-- `ruby-version` (optional): Ruby version to use (default: `3.4.7`)
+- `ruby-version` (optional): Ruby version to use (default: `3.4.12`)
 - `skip-ruby` (optional): Skip Ruby setup (default: `false`)
 
 **Usage:**
@@ -26,7 +26,7 @@ setup.
   uses: ./.github/actions/setup-env
   with:
     node-version: '22'
-    ruby-version: '3.4.7'
+    ruby-version: '3.4.12'
 ```
 
 **What it does:**
