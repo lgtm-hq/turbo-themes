@@ -42,7 +42,7 @@ jobs:
     with:
       job-name: '🎭 E2E Tests'
       test-command: ./scripts/ci/bootstrap-e2e-full.sh
-      node-version: '22'
+      node-version: '22.23.4' # Astro 7.4+ requires Node >=22.23.4
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-comment
@@ -93,7 +93,7 @@ jobs:
         bun run e2e:prep &&
         bun run e2e:ci
       grep: '@smoke'
-      node-version: '22'
+      node-version: '22.23.4' # Astro 7.4+ requires Node >=22.23.4
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-smoke-comment
@@ -136,7 +136,7 @@ jobs:
         bun run e2e:prep &&
         bun run e2e:ci
       grep: '@a11y'
-      node-version: '22'
+      node-version: '22.23.4' # Astro 7.4+ requires Node >=22.23.4
       browsers: chromium
       package-manager: bun
       comment-marker: playwright-e2e-a11y-comment
