@@ -10,6 +10,13 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.92] - 2026-11-05
+
+### 🔧 Changed
+
+- Update dependency html-validate to 11.18.0 (minor) (#1301)
+- Update dependency sass to 1.107.1 (minor) (#1292)
+
 ## [0.44.91] - 2026-11-05
 
 ### 🔧 Changed
