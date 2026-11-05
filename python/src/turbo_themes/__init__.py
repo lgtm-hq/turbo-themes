@@ -29,4 +29,4 @@ __all__ = [
     "set_theme",
 ]
 
-__version__ = "0.44.83"
+__version__ = "0.44.84"
