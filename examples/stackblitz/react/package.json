@@ -14,7 +14,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@lgtm-hq/turbo-themes": "0.44.72"
+    "@lgtm-hq/turbo-themes": "0.44.81"
   },
   "devDependencies": {
     "@types/react": "18.3.31",
