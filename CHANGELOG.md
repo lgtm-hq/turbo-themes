@@ -10,6 +10,17 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.89] - 2026-11-05
+
+### 🔧 Changed
+
+- Update dependency minimatch to 11.0.4 (patch) (#1281)
+- Update ruby:4.0-bookworm docker digest to 1bef051 (#1297)
+
+### 🤖 Internal
+
+- Retry CI tool downloads on transient GitHub Releases errors (#1294)
+
 ## [0.44.88] - 2026-11-05
 
 ### 🔧 Changed
