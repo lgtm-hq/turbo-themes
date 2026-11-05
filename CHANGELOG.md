@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.88] - 2026-11-05
+
+### 🔧 Changed
+
+- Update dependency ubuntu to 26.04 (major) (#1173)
+
 ## [0.44.87] - 2026-11-05
 
 ### 🔧 Changed
