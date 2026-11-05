@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.90] - 2026-11-05
+
+### 🔧 Changed
+
+- Update dependency @pagefind/default-ui to 1.6.0 (minor) (#1298)
+
 ## [0.44.89] - 2026-11-05
 
 ### 🔧 Changed
