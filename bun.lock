@@ -59,7 +59,7 @@
         "astro": "7.4.4",
       },
       "devDependencies": {
-        "@pagefind/default-ui": "1.5.2",
+        "@pagefind/default-ui": "1.6.0",
       },
     },
     "examples/bootstrap": {
@@ -588,7 +588,7 @@
 
     "@oxlint/binding-win32-x64-msvc": ["@oxlint/binding-win32-x64-msvc@1.90.0", "", { "os": "win32", "cpu": "x64" }, "sha512-30JiaFEBUB9peEOcvVM8ggo88SoN/IdSr9DW505JdBji/R6dM66gKEiG65hw6qcaF2f4mO0cEJ+RwRZprmun9g=="],
 
-    "@pagefind/default-ui": ["@pagefind/default-ui@1.5.2", "", {}, "sha512-pm1LMnQg8N2B3n2TnjKlhaFihpz6zTiA4HiGQ6/slKO/+8K9CAU5kcjdSSPgpuk1PMuuN4hxLipUIifnrkl3Sg=="],
+    "@pagefind/default-ui": ["@pagefind/default-ui@1.6.0", "", {}, "sha512-Wj93IzlLnaYYrMpOYrsqUerzA7+Vrs5Ri1U78hBh3zuKHNVkcjApNo5DUM99MzAam6f437VGG64jDenAObIt+w=="],
 
     "@parcel/watcher": ["@parcel/watcher@2.6.0", "", { "dependencies": { "detect-libc": "^2.0.3", "is-glob": "^4.0.3", "node-addon-api": "^7.0.0", "picomatch": "^4.0.4" }, "optionalDependencies": { "@parcel/watcher-android-arm64": "2.6.0", "@parcel/watcher-darwin-arm64": "2.6.0", "@parcel/watcher-darwin-x64": "2.6.0", "@parcel/watcher-freebsd-x64": "2.6.0", "@parcel/watcher-linux-arm-glibc": "2.6.0", "@parcel/watcher-linux-arm-musl": "2.6.0", "@parcel/watcher-linux-arm64-glibc": "2.6.0", "@parcel/watcher-linux-arm64-musl": "2.6.0", "@parcel/watcher-linux-x64-glibc": "2.6.0", "@parcel/watcher-linux-x64-musl": "2.6.0", "@parcel/watcher-win32-arm64": "2.6.0", "@parcel/watcher-win32-x64": "2.6.0" } }, "sha512-7FNeNl8NCE7aINx7WXiKQrPYZWC/hvrTsmk6zmxbI7LTXE7hVek/n8AfVgpe2y82zl3w0HvCHN0bVKMBoJcC0w=="],
 
