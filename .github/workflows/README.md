@@ -263,7 +263,7 @@ concurrency:
 jobs:
   job-name:
     name: 🎯 Descriptive Job Name
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@<sha>

@@ -30,7 +30,11 @@ env:
 jobs:
   generate-snapshots:
     name: Generate Linux Snapshots
-    runs-on: ubuntu-26.04
+    # Keep on the same image as the E2E jobs that compare these baselines:
+    # quality-e2e.yml calls the lgtm-ci Playwright reusable without
+    # runner-image, so it runs on that input's default (ubuntu-24.04).
+    # Move both together, then regenerate the baselines (#708).
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - name: Harden Runner
