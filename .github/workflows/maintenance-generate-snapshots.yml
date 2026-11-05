@@ -24,7 +24,7 @@ permissions:
   actions: read
 
 env:
-  NODE_VERSION: '22'
+  NODE_VERSION: '22.23.4' # Astro 7.4+ requires Node >=22.23.4
   PLAYWRIGHT_SNAPSHOT_DIR: snapshots
 
 jobs:

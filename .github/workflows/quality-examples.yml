@@ -183,6 +183,7 @@ jobs:
       - name: Setup environment
         uses: ./.github/actions/setup-env
         with:
+          node-version: '22.23.4' # Astro 7.4+ requires Node >=22.23.4 (e2e:prep builds the site)
           skip-ruby: 'false'
 
       - name: Install Playwright browsers
