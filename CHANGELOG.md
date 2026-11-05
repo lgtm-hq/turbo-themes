@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.91] - 2026-11-05
+
+### 🔧 Changed
+
+- Update dependency @vitejs/plugin-react to 6.2.1 (minor) (#1291)
+
 ## [0.44.90] - 2026-11-05
 
 ### 🔧 Changed
