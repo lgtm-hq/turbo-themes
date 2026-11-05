@@ -16,7 +16,7 @@
     "@lgtm-hq/turbo-themes": "0.44.81"
   },
   "devDependencies": {
-    "sass": "1.106.1",
+    "sass": "1.107.1",
     "vite": "8.3.5"
   }
 }
