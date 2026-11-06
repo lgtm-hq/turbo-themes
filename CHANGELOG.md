@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.94] - 2026-11-06
+
+### 🔧 Changed
+
+- Update softprops/action-gh-release action to v3.0.4 (patch) (#1311)
+
 ## [0.44.93] - 2026-11-06
 
 ### 🔧 Changed
