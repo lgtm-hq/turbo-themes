@@ -51,8 +51,13 @@ describe('security-sensitive glob dependencies', () => {
           ? bundledRequire('glob')
           : await import(pathToFileURL(resolve(dirname(manifestPath), entry)).href);
       // Both default exports embed minimatch; a clean external lock is insufficient.
-      const glob = new Glob('**/../a/b/**/../c/d/**/../e/f/x', { braceExpandMax: 4 });
-      expect(glob.patterns.length).toBeLessThanOrEqual(4);
+      // Since minimatch 11.0.5, splitting `**/..` past braceExpandMax rejects the
+      // pattern with a RangeError instead of expanding it, so preprocessing stays bounded.
+      expect(() => new Glob('**/../a/b/**/../c/d/**/../e/f/x', { braceExpandMax: 4 })).toThrow(
+        /too many patterns/
+      );
+      const bounded = new Glob('**/../a/b/x', { braceExpandMax: 4 });
+      expect(bounded.patterns.length).toBeLessThanOrEqual(4);
     }
   );
 
@@ -65,7 +70,7 @@ describe('security-sensitive glob dependencies', () => {
     const glob = rimrafRequire('glob');
     const globRequire = createRequire(rimrafRequire.resolve('glob'));
     expect(rimrafRequire('glob/package.json').version).toBe('7.2.3');
-    expect(globRequire('minimatch/package.json').version).toBe('11.0.4');
+    expect(globRequire('minimatch/package.json').version).toBe('11.0.5');
 
     const root = mkdtempSync(join(process.env.TMPDIR || tmpdir(), 'legacy-glob-'));
     try {

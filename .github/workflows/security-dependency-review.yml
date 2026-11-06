@@ -24,11 +24,11 @@ jobs:
   # on pull_request and merge_group), so no caller-side if is needed.
   dependency-review:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-dependency-review.yml@8f0fd9339df5d30a529aa572ceb51345b8be33a0 # v0.79.2
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-dependency-review.yml@b830ca6972f0c9cbaeb1363283de594f68d66acf # v0.87.0
     with:
       job-name: '🛡️ Dependency Review'
       fail-on-severity: high
-      tooling-ref: '8f0fd9339df5d30a529aa572ceb51345b8be33a0' # v0.79.2
+      tooling-ref: 'b830ca6972f0c9cbaeb1363283de594f68d66acf' # v0.87.0
       egress-policy: block
       egress-preset: scorecard
       # Complete list, not append: the reusable feeds allowed-endpoints
@@ -61,14 +61,14 @@ jobs:
   # Org ruleset (checks-turbo-themes): security-audit / 🔐 Security Audit
   security-audit:
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-security-audit.yml@8f0fd9339df5d30a529aa572ceb51345b8be33a0 # v0.79.2
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-security-audit.yml@b830ca6972f0c9cbaeb1363283de594f68d66acf # v0.87.0
     with:
       job-name: '🔐 Security Audit'
       # py-lintro 0.163.0 pinned to immutable digest for reproducibility
       # yamllint disable-line rule:line-length
-      lintro-image: ghcr.io/lgtm-hq/py-lintro:0.173.1@sha256:116e60912a8c7a2002349ef096cfa93644314492751746aacdd5ef228c74306f
+      lintro-image: ghcr.io/lgtm-hq/py-lintro:0.178.1@sha256:9f7510d65d063e2f0f1bdccb2b8f486d744ba21753341e75e5bbd8c9b29a9aae
       runner-image: ubuntu-26.04
-      tooling-ref: '8f0fd9339df5d30a529aa572ceb51345b8be33a0' # v0.79.2
+      tooling-ref: 'b830ca6972f0c9cbaeb1363283de594f68d66acf' # v0.87.0
       egress-policy: block
       egress-preset: quality
     permissions:
@@ -82,10 +82,10 @@ jobs:
       && github.event_name == 'pull_request'
       && github.event.pull_request.head.repo.fork == false
     # yamllint disable-line rule:line-length
-    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-publish-security-audit-comment.yml@8f0fd9339df5d30a529aa572ceb51345b8be33a0 # v0.79.2
+    uses: lgtm-hq/lgtm-ci/.github/workflows/reusable-publish-security-audit-comment.yml@b830ca6972f0c9cbaeb1363283de594f68d66acf # v0.87.0
     with:
       runner-image: ubuntu-26.04
-      tooling-ref: '8f0fd9339df5d30a529aa572ceb51345b8be33a0' # v0.79.2
+      tooling-ref: 'b830ca6972f0c9cbaeb1363283de594f68d66acf' # v0.87.0
       egress-policy: block
       egress-preset: github-minimal
     permissions:

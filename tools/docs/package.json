@@ -9,7 +9,7 @@
     "typescript": "5.9"
   },
   "overrides": {
-    "minimatch": "11.0.4"
+    "minimatch": "11.0.5"
   },
   "patchedDependencies": {
     "typedoc@0.28.20": "patches/typedoc@0.28.20.patch"

@@ -106,7 +106,7 @@ export const EXAMPLE_METADATA: Record<
   },
   react: {
     title: 'React',
-    description: 'React 18 + TypeScript with custom useTheme hook',
+    description: 'React 19 + TypeScript with custom useTheme hook',
   },
   vue: {
     title: 'Vue',
