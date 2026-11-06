@@ -1,3 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* Tailwind v4 loads the JavaScript config (and any presets in it) via @config. */
+@config '../tailwind.config.js';
+
+/*
+  Tailwind CSS v4 changed the default border color to `currentcolor`. Keep the
+  v3 default so a bare `border` utility renders as it did before the upgrade.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}

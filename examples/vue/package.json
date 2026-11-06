@@ -9,13 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "3.5.44"
+    "vue": "3.5.45"
   },
   "devDependencies": {
     "@lgtm-hq/turbo-themes-core": "workspace:*",
     "@vitejs/plugin-vue": "6.0.10",
-    "typescript": "5.9.3",
-    "vite": "8.3.5",
-    "vue-tsc": "2.2.12"
+    "typescript": "7.0.2",
+    "vite": "8.3.6",
+    "vue-tsc": "3.3.14"
   }
 }

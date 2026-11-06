@@ -4,7 +4,7 @@ A React + TypeScript example demonstrating theme switching with Turbo Themes.
 
 ## Features
 
-- React 18 with TypeScript
+- React 19 with TypeScript
 - Custom `useTheme` hook for theme management
 - Theme persistence in localStorage
 - FOUC (Flash of Unstyled Content) prevention

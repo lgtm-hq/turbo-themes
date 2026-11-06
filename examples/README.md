@@ -8,7 +8,7 @@ Themes with various frameworks and platforms.
 | Example                           | Framework    | Description                                | Try It                                                                                           |
 | --------------------------------- | ------------ | ------------------------------------------ | ------------------------------------------------------------------------------------------------ |
 | [html-vanilla](./html-vanilla/)   | HTML/JS      | Zero-dependency vanilla JavaScript         | [StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/html-vanilla) |
-| [react](./react/)                 | React 18     | TypeScript with custom `useTheme` hook     | [StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/react)        |
+| [react](./react/)                 | React 19     | TypeScript with custom `useTheme` hook     | [StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/react)        |
 | [vue](./vue/)                     | Vue 3        | Composition API with `useTheme` composable | [StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/vue)          |
 | [tailwind](./tailwind/)           | Tailwind CSS | Preset integration with utility classes    | [StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/tailwind)     |
 | [bootstrap](./bootstrap/)         | Bootstrap 5  | SCSS integration with light/dark mode      | [StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/bootstrap)    |
@@ -99,7 +99,7 @@ Want to add a new example? Here's how:
 ```
 examples/
 ├── html-vanilla/         # Zero-dependency HTML
-├── react/                # Vite + React 18 + TypeScript
+├── react/                # Vite + React 19 + TypeScript
 ├── vue/                  # Vite + Vue 3 + TypeScript
 ├── tailwind/             # Vite + Tailwind CSS
 ├── bootstrap/            # Vite + Bootstrap 5 + SCSS

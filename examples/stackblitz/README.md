@@ -7,7 +7,7 @@ Optimized, minimal examples designed for fast loading in StackBlitz.
 | Template                        | Description                  | Try It                                                                                                              |
 | ------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------- |
 | [html-vanilla](./html-vanilla/) | Zero-dependency vanilla JS   | [Open in StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/stackblitz/html-vanilla) |
-| [react](./react/)               | React 18 + TypeScript + Vite | [Open in StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/stackblitz/react)        |
+| [react](./react/)               | React 19 + TypeScript + Vite | [Open in StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/stackblitz/react)        |
 | [vue](./vue/)                   | Vue 3 + TypeScript + Vite    | [Open in StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/stackblitz/vue)          |
 | [tailwind](./tailwind/)         | Tailwind CSS + Vite          | [Open in StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/stackblitz/tailwind)     |
 | [bootstrap](./bootstrap/)       | Bootstrap 5 + SCSS + Vite    | [Open in StackBlitz](https://stackblitz.com/github/lgtm-hq/turbo-themes/tree/main/examples/stackblitz/bootstrap)    |
@@ -57,8 +57,10 @@ bun run build
 CSS is imported through the package's public `css/core`, `css/base` (React/Vue) and
 `css/themes-all` exports. Vite emits those styles into the production assets; switching
 `data-theme` selects bundled CSS without requesting `/node_modules/` at runtime. The Vue
-build retains `vue-tsc` before Vite, using the same 2.2.12 version as the main Vue
-example with TypeScript 5.9.3.
+build retains `vue-tsc` before Vite, using the same 3.3.14 version as the main Vue
+example with TypeScript 7.0.2. TypeScript 7 ships no JavaScript compiler API, so both
+manifests override `vue-tsc`'s `typescript` peer to `@typescript/typescript6`, which
+`vue-tsc` resolves to the bundled TypeScript 6 `tsc`.
 
 The templates intentionally retain their existing standalone, unlocked install contract:
 there are no committed template lockfiles, and remaining semver ranges can resolve new

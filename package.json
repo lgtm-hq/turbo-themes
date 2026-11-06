@@ -208,8 +208,8 @@
     "@axe-core/playwright": "4.14.0",
     "@catppuccin/palette": "1.8.0",
     "@fullhuman/postcss-purgecss": "8.0.0",
-    "@lhci/cli": "0.15.1",
-    "@playwright/test": "1.64.1",
+    "@lhci/cli": "0.16.0",
+    "@playwright/test": "1.65.0",
     "@primer/primitives": "11.10.0",
     "@radix-ui/colors": "3.0.0",
     "@rose-pine/palette": "4.0.1",
@@ -219,7 +219,7 @@
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@typescript/typescript6": "6.0.2",
-    "@vitest/coverage-v8": "5.0.5",
+    "@vitest/coverage-v8": "5.1.0",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "ayu": "9.1.0",
@@ -234,20 +234,20 @@
     "js-yaml": "5.5.0",
     "lightningcss": "1.33.0",
     "lint-staged": "17.6.0",
-    "oxfmt": "0.75.0",
-    "oxlint": "1.90.0",
+    "oxfmt": "0.76.0",
+    "oxlint": "1.91.0",
     "postcss-scss": "4.0.9",
     "react": "19.3.1",
     "react-dom": "19.3.1",
-    "sass": "1.107.1",
-    "style-dictionary": "5.7.1",
+    "sass": "1.108.0",
+    "style-dictionary": "5.8.0",
     "stylelint": "17.16.0",
     "stylelint-config-standard": "40.0.0",
     "stylelint-config-standard-scss": "17.0.0",
     "typescript": "7.0.2",
-    "vite": "8.3.5",
+    "vite": "8.3.6",
     "vite-plugin-dts": "5.1.2",
-    "vitest": "5.0.5"
+    "vitest": "5.1.0"
   },
   "overrides": {
     "ajv": "8.20.0",
@@ -256,16 +256,16 @@
     "picomatch": "4.0.7",
     "yaml": "2.9.1",
     "qs": "6.17.1",
-    "basic-ftp": "6.2.5",
+    "basic-ftp": "6.2.6",
     "uuid": "14.0.3",
     "follow-redirects": "1.16.2",
-    "astro": "7.4.5",
+    "astro": "7.4.7",
     "smol-toml": "1.9.1",
-    "path-to-regexp": "8.4.2",
+    "path-to-regexp": "9.0.0",
     "@isaacs/brace-expansion": "5.0.1",
-    "minimatch": "11.0.4",
+    "minimatch": "11.0.5",
     "@bundled-es-modules/glob": {
-      "glob": "14.0.3"
+      "glob": "14.0.4"
     },
     "brace-expansion": "5.0.12",
     "tmp": "0.2.7",
@@ -279,7 +279,10 @@
     "js-yaml": "5.5.0",
     "fast-uri": "4.2.3",
     "sharp": "0.35.5",
-    "puppeteer-core": "25.16.0"
+    "puppeteer-core": "25.16.0",
+    "vue-tsc": {
+      "typescript": "npm:@typescript/typescript6@6.0.2"
+    }
   },
   "patchedDependencies": {
     "glob@7.2.3": "patches/glob@7.2.3.patch"
