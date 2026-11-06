@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.96] - 2026-11-06
+
+### 🔧 Changed
+
+- Consolidated dependency catch-up (all open and rate-limited Renovate updates) (#1316)
+
 ## [0.44.95] - 2026-11-06
 
 ### 🐛 Fixed
