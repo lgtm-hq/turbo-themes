@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.93] - 2026-11-06
+
+### 🔧 Changed
+
+- Update ruby:4.0-bookworm docker digest to fbdd99f (#1309)
+
 ## [0.44.92] - 2026-11-05
 
 ### 🔧 Changed
