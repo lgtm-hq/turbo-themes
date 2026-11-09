@@ -15,9 +15,9 @@
     "@lgtm-hq/turbo-themes": "0.44.95"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "4.3.4",
+    "@tailwindcss/postcss": "4.3.5",
     "postcss": "8.5.32",
-    "tailwindcss": "4.3.4",
+    "tailwindcss": "4.3.5",
     "vite": "8.3.6"
   },
   "overrides": {
