@@ -10,6 +10,12 @@ The format is based on Keep a Changelog and this project adheres to SemVer.
 
 - TBD
 
+## [0.44.100] - 2026-11-09
+
+### 🐛 Fixed
+
+- Allow release-assets.githubusercontent.com in the npm publish job (#1319)
+
 ## [0.44.99] - 2026-11-09
 
 ### 🔧 Changed
