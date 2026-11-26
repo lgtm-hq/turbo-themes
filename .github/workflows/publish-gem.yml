@@ -56,7 +56,7 @@ jobs:
       gem-name: ${{ steps.gem-info.outputs.name }}
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: block
           allowed-endpoints: >
@@ -95,9 +95,9 @@ jobs:
           node-version: '26'
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@de492cf36cbab201753d720ce4f4e336cd688c94 # v1.336.0
+        uses: ruby/setup-ruby@145243922b4465b78e04dd66294782c7de45901f # v1.345.0
         with:
-          ruby-version: '4.0.9'
+          ruby-version: '4.0.10'
           bundler-cache: true
 
       - name: Install dependencies
@@ -150,7 +150,7 @@ jobs:
       url: https://rubygems.org/gems/turbo-themes
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@1d88384fd173af6ecb012dfd0264a306b711241a # v2.22.4
+        uses: step-security/harden-runner@aebdcf6156ab6691adf63218240e476564a1ed4c # v2.23.0
         with:
           egress-policy: block
           allowed-endpoints: >
@@ -181,12 +181,12 @@ jobs:
         run: ./scripts/ci/verify-artifact.sh
 
       - name: Setup Ruby
-        uses: ruby/setup-ruby@de492cf36cbab201753d720ce4f4e336cd688c94 # v1.336.0
+        uses: ruby/setup-ruby@145243922b4465b78e04dd66294782c7de45901f # v1.345.0
         with:
-          ruby-version: '4.0.9'
+          ruby-version: '4.0.10'
 
       - name: Configure RubyGems credentials
-        uses: rubygems/configure-rubygems-credentials@dc5a8d8553e6ee01fc26761a49e99e733d17954a # v2.1.0
+        uses: rubygems/configure-rubygems-credentials@c6ca7f4bac0e29c9bde8eeae0a0a986b27efa05f # v2.2.0
         with:
           role-to-assume: ${{ secrets.RUBYGEMS_OIDC_ROLE }}
 
